@@ -82,13 +82,13 @@ switch ($userRole) {
     <header class="header">
 
         <?php if ($userRole === 3) { ?>
-            <a href="adminDashboard.php" id="backToDashboard" class="backButton">
-                <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="back to dashboard" id="back-btn">
-            </a>
+        <a href="adminDashboard.php" id="backToDashboard" class="backButton">
+            <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="back to dashboard" id="back-btn">
+        </a>
         <?php } elseif ($userRole === 2) { ?>
-            <a href="../Account/bpSales.php" id="backToDashboard" class="backButton">
-                <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="back to dashboard" id="back-btn">
-            </a>
+        <a href="../Account/bpSales.php" id="backToDashboard" class="backButton">
+            <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="back to dashboard" id="back-btn">
+        </a>
         <?php } ?>
         <div class="pagetitle">
             <img src="../../Assets/Images/Icon/Statistics.png" alt="" id="sales-logo">
@@ -123,9 +123,9 @@ switch ($userRole) {
                             <th>Customer Name</th>
                             <th>Booking Type</th>
                             <?php if ($userRole === 3) { ?>
-                                <th>Total Guest</th>
+                            <th>Total Guest</th>
                             <?php } elseif ($userRole === 2) { ?>
-                                <th>Service Name</th>
+                            <th>Service Name</th>
                             <?php   } ?>
                             <th>Start Date</th>
                             <th>End Date</th>
@@ -227,44 +227,79 @@ switch ($userRole) {
                                         $totalCost = $row['confirmedFinalBill'];
                                         $partnerServiceName = $row['PBName'] ?? null;
                         ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($bookingCode) ?></td>
-                                            <td><?= htmlspecialchars($customerName) ?></td>
-                                            <td><?= htmlspecialchars($bookingType) ?></td>
-                                            <?php if ($userRole === 3) { ?>
-                                                <td><?= htmlspecialchars($guest) ?></td>
-                                            <?php } elseif ($userRole === 2) { ?>
-                                                <td><?= htmlspecialchars($partnerServiceName) ?></td>
-                                            <?php   } ?>
-                                            <td><?= $startDate ?></td>
-                                            <td><?= $endDate ?></td>
-                                            <td><?= htmlspecialchars($paymentMethod) ?></td>
-                                            <td>₱<?= number_format($totalCost, 2) ?></td>
-                                        </tr>
-                                    <?php
+                        <tr>
+                            <td><?= htmlspecialchars($bookingCode) ?></td>
+                            <td><?= htmlspecialchars($customerName) ?></td>
+                            <td><?= htmlspecialchars($bookingType) ?></td>
+                            <?php if ($userRole === 3) { ?>
+                            <td><?= htmlspecialchars($guest) ?></td>
+                            <?php } elseif ($userRole === 2) { ?>
+                            <td><?= htmlspecialchars($partnerServiceName) ?></td>
+                            <?php   } ?>
+                            <td><?= $startDate ?></td>
+                            <td><?= $endDate ?></td>
+                            <td><?= htmlspecialchars($paymentMethod) ?></td>
+                            <td>₱<?= number_format($totalCost, 2) ?></td>
+                        </tr>
+                        <?php
                                     }
                                 } else {
                                     ?>
-                                    <tr>
-                                        <td colspan="8" class="text-center no-data-text">No bookings found for selected dates</td>
-                                    </tr>
-                                <?php
+                        <tr>
+                            <td colspan="8" class="text-center no-data-text">No bookings found for selected dates</td>
+                        </tr>
+                        <?php
                                 }
                             } else {
                                 ?>
-                                <tr>
-                                    <td colspan="8" class="text-center no-data-text">Invalid Date Format</td>
-                                </tr>
-                            <?php
+                        <tr>
+                            <td colspan="8" class="text-center no-data-text">Invalid Date Format</td>
+                        </tr>
+                        <?php
                             }
                         } else {
                             ?>
-                            <tr>
-                                <td colspan="8" class="text-center no-data-text">No data available</td>
-                            </tr>
+                        <tr>
+                            <td colspan="8" class="text-center no-data-text">No data available</td>
+                        </tr>
                         <?php
                         }
                         ?>
+                    </tbody>
+                </table>
+
+                <hr class="separator-line">
+
+                <h5 class="bulkBooking-title">Bulk Booking Report</h5>
+
+                <table class="table table-striped bulkBooking-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Date Period</th>
+                            <th>Type of Booking</th>
+                            <th>Total Booking/s</th>
+                            <th>Total Sale/s</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2">Nov. 1, 2025 to Dec. 31, 2025</td>
+                            <td>Resort Booking</td>
+                            <td>10</td>
+                            <td>₱30,000.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Nov. 1, 2025 to 30, 2025</td>
+                            <td>Event Booking</td>
+                            <td>5</td>
+                            <td>₱80,000.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Nov. 1, 2025 to 30, 2025</td>
+                            <td>Hotel Booking</td>
+                            <td>3</td>
+                            <td>₱20,000.00</td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -290,35 +325,35 @@ switch ($userRole) {
     <!-- Flatpickr Link -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        flatpickr('#reportDate', {
-            mode: "range",
-            minDate: null,
-            maxDate: "today",
-            dateFormat: "F d, Y"
-        });
+    flatpickr('#reportDate', {
+        mode: "range",
+        minDate: null,
+        maxDate: "today",
+        dateFormat: "F d, Y"
+    });
 
-        const calIcon = document.getElementById("calendarIcon");
-        const reportDate = document.getElementById("reportDate");
+    const calIcon = document.getElementById("calendarIcon");
+    const reportDate = document.getElementById("reportDate");
 
-        calIcon.addEventListener('click', function(event) {
-            reportDate.click()
-        })
+    calIcon.addEventListener('click', function(event) {
+        reportDate.click()
+    })
 
-        const generateReportBtn = document.getElementById("generateReport");
-        const errorMessage = document.querySelector(".error-message");
+    const generateReportBtn = document.getElementById("generateReport");
+    const errorMessage = document.querySelector(".error-message");
 
 
-        generateReportBtn.addEventListener("click", function(event) {
-            const reportDateValue = reportDate.value.trim();
+    generateReportBtn.addEventListener("click", function(event) {
+        const reportDateValue = reportDate.value.trim();
 
-            if (reportDateValue === '') {
-                event.preventDefault();
-                errorMessage.innerHTML = 'Please choose the date range you want for the report';
-            } else {
-                errorMessage.innerHTML = '';
-                errorMessage.style.border = "none";
-            };
-        });
+        if (reportDateValue === '') {
+            event.preventDefault();
+            errorMessage.innerHTML = 'Please choose the date range you want for the report';
+        } else {
+            errorMessage.innerHTML = '';
+            errorMessage.style.border = "none";
+        };
+    });
     </script>
 
 </body>

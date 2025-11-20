@@ -65,16 +65,10 @@ $baseURL = '..';
 
 
                         <div class="phone-container">
-                            <input
-                                type="text"
-                                name="phoneNumber"
-                                id="phoneNumber"
-                                pattern="^(?:\+63|0)9\d{9}$"
+                            <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$"
                                 title="e.g., +639123456789 or 09123456789"
                                 value="<?php echo isset($_SESSION['partnerData']['phoneNumber']) ? htmlspecialchars(trim($_SESSION['partnerData']['phoneNumber']) ?? '') : ''; ?>"
-                                class="form-control"
-                                placeholder="Phone Number"
-                                required>
+                                class="form-control" placeholder="Phone Number" required>
                             <div id="tooltip-phone" class="custom-tooltip">Please input numbers only</div>
                         </div>
 
@@ -93,17 +87,20 @@ $baseURL = '..';
                             value="<?php echo isset($_SESSION['partnerData']['companyName']) ? htmlspecialchars(trim($_SESSION['partnerData']['companyName'])) : ''; ?>">
 
                         <button type="button" class="btn btn-light" data-bs-toggle="modal"
-                            data-bs-target="#busTypenModal" id="partnerTypeButton" require>Type of your Business</button>
+                            data-bs-target="#busTypenModal" id="partnerTypeButton" require>Type of your
+                            Business</button>
                         <div id="selectedBusinessTypes" class="mt-2 text-black"></div>
 
                         <!-- modal for type of business -->
-                        <div class="modal fade" id="busTypenModal" tabindex="-1" aria-labelledby="busTypeModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="busTypenModal" tabindex="-1" aria-labelledby="busTypeModalLabel"
+                            aria-hidden="true">
                             <div class="modal-dialog modal-dialog-scrollable">
                                 <div class="modal-content">
 
                                     <div class="modal-header">
                                         <h5 class="modal-title">Type of Business</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body busTypeBody">
                                         <?php
@@ -116,23 +113,24 @@ $baseURL = '..';
                                                 $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
                                         ?>
 
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="partnerType[]"
-                                                        id="partnerType<?= htmlspecialchars($partnerType) ?>"
-                                                        value="<?= htmlspecialchars($partnerType) ?>"
-                                                        <?= (isset($_SESSION['partnerData']) && in_array($partnerType, $_SESSION['partnerData']['partnerType'])) ? 'checked' : '' ?>>
-                                                    <label class="form-check-label"
-                                                        for="partnerType<?= htmlspecialchars($partnerType) ?>">
-                                                        <?= htmlspecialchars($partnerTypeDescription) ?>
-                                                    </label>
-                                                </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="partnerType[]"
+                                                id="partnerType<?= htmlspecialchars($partnerType) ?>"
+                                                value="<?= htmlspecialchars($partnerType) ?>"
+                                                <?= (isset($_SESSION['partnerData']) && in_array($partnerType, $_SESSION['partnerData']['partnerType'])) ? 'checked' : '' ?>>
+                                            <label class="form-check-label"
+                                                for="partnerType<?= htmlspecialchars($partnerType) ?>">
+                                                <?= htmlspecialchars($partnerTypeDescription) ?>
+                                            </label>
+                                        </div>
                                         <?php
                                             }
                                         }
                                         ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" id="selectedPartnerTypes" data-bs-dismiss="modal">Select</button>
+                                        <button type="button" class="btn btn-primary" id="selectedPartnerTypes"
+                                            data-bs-dismiss="modal">Select</button>
                                     </div>
                                 </div>
                             </div>
@@ -148,13 +146,16 @@ $baseURL = '..';
                             required>
 
                         <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"
-                            value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>" required>
+                            value="<?php echo isset($_SESSION['partnerData']['city']) ? htmlspecialchars(trim($_SESSION['partnerData']['city'])) : ''; ?>"
+                            required>
 
                         <div class="row1">
                             <input type="text" class="form-control" id="province" name="province" placeholder="Province"
-                                value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>" required>
+                                value="<?php echo isset($_SESSION['partnerData']['province']) ? htmlspecialchars(trim($_SESSION['partnerData']['province'])) : ''; ?>"
+                                required>
                             <div class="zip-code">
-                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code" pattern="^\d{4}$"
+                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code"
+                                    pattern="^\d{4}$"
                                     value="<?php echo isset($_SESSION['partnerData']['zip']) ? htmlspecialchars(trim($_SESSION['partnerData']['zip'])) : ''; ?>">
                                 <div id="tooltip-zip" class="custom-tooltip-zip">Please input numbers only</div>
                             </div>
@@ -166,7 +167,8 @@ $baseURL = '..';
                 <div class="col" id="busProofContainer">
                     <h4 class="busProofLabel">Proof of Business</h4>
 
-                    <p class="description">Please provide a link to your Google Drive or social media page and a valid ID as a proof of your business</p>
+                    <p class="description">Please provide a link to your Google Drive or social media page and a valid
+                        ID as a proof of your business</p>
 
                     <div class="busProofFormContainer">
                         <input type="text" class="form-control" id="proofLink" name="proofLink"
@@ -180,7 +182,8 @@ $baseURL = '..';
                         <h6 class="label">Upload a Valid ID</h6>
                         <input type="file" class="form-control validIDFIle" id="validID" name="validID">
 
-                        <button type="button" class="btn btn-primary w-75" id="nextBtn" onclick="openEmailPass(event)">Next</button>
+                        <button type="button" class="btn btn-primary w-75" id="nextBtn"
+                            onclick="openEmailPass(event)">Next</button>
                     </div>
                 </div>
             </div>
@@ -200,7 +203,9 @@ $baseURL = '..';
             </div>
             <div class="emailPassForm">
                 <div class="input-box">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?php echo isset($_SESSION['partnerData']['email']) ? htmlspecialchars(trim($_SESSION['partnerData']['email'])) : ''; ?>" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                        value="<?php echo isset($_SESSION['partnerData']['email']) ? htmlspecialchars(trim($_SESSION['partnerData']['email'])) : ''; ?>"
+                        required>
                     <i class='bx bxs-envelope'></i>
                 </div>
 
@@ -211,7 +216,8 @@ $baseURL = '..';
                         <i id="togglePassword1" class='bx bxs-hide'></i>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" id="password-strength" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" id="password-strength" aria-valuemin="0"
+                            aria-valuemax="100"></div>
                     </div>
                     <div class="confirmErrorMsg" id="passwordValidation"></div>
                     <div class="input-box">
@@ -235,7 +241,8 @@ $baseURL = '..';
                             </label><br>
                             <div class="confirmErrorMsg text-center" id="termsError"></div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-75 m-auto" id="signUp" name="signUp" onclick="isValid(event);">Sign Up</button>
+                        <button type="submit" class="btn btn-primary w-75 m-auto" id="signUp" name="signUp"
+                            onclick="isValid(event);">Sign Up</button>
                     </div>
                 </div>
             </div>
@@ -537,7 +544,8 @@ $baseURL = '..';
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">
-                        <button type="button" class="btn btn-secondary" id="declineTermsBtn" onclick="declineTerms()">Decline</button>
+                        <button type="button" class="btn btn-secondary" id="declineTermsBtn"
+                            onclick="declineTerms()">Decline</button>
                     </div>
                     <div class="acceptBtnContainer">
                         <button type="button" class="btn btn-primary" id="acceptTermsBtn"
@@ -562,274 +570,274 @@ $baseURL = '..';
 
     <!-- For validation -->
     <script>
-        const emailPassContainer = document.getElementById("emailPassContainer");
-        const basicInfo = document.getElementById("basicInfo")
+    const emailPassContainer = document.getElementById("emailPassContainer");
+    const basicInfo = document.getElementById("basicInfo")
 
-        emailPassContainer.style.display = "none";
+    emailPassContainer.style.display = "none";
 
-        function openEmailPass(event) {
-            event.preventDefault();
+    function openEmailPass(event) {
+        event.preventDefault();
 
-            const requiredFields = [
-                'firstName', 'lastName', 'phoneNumber',
-                'companyName', 'barangay', 'proofLink', 'validID', 'province', 'city'
-            ];
+        const requiredFields = [
+            'firstName', 'lastName', 'phoneNumber',
+            'companyName', 'barangay', 'proofLink', 'validID', 'province', 'city'
+        ];
 
-            let allValid = true;
+        let allValid = true;
 
-            requiredFields.forEach(id => {
-                const field = document.getElementById(id);
-                if (!field || !field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    allValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
-                }
-            });
-
-            // Validate business type selection
-            const checkboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
-            if (checkboxes.length < 1 || checkboxes.length > 2) {
+        requiredFields.forEach(id => {
+            const field = document.getElementById(id);
+            if (!field || !field.value.trim()) {
+                field.classList.add('is-invalid');
                 allValid = false;
+            } else {
+                field.classList.remove('is-invalid');
             }
+        });
 
-            if (!allValid) {
-                Swal.fire({
-                    title: 'Oops',
-                    text: "Please fill out all required fields before continuing.",
-                    icon: 'warning'
-                });
-                return;
-            }
-            emailPassContainer.style.display = "block";
-            basicInfo.style.display = "none";
+        // Validate business type selection
+        const checkboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+        if (checkboxes.length < 1 || checkboxes.length > 2) {
+            allValid = false;
         }
 
-        document.getElementById('selectedPartnerTypes').addEventListener('click', function() {
-            // Get all checked checkboxes
-            const selectedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
-            const displayDiv = document.getElementById('selectedBusinessTypes');
-
-            // Clear previous content
-            displayDiv.innerHTML = '';
-
-            if (selectedCheckboxes.length === 0) {
-                displayDiv.innerHTML = '<em>No business type selected! Required!</em>';
-                return;
-            }
-
-            selectedCheckboxes.forEach(checkbox => {
-                const label = document.querySelector(`label[for="${checkbox.id}"]`);
-                if (label) {
-                    const span = document.createElement('span');
-                    span.textContent = label.textContent.trim();
-                    span.className = 'badge bg-info me-1 text-black';
-                    displayDiv.appendChild(span);
-                }
+        if (!allValid) {
+            Swal.fire({
+                title: 'Oops',
+                text: "Please fill out all required fields before continuing.",
+                icon: 'warning'
             });
-        });
+            return;
+        }
+        emailPassContainer.style.display = "block";
+        basicInfo.style.display = "none";
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const displayDiv = document.getElementById('selectedBusinessTypes');
-            displayDiv.innerHTML = '';
+    document.getElementById('selectedPartnerTypes').addEventListener('click', function() {
+        // Get all checked checkboxes
+        const selectedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+        const displayDiv = document.getElementById('selectedBusinessTypes');
 
-            const checkedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+        // Clear previous content
+        displayDiv.innerHTML = '';
 
-            if (checkedCheckboxes.length === 0) {
-                displayDiv.innerHTML = '<em>No business type selected! Required!</em>';
-                return;
+        if (selectedCheckboxes.length === 0) {
+            displayDiv.innerHTML = '<em>No business type selected! Required!</em>';
+            return;
+        }
+
+        selectedCheckboxes.forEach(checkbox => {
+            const label = document.querySelector(`label[for="${checkbox.id}"]`);
+            if (label) {
+                const span = document.createElement('span');
+                span.textContent = label.textContent.trim();
+                span.className = 'badge bg-light me-1';
+                displayDiv.appendChild(span);
             }
-
-            checkedCheckboxes.forEach(checkbox => {
-                const label = document.querySelector(`label[for="${checkbox.id}"]`);
-                if (label) {
-                    const span = document.createElement('span');
-                    span.textContent = label.textContent.trim();
-                    span.className = 'badge bg-info me-1 text-black';
-                    displayDiv.appendChild(span);
-                }
-            });
         });
+    });
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const displayDiv = document.getElementById('selectedBusinessTypes');
+        displayDiv.innerHTML = '';
 
-        document.getElementById('emailBackArrow').addEventListener('click', function(e) {
-            e.preventDefault();
-            emailPassContainer.style.display = "none";
-            basicInfo.style.display = "block";
+        const checkedCheckboxes = document.querySelectorAll('input[name="partnerType[]"]:checked');
+
+        if (checkedCheckboxes.length === 0) {
+            displayDiv.innerHTML = '<em>No business type selected! Required!</em>';
+            return;
+        }
+
+        checkedCheckboxes.forEach(checkbox => {
+            const label = document.querySelector(`label[for="${checkbox.id}"]`);
+            if (label) {
+                const span = document.createElement('span');
+                span.textContent = label.textContent.trim();
+                span.className = 'badge bg-info me-1 text-black';
+                displayDiv.appendChild(span);
+            }
         });
+    });
+
+
+    document.getElementById('emailBackArrow').addEventListener('click', function(e) {
+        e.preventDefault();
+        emailPassContainer.style.display = "none";
+        basicInfo.style.display = "block";
+    });
     </script>
 
     <!-- For Messages -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get("action");
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get("action");
 
-        if (paramValue === 'emailExist') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Email Already Exist!',
-                text: 'The email address you entered is already registered. Please use a different email or log in if you already have an account.',
-                confirmButtonText: 'Okay'
-            }).then(() => {
-                emailPassContainer.style.display = "block";
-                basicInfo.style.display = "none";
+    if (paramValue === 'emailExist') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Email Already Exist!',
+            text: 'The email address you entered is already registered. Please use a different email or log in if you already have an account.',
+            confirmButtonText: 'Okay'
+        }).then(() => {
+            emailPassContainer.style.display = "block";
+            basicInfo.style.display = "none";
 
-                emailPassContainer.style.border = '1px solid red';
-            });
-        } else if (paramValue === 'extError') {
-            Swal.fire({
-                title: 'Oops',
-                text: `Invalid file type. Please upload JPG, JPEG, WEBP or PNG.`,
-                icon: 'warning',
-                confirmButtonText: 'Okay'
-            });
-        } else if (paramValue === 'imageSize') {
-            Swal.fire({
-                title: "Oops!",
-                text: "File is too large. Maximum allowed size is 5MB.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            });
-        } else if (paramValue === 'selectPartner') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops!',
-                text: 'You must select 1 or 2 business types.',
-                showConfirmButton: 'Okay',
-            }).then(() => {
-                const typeModal = document.getElementById('busTypenModal');
-                const modal = new bootstrap.Modal(typeModal);
-                modal.show();
-            });
-        } else if (paramValue === 'zipCode') {
-            Swal.fire({
-                title: "Oops!",
-                text: "Please enter a valid ZIP code.",
-                icon: "warning",
-                confirmButtonText: "Okay",
-            }).then(() => {
-                document.getElementById('zip').style.border = '1px solid red';
-            });
-        }
-
-        document.getElementById('zip').addEventListener('input', () => {
-            document.getElementById('zip').style.border = '1px solid rgb(223, 226, 230)';
+            emailPassContainer.style.border = '1px solid red';
         });
-
-        emailPassContainer.addEventListener('input', () => {
-            emailPassContainer.style.border = '1px solid rgb(223, 226, 230)';
+    } else if (paramValue === 'extError') {
+        Swal.fire({
+            title: 'Oops',
+            text: `Invalid file type. Please upload JPG, JPEG, WEBP or PNG.`,
+            icon: 'warning',
+            confirmButtonText: 'Okay'
         });
+    } else if (paramValue === 'imageSize') {
+        Swal.fire({
+            title: "Oops!",
+            text: "File is too large. Maximum allowed size is 5MB.",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        });
+    } else if (paramValue === 'selectPartner') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'You must select 1 or 2 business types.',
+            showConfirmButton: 'Okay',
+        }).then(() => {
+            const typeModal = document.getElementById('busTypenModal');
+            const modal = new bootstrap.Modal(typeModal);
+            modal.show();
+        });
+    } else if (paramValue === 'zipCode') {
+        Swal.fire({
+            title: "Oops!",
+            text: "Please enter a valid ZIP code.",
+            icon: "warning",
+            confirmButtonText: "Okay",
+        }).then(() => {
+            document.getElementById('zip').style.border = '1px solid red';
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    document.getElementById('zip').addEventListener('input', () => {
+        document.getElementById('zip').style.border = '1px solid rgb(223, 226, 230)';
+    });
+
+    emailPassContainer.addEventListener('input', () => {
+        emailPassContainer.style.border = '1px solid rgb(223, 226, 230)';
+    });
+
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
     <!-- For password — weak, medium, strong -->
     <script>
-        document.getElementById('password').addEventListener('input', function() {
-            const password = document.getElementById("password").value;
-            const weakPattern = /^.{0,5}$/;
-            const mediumPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
-            const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-            const passwordBar = document.getElementById("password-strength");
-            // console.log(password);
+    document.getElementById('password').addEventListener('input', function() {
+        const password = document.getElementById("password").value;
+        const weakPattern = /^.{0,5}$/;
+        const mediumPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+        const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+        const passwordBar = document.getElementById("password-strength");
+        // console.log(password);
 
-            passwordBar.className = "progress-bar";
-            let color = "";
-            let number = "";
-            let strength = 'too  weak';
-            if (strongPattern.test(password)) {
-                color = "bg-success";
-                number = "100";
-                strength = 'strong';
-            } else if (mediumPattern.test(password)) {
-                color = "bg-warning";
-                number = "75";
-                strength = 'moderate';
-            } else if (weakPattern.test(password)) {
-                color = "bg-danger";
-                number = "50";
-                strength = 'weak';
-            } else {
-                color = "bg-danger";
-                number = "25";
-                strength = 'too weak';
-            }
+        passwordBar.className = "progress-bar";
+        let color = "";
+        let number = "";
+        let strength = 'too  weak';
+        if (strongPattern.test(password)) {
+            color = "bg-success";
+            number = "100";
+            strength = 'strong';
+        } else if (mediumPattern.test(password)) {
+            color = "bg-warning";
+            number = "75";
+            strength = 'moderate';
+        } else if (weakPattern.test(password)) {
+            color = "bg-danger";
+            number = "50";
+            strength = 'weak';
+        } else {
+            color = "bg-danger";
+            number = "25";
+            strength = 'too weak';
+        }
 
-            // console.log(color);
-            // console.log(number);
+        // console.log(color);
+        // console.log(number);
 
-            passwordBar.classList.add(color, `w-${number}`);
-            passwordBar.setAttribute("aria-valuenow", number);
-            passwordBar.textContent = strength;
-        });
+        passwordBar.classList.add(color, `w-${number}`);
+        passwordBar.setAttribute("aria-valuenow", number);
+        passwordBar.textContent = strength;
+    });
     </script>
 
     <!-- For numbers input only -->
     <script>
-        const input = document.getElementById('phoneNumber');
-        const tooltipPhone = document.getElementById('tooltip-phone');
-        const zip = document.getElementById('zip');
-        const tooltipZip = document.getElementById('tooltip-zip');
+    const input = document.getElementById('phoneNumber');
+    const tooltipPhone = document.getElementById('tooltip-phone');
+    const zip = document.getElementById('zip');
+    const tooltipZip = document.getElementById('tooltip-zip');
 
-        input.addEventListener('keydown', function(e) {
-            const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Delete'];
+    input.addEventListener('keydown', function(e) {
+        const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Delete'];
 
-            if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                e.preventDefault();
+        if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+            e.preventDefault();
 
-                tooltipPhone.classList.add('show');
-                clearTimeout(tooltipPhone.hideTimeout);
-                tooltipPhone.hideTimeout = setTimeout(() => {
-                    tooltipPhone.classList.remove('show');
-                }, 2000);
-            }
-        });
+            tooltipPhone.classList.add('show');
+            clearTimeout(tooltipPhone.hideTimeout);
+            tooltipPhone.hideTimeout = setTimeout(() => {
+                tooltipPhone.classList.remove('show');
+            }, 2000);
+        }
+    });
 
-        zip.addEventListener('keydown', function(e) {
-            const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Delete'];
+    zip.addEventListener('keydown', function(e) {
+        const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Delete'];
 
-            if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                e.preventDefault();
+        if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+            e.preventDefault();
 
-                tooltipZip.classList.add('show');
-                clearTimeout(tooltipZip.hideTimeout);
-                tooltipZip.hideTimeout = setTimeout(() => {
-                    tooltipZip.classList.remove('show');
-                }, 2000);
-            }
-        });
+            tooltipZip.classList.add('show');
+            clearTimeout(tooltipZip.hideTimeout);
+            tooltipZip.hideTimeout = setTimeout(() => {
+                tooltipZip.classList.remove('show');
+            }, 2000);
+        }
+    });
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-        const passwordField1 = document.getElementById('password');
-        const passwordField2 = document.getElementById('confirm_password');
-        const togglePassword1 = document.getElementById('togglePassword1');
-        const togglePassword2 = document.getElementById('togglePassword2');
+    const passwordField1 = document.getElementById('password');
+    const passwordField2 = document.getElementById('confirm_password');
+    const togglePassword1 = document.getElementById('togglePassword1');
+    const togglePassword2 = document.getElementById('togglePassword2');
 
-        function togglePasswordVisibility(passwordField, toggleIcon) {
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('bxs-hide');
-                toggleIcon.classList.add('bx-show-alt');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('bx-show-alt');
-                toggleIcon.classList.add('bxs-hide');
-            }
+    function togglePasswordVisibility(passwordField, toggleIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('bxs-hide');
+            toggleIcon.classList.add('bx-show-alt');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('bx-show-alt');
+            toggleIcon.classList.add('bxs-hide');
         }
+    }
 
-        togglePassword1.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField1, togglePassword1);
-        });
+    togglePassword1.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField1, togglePassword1);
+    });
 
-        togglePassword2.addEventListener('click', () => {
-            togglePasswordVisibility(passwordField2, togglePassword2);
-        });
+    togglePassword2.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField2, togglePassword2);
+    });
     </script>
 </body>
 
