@@ -112,8 +112,6 @@ section {
 
 label {
   display: block;
-  text-align: center;
-  margin-bottom: 5px;
   font-size: 16px;
   font-family: "Poppins";
   font-weight: bold;
@@ -141,8 +139,6 @@ label {
 }
 
 .form-control:read-only {
-  height: 6vh;
-  /* width: 25vw !important; */
   width: 100%;
   background-color: #f5f5f5;
   text-align: center;
@@ -172,12 +168,13 @@ label {
   grid-template-columns: repeat(2, 20vw);
   grid-template-rows: repeat(5, 0.1vw);
   gap: 8px;
+  margin-top: 0.4rem;
+  align-items: center;
 }
 
 #paymentLabel {
   display: block;
   text-align: left;
-  margin-top: 0.3vw;
   font-size: 16px;
 }
 
@@ -194,6 +191,11 @@ label {
 .form-button {
   display: flex;
   gap: 1rem;
+  justify-content: center;
+}
+
+.form-button button {
+  width: 40%;
 }
 
 .btn {
@@ -202,7 +204,10 @@ label {
 }
 
 .button-container {
-  margin-top: -5vw;
+  margin-top: -3vw;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 /* modal */
