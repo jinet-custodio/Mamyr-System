@@ -125,7 +125,6 @@ try {
                         break;
                 }
                 break;
-                break;
             case 7: //Expired
                 $class = 'muted';
                 break;

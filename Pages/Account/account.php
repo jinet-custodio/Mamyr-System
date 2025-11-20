@@ -121,7 +121,7 @@ $userRole = $_SESSION['userRole'];
                 $email = $data['email'];
                 $phoneNumber = $data['phoneNumber'] ?: "--";
 
-                $birthday = date('M. d, Y', strtotime($data['birthDate']));
+                $birthday = date('M. d, Y', strtotime($data['birthDate'] ?? ''));
                 // $type = ($birthday === NULL || $birthday === "") ? "text" : "date";
                 $birthday = $birthday ?: "--";
 
@@ -355,7 +355,7 @@ $userRole = $_SESSION['userRole'];
                 </div>
 
 
-                <?php if ($role === 'Business Partner' ||  $role = 'Partnership Applicant'): ?>
+                <?php if ($role === 'Business Partner' ||  $role === 'Partnership Applicant') { ?>
                     <h4 class="partner-details-label">Business Partner Information</h4>
                     <input type="hidden" name="partnershipID" value="<?= $partnershipID ?>">
                     <div class="partner-details-container">
@@ -444,7 +444,7 @@ $userRole = $_SESSION['userRole'];
                         </div>
                     </div> -->
 
-                <?php endif; ?>
+                <?php } ?>
 
                 <div class="button-container">
                     <button type="button" class="edit btn btn-primary" name="changeDetails" id="editBtn"
