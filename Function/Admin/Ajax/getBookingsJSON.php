@@ -110,7 +110,7 @@ try {
                 break;
             case 6: // Done
                 $class = 'light-green';
-                switch ($paymentApprovalStatus['statusID']) {
+                switch ($paymentApprovalStatus['statusID'] ?? '') {
                     case 2: //Approved
                         switch ($paymentStatus['paymentStatusID']) {
                             case 2: //Partially Paid

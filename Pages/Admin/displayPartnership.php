@@ -134,6 +134,11 @@ if ($result->num_rows > 0) {
                     <i class="bi bi-calendar-week"></i><span class="linkText"> Bookings</span>
                 </a>
             </li>
+            <li class="nav-item" id="navLI" title="Payments">
+                <a class="nav-link" href="transaction.php">
+                    <i class="bi bi-credit-card-2-front"></i> <span class="linkText">Payments</span>
+                </a>
+            </li>
             <li class="nav-item" id="navLI" title="Schedule">
                 <a class="nav-link" href="schedule.php">
                     <i class="bi bi-calendar-date"></i><span class="linkText">Schedule</span>
@@ -147,11 +152,6 @@ if ($result->num_rows > 0) {
             <li class="nav-item" id="navLI" title="Services">
                 <a class="nav-link" href="services.php">
                     <i class="bi bi-bell"></i> <span class="linkText">Services</span>
-                </a>
-            </li>
-            <li class="nav-item" id="navLI" title="Payments">
-                <a class="nav-link" href="transaction.php">
-                    <i class="bi bi-credit-card-2-front"></i> <span class="linkText">Payments</span>
                 </a>
             </li>
             <li class="nav-item active" id="navLI" title="Partnerships">

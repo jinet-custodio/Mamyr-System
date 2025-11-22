@@ -155,7 +155,7 @@ switch ($userRole) {
                     </div>
 
                     <div class="button-container">
-                        <div id="button-approval-container">
+                        <div id="button-approval-container" class="d-flex w-50 mx-auto">
                             <button type="button" class="btn btn-primary approveReject" data-bs-toggle="modal"
                                 data-bs-target="#finalizedModal">Approve</button>
                             <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal"
@@ -602,6 +602,12 @@ switch ($userRole) {
                                         <div class="mb-3">
                                             <label for="newFoodPrice" class="form-label">Enter Updated Food Price
                                                 (₱)</label>
+                                            <div class="sameFoodPrice d-flex w-50 mb-1" id="sameFoodPrice">
+                                                <input class="form-check-input" type="checkbox" id="sameAmount">
+                                                <label class="form-check-label ms-2" for="sameAmount">
+                                                    Same as original
+                                                </label>
+                                            </div>
                                             <input type="text" class="form-control" id="newFoodPrice" name="newFoodPrice"
                                                 placeholder="e.g 10000">
                                         </div>
@@ -663,7 +669,7 @@ switch ($userRole) {
                 <!-- Approval Modal -->
                 <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="approvalModalLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-body">
                                 <p class="approvalModal-p">You are about to approve a booking. Please review the
@@ -674,7 +680,7 @@ switch ($userRole) {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                    aria-label="Close">Close</button>
+                                    aria-label="Close">Cancel</button>
                                 <button type="submit" class="btn btn-primary loaderTrigger"
                                     name="approveBtn">Approve</button>
                             </div>
@@ -938,31 +944,34 @@ switch ($userRole) {
                     <div class="bookingInfoLeft" id="bookingInformation">
                         <div class="row1">
                             <input type="hidden" name="bookingCode" id="bookingCode" value="<?= $bookingCode ?>">
-                            <input type="hidden" name="startDate" value="<?= $startDate ?>">
-                            <div class="info-container" id="booking-info-container">
-                                <label for="bookingType" class="info-label">Booking Type</label>
-                                <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
-                                <input type="text" class="form-control inputDetail" value="<?= $bookingType ?> Booking"
-                                    readonly>
+                            <div id="typeAndCustomers" class="d-flex w-100">
+                                <input type="hidden" name="startDate" value="<?= $startDate ?>">
+                                <div class="info-container <?= ($bookingType === 'Hotel') ? 'w-100' : 'w-50' ?> px-3" id="booking-info-container">
+                                    <label for="bookingType" class="info-label">Booking Type</label>
+                                    <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
+                                    <input type="text" class="form-control inputDetail" value="<?= $bookingType ?> Booking"
+                                        readonly>
+                                </div>
+                                <?php if ($bookingType === 'Resort') { ?>
+                                    <div class="info-container w-50 px-3" id="booking-info-container">
+                                        <label for="tourType" class="info-label">Tour Type</label>
+                                        <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
+                                        <input type="text" class="form-control inputDetail" name="tourType"
+                                            value="<?= $tourType ?> Swimming" readonly>
+                                    </div>
+                                <?php } elseif ($bookingType === 'Event') { ?>
+                                    <div class="info-container w-50 px-3" id="booking-info-container">
+                                        <label for="eventType" class="info-label">Event Type</label>
+                                        <input type="text" name="eventType" id="eventType" class="form-control inputDetail"
+                                            readonly value="<?= $eventType ?>">
+                                    </div>
+                                <?php } ?>
                             </div>
-                            <?php if ($bookingType === 'Resort') { ?>
-                                <div class="info-container" id="booking-info-container">
-                                    <label for="tourType" class="info-label">Tour Type</label>
-                                    <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
-                                    <input type="text" class="form-control inputDetail" name="tourType"
-                                        value="<?= $tourType ?> Swimming" readonly>
-                                </div>
-                            <?php } elseif ($bookingType === 'Event') { ?>
-                                <div class="info-container" id="booking-info-container">
-                                    <label for="eventType" class="info-label">Event Type</label>
-                                    <input type="text" name="eventType" id="eventType" class="form-control inputDetail"
-                                        readonly value="<?= $eventType ?>">
-                                </div>
-                            <?php } ?>
-                            <div class="info-container" id="booking-info-container">
+                            <div class="info-container px-3" id="booking-info-container">
                                 <label for="paxNum" class="info-label mb-2">Number of People:</label>
                                 <input type="text" class="form-control inputDetail" name="paxNum" id="paxNum"
                                     value="<?= $totalPax ?>" readonly>
+
                             </div>
                         </div>
 
@@ -1353,6 +1362,33 @@ switch ($userRole) {
                 });
             });
 
+        });
+    </script>
+
+    <!-- //* to add original price to updated food price  -->
+    <script>
+        const sameFoodPrice = document.getElementById('sameFoodPrice');
+        const sameAmount = document.getElementById('sameAmount');
+        const newFoodPrice = document.getElementById('newFoodPrice');
+        const foodPrice = document.getElementById('foodPrice');
+
+        sameAmount.addEventListener('click', (event) => {
+            event.stopPropagation();
+
+            if (sameAmount.checked) {
+                newFoodPrice.value = foodPrice.value;
+            } else {
+                newFoodPrice.value = "";
+            }
+        });
+
+        sameFoodPrice.addEventListener('click', () => {
+
+            if (sameAmount.checked) {
+                newFoodPrice.value = foodPrice.value;
+            } else {
+                newFoodPrice.value = "";
+            }
         });
     </script>
 

@@ -109,21 +109,36 @@ if ($role === "Admin") {
                     LPAD(cb.bookingID, 4, '0') AS formattedID, b.bookingCode,
                     cb.confirmedBookingID, cb.downpaymentImage, cb.discountAmount, cb.additionalCharge, cb.finalBill,
                     cb.amountPaid, cb.userBalance, cb.paymentApprovalStatus as paymentApprovalStatusID, 
-                    cb.paymentStatus as paymentStatusID, p.amount, p.paymentID,  cb.paymentDueDate, cb.downpaymentDueDate,
+                    cb.paymentStatus as paymentStatusID,  cb.paymentDueDate, cb.downpaymentDueDate,
                     b.bookingID, b.bookingType, b.customPackageID, b.addOns, b.paymentMethod, b.totalCost as originalBill, b.downpayment, b.bookingStatus as bookingStatusID, mi.foodName,
                     u.firstName, u.lastName, u.phoneNumber, u.userID AS customerID, u.userRole, u.email,
                     cp.totalFoodPrice, cp.venuePricing, cp.additionalServicePrice, cpi.foodItemID, 
                     s.serviceID, s.resortServiceID, s.partnershipServiceID, s.entranceRateID, s.serviceType,
                     ra.RServiceName,sp.price,
                     er.sessionType as tourType,
-                    ps.PBName,              
+                    ps.PBName,       
+                    (
+                        SELECT p2.paymentID 
+                        FROM payment p2
+                        WHERE p2.confirmedBookingID = p.confirmedBookingID
+                        ORDER BY p2.paymentID ASC
+                        LIMIT 1
+                    ) AS singlePaymentID,
+
+                    (
+                        SELECT p2.amount
+                        FROM payment p2
+                        WHERE p2.confirmedBookingID = p.confirmedBookingID
+                        ORDER BY p2.paymentID ASC
+                        LIMIT 1
+                    ) AS singlePaymentAmount,       
                     GROUP_CONCAT(p.paymentID ORDER BY p.paymentID) AS paymentIDs,
                     GROUP_CONCAT(p.amount ORDER BY p.paymentID) AS paymentAmounts,
                     GROUP_CONCAT(p.paymentMethod ORDER BY p.paymentID) AS paymentMethods,
                     GROUP_CONCAT(p.paymentDate ORDER BY p.paymentID) AS paymentDates,
                     GROUP_CONCAT(p.downpaymentImage ORDER BY p.paymentID) AS dpImages
-                FROM confirmedbooking cb
-                LEFT JOIN booking b ON cb.bookingID = b.bookingID
+                FROM booking b
+                LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                 LEFT JOIN user u ON b.userID = u.userID
                 LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                 LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
@@ -135,7 +150,7 @@ if ($role === "Admin") {
                 LEFT JOIN entrancerate er ON s.entranceRateID = er.entranceRateID
                 LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                 LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
-                WHERE cb.bookingID = ? 
+                WHERE b.bookingID = ?
         ");
     $payments->bind_param("i", $bookingID);
     $payments->execute();
@@ -233,10 +248,10 @@ if ($role === "Admin") {
                 }
             }
 
-            $paymentID = $row['paymentID'];
+            $paymentID = $row['singlePaymentID'];
             $customerAmountPaid = 0;
             if (!empty($paymentID)) {
-                $customerAmountPaid = $row['amount'];
+                $customerAmountPaid = $row['singlePaymentAmount'];
             }
 
             $paymentStatus = getPaymentStatus($conn, $paymentStatusID);
@@ -348,23 +363,23 @@ if ($role === "Admin") {
                         <?php if ($bookingType === 'Event') { ?>
                             <div class="payment-input-container" id="payment-info">
                                 <label for="venuePrice" id="paymentLabel" class="mt-2">Venue Price</label>
-                                <input type="text" class="form-control inputDetail w-50" name="venuePrice" id="venuePrice"
+                                <input type="text" class="form-control inputDetail" name="venuePrice" id="venuePrice"
                                     value="₱<?= number_format($venuePrice, 2) ?>" readonly>
                             </div>
                             <div class="payment-input-container" id="payment-info">
                                 <label for="pricePerHead" id="paymentLabel" class="mt-2">Price Per Head</label>
-                                <input type="text" class="form-control inputDetail w-50" name="pricePerHead"
+                                <input type="text" class="form-control inputDetail" name="pricePerHead"
                                     id="pricePerHead" value="₱<?= number_format($pricePerHead, 2) ?>" readonly>
                             </div>
                             <div class="payment-input-container" id="payment-info">
                                 <label for="foodPriceTotal" id="paymentLabel" class="mt-2">Total Food Price</label>
-                                <input type="text" class="form-control inputDetail w-50" name="foodPriceTotal"
+                                <input type="text" class="form-control inputDetail" name="foodPriceTotal"
                                     id="foodPriceTotal" value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
                             </div>
                             <div class="payment-input-container" id="payment-info">
                                 <label for="additionalServicePrice" id="paymentLabel" class="mt-2">Additional Services
                                     Price</label>
-                                <input type="text" class="form-control  inputDetail w-50" name="additionalServicePrice"
+                                <input type="text" class="form-control  inputDetail" name="additionalServicePrice"
                                     id="additionalServicePrice" value="₱<?= number_format($additionalServicePrice, 2) ?>"
                                     readonly>
                             </div>
@@ -372,7 +387,7 @@ if ($role === "Admin") {
                         <?php } ?>
                         <div class="payment-input-container" id="payment-info">
                             <label for="additionalCharge" id="paymentLabel" class="mt-2">Additional Charge</label>
-                            <input type="text" class="form-control inputDetail w-50"
+                            <input type="text" class="form-control inputDetail"
                                 value="₱<?= number_format($additionalCharge, 2) ?>" readonly>
                         </div>
                         <div class="payment-input-container">
@@ -400,28 +415,30 @@ if ($role === "Admin") {
 
 
                 <div class="button-container">
-                    <button type="submit" name="viewBooking" class="btn btn-info w-100" id="viewBookingBtn">View Booking
-                        Details</button>
-                    <button type="button" name="addPayment" id="addPayment" class="btn btn-success w-100"
-                        data-bs-toggle="modal" data-bs-target="#addPaymentModal">Add Payment</button>
-
-                    <div class="form-button" id="form-button">
-                        <button type="button" name="approveBtn" class="btn btn-primary w-100" data-bs-toggle="modal"
+                    <div class="form-button">
+                        <button type="submit" name="viewBooking" class="btn btn-info" id="viewBookingBtn">View Booking
+                            Details</button>
+                        <button type="button" name="addPayment" id="addPayment" class="btn btn-success"
+                            data-bs-toggle="modal" data-bs-target="#addPaymentModal">Add Payment</button>
+                    </div>
+                    <div class="form-button mt-2" id="form-button">
+                        <button type="button" name="approveBtn" class="btn btn-primary " data-bs-toggle="modal"
                             data-bs-target="#finalizedModal">Approve</button>
 
-                        <button type="button" name="rejectBtn" class="btn btn-danger w-100" data-bs-toggle="modal"
+                        <button type="button" name="rejectBtn" class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#rejectModal">Reject</button>
                     </div>
                     <input type="hidden" name="button" value="payment">
                     <input type="hidden" name="totalCost" value="<?= $finalBill ?>"> <!-- info for receipt -->
                     <input type="hidden" name="bookingType" value="<?= $bookingType ?>"> <!-- info for receipt -->
                     <input type="hidden" name="adminName" value="<?= $adminName ?>"> <!-- info for receipt -->
-                    <button type="submit" name="downloadReceiptBtn" id="genReceipt"
-                        class="btn btn-primary w-100 mt-4">Generate
-                        Receipt</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingModal">
-                        View Payment History
-                    </button>
+                    <div class="form-button mt-2">
+                        <button type="submit" name="downloadReceiptBtn" id="genReceipt"
+                            class="btn btn-primary">Generate Receipt</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                            View Payment History
+                        </button>
+                    </div>
                 </div>
 
             </section>
@@ -570,10 +587,21 @@ if ($role === "Admin") {
                                     <input type="text" class="form-control" id="customerPaymentMade" name="customerPaymentMade" value="<?= $customerAmountPaid ?>" readonly>
                                 </div>
                                 <div class="note mt-3">
-                                    <p class="note text-center mb-0">Is the entered amount the same as the amount on the receipt? </p>
+                                    <p class="note text-center mb-0">Is the entered amount the same as the amount on the receipt?</p>
                                     <div class="d-flex mb-2 mx-auto" style="width: 50%; height:10%;">
-                                        <button type="button" class="btn btn-primary w-50 me-2" id="sameAmount">Yes</button>
-                                        <button type="button" class="btn btn-secondary w-50" id="notSame">No</button>
+                                        <div class="form-check w-50 me-2 text-center" id="sameAmountBox">
+                                            <input class="form-check-input" type="checkbox" id="sameAmount" checked>
+                                            <label class="form-check-label" for="sameAmount">
+                                                Yes
+                                            </label>
+                                        </div>
+                                        <div class="form-check w-50 text-center" id="notSameBox">
+                                            <input class="form-check-input" type="checkbox" id="notSame">
+                                            <label class="form-check-label" for="notSame">
+                                                No
+                                            </label>
+                                        </div>
+
                                     </div>
                                     <div class="input-container mt-2" style="display: none;" id="paymentAmountContainer">
                                         <label for="paymentAmount">Payment Amount</label>
@@ -627,7 +655,7 @@ if ($role === "Admin") {
             <!--//* Approval Modal -->
             <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="approvalModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog  modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-body">
                             <p class="approvalModal-p">You are about to approve a payment. Please review the details carefully. Once you approve, the payment will be finalized and cannot be undone. After approval, the reservation will be secured.</p>
@@ -635,7 +663,7 @@ if ($role === "Admin") {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                aria-label="Close">Close</button>
+                                aria-label="Close">Cancel</button>
                             <button type="submit" class="btn btn-primary loaderTrigger" name="approvePaymentBtn" id="approvePaymentBtn">Approve</button>
                         </div>
                     </div>
@@ -1072,13 +1100,21 @@ if ($role === "Admin") {
             });
 
             if (paymentMethod.value === 'GCash') {
-                document.getElementById('notSame').addEventListener('click', () => {
+                document.getElementById('notSameBox').addEventListener('click', () => {
                     document.getElementById('paymentAmountContainer').style.display = 'block';
+                    document.getElementById('sameAmount').checked = false;
+                    document.getElementById('notSame').checked = true;
                 });
 
-                document.getElementById('sameAmount').addEventListener('click', () => {
+                document.getElementById('sameAmountBox').addEventListener('click', () => {
                     document.getElementById('paymentAmountContainer').style.display = 'none';
                     paymentAmount.value = '';
+
+                    if (document.getElementById('notSame').checked === true) {
+                        document.getElementById('notSame').checked = false;
+                        document.getElementById('sameAmount').checked = true;
+                    }
+
                     updateSummary();
                 });
             }

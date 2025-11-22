@@ -219,7 +219,7 @@ main {
 .collapsed .linkText,
 .collapsed .logo,
 .collapsed .admin-name,
-.collapsed .logoutText {
+.collapsed h5.logoutText {
   display: none;
 }
 
@@ -324,7 +324,15 @@ main {
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   #sidebar {
-    width: 25% !important;
+    width: 30% !important;
+  }
+
+  main {
+    width: 70%;
+  }
+
+  #sidebar.collapsed {
+    width: 10% !important;
   }
 
   .collapsed .nav-item i,
@@ -343,6 +351,25 @@ main {
   #sidebar {
     width: 35% !important;
   }
+
+  #sidebar.collapsed {
+    width: 12% !important;
+  }
+
+  main {
+    width: 65%;
+  }
+
+  #pfpContainer {
+    padding: 0 !important;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logOutContainer a {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 /* Phone size */
@@ -351,13 +378,14 @@ main {
     height: unset;
     position: absolute;
     z-index: 1000;
+    width: 40%;
   }
 
   #main,
   main {
     margin-left: 15%;
   }
-  .sidebar.collapsed {
+  #sidebar.collapsed {
     width: 14% !important;
     position: absolute !important;
   }
@@ -371,11 +399,26 @@ main {
   #sidebar .nav-link {
     font-size: var(--font-size-sm);
   }
+
+  #pfpContainer {
+    padding: 0 !important;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .logOutContainer a {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 @media screen and (max-width: 400px) {
   #sidebar .nav-link {
     padding: 0.5vw 1vw;
+  }
+
+  #sidebar {
+    width: 45%;
   }
 
   .sidebar.collapsed {

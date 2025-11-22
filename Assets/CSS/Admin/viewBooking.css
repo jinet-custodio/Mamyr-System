@@ -52,7 +52,7 @@ body {
 .approveReject {
   width: 35%;
   margin: 0 auto;
-  font-size: clamp(1.3vw, 1.4vw, 1.1vw);
+  font-size: clamp(1.3vw, 1.4vw, 1.2vw) !important;
 }
 
 .card {
@@ -79,11 +79,12 @@ body {
 }
 
 .name {
-  font-size: clamp(1.4vw, 1.2vw, 1.1vw) !important;
+  font-size: clamp(25px, calc(2.2vh + 2px), 27px) !important;
+  font-weight: 700;
 }
 
 .sub-name {
-  font-size: clamp(0.9vw, 1vw, 1.1vw) !important;
+  font-size: clamp(19px, calc(1.6vh + 2px), 22px) !important;
 }
 
 .booking-info-name-pic-btn {
