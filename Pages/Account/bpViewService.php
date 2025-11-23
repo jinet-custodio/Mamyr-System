@@ -390,8 +390,7 @@ switch ($userRole) {
             select.style.border = "1px solid red";
             select.disabled = false;
             originalValues[select.name] = select.value;
-
-            changeImageContainer.style.display = 'block';
+            changeImageContainer.style.display = 'flex';
             editBtn.style.display = 'none';
             saveBtn.style.display = 'block';
             cancelBtn.style.display = 'block';

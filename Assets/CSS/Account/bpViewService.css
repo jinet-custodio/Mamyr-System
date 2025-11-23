@@ -67,12 +67,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
 }
 
 .editService-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  gap: 1rem;
   margin-top: 2rem !important;
+}
+
+.form-control:read-only,
+.form-select:disabled {
+  background-color: rgb(223, 226, 230);
+  cursor: not-allowed;
 }
 
 .service-pic {
@@ -92,7 +103,7 @@
 }
 
 .note {
-  color: red;
+  color: rgb(0, 140, 255);
   font-size: 12px;
   font-family: "Poppins";
   text-align: center;

@@ -588,30 +588,86 @@ switch ($userRole) {
     <!-- <script src="../../Assets/JS/Services/editCancelPartnerService.js"></script> -->
 
     <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('action');
-        if (paramValue === 'success') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Service Added Successfully',
-                text: ''
-            })
-        } else if (paramValue === 'error') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Failed to Add Service',
-                text: 'Please try again later.',
-                confirmButtonText: 'Okay',
-            }).then((result) => {
-                addService();
-            })
+
+        switch (paramValue) {
+            case 'success':
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Service Added Successfully',
+                });
+                break;
+            case 'error':
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Add Service',
+                    text: 'Please try again later.',
+                    confirmButtonText: 'Okay',
+                }).then((result) => {
+                    addService();
+                })
+                break;
+            case 'imageFailed':
+            case 'uploadingFailed':
+                Swal.fire({
+                    title: "Info!",
+                    text: "No Image Selected",
+                    icon: "info",
+                    confirmButtonText: 'Okay',
+                }).then((result) => {
+                    addService();
+                })
+                break;
+            case 'imageSize':
+                Swal.fire({
+                    title: "Oops!",
+                    text: "File is too large. Maximum allowed size is 5MB.",
+                    icon: "warning",
+                    confirmButtonText: 'Okay',
+                }).then((result) => {
+                    addService();
+                })
+                break;
+            case 'imageFailed':
+                Swal.fire({
+                    title: 'Oops',
+                    text: `Make sure you uploaded an image`,
+                    icon: 'warning',
+                    confirmButtonText: 'Okay',
+                }).then((result) => {
+                    addService();
+                })
+                break;
+            case 'imageExt':
+                Swal.fire({
+                    title: 'Oops',
+                    text: `Invalid file type. Please upload JPG, JPEG, WEBP, or PNG.`,
+                    icon: 'warning',
+                    confirmButtonText: 'Okay',
+                }).then((result) => {
+                    addService();
+                })
+                break;
         }
 
-        // if (paramValue) {
-        //     const url = new URL(window.location);
-        //     url.search = '';
-        //     history.replaceState({}, document.title, url.toString());
-        // }
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
 
