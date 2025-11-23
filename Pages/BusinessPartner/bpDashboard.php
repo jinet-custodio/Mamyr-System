@@ -116,7 +116,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <!-- Account Icon on the Left -->
         <ul class="navbar-nav d-flex flex-row align-items-center" id="profileAndNotif">
             <?php
-            $getProfile = $conn->prepare("SELECT firstName, userProfile FROM user WHERE userID = ? AND userRole = ?");
+            $getProfile = $conn->prepare("SELECT u.firstName, u.userProfile, p.partnershipID FROM user u
+            INNER JOIN usertype ut ON u.userRole = ut.userTypeID
+            LEFT JOIN partnership p ON u.userID = p.userID
+            WHERE u.userID = ? AND u.userRole = ?");
             $getProfile->bind_param("ii", $userID, $userRole);
             $getProfile->execute();
             $getProfileResult = $getProfile->get_result();
@@ -128,6 +131,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 $mimeType = finfo_buffer($finfo, $imageData);
                 finfo_close($finfo);
                 $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+
+                $partnershipID = $data['partnershipID'];
+                $encodedPartnershipID = base64_encode($partnershipID ?? '');
             }
             ?>
             <li class="nav-item account-nav">
@@ -313,7 +319,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                             <div class="sales-chart" id="pieGraph">
                                 <canvas id="salesGraph" class="graph"></canvas>
-                                <a href="../Admin/salesReport.php" class="btn btn-primary sales-btn">Sales Report</a>
+                                <a href="../Admin/salesReport.php?id=<?= $encodedPartnershipID ?>" class="btn btn-primary sales-btn">Sales Report</a>
                             </div>
 
                         </div>
