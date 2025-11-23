@@ -1274,6 +1274,39 @@ if ($result->num_rows > 0) {
     <script src="../../Assets/JS/Services/servicePricingFunc.js"> </script>
 
     <?php include '../Customer/loader.php'; ?>
+
+
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('result');
+
+        switch (paramValue) {
+            case 'added':
+                Toast.fire({
+                    title: 'Service was added successfully',
+                    icon: 'success'
+                })
+                break;
+        }
+
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
+    </script>
 </body>
 
 </html>
