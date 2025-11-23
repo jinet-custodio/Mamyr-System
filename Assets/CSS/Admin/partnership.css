@@ -27,11 +27,11 @@
 
 .card-title {
   font-family: "Poppins";
-  font-size: 1rem;
+  font-size: 18px;
 }
 
 .name {
-  font-size: 2.35rem !important;
+  font-size: 20px !important;
 }
 
 .partner-info-name-pic,
@@ -43,22 +43,28 @@
 }
 
 .img-fluid {
-  height: 30vh;
-  width: 30vh;
+  height: 20vh;
+  width: auto;
   object-fit: cover;
 }
 
 .card-text {
   font-family: "Poppins";
-  font-size: 1.3rem;
+  font-size: 16px;
 }
 
-/* .card-body {
-  border: 1px solid red;
+.card-body {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 1rem;
-} */
+}
+
+.partner-info-container,
+.applicant-info-container {
+  display: flex;
+  gap: 1rem;
+}
 
 .firstRow {
   display: flex;
@@ -112,10 +118,11 @@
 }
 
 .page-title {
-  font-family: "Alkatra";
-  font-size: 2rem;
-  margin-left: 0.5rem;
-  margin-top: 0.3rem;
+  font-family: "Poppins";
+  font-size: 25px;
+  font-weight: bold;
+  /* margin-left: 0.5rem;
+  margin-top: 0.3rem; */
 }
 
 .back {
@@ -141,13 +148,23 @@ form {
 
 /* Tablet portrait */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
+  .partner-info-container,
+  .applicant-info-container {
+    flex-direction: column;
+  }
+
   .card {
     width: 90% !important;
   }
 
+  .card-body {
+    display: flex;
+    flex-direction: column;
+  }
+
   .img-fluid {
-    height: 25vh;
-    width: 25vh;
+    height: 20vh;
+    width: auto;
   }
 
   .name {
@@ -164,8 +181,7 @@ form {
     flex-wrap: wrap;
   }
 
-  .documentLink,
-  .validID {
+  .documentLink {
     width: 48%;
   }
 
@@ -175,25 +191,35 @@ form {
 }
 
 @media only screen and (max-width: 599px) {
+  .partner-info-container,
+  .applicant-info-container {
+    flex-direction: column;
+  }
+
   .card {
     width: 95% !important;
   }
 
+  .card-body {
+    display: flex;
+    flex-direction: column;
+  }
+
   .partner-info-name-pic,
   .applicant-info-name-pic {
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
   .img-fluid {
-    height: 20vh;
-    width: 20vh;
+    height: 18vh;
+    width: auto;
   }
 
   .firstRow,
   .secondRow {
-    flex-direction: column; 
+    flex-direction: column;
     gap: 0.8rem;
   }
 
@@ -203,7 +229,7 @@ form {
   }
 
   .validIDImg {
-    width: 90%; 
+    width: 90%;
   }
 
   .name {

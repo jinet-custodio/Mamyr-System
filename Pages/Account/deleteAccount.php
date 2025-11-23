@@ -187,12 +187,12 @@ switch ($userRole) {
                         <span class="sidebar-text">Services</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a href="bpSales.php" class="list-group-item">
                         <i class="bi bi-tags sidebar-icon"></i>
                         <span class="sidebar-text">Sales</span>
                     </a>
-                </li>
+                </li> -->
                 <?php } ?>
                 <li>
                     <a href="loginSecurity.php" class="list-group-item">

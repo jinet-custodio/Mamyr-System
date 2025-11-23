@@ -65,8 +65,9 @@ body {
 }
 
 .calendar-card {
-  width: 80%;
-  margin: 0 auto;
+  border: none !important;
+  /* width: 80%;
+  margin: 0 auto; */
 }
 
 #calendar {

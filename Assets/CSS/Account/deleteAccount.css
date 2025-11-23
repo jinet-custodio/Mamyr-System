@@ -27,20 +27,29 @@
 .card {
   border: none;
   width: 90%;
+  margin: auto;
 }
 
 .card-title {
-  font-size: 25px;
-  font-family: "Poppins Black";
+  text-align: center;
+  font-size: 30px;
+  font-family: "Poppins";
   font-weight: bold;
-  margin-bottom: 2vw;
+  background-color: transparent;
+  border: none;
 }
 
 .card-text {
-  font-size: 18px;
-  text-indent: 2rem;
+  width: 100%;
+  margin: auto;
+  text-align: center;
   line-height: 2;
-  text-align: justify;
+  font-size: 16px;
+}
+
+.delete-button {
+  margin-top: 2rem;
+  text-align: center;
 }
 
 #confirmationModal {

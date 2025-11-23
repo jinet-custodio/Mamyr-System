@@ -89,7 +89,6 @@ body {
 #partner-card,
 #request-card {
   border: none !important;
-  padding: var(--padding-lg);
   margin-top: var(--margin-mdl);
   margin-bottom: 2rem;
   width: 100% !important;
