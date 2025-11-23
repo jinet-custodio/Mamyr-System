@@ -90,11 +90,32 @@ switch ($userRole) {
 
     </nav>
 
+    <?php
+    $getAdminData = $conn->prepare("SELECT adminID FROM admin WHERE userID = ?");
+    $getAdminData->bind_param('i', $userID);
+    if (!$getAdminData->execute()) {
+        error_log('Failed getting user data: userID' . $userID);
+    }
+
+    $result = $getAdminData->get_result();
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        $adminID = $data['adminID'];
+    } else {
+        $_SESSION['error'] = "Unauthorized Access eh!";
+        session_destroy();
+        header("Location: ../register.php");
+        exit();
+    }
+    ?>
+
     <div class="titleContainer">
         <h1 class="title" id="title">Add Booking</h1>
     </div>
 
     <form action="../../Function/Admin/addBulkBooking.php" method="POST">
+
+        <input type="hidden" name="adminID" value="<?= $adminID ?>">
 
         <main class="container-fluid">
             <!-- <h5 class="bsTitle">Booking Summary</h5> -->

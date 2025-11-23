@@ -11,6 +11,7 @@ if (isset($_POST['addBulkBooking'])) {
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $totalBookings = intval($_POST['totalBooking']);
     $totalSales = floatval($_POST['totalSales']);
+    $adminID = intval($_POST['adminID']);
 
     list($firstDate, $lastDate) = explode(" to ", $dateRange);
 
@@ -30,8 +31,8 @@ if (isset($_POST['addBulkBooking'])) {
     }
 
     try {
-        $insertSalesQuery = $conn->prepare("INSERT INTO `walkin_sales_summary`(`startDate`, `endDate`, `bookingType`, `bookingCount`, `salesAmount`) VALUES (?,?,?,?,?)");
-        $insertSalesQuery->bind_param('sssid', $startDate, $endDate, $bookingType, $totalBookings, $totalSales);
+        $insertSalesQuery = $conn->prepare("INSERT INTO `walkin_sales_summary`(`startDate`, `endDate`, `bookingType`, `bookingCount`, `salesAmount`, `createdBy`) VALUES (?,?,?,?,?,?)");
+        $insertSalesQuery->bind_param('sssidi', $startDate, $endDate, $bookingType, $totalBookings, $totalSales, $adminID);
 
         if (!$insertSalesQuery->execute()) {
             throw new Exception('Error executing the insertion of booking with sales query');
