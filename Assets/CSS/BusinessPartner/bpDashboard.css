@@ -13,7 +13,8 @@
 
 .service-btn,
 .bookNowBtn,
-.viewBtn {
+.viewBtn,
+.sales-btn {
   font-family: "Poppins" !important;
   font-size: var(--font-size-sm) !important;
 }
@@ -200,12 +201,17 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  padding: 1rem;
 }
 
 #salesGraph {
   width: auto;
   height: auto !important;
   min-height: 70%;
+}
+
+.sales-btn {
+  margin: 1rem auto;
 }
 
 .services-card {

@@ -33,18 +33,18 @@
 }
 
 .card-header {
-  font-family: "Poppins Black";
-  font-size: 25px;
+  text-align: center;
+  font-size: 30px;
+  font-family: "Poppins";
+  font-weight: bold;
   background-color: transparent;
   border: none;
-  text-transform: capitalize;
 }
 
 .card-text {
-  width: 95%;
+  width: 100%;
   margin: auto;
-  text-indent: 3rem;
-  text-align: justify;
+  text-align: center;
   line-height: 2;
   font-size: 16px;
 }

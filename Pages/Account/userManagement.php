@@ -107,17 +107,17 @@ unset($_SESSION['account-form']);
             </div>
             <div class="home">
                 <?php if ($role === 'Customer') { ?>
-                    <a href="../Customer/dashboard.php">
-                        <i class="bi bi-house homeIcon"></i>
-                    </a>
+                <a href="../Customer/dashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <a href="../Admin/adminDashboard.php">
-                        <i class="bi bi-house homeIcon"></i>
-                    </a>
+                <a href="../Admin/adminDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                    <a href="../BusinessPartner/bpDashboard.php">
-                        <i class="bi bi-house homeIcon"></i>
-                    </a>
+                <a href="../BusinessPartner/bpDashboard.php">
+                    <i class="bi bi-house homeIcon"></i>
+                </a>
                 <?php } ?>
             </div>
 
@@ -137,39 +137,39 @@ unset($_SESSION['account-form']);
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
-                            <i class="bi bi-calendar2-check sidebar-icon"></i>
-                            <span class="sidebar-text">Payment & Booking History</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="bookingHistory.php" class="list-group-item" id="paymentBookingHist">
+                        <i class="bi bi-calendar2-check sidebar-icon"></i>
+                        <span class="sidebar-text">Payment & Booking History</span>
+                    </a>
+                </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                    <li class="sidebar-item">
-                        <a href="userManagement.php" class="list-group-item active">
-                            <i class="bi bi-person-gear sidebar-icon"></i>
-                            <span class="sidebar-text">Manage Users</span>
-                        </a>
-                    </li>
+                <li class="sidebar-item">
+                    <a href="userManagement.php" class="list-group-item active">
+                        <i class="bi bi-person-gear sidebar-icon"></i>
+                        <span class="sidebar-text">Manage Users</span>
+                    </a>
+                </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                    <li class="sidebar-item">
-                        <a href="bpBookings.php" class="list-group-item">
-                            <i class="bi bi-calendar-week sidebar-icon"></i>
-                            <span class="sidebar-text">Bookings</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="bpServices.php" class="list-group-item">
-                            <i class="bi bi-bell sidebar-icon"></i>
-                            <span class="sidebar-text">Services</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
+                <li class="sidebar-item">
+                    <a href="bpBookings.php" class="list-group-item">
+                        <i class="bi bi-calendar-week sidebar-icon"></i>
+                        <span class="sidebar-text">Bookings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="bpServices.php" class="list-group-item">
+                        <i class="bi bi-bell sidebar-icon"></i>
+                        <span class="sidebar-text">Services</span>
+                    </a>
+                </li>
+                <!-- <li class="sidebar-item">
                         <a href="bpSales.php" class="list-group-item">
                             <i class="bi bi-tags sidebar-icon"></i>
                             <span class="sidebar-text">Sales</span>
                         </a>
-                    </li>
+                    </li> -->
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -265,99 +265,99 @@ unset($_SESSION['account-form']);
 
     <!-- Table JS -->
     <script>
-        $(document).ready(function() {
-            $('#usertable').DataTable({
-                language: {
-                    emptyTable: "No users found."
+    $(document).ready(function() {
+        $('#usertable').DataTable({
+            language: {
+                emptyTable: "No users found."
+            },
+            columnDefs: [{
+                    targets: 0,
+                    width: "18%"
                 },
-                columnDefs: [{
-                        targets: 0,
-                        width: "18%"
-                    },
-                    {
-                        targets: 1,
-                        width: "25%"
-                    },
-                    {
-                        targets: 2,
-                        width: "10%"
-                    },
-                    {
-                        targets: 3,
-                        width: "10%"
-                    },
-                    {
-                        targets: 4,
-                        width: "15%"
-                    },
-                    {
-                        targets: 5,
-                        width: "17%"
-                    }
-                ]
-            });
+                {
+                    targets: 1,
+                    width: "25%"
+                },
+                {
+                    targets: 2,
+                    width: "10%"
+                },
+                {
+                    targets: 3,
+                    width: "10%"
+                },
+                {
+                    targets: 4,
+                    width: "15%"
+                },
+                {
+                    targets: 5,
+                    width: "17%"
+                }
+            ]
         });
+    });
     </script>
 
     <script>
-        function getRoleBadge(role) {
-            let colorClass = "";
-            switch (role.toLowerCase()) {
-                case "admin":
-                    colorClass = "badge bg-danger";
-                    break;
-                case "customer":
-                    colorClass = "badge bg-primary";
-                    break;
-                case "business partner":
-                case "partner":
-                    colorClass = "badge bg-success";
-                    break;
-                case "applicant":
-                    colorClass = "badge bg-warning ";
-                    break;
-                default:
-                    colorClass = "badge bg-secondary";
-            }
-            return `<span class="${colorClass} text-capitalize">${role}</span>`;
+    function getRoleBadge(role) {
+        let colorClass = "";
+        switch (role.toLowerCase()) {
+            case "admin":
+                colorClass = "badge bg-danger";
+                break;
+            case "customer":
+                colorClass = "badge bg-primary";
+                break;
+            case "business partner":
+            case "partner":
+                colorClass = "badge bg-success";
+                break;
+            case "applicant":
+                colorClass = "badge bg-warning ";
+                break;
+            default:
+                colorClass = "badge bg-secondary";
         }
+        return `<span class="${colorClass} text-capitalize">${role}</span>`;
+    }
 
-        function getStatusBadge(status) {
-            let colorClass = "";
-            switch (status.toLowerCase()) {
-                case "verified":
-                case "active":
-                    colorClass = "badge bg-success";
-                    break;
-                case "pending":
-                    colorClass = "badge bg-warning ";
-                    break;
-                default:
-                    colorClass = "badge bg-light text-muted";
-            }
-            return `<span class="${colorClass} text-capitalize">${status}</span>`;
+    function getStatusBadge(status) {
+        let colorClass = "";
+        switch (status.toLowerCase()) {
+            case "verified":
+            case "active":
+                colorClass = "badge bg-success";
+                break;
+            case "pending":
+                colorClass = "badge bg-warning ";
+                break;
+            default:
+                colorClass = "badge bg-light text-muted";
         }
+        return `<span class="${colorClass} text-capitalize">${status}</span>`;
+    }
 
-        fetch("../../Function/Admin/Ajax/getUsers.php")
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    throw new Error(data.message || "Failed to load user data.");
-                    return;
-                }
+    fetch("../../Function/Admin/Ajax/getUsers.php")
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                throw new Error(data.message || "Failed to load user data.");
+                return;
+            }
 
-                const users = data.users;
-                const table = $('#usertable').DataTable();
-                table.clear();
+            const users = data.users;
+            const table = $('#usertable').DataTable();
+            table.clear();
 
-                users.forEach(user => {
-                    table.row.add([
-                        user.name,
-                        user.email,
-                        getRoleBadge(user.role),
-                        getStatusBadge(user.status),
-                        user.date,
-                        `<div class="button-container">
+            users.forEach(user => {
+                table.row.add([
+                    user.name,
+                    user.email,
+                    getRoleBadge(user.role),
+                    getStatusBadge(user.status),
+                    user.date,
+                    `<div class="button-container">
                             <form action="viewUser.php" method="POST" id="viewForm">
                                 <input type="hidden" name="selectedUserID" value="${user.userID}">
                                 <button type="submit" class="btn btn-info viewBtn" name="viewUser">View</button>
@@ -371,191 +371,191 @@ unset($_SESSION['account-form']);
                                 Delete
                             </button>
                         </div>`
-                    ]);
-                });
-
-
-                table.draw();
-
-            }).catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: error.message || 'Failed to load data from the server.'
-                })
+                ]);
             });
 
 
-        const deleteBtns = document.querySelectorAll('.deleteUserAccount');
+            table.draw();
 
-        document.addEventListener('click', function(e) {
-            const target = e.target;
-            if (target.classList.contains('deleteUserAccount')) {
-                const userId = target.getAttribute("data-userid");
-                const confirmationModal = document.getElementById("confirmationModal");
-                if (!confirmationModal) return;
-
-                const userIdInput = confirmationModal.querySelector('input[name="selectedUserID"]');
-                if (userIdInput) userIdInput.value = userId;
-            }
+        }).catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: error.message || 'Failed to load data from the server.'
+            })
         });
+
+
+    const deleteBtns = document.querySelectorAll('.deleteUserAccount');
+
+    document.addEventListener('click', function(e) {
+        const target = e.target;
+        if (target.classList.contains('deleteUserAccount')) {
+            const userId = target.getAttribute("data-userid");
+            const confirmationModal = document.getElementById("confirmationModal");
+            if (!confirmationModal) return;
+
+            const userIdInput = confirmationModal.querySelector('input[name="selectedUserID"]');
+            if (userIdInput) userIdInput.value = userId;
+        }
+    });
     </script>
 
     <script>
-        //Handle sidebar for responsiveness
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.getElementById('toggle-btn');
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const items = document.querySelectorAll('.list-group-item');
-            const toggleCont = document.getElementById('toggle-container');
-            const viewBtns = document.querySelectorAll('.viewBtn');
-            const deleteBtns = document.querySelectorAll('.deleteUserAccount');
-            const roles = document.querySelectorAll('.user-role');
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
+    //Handle sidebar for responsiveness
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const items = document.querySelectorAll('.list-group-item');
+        const toggleCont = document.getElementById('toggle-container');
+        const viewBtns = document.querySelectorAll('.viewBtn');
+        const deleteBtns = document.querySelectorAll('.deleteUserAccount');
+        const roles = document.querySelectorAll('.user-role');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
 
-                if (sidebar.classList.contains('collapsed')) {
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    });
-                    toggleCont.style.justifyContent = "center"
-                } else {
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    });
-                    toggleCont.style.justifyContent = "flex-end"
-                }
-            });
-
-            function handleResponsiveSidebar() {
-                if (window.innerWidth <= 600) {
-                    sidebar.classList.add('collapsed');
-                    viewBtns.forEach(viewBtn => {
-                        viewBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
-                    })
-                    deleteBtns.forEach(deleteBtn => {
-                        deleteBtn.innerHTML = '<i class="fa-solid fa-user-xmark"></i>';
-                    })
-                    roles.forEach(role => {
-                        // console.log(role.innerHTML);
-                        if (role.innerHTML == "Customer") {
-                            role.innerHTML = '<i class="fa-solid fa-user status-icon"></i>';
-                        } else if (role.innerHTML == "Partner") {
-                            role.innerHTML = '<i class="fa-solid fa-handshake status-icon"></i>';
-                        } else if (role.innerHTML == "Admin") {
-                            role.innerHTML = '<i class="fa-solid fa-user-tie status-icon"></i>';
-                        } else if (role.innerHTML == "PartnerRequest") {
-                            role.innerHTML = '<i class="fa-solid fa-hourglass-half status-icon"></i>';
-                        }
-                    })
-                } else {
-                    toggleBtn.style.display = "none";
-                    items.forEach(item => {
-                        item.style.justifyContent = "flex-start";
-                    })
-                    sidebar.classList.remove('collapsed');
-                    viewBtns.forEach(viewBtn => {
-                        viewBtn.innerHTML = 'View';
-                    })
-                    deleteBtns.forEach(deleteBtn => {
-                        deleteBtn.innerHTML = 'Delete';
-                    })
-                    roles.forEach(role => {
-                        // console.log(role.innerHTML);
-                        if (role.innerHTML == '<i class="fa-solid fa-user status-icon"></i>') {
-                            role.innerHTML = 'Customer';
-                        } else if (role.innerHTML == '<i class="fa-solid fa-handshake status-icon"></i>') {
-                            role.innerHTML = 'Partner';
-                        } else if (role.innerHTML == '<i class="fa-solid fa-user-tie status-icon"></i>') {
-                            role.innerHTML = 'Admin';
-                        } else if (role.innerHTML ==
-                            '<i class="fa-solid fa-hourglass-half status-icon"></i>') {
-                            role.innerHTML = 'PartnerRequest';
-                        }
-                    })
-                }
-                //change the text into icons when the screen width shrinks to below 1024px
-                if (window.innerWidth <= 1024) {
-                    sidebar.classList.add('collapsed');
-                    toggleBtn.style.display = "flex";
-                    items.forEach(item => {
-                        item.style.justifyContent = "center";
-                    })
-
-                }
+            if (sidebar.classList.contains('collapsed')) {
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                });
+                toggleCont.style.justifyContent = "center"
+            } else {
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                });
+                toggleCont.style.justifyContent = "flex-end"
             }
-
-            // Run on load and when window resizes
-            handleResponsiveSidebar();
-            window.addEventListener('resize', handleResponsiveSidebar);
         });
+
+        function handleResponsiveSidebar() {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.add('collapsed');
+                viewBtns.forEach(viewBtn => {
+                    viewBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+                })
+                deleteBtns.forEach(deleteBtn => {
+                    deleteBtn.innerHTML = '<i class="fa-solid fa-user-xmark"></i>';
+                })
+                roles.forEach(role => {
+                    // console.log(role.innerHTML);
+                    if (role.innerHTML == "Customer") {
+                        role.innerHTML = '<i class="fa-solid fa-user status-icon"></i>';
+                    } else if (role.innerHTML == "Partner") {
+                        role.innerHTML = '<i class="fa-solid fa-handshake status-icon"></i>';
+                    } else if (role.innerHTML == "Admin") {
+                        role.innerHTML = '<i class="fa-solid fa-user-tie status-icon"></i>';
+                    } else if (role.innerHTML == "PartnerRequest") {
+                        role.innerHTML = '<i class="fa-solid fa-hourglass-half status-icon"></i>';
+                    }
+                })
+            } else {
+                toggleBtn.style.display = "none";
+                items.forEach(item => {
+                    item.style.justifyContent = "flex-start";
+                })
+                sidebar.classList.remove('collapsed');
+                viewBtns.forEach(viewBtn => {
+                    viewBtn.innerHTML = 'View';
+                })
+                deleteBtns.forEach(deleteBtn => {
+                    deleteBtn.innerHTML = 'Delete';
+                })
+                roles.forEach(role => {
+                    // console.log(role.innerHTML);
+                    if (role.innerHTML == '<i class="fa-solid fa-user status-icon"></i>') {
+                        role.innerHTML = 'Customer';
+                    } else if (role.innerHTML == '<i class="fa-solid fa-handshake status-icon"></i>') {
+                        role.innerHTML = 'Partner';
+                    } else if (role.innerHTML == '<i class="fa-solid fa-user-tie status-icon"></i>') {
+                        role.innerHTML = 'Admin';
+                    } else if (role.innerHTML ==
+                        '<i class="fa-solid fa-hourglass-half status-icon"></i>') {
+                        role.innerHTML = 'PartnerRequest';
+                    }
+                })
+            }
+            //change the text into icons when the screen width shrinks to below 1024px
+            if (window.innerWidth <= 1024) {
+                sidebar.classList.add('collapsed');
+                toggleBtn.style.display = "flex";
+                items.forEach(item => {
+                    item.style.justifyContent = "center";
+                })
+
+            }
+        }
+
+        // Run on load and when window resizes
+        handleResponsiveSidebar();
+        window.addEventListener('resize', handleResponsiveSidebar);
+    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- For logout -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const logoutBtn = document.getElementById('logoutBtn');
+    document.addEventListener("DOMContentLoaded", function() {
+        const logoutBtn = document.getElementById('logoutBtn');
 
-            logoutBtn.addEventListener("click", function() {
-                Swal.fire({
-                    title: "Are you sure you want to log out?",
-                    text: "You will need to log in again to access your account.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    // confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, logout!",
-                    customClass: {
-                        title: 'swal-custom-title',
-                        htmlContainer: 'swal-custom-text'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "../../Function/Admin/logout.php";
-                    }
-                });
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../Function/Admin/logout.php";
+                }
             });
         });
+    });
     </script>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('action');
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('action');
 
-        if (paramValue === "accountDeleted") {
-            Swal.fire({
-                position: 'top-right',
-                title: "Confirmed",
-                text: "The account has been deleted.",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        } else if (paramValue === "failed") {
-            Swal.fire({
-                title: "Action Failed",
-                text: "We were unable to delete the account. Please try again later.",
-                icon: "error"
-            });
-        } else if (paramValue === "userCreated") {
-            Swal.fire({
-                position: 'top-right',
-                title: "Confirmed",
-                text: "New Account Created Successfully.",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }
+    if (paramValue === "accountDeleted") {
+        Swal.fire({
+            position: 'top-right',
+            title: "Confirmed",
+            text: "The account has been deleted.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    } else if (paramValue === "failed") {
+        Swal.fire({
+            title: "Action Failed",
+            text: "We were unable to delete the account. Please try again later.",
+            icon: "error"
+        });
+    } else if (paramValue === "userCreated") {
+        Swal.fire({
+            position: 'top-right',
+            title: "Confirmed",
+            text: "New Account Created Successfully.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 </body>

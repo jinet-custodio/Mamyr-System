@@ -313,6 +313,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                             <div class="sales-chart" id="pieGraph">
                                 <canvas id="salesGraph" class="graph"></canvas>
+                                <a href="../Admin/salesReport.php" class="btn btn-primary sales-btn">Sales Report</a>
                             </div>
 
                         </div>

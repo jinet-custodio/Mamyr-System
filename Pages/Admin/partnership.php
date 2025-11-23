@@ -146,30 +146,36 @@ switch ($userRole) {
             </div>
 
             <div class="card-body">
-                <div class="partner-info">
-                    <h4 class="card-title">Company Name</h4>
-                    <p class="card-text"><?= $companyName ?></p>
-                </div>
-                <div class="partner-info">
-                    <h4 class="card-title">Business Address</h4>
-                    <p class="card-text"><?= $address ?></p>
-                </div>
-                <div class="partner-info">
-                    <h4 class="card-title">Document Link</h4>
-                    <a href="<?= $link ?>" target="_blank" onclick="return warnExternalLink('<?= htmlspecialchars($link) ?>', event)"><?= $link ?></a>
+                <div class="partner-info-container">
+                    <div class="partner-info">
+                        <h4 class="card-title">Company Name</h4>
+                        <p class="card-text"><?= $companyName ?></p>
+                    </div>
+                    <div class="partner-info">
+                        <h4 class="card-title">Business Address</h4>
+                        <p class="card-text"><?= $address ?></p>
+                    </div>
+                    <div class="partner-info">
+                        <h4 class="card-title">Document Link</h4>
+                        <a href="<?= $link ?>" target="_blank"
+                            onclick="return warnExternalLink('<?= htmlspecialchars($link) ?>', event)"><?= $link ?></a>
 
+                    </div>
                 </div>
-                <div class="applicant-info">
-                    <h4 class="card-title">Partner Type</h4>
-                    <?php foreach ($partnerTypes as  $partnerType): ?>
+                <div class="applicant-info-container">
+                    <div class="applicant-info">
+                        <h4 class="card-title">Partner Type</h4>
+                        <?php foreach ($partnerTypes as  $partnerType): ?>
                         <p class="card-text"><?= ($partnerType) ?></p>
-                    <?php endforeach; ?>
-                </div>
-                <div class="applicant-info validID">
-                    <h4 class="card-title">Valid ID</h4>
-                    <input type="text" class="form-control validID" value="<?= $imageName ?? '' ?>" name="validID" readonly>
-                    <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
-                        data-bs-target="#partnerModal">View ID</button>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="applicant-info validID">
+                        <h4 class="card-title">Valid ID</h4>
+                        <input type="text" class="form-control validID" value="<?= $imageName ?? '' ?>" name="validID"
+                            readonly>
+                        <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
+                            data-bs-target="#partnerModal">View ID</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -179,9 +185,6 @@ switch ($userRole) {
 
                     <div class="modal-header">
                         <h5 class="modal-title">Valid ID</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
                     <div class="modal-body">
                         <img src="../../Assets/Images/BusinessPartnerIDs/<?= $imageName ?? '' ?>" alt="Valid ID"
@@ -268,18 +271,18 @@ switch ($userRole) {
                         <p class="card-text sub-name"><?= $businessEmail ?> | <?= $phoneNumber ?> </p>
                     </div>
                     <?php if ($partnerStatus === 1) { ?>
-                        <div class="button-container">
-                            <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                    <div class="button-container">
+                        <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
 
-                            <button type="button" class="btn btn-danger" id="declineBtn" data-bs-toggle="modal"
-                                data-bs-target="#rejectionModal">
-                                Decline
-                            </button>
-                        </div>
+                        <button type="button" class="btn btn-danger" id="declineBtn" data-bs-toggle="modal"
+                            data-bs-target="#rejectionModal">
+                            Decline
+                        </button>
+                    </div>
                     <?php } else { ?>
-                        <div class="rejected-image">
-                            <img src="../../Assets/Images/Icon/rejected.png" alt="Rejected Image">
-                        </div>
+                    <div class="rejected-image">
+                        <img src="../../Assets/Images/Icon/rejected.png" alt="Rejected Image">
+                    </div>
                     <?php } ?>
                 </div>
 
@@ -292,10 +295,10 @@ switch ($userRole) {
                         <div class="applicant-info" id="partnerType-container">
                             <h4 class="card-title">Partner Type</h4>
                             <?php foreach ($partnerTypes as  $id => $name): ?>
-                                <div class="partnertype-container">
-                                    <input type="checkbox" name="partnerTypes[]" value="<?= $id ?>">
-                                    <label> <?= $name ?></label>
-                                </div>
+                            <div class="partnertype-container">
+                                <input type="checkbox" name="partnerTypes[]" value="<?= $id ?>">
+                                <label> <?= $name ?></label>
+                            </div>
 
                             <?php endforeach; ?>
                         </div>
@@ -307,11 +310,13 @@ switch ($userRole) {
                         </div>
                         <div class="applicant-info documentLink">
                             <h4 class="card-title">Document Link</h4>
-                            <a href="<?= $link ?>" target="_blank" onclick="return warnExternalLink('<?= htmlspecialchars($link) ?>', event)"><?= $link ?></a>
+                            <a href="<?= $link ?>" target="_blank"
+                                onclick="return warnExternalLink('<?= htmlspecialchars($link) ?>', event)"><?= $link ?></a>
                         </div>
                         <div class="applicant-info validID">
                             <h4 class="card-title">Valid ID</h4>
-                            <input type="text" class="form-control validID" value="<?= htmlspecialchars($imageName) ?>" name="validID" readonly>
+                            <input type="text" class="form-control validID" value="<?= htmlspecialchars($imageName) ?>"
+                                name="validID" readonly>
                             <button type="button" class="btn btn-primary viewID" data-bs-toggle="modal"
                                 data-bs-target="#applicantModal">View ID</button>
                         </div>
@@ -347,7 +352,8 @@ switch ($userRole) {
                 </div>
             </form>
         </div>
-        <div class="modal fade" id="applicantModal" tabindex="-1" aria-labelledby="applicantModalLabel" aria-hidden="true">
+        <div class="modal fade" id="applicantModal" tabindex="-1" aria-labelledby="applicantModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
 
@@ -381,90 +387,90 @@ switch ($userRole) {
 
     <!-- Search URL -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const paramValue = params.get('container');
-        const action = params.get("action");
-        // const paramValue = atob(encodedParamValue);
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get('container');
+    const action = params.get("action");
+    // const paramValue = atob(encodedParamValue);
 
-        const partnerContainer = document.getElementById("partner-info");
-        const requestContainer = document.getElementById("applicant-request");
+    const partnerContainer = document.getElementById("partner-info");
+    const requestContainer = document.getElementById("applicant-request");
 
-        if (paramValue == 3) {
-            partnerContainer.style.display = "block";
-            requestContainer.style.display = "none";
-        } else if (paramValue == 4) {
-            partnerContainer.style.display = "none";
-            requestContainer.style.display = "block";
-        }
+    if (paramValue == 3) {
+        partnerContainer.style.display = "block";
+        requestContainer.style.display = "none";
+    } else if (paramValue == 4) {
+        partnerContainer.style.display = "none";
+        requestContainer.style.display = "block";
+    }
 
-        if (action === "failed1") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Partnership Approval Failed',
-                text: 'There was an issue approving the partnership request. Please try again.'
-            });
-        } else if (action === "failed2") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Partnership Rejection Failed',
-                text: 'There was an issue declining the partnership request. Please try again.'
-            });
-        } else if (action === "failed") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Partnership Approval Failed',
-                text: 'There was an issue approving/rejecting the partnership request. Please try again.'
-            });
-        } else if (action === "emptyPartnerTypes") {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops',
-                text: 'Please choose a partner type to approve!',
-                confirmButtonText: 'Okay'
-            }).then(() => {
-                document.getElementById('partnerType-container').style.border = '1px solid red';
-            })
-        }
-
-
+    if (action === "failed1") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Partnership Approval Failed',
+            text: 'There was an issue approving the partnership request. Please try again.'
+        });
+    } else if (action === "failed2") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Partnership Rejection Failed',
+            text: 'There was an issue declining the partnership request. Please try again.'
+        });
+    } else if (action === "failed") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Partnership Approval Failed',
+            text: 'There was an issue approving/rejecting the partnership request. Please try again.'
+        });
+    } else if (action === "emptyPartnerTypes") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Oops',
+            text: 'Please choose a partner type to approve!',
+            confirmButtonText: 'Okay'
+        }).then(() => {
+            document.getElementById('partnerType-container').style.border = '1px solid red';
+        })
+    }
 
 
-        if (action) {
-            const url = new URL(window.location);
-            url.searchParams.delete('action');
-            history.replaceState({}, document.title, url.toString());
-        }
+
+
+    if (action) {
+        const url = new URL(window.location);
+        url.searchParams.delete('action');
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
 
 
     <!-- To show warning when clicking the link -->
     <script>
-        function warnExternalLink(url, e) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'warning',
-                title: '⚠️ External Link Warning',
-                html: `
+    function warnExternalLink(url, e) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ External Link Warning',
+            html: `
             <p class="fs-6 mb-2">You are about to visit an external site.</p>
             <p class="fs-6 mb-3"><b>This link may be unsafe, unverified, or contain spam.</b></p>
             <p class="fs-6 mb-2">Do you still want to continue to:</p>
             <code style="display:block; color: #1a73e8; margin-bottom: 15px;">${url}</code>
         `,
-                showCancelButton: true,
-                confirmButtonText: 'Yes, open link',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                width: '500px',
-                padding: '2rem'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.open(url, '_blank');
-                }
-            });
+            showCancelButton: true,
+            confirmButtonText: 'Yes, open link',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            width: '500px',
+            padding: '2rem'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.open(url, '_blank');
+            }
+        });
 
-            return false;
-        }
+        return false;
+    }
     </script>
 
 </body>
