@@ -171,7 +171,6 @@ main {
 
 .post img {
   width: 18vw;
-  border: 1px solid black;
 }
 
 .othersDesc {
@@ -266,6 +265,63 @@ input.headerEdit {
   height: auto;
 }
 
+.fb-gallery {
+  width: 90%;
+  position: relative;
+}
+
+.fb-grid {
+  display: grid;
+  gap: 5px;
+}
+
+.fb-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.fb-grid-3 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.featured .fb-img {
+  max-height: 200px;
+  object-fit: cover;
+}
+
+.fb-img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.fb-img-1 {
+  height: 40%;
+  border-radius: 6px;
+}
+
+.fb-more-wrapper {
+  position: relative;
+}
+
+.fb-more-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.additional-images {
+  overflow-y: scroll;
+}
+
 /* Tablet size */
 @media only screen and (min-width: 600px) and (max-width: 1025px) {
   .titleContainer {
@@ -337,7 +393,7 @@ input.headerEdit {
   }
 
   .modal-body img {
-    width: 50%;
+    width: 40%;
     margin: 2vw auto 1vw auto !important;
   }
 

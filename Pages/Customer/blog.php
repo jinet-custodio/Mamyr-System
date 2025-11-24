@@ -163,6 +163,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </nav>
 
         <main>
+
             <?php
             $getWebContent = "SELECT * FROM websitecontent WHERE sectionName = 'Blog'";
             $result = mysqli_query($conn, $getWebContent);
@@ -176,7 +177,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
             if ($imageResult && mysqli_num_rows($imageResult) > 0) {
                 while ($imgRow = mysqli_fetch_assoc($imageResult)) {
-                    $imageMap[$imgRow['contentID']] = $imgRow;
+                    $imageMap[$imgRow['contentID']][] = $imgRow;
                 }
             }
 
@@ -200,7 +201,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
 
 
-            $defaultImage = ".../../Assets/Images/no-picture.jpg";
+            $defaultImage = "../../Assets/Images/no-picture.jpg";
             ?>
 
             <div class="titleContainer">
@@ -233,43 +234,104 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         } elseif (isset($imageMap[$postID])) {
                             $lookupKey = $postID;
                         }
+                        if ($lookupKey !== null && isset($imageMap[$lookupKey][0])) {
 
-                        if ($lookupKey !== null) {
-                            $imageFile = $imageMap[$lookupKey]['imageData'];
+                            $firstImage = $imageMap[$lookupKey][0];
+
+                            $imageFile = $firstImage['imageData'];
                             $tempPath = "../../Assets/Images/blogposts/" . $imageFile;
+
+                            echo "<!-- Debug: imagePath = $tempPath -->";
+
                             if (file_exists($tempPath)) {
                                 $imagePath = $tempPath;
                             }
-                            $altText = $imageMap[$lookupKey]['altText'] ?? 'Blog image';
+
+                            $altText = $firstImage['altText'] ?? 'Blog image';
                         }
+
                         ?>
 
                         <?php if ($index === 0): ?>
+                            <!-- FEATURED POST (LEFT SIDE) -->
                             <div class="featured">
-                                <div class="featuredpost">
-                                    <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($altText) ?>"
-                                        class="img-fluid" />
+                                <?php
+                                $images = $imageMap[$post['contentID']] ?? [];
+                                $imageCount = count($images);
+                                ?>
 
-                                    <div class="desc">
-                                        <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
-                                            <p class="eventType text-muted">
-                                                <?= htmlspecialchars($post['EventType']) ?> •
-                                                <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
-                                            </p>
-                                        <?php endif; ?>
+                                <div class="fb-gallery">
+                                    <?php if ($imageCount === 1): ?>
 
-                                        <div class="blogHeading">
-                                            <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
+                                        <!-- 1 IMAGE -->
+                                        <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[0]['imageData']) ?>"
+                                            class="fb-img fb-img-1" />
+
+                                    <?php elseif ($imageCount === 2): ?>
+
+                                        <!-- 2 IMAGES -->
+                                        <div class="fb-grid fb-grid-2">
+                                            <?php foreach ($images as $img): ?>
+                                                <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
+                                                    class="fb-img img-fluid" />
+                                            <?php endforeach; ?>
                                         </div>
-                                        <div class="blogDescription">
-                                            <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
+
+                                    <?php elseif ($imageCount === 3): ?>
+
+                                        <!-- 3 IMAGES -->
+                                        <div class="fb-grid fb-grid-3">
+                                            <?php foreach ($images as $img): ?>
+                                                <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
+                                                    class="fb-img" />
+                                            <?php endforeach; ?>
                                         </div>
 
-                                        <button class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
-                                            Read More
-                                        </button>
+                                    <?php elseif ($imageCount >= 4): ?>
+
+                                        <!-- 4+ IMAGES WITH OVERLAY -->
+                                        <div class="fb-grid fb-grid-3">
+                                            <!-- First 3 images -->
+                                            <?php for ($i = 0; $i < 3; $i++): ?>
+                                                <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[$i]['imageData']) ?>"
+                                                    class="fb-img" />
+                                            <?php endfor; ?>
+
+                                            <!-- 4th tile with overlay -->
+                                            <div class="fb-more-wrapper">
+                                                <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[3]['imageData']) ?>"
+                                                    class="fb-img fb-img-more" />
+                                                <div class="fb-more-overlay">
+                                                    +<?= $imageCount - 3 ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <?php endif; ?>
+                                </div>
+
+
+                                <div class="desc">
+                                    <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
+                                        <p class="eventType text-muted">
+                                            <?= htmlspecialchars($post['EventType']) ?> •
+                                            <?= htmlspecialchars(date("j F Y", strtotime($post['EventDate']))) ?>
+                                        </p>
+                                    <?php endif; ?>
+
+                                    <div class="blogHeading">
+                                        <h4><?= htmlspecialchars($post['EventHeader'] ?? '') ?></h4>
                                     </div>
+                                    <div class="blogDescription">
+                                        <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
+                                    </div>
+
+                                    <button class="btn btn-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modal<?= htmlspecialchars($postID) ?>"
+                                        id="featuredReadmore">
+                                        Read More
+                                    </button>
                                 </div>
                             </div>
                         <?php else: ?>
@@ -279,8 +341,71 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                 <div class="post row align-items-start mb-3">
                                     <div class="col-md-5 othersImg">
-                                        <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($altText) ?>"
-                                            class="img-fluid" />
+
+                                        <?php
+                                        $images = $imageMap[$post['contentID']] ?? [];
+                                        $imageCount = count($images);
+                                        ?>
+
+                                        <div class="fb-gallery small-fb-gallery">
+
+                                            <?php if ($imageCount === 1): ?>
+
+                                                <!-- 1 IMAGE -->
+                                                <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[0]['imageData']) ?>"
+                                                    class="fb-img fb-img-1" />
+
+                                            <?php elseif ($imageCount === 2): ?>
+
+                                                <!-- 2 IMAGES -->
+                                                <div class="fb-grid fb-grid-2">
+                                                    <?php foreach ($images as $img): ?>
+                                                        <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
+                                                            class="fb-img img-fluid" />
+                                                    <?php endforeach; ?>
+                                                </div>
+
+                                            <?php elseif ($imageCount === 3): ?>
+
+                                                <!-- 3 IMAGES -->
+                                                <div class="fb-grid fb-grid-3">
+                                                    <?php foreach ($images as $img): ?>
+                                                        <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
+                                                            class="fb-img" />
+                                                    <?php endforeach; ?>
+                                                </div>
+
+                                            <?php elseif ($imageCount >= 4): ?>
+
+                                                <!-- 4+ IMAGES WITH OVERLAY -->
+                                                <div class="fb-grid fb-grid-3">
+
+                                                    <!-- First 3 images -->
+                                                    <?php for ($i = 0; $i < 3; $i++): ?>
+                                                        <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[$i]['imageData']) ?>"
+                                                            class="fb-img" />
+                                                    <?php endfor; ?>
+
+                                                    <!-- Overflow tile -->
+                                                    <div class="fb-more-wrapper">
+                                                        <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[3]['imageData']) ?>"
+                                                            class="fb-img fb-img-more" />
+                                                        <div class="fb-more-overlay">
+                                                            +<?= $imageCount - 3 ?>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            <?php else: ?>
+
+                                                <!-- NO IMAGES -->
+                                                <img src="../../Assets/Images/no-picture.jpg" class="img-fluid" />
+
+                                            <?php endif; ?>
+
+                                        </div>
+
                                     </div>
                                     <div class="col-md-7 othersDesc">
                                         <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
@@ -297,7 +422,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
                                         </div>
 
-                                        <button class="btn btn-primary mb-3 othersReadmore" data-bs-toggle="modal"
+                                        <button class="btn btn-primary mb-3 othersReadmore"
+                                            data-bs-toggle="modal"
                                             data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
                                             Read More
                                         </button>
@@ -321,9 +447,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                     </div>
 
                                     <div class="modal-body">
-                                        <img src="<?= htmlspecialchars($imagePath) ?>"
-                                            alt="<?= htmlspecialchars($altText) ?>" class="img-fluid mb-3" />
-
+                                        <!-- EVENT TYPE + DATE -->
                                         <?php if (!empty($post['EventType']) && !empty($post['EventDate'])): ?>
                                             <p class="text-muted">
                                                 <?= htmlspecialchars($post['EventType']) ?> •
@@ -331,9 +455,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             </p>
                                         <?php endif; ?>
 
-                                        <div class="blog-full-content">
+                                        <div class="blog-full-content mb-4">
                                             <?= nl2br(htmlspecialchars($post['Content'] ?? '')) ?>
                                         </div>
+                                        <?php if (!empty($imageMap[$post['contentID']])): ?>
+                                            <div class="additional-images">
+                                                <?php foreach ($imageMap[$post['contentID']] as $img): ?>
+                                                    <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
+                                                        alt="<?= htmlspecialchars($img['altText']) ?>"
+                                                        class="img-fluid mb-3" />
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
+
                                     </div>
 
                                     <div class="modal-footer">

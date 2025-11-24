@@ -202,9 +202,17 @@ switch ($userRole) {
                             <textarea class="form-control" name="eventDesc" id="eventDesc" required></textarea>
                         </div>
                         <div class="input-container mb-2">
-                            <label for="eventImage">Event Image</label>
-                            <input type="file" class="form-control" name="eventImage" id="eventImage" accept="image/*" required>
+                            <label>Event Images</label>
+
+                            <div id="imageInputs">
+                                <input type="file" class="form-control mb-2" name="eventImages[]" accept="image/*" required>
+                            </div>
+
+                            <button type="button" id="addImageBtn" class="btn btn-outline-primary btn-sm mt-1">
+                                + Add another image
+                            </button>
                         </div>
+
                         <button type="submit" class="btn btn-primary w-100 mt-3">Save</button>
                     </form>
                 </div>
@@ -346,6 +354,17 @@ switch ($userRole) {
 
 
     <script>
+        document.getElementById("addImageBtn").addEventListener("click", function() {
+            const container = document.getElementById("imageInputs");
+
+            const input = document.createElement("input");
+            input.type = "file";
+            input.name = "eventImages[]";
+            input.accept = "image/*";
+            input.className = "form-control mb-2";
+            container.appendChild(input);
+        });
+
         document.getElementById("blogPostForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
@@ -366,8 +385,8 @@ switch ($userRole) {
                         console.log("Parsed JSON:", data);
                     } catch (e) {
                         console.error("JSON parse error:", e);
-                        alert("⚠️ PHP returned invalid JSON. Check console for full output.");
-                        return; // Stop execution if JSON parsing fails
+                        alert("PHP returned invalid JSON. Check console for full output.");
+                        return;
                     }
 
                     if (data.success) {
