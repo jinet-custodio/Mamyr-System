@@ -102,8 +102,9 @@ $baseURL = '..';
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body busTypeBody">
-                                        <?php
+                                    <div class="modal-body">
+                                        <div class="busTypeBody">
+                                            <?php
                                         $serviceType = $conn->prepare("SELECT * FROM partnershiptype");
                                         $serviceType->execute();
                                         $serviceTypeResult = $serviceType->get_result();
@@ -113,20 +114,28 @@ $baseURL = '..';
                                                 $partnerTypeDescription = $serviceTypes['partnerTypeDescription'];
                                         ?>
 
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="partnerType[]"
-                                                id="partnerType<?= htmlspecialchars($partnerType) ?>"
-                                                value="<?= htmlspecialchars($partnerType) ?>"
-                                                <?= (isset($_SESSION['partnerData']) && in_array($partnerType, $_SESSION['partnerData']['partnerType'])) ? 'checked' : '' ?>>
-                                            <label class="form-check-label"
-                                                for="partnerType<?= htmlspecialchars($partnerType) ?>">
-                                                <?= htmlspecialchars($partnerTypeDescription) ?>
-                                            </label>
-                                        </div>
-                                        <?php
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="partnerType[]"
+                                                    id="partnerType<?= htmlspecialchars($partnerType) ?>"
+                                                    value="<?= htmlspecialchars($partnerType) ?>"
+                                                    <?= (isset($_SESSION['partnerData']) && in_array($partnerType, $_SESSION['partnerData']['partnerType'])) ? 'checked' : '' ?>>
+                                                <label class="form-check-label"
+                                                    for="partnerType<?= htmlspecialchars($partnerType) ?>">
+                                                    <?= htmlspecialchars($partnerTypeDescription) ?>
+                                                </label>
+                                            </div>
+                                            <?php
                                             }
                                         }
                                         ?>
+                                        </div>
+                                        <?php if($partnerTypeDescription=== "Other"): ?>
+                                        <div class="form-group other-container" id="otherInput" style="display: none;">
+                                            <label for="otherText" class="other-label">Please specify:</label>
+                                            <input type="text" class="form-control" id="otherText">
+                                        </div>
+                                        <?php endif; ?>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" id="selectedPartnerTypes"
@@ -839,6 +848,22 @@ $baseURL = '..';
         togglePasswordVisibility(passwordField2, togglePassword2);
     });
     </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const otherCheckbox = document.querySelector('input[value="<?= htmlspecialchars($partnerType) ?>"]');
+        const otherInput = document.getElementById("otherInput");
+
+        if (otherCheckbox) {
+            otherCheckbox.addEventListener("change", function() {
+                otherInput.style.display = this.checked ? "block" : "none";
+            });
+        }
+
+    });
+    </script>
+
 </body>
 
 </html>
