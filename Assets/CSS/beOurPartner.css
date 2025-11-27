@@ -243,6 +243,38 @@ footer {
   background-color: oklch(95.93% 0.022 239.42) !important;
 }
 
+div#selectedBusinessTypes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bg-light {
+  color: #1f6ee6 !important;
+}
+
+.busTypeBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  column-gap: 1.3rem;
+  justify-content: center;
+  margin: auto;
+}
+
+.other-container {
+  margin-top: 1rem !important;
+  width: 50%;
+  margin: auto;
+}
+
+.other-label {
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
 @media screen and (max-width: 600px) {
   .column {
     width: 100%;

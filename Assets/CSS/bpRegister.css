@@ -223,6 +223,18 @@ div#selectedBusinessTypes {
   margin: auto;
 }
 
+.other-container {
+  margin-top: 1rem !important;
+  width: 50%;
+  margin: auto;
+}
+
+.other-label {
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
 .modal-header {
   display: flex;
   justify-content: center;
