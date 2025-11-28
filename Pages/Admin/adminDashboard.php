@@ -66,7 +66,7 @@ if ($result->num_rows > 0) {
     if (!empty($profile)) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_buffer($finfo, $profile);
-        finfo_close($finfo);
+        // finfo_close($finfo);
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
     }
 } else {
