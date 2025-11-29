@@ -22,164 +22,198 @@ $userRole = (int) $_SESSION['userRole'];
 $userID = (int) $_SESSION['userID'];
 
 
+if (isset($_POST['confirmationBtn'])) {
+
+  $checkTransaction = $conn->prepare("SELECT userID FROM booking WHERE userID = ?");
+  $checkTransaction->bind_param("i", $userID);
+
+  if (!$checkTransaction->execute()) {
+    header("Location: ../../Pages/Account/deleteAccount.php?action=executionFailed");
+    exit();
+  }
+
+  $result = $checkTransaction->get_result();
+  if ($result->num_rows > 0) {
+    header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+    exit();
+  } else {
+    header("Location: ../../Pages/Account/deleteAccount.php?action=noTransaction");
+    exit();
+  }
+}
+
+
 //* Send Otp to user email if user agree to delete the 
 if (isset($_POST['yesDelete'])) {
+  $checkTransaction = $conn->prepare("SELECT userID FROM booking WHERE userID = ?");
+  $checkTransaction->bind_param("i", $userID);
 
-    try {
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
-        $emailQuery->bind_param('s', $email);
+  if (!$checkTransaction->execute()) {
+    header("Location: ../../Pages/Account/deleteAccount.php?action=executionFailed");
+    exit();
+  }
 
-        if (!$emailQuery->execute()) {
-            throw new Exception("Error executing email query: " . $emailQuery->error);
-        }
+  $result = $checkTransaction->get_result();
+  if ($result->num_rows > 0) {
+    header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+    exit();
+  }
 
-        $result = $emailQuery->get_result();
+  try {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $emailQuery->bind_param('s', $email);
 
-        if ($result->num_rows === 0) {
-            throw new Exception("User Not Found");
-        }
+    if (!$emailQuery->execute()) {
+      throw new Exception("Error executing email query: " . $emailQuery->error);
+    }
 
-        $storedData = $result->fetch_assoc();
-        $OTP = generateCode(6);
-        $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+    $result = $emailQuery->get_result();
 
-        $insertOTP = $conn->prepare("UPDATE user SET userOTP = ?, 
+    if ($result->num_rows === 0) {
+      throw new Exception("User Not Found");
+    }
+
+    $storedData = $result->fetch_assoc();
+    $OTP = generateCode(6);
+    $OTP_expiration_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+
+    $insertOTP = $conn->prepare("UPDATE user SET userOTP = ?, 
         OTP_expiration_at = ?
         WHERE userID = ? and userRole = ?");
-        $insertOTP->bind_param("ssii", $OTP, $OTP_expiration_at, $userID, $userRole);
-        if (!$insertOTP->execute()) {
-            throw new Exception("Error inserting data: " . mysqli_error($conn));
-        }
-        $subject = "Account Deletion - OTP Verification";
-        $message = '<body
-    style="
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-      margin: 0;
-    "
-  >
-    <table
-      align="center"
-      width="100%"
-      cellpadding="0"
-      cellspacing="0"
-      style="
-        max-width: 600px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      "
-    >
-      <tr style="background-color: #365cce">
-        <td style="text-align: center">
-          <h2
-            style="
-              font-family: Poppins Light;
-              color: #ffffff;
-              font-size: 18px;
-              margin-top: 25px;
-            "
-          >
-            Account Deletion Verification
-          </h2>
-        </td>
-      </tr>
-
-      <tr>
-        <td style="padding: 30px; text-align: left; color: #333333">
-          <p style="font-size: 12px; margin: 10px 0 10px">
-            We received a request to delete your account. To confirm this
-            action, please use the following One-Time Password (OTP):
-          </p>
-
-          <h2 style="color: rgb(12, 6, 5); font-size: 24px; text-align: center">
-            $OTP
-          </h2>
-          <p style="font-size: 12px; margin: 8px 0">
-            This OTP is valid for <strong>5 minutes</strong>. Do not share it
-            with anyone. If you did not request this code, please ignore this
-            email.
-          </p>
-          <br />
-          <p style="font-size: 14px">Thank you,</p>
-          <p sstyle="font-size: 14px; font-weight:bold ">
-            Mamyr Resort and Events Place.
-          </p>
-        </td>
-      </tr>
-    </table>
-  </body>';
-        if (sendEmail($email,   $storedData['firstName'], $subject, $message, $env)) {
-            header("Location: ../../Pages/Account/deleteAccount.php?action=success");
-            exit;
-        } else {
-            throw new Exception('Failed to send OTP. Try again.');
-        }
-    } catch (Exception $e) {
-        $_SESSION['deleteAccountMessage'] = $e->getMessage();
-        error_log("Error: " . $e->getMessage());
-        header("Location: ../../Pages/Account/deleteAccount.php");
-        exit();
+    $insertOTP->bind_param("ssii", $OTP, $OTP_expiration_at, $userID, $userRole);
+    if (!$insertOTP->execute()) {
+      throw new Exception("Error inserting data: " . mysqli_error($conn));
     }
+    $subject = "Account Deletion - OTP Verification";
+    $message = '<body
+                        style="
+                          font-family: Arial, sans-serif;
+                          background-color: #f4f4f4;
+                          padding: 20px;
+                          margin: 0;
+                        "
+                      >
+                        <table
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          style="
+                            max-width: 600px;
+                            background-color: #ffffff;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                          "
+                        >
+                          <tr style="background-color: #365cce">
+                            <td style="text-align: center">
+                              <h2
+                                style="
+                                  font-family: Poppins Light;
+                                  color: #ffffff;
+                                  font-size: 18px;
+                                  margin-top: 25px;
+                                "
+                              >
+                                Account Deletion Verification
+                              </h2>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td style="padding: 30px; text-align: left; color: #333333">
+                              <p style="font-size: 12px; margin: 10px 0 10px">
+                                We received a request to delete your account. To confirm this
+                                action, please use the following One-Time Password (OTP):
+                              </p>
+
+                              <h2 style="color: rgb(12, 6, 5); font-size: 24px; text-align: center">
+                              ' . $OTP . '
+                              </h2>
+                              <p style="font-size: 12px; margin: 8px 0">
+                                This OTP is valid for <strong>5 minutes</strong>. Do not share it
+                                with anyone. If you did not request this code, please ignore this
+                                email.
+                              </p>
+                              <br />
+                              <p style="font-size: 14px">Thank you,</p>
+                              <p sstyle="font-size: 14px; font-weight:bold ">
+                                Mamyr Resort and Events Place.
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </body>';
+    if (sendEmail($email,   $storedData['firstName'], $subject, $message, $env)) {
+      header("Location: ../../Pages/Account/deleteAccount.php?action=success");
+      exit;
+    } else {
+      throw new Exception('Failed to send OTP. Try again.');
+    }
+  } catch (Exception $e) {
+    $_SESSION['deleteAccountMessage'] = $e->getMessage();
+    error_log("Error: " . $e->getMessage());
+    header("Location: ../../Pages/Account/deleteAccount.php");
+    exit();
+  }
 }
 
 
 //* Verify OTP and then delete the Account 
 
 elseif (isset($_POST['verifyCode'])) {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $enteredOTP = mysqli_real_escape_string($conn, $_POST['enteredOTP']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $enteredOTP = mysqli_real_escape_string($conn, $_POST['enteredOTP']);
+  $deletedID = 4;
 
-    if (!empty($enteredOTP)) {
-        $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
-        $emailQuery->bind_param('s', $email);
-        $emailQuery->execute();
-        $result = $emailQuery->get_result();
+  if (!empty($enteredOTP)) {
+    $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $emailQuery->bind_param('s', $email);
+    $emailQuery->execute();
+    $result = $emailQuery->get_result();
 
-        if ($result->num_rows > 0) {
-            $storedData = $result->fetch_assoc();
-            $storedOTP = $storedData['userOTP'];
-            $storedTime = $storedData['OTP_expiration_at'];
-            $userID = $storedData['userID']; // ✅ FIX
+    if ($result->num_rows > 0) {
+      $storedData = $result->fetch_assoc();
+      $storedOTP = $storedData['userOTP'];
+      $storedTime = $storedData['OTP_expiration_at'];
+      $userID = $storedData['userID'];
 
-            date_default_timezone_set('Asia/Manila');
-            $timeNow = time();
-            $otpExpiration = strtotime($storedTime);
+      $timeNow = time();
+      $otpExpiration = strtotime($storedTime);
 
-            if ($timeNow <= $otpExpiration) {
-                if ($enteredOTP === $storedOTP) {
-                    $today = date('Y-m-d H:i:s');
-                    $isDeleted = 1;
-                    $anonymousEmail = 'deletedAt_' . bin2hex(random_bytes(4)) . '@gmail.com';
+      if ($timeNow <= $otpExpiration) {
+        if ($enteredOTP === $storedOTP) {
+          $today = date('Y-m-d H:i:s');
+          $isDeleted = 1;
+          $anonymousEmail = 'deletedAt_' . bin2hex(random_bytes(4)) . '@gmail.com';
 
-                    $deleteQuery = $conn->prepare("UPDATE user SET email = ?, isDeleted = ?, dateDeleted = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE userID = ? AND email = ?");
-                    $deleteQuery->bind_param("sisis", $anonymousEmail, $isDeleted, $today, $userID, $email);
+          $deleteQuery = $conn->prepare("UPDATE user SET email = ?, isDeleted = ?, dateDeleted = ?, userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE userID = ? AND email = ?");
+          $deleteQuery->bind_param("sisiis", $anonymousEmail, $isDeleted, $today, $deletedID, $userID, $email);
 
-                    if ($deleteQuery->execute()) {
-                        header("Location: ../../Pages/register.php?action=deleted");
-                        exit;
-                    } else {
-                        echo "Error deleting account: " . $deleteQuery->error;
-                    }
-                } else {
-                    $_SESSION['deleteAccountMessage'] = 'Invalid OTP.';
-                    header("Location: ../../Pages/Account/deleteAccount.php");
-                    exit;
-                }
-            } else {
-                $_SESSION['deleteAccountMessage'] = 'Expired OTP.';
-                header("Location: ../../Pages/Account/deleteAccount.php");
-                exit;
-            }
+          if ($deleteQuery->execute()) {
+            header("Location: ../../Pages/register.php?action=deleted");
+            exit;
+          } else {
+            echo "Error deleting account: " . $deleteQuery->error;
+          }
         } else {
-            echo 'Email not found.';
+          $_SESSION['deleteAccountMessage'] = 'Invalid OTP.';
+          header("Location: ../../Pages/Account/deleteAccount.php");
+          exit;
         }
+      } else {
+        $_SESSION['deleteAccountMessage'] = 'Expired OTP.';
+        header("Location: ../../Pages/Account/deleteAccount.php");
+        exit;
+      }
     } else {
-        echo 'OTP is empty.';
+      echo 'Email not found.';
     }
+  } else {
+    echo 'OTP is empty.';
+  }
 } else {
-    echo 'Form not submitted properly.';
+  echo 'Form not submitted properly.';
 }

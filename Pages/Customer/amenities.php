@@ -125,7 +125,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     $imageData = $data['userProfile'];
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
                     $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
+                    // finfo_close($finfo);
                     $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>

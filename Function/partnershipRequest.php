@@ -3,6 +3,7 @@
 require '../Config/dbcon.php';
 session_start();
 
+require_once 'Helpers/categoryFunctions.php';
 
 
 if (isset($_POST['submit_request'])) {
@@ -17,8 +18,8 @@ if (isset($_POST['submit_request'])) {
     $businessEmail = mysqli_real_escape_string($conn, $_POST['businessEmail']);
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
     $companyName = mysqli_real_escape_string($conn, $_POST['companyName']);
-    $partnerTypes = $_POST['partnerType'];
-
+    $partnerTypes = $_POST['partnerType'] ?? [];
+    $otherPartnerTypes = $_POST['other-partner-type'] ?? [];
     $streetAddress = mysqli_real_escape_string($conn, $_POST['streetAddress']) ?? '';
     $barangay = mysqli_real_escape_string($conn, $_POST['barangay']) ?? '';
     $city = mysqli_real_escape_string($conn, $_POST['city']) ?? '';
@@ -120,12 +121,47 @@ if (isset($_POST['submit_request'])) {
                 }
 
                 $partnershipID = $conn->insert_id;
-                $insertPartnerTypes = $conn->prepare("INSERT INTO `partnership_partnertype`(`partnershipID`, `partnerTypeID`) VALUES (?,?)");
+
+                //Get other id
+                $partnerTypes = getPartnerType($conn);
+                $otherID = 0;
+                foreach ($partnerTypes as $id => $partner) {
+                    $typeName = strtolower($partner['partnerType']);
+
+                    if ($typeName === 'other') {
+                        $otherID = (int) $partner['partnerTypeID'];
+                    };
+                }
+
+
+                $insertPartnerTypes = $conn->prepare("INSERT INTO `partnership_partnertype`(`partnershipID`, `partnerTypeID`, `otherPartnerType`) VALUES (?,?,?)");
                 if (!empty($partnerTypes)) {
 
-
                     foreach ($partnerTypes as $id):
-                        $insertPartnerTypes->bind_param("ii", $partnershipID, $id);
+                        $id = intval($id);
+
+                        if ($id === $otherID) { //Means they select the other
+                            if (!empty(array_filter($otherPartnerType))) { //Check if may value be or element sa array
+                                $otherPartnerTypeFiltered = array_values(array_filter($otherPartnerType));
+                                foreach ($otherPartnerTypeFiltered as $other) {
+                                    $other = trim($other);
+                                    $insertPartnerTypes->bind_param('iis', $partnershipID, $id, $other);
+                                    if (!$insertPartnerTypes->execute()) {
+                                        $conn->rollback();
+                                        $_SESSION['message'] = 'Server problem. An error occured, try again later!';
+                                        throw new Exception('Error inserting partnership types. ' . $insertPartnerTypes->error);
+                                    }
+                                }
+                            } else {
+                                $other = NULL;
+                                $insertPartnerTypes->bind_param('iis', $partnershipID, $id, $other);
+                                if (!$insertPartnerTypes->execute()) {
+                                    $conn->rollback();
+                                    $_SESSION['message'] = 'Server problem. An error occured, try again later!';
+                                    throw new Exception('Error inserting partnership types. ' . $insertPartnerTypes->error);
+                                }
+                            }
+                        }
 
                         if (!$insertPartnerTypes->execute()) {
                             $conn->rollback();
@@ -136,6 +172,25 @@ if (isset($_POST['submit_request'])) {
                 } else {
                     header("Location: ../Pages/Customer/partnerApplication.php?result=selectPartner");
                     exit;
+                }
+
+                // Insert notification
+                $receiver = "Customer";
+                $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
+                $insertNotification = $conn->prepare("INSERT INTO notification(partnershipID, receiverID, message, receiver) VALUES(?, ?, ?, ?)");
+                $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
+                if (!$insertNotification->execute()) {
+                    $conn->rollback();
+                    throw new Exception("Failed to insert notification");
+                }
+
+                $admin = "Admin";
+                $requestNotif = "A new partnership application has been submitted and is currently awaiting your review and approval. Please review the application as soon as possible. Click <a href='displayPartnership.php?container=2'>here</a> to view the application";
+                $insertAdminNotification = $conn->prepare("INSERT INTO notification(partnershipID, senderID, message, receiver) VALUES(?, ?, ?, ?)");
+                $insertAdminNotification->bind_param("iiss", $partnershipID, $storedUserID, $requestNotif, $admin);
+                if (!$insertNotification->execute()) {
+                    $conn->rollback();
+                    throw new Exception("Failed to insert admin notification");
                 }
 
                 $_SESSION['success'] = 'Partnership Request Sent Successfully';

@@ -69,7 +69,7 @@ if (isset($_POST['signUp'])) {
         }
 
         $imageName = $firstName . '_' . basename($_SESSION['tempImage']);
-        $finalFilePath = $storeProofPath . $finalFileName;
+        $finalFilePath = $storeProofPath . $imageName;
 
         rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
     } else {
@@ -88,6 +88,7 @@ if (isset($_POST['signUp'])) {
         'imageName' => $imageName,
         'email' => $email,
         'partnerType' => $_POST['partnerType'] ?? [],
+        'other-partner-type' => $_POST['other-partner-type'] ?? [],
         'companyName'    => trim($_POST['companyName'] ?? ''),
         'phoneNumber'    => trim($_POST['phoneNumber'] ?? ''),
         'barangay'       => trim($_POST['barangay'] ?? ''),
@@ -103,7 +104,7 @@ if (isset($_POST['signUp'])) {
         'proofLink'      => trim($_POST['proofLink'] ?? '')
     ];
 
-
+    error_log(print_r($partnerData, true));
     $defaultImage = '../Assets/Images/defaultProfile.png';
     if (file_exists($defaultImage)) {
         $userProfile = file_get_contents($defaultImage);

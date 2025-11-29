@@ -118,9 +118,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
             <div class="rates" id="rates">
-                <div class="titleContainer">
+                <!-- <div class="titleContainer">
                     <h4 class="title">Our Rates</h4>
-                </div>
+                </div> -->
 
 
                 <div class="entrance mx-auto" style="padding: 0vw 0 1vw 0; ">
