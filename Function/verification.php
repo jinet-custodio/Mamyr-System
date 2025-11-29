@@ -7,7 +7,7 @@ $env = parse_ini_file(__DIR__ . '/../.env');
 require '../vendor/autoload.php';
 require_once 'emailSenderFunction.php';
 require_once 'Helpers/userFunctions.php';
-
+require_once 'Helpers/categoryFunctions.php';
 
 if (isset($_POST['verify-btn'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['email']);
@@ -55,6 +55,7 @@ if (isset($_POST['verify-btn'])) {
                             $partnerProofLink = mysqli_real_escape_string($conn, $partnerData['proofLink']);
                             $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
                             $validIDImage = mysqli_real_escape_string($conn, $partnerData['imageName']);
+                            $otherPartnerType = $partnerData['other-partner-type'] ?? [];
 
                             // error_log($partnerType);
                             if (!$partnerData) {
@@ -86,14 +87,41 @@ if (isset($_POST['verify-btn'])) {
 
                                 $partnershipID = $conn->insert_id;
 
-                                //Insert the partnershiptype
-                                $insertPartnerType = $conn->prepare("INSERT INTO `partnership_partnertype`(`partnershipID`, `partnerTypeID`) VALUES (?,?)");
+                                //Get other id
+                                $partnerTypes = getPartnerType($conn);
+                                $otherID = 0;
+                                foreach ($partnerTypes as $id => $partner) {
+                                    $typeName = strtolower($partner['partnerType']);
+
+                                    if ($typeName === 'other') {
+                                        $otherID = (int) $partner['partnerTypeID'];
+                                    };
+                                }
+
+
+                                //Insert the partnership_partnertype
+                                $insertPartnerType = $conn->prepare("INSERT INTO `partnership_partnertype`(`partnershipID`, `partnerTypeID`, `otherPartnerType`) VALUES (?,?,?)");
                                 foreach ($partnerType as $id) {
                                     $id = intval($id);
-                                    $insertPartnerType->bind_param('ii', $partnershipID, $id);
-                                    if (!$insertPartnerType->execute()) {
-                                        $conn->rollback();
-                                        throw new Exception("Failed to insert partnership type");
+                                    if ($id === $otherID) { //Means they select the other
+                                        if (!empty(array_filter($otherPartnerType))) { //Check if may value be or element sa array
+                                            $otherPartnerTypeFiltered = array_values(array_filter($otherPartnerType));
+                                            foreach ($otherPartnerTypeFiltered as $other) {
+                                                $other = trim($other);
+                                                $insertPartnerType->bind_param('iis', $partnershipID, $id, $other);
+                                                if (!$insertPartnerType->execute()) {
+                                                    $conn->rollback();
+                                                    throw new Exception("Failed to insert partnership type");
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        $other = NULL;
+                                        $insertPartnerType->bind_param('iis', $partnershipID, $id, $other);
+                                        if (!$insertPartnerType->execute()) {
+                                            $conn->rollback();
+                                            throw new Exception("Failed to insert partnership type");
+                                        }
                                     }
                                 }
 
@@ -106,13 +134,22 @@ if (isset($_POST['verify-btn'])) {
                                 }
 
                                 // Insert notification
-                                $receiver = "Customer";
+                                $receiver = "Partner Applicant";
                                 $message = "Your request has been submitted and is currently awaiting admin approval. We’ll notify you once your request has been reviewed.";
                                 $insertNotification = $conn->prepare("INSERT INTO notification(partnershipID, receiverID, message, receiver) VALUES(?, ?, ?, ?)");
                                 $insertNotification->bind_param("iiss", $partnershipID, $storedUserID, $message, $receiver);
                                 if (!$insertNotification->execute()) {
                                     $conn->rollback();
                                     throw new Exception("Failed to insert notification");
+                                }
+
+                                $admin = "Admin";
+                                $requestNotif = "A new partnership application has been submitted and is currently awaiting your review and approval. Please review the application as soon as possible. Click <a href='displayPartnership.php?container=2'>here</a> to view the application";
+                                $insertAdminNotification = $conn->prepare("INSERT INTO notification(partnershipID, senderID, message, receiver) VALUES(?, ?, ?, ?)");
+                                $insertAdminNotification->bind_param("iiss", $partnershipID, $storedUserID, $requestNotif, $admin);
+                                if (!$insertNotification->execute()) {
+                                    $conn->rollback();
+                                    throw new Exception("Failed to insert admin notification");
                                 }
 
                                 $conn->commit();
@@ -142,7 +179,7 @@ if (isset($_POST['verify-btn'])) {
                                 }
 
                                 $_SESSION['registerError'] = "An error occurred during partner registration. Please try again.";
-                                header("Location: ../Pages/register.php");
+                                header("Location: ../Pages/register.php?action=partnerApplicationFailed");
                                 exit;
                             }
                         } elseif ($action === 'forgot-password') {
@@ -215,75 +252,75 @@ if (isset($_POST['resend_code'])) {
                 $updateOTP->bind_param("sss", $newOtp, $new_time, $email);
                 if ($updateOTP->execute()) {
                     $message = '<body
-    style="
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-      margin: 0;
-    "
-  >
-    <table
-      align="center"
-      width="100%"
-      cellpadding="0"
-      cellspacing="0"
-      style="
-        max-width: 600px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      "
-    >
-      <tr style="background-color: #365cce">
-        <td style="text-align: center">
-          <h2
             style="
-              font-family: Poppins Light;
-              color: #ffffff;
-              font-size: 18px;
-              margin-top: 25px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin: 0;
             "
-          >
-            Your New One-Time Password (OTP) Code
-          </h2>
-        </td>
-      </tr>
-
-      <tr>
-        <td style="padding: 30px; text-align: left; color: #333333">
-          <p style="font-size: 12px; margin: 10px 0 10px">
-            Hello, please use this new OTP code for your account verification.
-          </p>
-
-          <div style="text-align: center; margin: 30px 0">
-            <span
-              style="
-                display: inline-block;
-                color: #0c0605;
-                font-size: 20px;
-                padding: 15px 30px;
-                border-radius: 6px;
-                font-weight: bold;
-              "
+        >
+            <table
+            align="center"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+                max-width: 600px;
+                background-color: #ffffff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            "
             >
-              ' . $newOtp . '
-            </span>
-          </div>
-          <p style="font-size: 12px; margin: 8px 0">
-            This OTP is valid for <strong>5 minutes</strong>. Do not share it
-            with anyone. If you did not request this code, please ignore this
-            email.
-          </p>
-          <br />
-          <p style="font-size: 14px">Thank you,</p>
-          <p sstyle="font-size: 14px; font-weight:bold ">
-            Mamyr Resort and Events Place.
-          </p>
-        </td>
-      </tr>
-    </table>
-  </body>
+            <tr style="background-color: #365cce">
+                <td style="text-align: center">
+                <h2
+                    style="
+                    font-family: Poppins Light;
+                    color: #ffffff;
+                    font-size: 18px;
+                    margin-top: 25px;
+                    "
+                >
+                    Your New One-Time Password (OTP) Code
+                </h2>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="padding: 30px; text-align: left; color: #333333">
+                <p style="font-size: 12px; margin: 10px 0 10px">
+                    Hello, please use this new OTP code for your account verification.
+                </p>
+
+                <div style="text-align: center; margin: 30px 0">
+                    <span
+                    style="
+                        display: inline-block;
+                        color: #0c0605;
+                        font-size: 20px;
+                        padding: 15px 30px;
+                        border-radius: 6px;
+                        font-weight: bold;
+                    "
+                    >
+                    ' . $newOtp . '
+                    </span>
+                </div>
+                <p style="font-size: 12px; margin: 8px 0">
+                    This OTP is valid for <strong>5 minutes</strong>. Do not share it
+                    with anyone. If you did not request this code, please ignore this
+                    email.
+                </p>
+                <br />
+                <p style="font-size: 14px">Thank you,</p>
+                <p sstyle="font-size: 14px; font-weight:bold ">
+                    Mamyr Resort and Events Place.
+                </p>
+                </td>
+            </tr>
+            </table>
+        </body>
                                 ';
                     $subject = 'Here\'s Your New OTP Code from Mamyr Resort and Events Place';
 

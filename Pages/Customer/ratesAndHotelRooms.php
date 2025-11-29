@@ -185,9 +185,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             <div class="selection" id="selection" style="display: block;">
                 <div class="categories mx-auto" id="categories">
                     <a class="categoryLink d-flex justify-content-center" onclick="showRates(event)">
-                        <h5 class="card-title m-auto selected" id="ratesTitle">Resort Rates</h5>
+                        <h5 class="card-title m-auto selected" id="ratesTitle">Resort Rates </h5>
                     </a>
-
                     <a class="categoryLink  d-flex justify-content-center" onclick="showHotels(event)">
                         <h5 class="card-title m-auto" id="hotelTitle">Hotel Rooms</h5>
                     </a>
@@ -197,9 +196,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
             <div class="rates" id="rates" style="display: none;">
-                <div class="titleContainer">
+                <!-- <div class="titleContainer">
                     <h4 class="title">Our Rates</h4>
-                </div>
+                </div> -->
 
                 <div class="entrance mx-auto" style="padding: 0vw 0 1vw 0; ">
                     <div class=" entranceTitleContainer" style="padding-top: 2vw;">

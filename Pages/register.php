@@ -564,6 +564,13 @@ resetExpiredOTPs($conn);
                 text: "Partner has been successfully registered and verified.",
                 icon: "success"
             })
+        } else if (action === 'partnerApplicationFailed') {
+            Swal.fire({
+                title: "Server Error",
+                text: "An error occurred during partner registration. Please try again later.",
+                icon: "error",
+                confirmButtonText: 'okay'
+            });
         }
 
         if (urlParams) {

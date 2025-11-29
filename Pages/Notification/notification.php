@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../Assets/CSS/Notification/notification.css">
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
@@ -43,7 +43,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Bootstrap Link -->
-    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
 
     <!-- Notification Script -->
     <script>
