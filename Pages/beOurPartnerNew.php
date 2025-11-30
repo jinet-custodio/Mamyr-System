@@ -160,7 +160,7 @@ require '../Function/Helpers/statusFunctions.php';
                                             LEFT JOIN
                                                 partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
                                             WHERE 
-                                                p.partnerStatusID = ?
+                                                p.partnerStatusID = ? AND ppt.isApproved = ?
                                                 ");
         $getPartnersQuery->bind_param('i', $approvedPartnerID);
         if (!$getPartnersQuery->execute()) {
@@ -178,7 +178,7 @@ require '../Function/Helpers/statusFunctions.php';
 
         while ($row = $result->fetch_assoc()) {
             $availability = getAvailabilityStatus($conn, $row['PSAvailabilityID']);
-            $availabilityName = $availability['availabilityName'];
+            $availabilityName = $availability['availabilityName'] ?? '';
 
             switch (strtolower($availabilityName)) {
                 case 'available':

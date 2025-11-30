@@ -103,7 +103,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="stylesheet" href="../../Assets/CSS/Customer/dashboard.css">
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
     <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
-    <!-- online stylesheet link for bootstrap -->
+    <!-- stylesheet link for bootstrap -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <!-- Swiper's CSS Link  -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -111,6 +111,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -249,7 +250,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <!-- centers modal vertically -->
-                            <div class="modal-content shadow-lg rounded-3" id="modal-content">
+                            <div class="modal-content shadow-lg rounded-3">
                                 <div class="modal-header bg-primary text-white">
                                     <h5 class="modal-title" id="userEventModalLabel">Event Details</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -668,8 +669,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             const calendarEl = document.getElementById('calendar');
             const modal = new bootstrap.Modal(document.getElementById('userEventModal'));
             const modalBody = document.getElementById('userEventModalBody');
-            const modalFooter = document.getElementById('modal-close');
-            const modalCont = document.getElementById('modal-content');
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -715,13 +714,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                     modalBody.innerHTML = `
                 <div class="text-center">
-                    <p class="fs-5"><strong>Booking Type:</strong> ${event.title || 'N/A'}</p>
-                    <p class="mb-1 mt-5"><strong>Start:</strong> ${formattedStart}</p>
+                    <p class="fs-5 mb-2"><strong>Booking Type:</strong> ${event.title || 'N/A'}</p>
+                    <p class="mb-1"><strong>Start:</strong> ${formattedStart}</p>
                     ${formattedEnd ? `<p><strong>End:</strong> ${formattedEnd}</p>` : ''}
                 </div>
             `;
-                    modalCont.classList.add('gradientBg');
-                    modalFooter.classList.add('mx-auto');
                     modal.show();
                 },
 
@@ -780,7 +777,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                 null;
 
                             content += `
-                        <div class="list-group-item d-flex align-items-center justify-content-between mt-2 rounded" style="border-left: 8px solid ${event.backgroundColor}">
+                        <div class="list-group-item d-flex align-items-center justify-content-between" style="border-left: 8px solid ${event.backgroundColor}">
                             <div>
                                 <strong>${event.title || 'Event'}</strong><br>
                                 <small>${formattedStart}${formattedEnd ? ` - ${formattedEnd}` : ''}</small>
@@ -792,12 +789,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         content += `</div>`;
                         modalBody.innerHTML = content;
                     }
-                    if (modalCont.classList.contains('gradientBg')) {
-                        modalCont.classList.remove('gradientBg');
-                    };
-                    if (modalFooter.classList.contains('mx-auto')) {
-                        modalFooter.classList.remove('mx-auto');
-                    };
+
+                    // Make header neutral color for date clicks
                     const header = document.querySelector('#userEventModal .modal-header');
                     header.style.backgroundColor = '#0d6efd';
 
