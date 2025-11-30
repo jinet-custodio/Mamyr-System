@@ -204,7 +204,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     class="editable-img" style="cursor: pointer;" <?php if ($editMode): ?>
                                     data-bs-toggle="modal" data-bs-target="#editImageModal"
                                     data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?>"
                                     data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>" <?php endif; ?>>
                             </div>
@@ -249,7 +248,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     class="editable-img" style="cursor: pointer;" <?php if ($editMode): ?>
                                     data-bs-toggle="modal" data-bs-target="#editImageModal"
                                     data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?>"
                                     data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>" <?php endif; ?>>
                             </div>
@@ -295,7 +293,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     class="editable-img" style="cursor: pointer;" <?php if ($editMode): ?>
                                     data-bs-toggle="modal" data-bs-target="#editImageModal"
                                     data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?>"
                                     data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>" <?php endif; ?>>
                             </div>
@@ -341,7 +338,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     class="editable-img" style="cursor: pointer;" <?php if ($editMode): ?>
                                     data-bs-toggle="modal" data-bs-target="#editImageModal"
                                     data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?>"
                                     data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>" <?php endif; ?>>
                             </div>
@@ -387,7 +383,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     class="editable-img" style="cursor: pointer;" <?php if ($editMode): ?>
                                     data-bs-toggle="modal" data-bs-target="#editImageModal"
                                     data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?>"
                                     data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>" <?php endif; ?>>
                             </div>
@@ -432,7 +427,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     class="editable-img" style="cursor: pointer;" <?php if ($editMode): ?>
                                     data-bs-toggle="modal" data-bs-target="#editImageModal"
                                     data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?>"
                                     data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>" <?php endif; ?>>
                             </div>
@@ -479,7 +473,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     class="editable-img" style="cursor: pointer;" <?php if ($editMode): ?>
                                     data-bs-toggle="modal" data-bs-target="#editImageModal"
                                     data-wcimageid="<?= htmlspecialchars($img['WCImageID'] ?? '') ?>"
-                                    data-folder="<?= $folder ?>"
                                     data-imagepath="<?= htmlspecialchars($img['imageData'] ?? '') ?>"
                                     data-alttext="<?= htmlspecialchars($img['altText']) ?>" <?php endif; ?>>
                             </div>
