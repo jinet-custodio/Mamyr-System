@@ -68,6 +68,50 @@ body {
   font-weight: var(--font-weight-bold);
 }
 
+.filter-btn-container {
+  width: 22rem;
+  margin: 1rem 0 1rem 0;
+}
+
+.filter-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fff;
+  height: 36px;
+  padding: 0 10px;
+  width: 80%;
+}
+
+.filter-select {
+  appearance: none; /* remove default select arrow */
+  border: none;
+  max-width: 100%;
+  word-wrap: break-word !important;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+  cursor: pointer;
+  padding-right: 20px;
+}
+
+.filter-select:focus {
+  outline: none;
+  box-shadow: none;
+  padding-left: 0.5rem;
+}
+
+.filter-select-wrapper i {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  font-size: 16px;
+  color: #0d6dfc;
+}
+
 .transactionContainer {
   /* border: 1px solid black; */
   display: flex;
@@ -245,6 +289,14 @@ th:nth-child(7) {
     text-align: center;
     margin: 3vw auto 5vw auto;
   }
+
+  .filter-btn-container {
+    display: flex;
+    justify-content: center;
+    width: 18rem;
+    margin: auto;
+  }
+
   thead {
     font-size: clamp(21px, calc(1.8vh + 2px), 22px);
   }
@@ -291,6 +343,14 @@ th:nth-child(7) {
     text-align: center;
     margin: 3vw auto 5vw auto;
   }
+
+  .filter-btn-container {
+    display: flex;
+    justify-content: center;
+    width: 18rem;
+    margin: auto;
+  }
+
   .card {
     padding: 2vw;
   }

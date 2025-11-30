@@ -216,64 +216,6 @@ switch ($userRole) {
                 <h5 class="page-title">Bookings</h5>
             </section>
 
-
-            <!-- <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-                <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto me-10" id="navUL">
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link active main-nav-link" href="#">
-                                <i class="bi bi-list-check nav-icon"></i>
-                                <h5 class="nav-text">All</h5>
-                            </a>
-                        </li>
-
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link main-nav-link" href="#">
-                                <i class="bi bi-inbox nav-icon"></i>
-                                <h5 class="nav-text">Incoming</h5>
-                            </a>
-                        </li>
-
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link  main-nav-link" href="#">
-                                <i class="bi bi-calendar-check nav-icon"></i>
-                                <h5 class="nav-text">Reserved</h5>
-                            </a>
-                        </li>
-
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link main-nav-link" href="#">
-                                <i class="bi bi-hourglass-top nav-icon"></i>
-                                <h5 class="nav-text">Ongoing</h5>
-                            </a>
-                        </li>
-
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link main-nav-link" href="#">
-                                <i class="bi  bi-check2-circle nav-icon"></i>
-                                <h5 class="nav-text">Finished</h5>
-                            </a>
-                        </li>
-
-                        <li class="nav-item main-nav-item">
-                            <a class="nav-link main-nav-link" href="#">
-                                <i class="bi bi-dash-circle nav-icon"></i>
-                                <h5 class="nav-text">Cancelled/Rejected</h5>
-                            </a>
-                        </li>
-
-
-                    </ul>
-
-
-                </div>
-            </nav> -->
-
             <!-- <h1 class="title text-center my-3" style="display: none;" id="hiddenTitle">Bookings</h1> -->
 
             <div class="booking-table">
@@ -333,144 +275,144 @@ switch ($userRole) {
 
     <!-- Table JS -->
     <script>
-        $('#bookingTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            "order": [],
-            columnDefs: [{
-                    width: '5%',
-                    targets: 0
-                },
-                {
-                    width: '15%',
-                    targets: 1
-                },
-                {
-                    width: '15%',
-                    targets: 2
-                },
-                {
-                    width: '15%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
-                {
-                    width: '10%',
-                    targets: 5
-                },
-                {
-                    width: '10%',
-                    targets: 6
-                },
-            ],
-        });
+    $('#bookingTable').DataTable({
+        responsive: false,
+        scrollX: true,
+        "order": [],
+        columnDefs: [{
+                width: '5%',
+                targets: 0
+            },
+            {
+                width: '15%',
+                targets: 1
+            },
+            {
+                width: '15%',
+                targets: 2
+            },
+            {
+                width: '15%',
+                targets: 3
+            },
+            {
+                width: '15%',
+                targets: 4
+            },
+            {
+                width: '10%',
+                targets: 5
+            },
+            {
+                width: '10%',
+                targets: 6
+            },
+        ],
+    });
     </script>
     <!-- Booking Ajax -->
     <script>
-        function getStatusBadge(colorClass, status) {
-            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-        }
+    function getStatusBadge(colorClass, status) {
+        return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+    }
 
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const filterSelected = document.getElementById('booking-filter-select');
+    document.addEventListener("DOMContentLoaded", function() {
+        const filterSelected = document.getElementById('booking-filter-select');
+        getBookings(filterSelected.value);
+        filterSelected.addEventListener('change', () => {
             getBookings(filterSelected.value);
-            filterSelected.addEventListener('change', () => {
-                getBookings(filterSelected.value);
-                // console.log(filterSelected.value);
-            });
             // console.log(filterSelected.value);
         });
+        // console.log(filterSelected.value);
+    });
 
 
 
-        function getBookings(filterSelectedValue) {
-            fetch(`../../Function/Admin/Ajax/getBookingsJSON.php?filter=${encodeURIComponent(filterSelectedValue)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        // console.error("Failed to load bookings.");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.message || 'An unknown error occurred.',
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                        return;
-                    }
-                    const bookings = data.bookings;
-                    const table = $('#bookingTable').DataTable();
-                    table.clear();
-
-                    bookings.forEach(booking => {
-                        table.row.add([
-                            booking.bookingID,
-                            booking.bookingCode,
-                            booking.name,
-                            booking.bookingType + ` Booking`,
-                            booking.bookingDate,
-                            booking.createdOn,
-                            // booking.checkOut,
-                            getStatusBadge(booking.statusClass, booking.status),
-                            `<form action="viewBooking.php" method="POST">
-                                    <input type="hidden" name="button" value="booking">
-                                    <input type="hidden" name="bookingType" value="${booking.bookingType}">
-                                    <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
-                                    <input type="hidden" name="bookingID" value="${booking.bookingID}">
-                                    <button type="submit" class="btn btn-primary viewBooking">View</button>
-                            </form>`
-                        ]);
-                    });
-
-                    table.draw();
-
-                }).catch(error => {
-                    console.error("Error loading bookings:", error);
+    function getBookings(filterSelectedValue) {
+        fetch(`../../Function/Admin/Ajax/getBookingsJSON.php?filter=${encodeURIComponent(filterSelectedValue)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // console.error("Failed to load bookings.");
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
                         text: data.message || 'An unknown error occurred.',
                         showConfirmButton: false,
                         timer: 1500,
-                    })
+                    });
+                    return;
+                }
+                const bookings = data.bookings;
+                const table = $('#bookingTable').DataTable();
+                table.clear();
+
+                bookings.forEach(booking => {
+                    table.row.add([
+                        booking.bookingID,
+                        booking.bookingCode,
+                        booking.name,
+                        booking.bookingType + ` Booking`,
+                        booking.bookingDate,
+                        booking.createdOn,
+                        // booking.checkOut,
+                        getStatusBadge(booking.statusClass, booking.status),
+                        `<form action="viewBooking.php" method="POST">
+                                    <input type="hidden" name="button" value="booking">
+                                    <input type="hidden" name="bookingType" value="${booking.bookingType}">
+                                    <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
+                                    <input type="hidden" name="bookingID" value="${booking.bookingID}">
+                                    <button type="submit" class="btn btn-primary viewBooking">View</button>
+                            </form>`
+                    ]);
+                });
+
+                table.draw();
+
+            }).catch(error => {
+                console.error("Error loading bookings:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: data.message || 'An unknown error occurred.',
+                    showConfirmButton: false,
+                    timer: 1500,
                 })
-        }
+            })
+    }
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const paramValue = param.get('action');
+    const param = new URLSearchParams(window.location.search);
+    const paramValue = param.get('action');
 
-        if (paramValue === "approvedSuccess") {
-            Swal.fire({
-                position: "top-end",
-                title: "Booking Approved!",
-                text: "The booking has been successfully approved.",
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        } else if (paramValue === 'rejectedSuccess') {
-            Swal.fire({
-                position: "top-end",
-                title: "Booking Rejected!",
-                text: "The booking has been successfully rejected.",
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }
+    if (paramValue === "approvedSuccess") {
+        Swal.fire({
+            position: "top-end",
+            title: "Booking Approved!",
+            text: "The booking has been successfully approved.",
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    } else if (paramValue === 'rejectedSuccess') {
+        Swal.fire({
+            position: "top-end",
+            title: "Booking Rejected!",
+            text: "The booking has been successfully rejected.",
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
 
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
+    if (paramValue) {
+        const url = new URL(window.location);
+        url.search = '';
+        history.replaceState({}, document.title, url.toString());
+    }
     </script>
     <?php include '../Customer/loader.php'; ?>
 </body>
