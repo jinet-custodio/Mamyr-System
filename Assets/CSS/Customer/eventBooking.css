@@ -389,6 +389,15 @@ input[type="checkbox"],
   color: #3888ff;
 }
 
+.foodCheck-container {
+  margin-top: 0.5rem;
+}
+
+.foodCheck-label {
+  font-size: 14px;
+  text-align: center;
+}
+
 /* Tablet Landscape */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .backToSelection {
@@ -589,6 +598,12 @@ input[type="checkbox"],
   .fc .fc-daygrid-day-top {
     flex-direction: unset;
   }
+
+  .foodCheck-container {
+    text-align: center !important;
+    width: 70%;
+    margin: auto;
+  }
 }
 
 /* Phone size */
@@ -744,5 +759,11 @@ input[type="checkbox"],
 
   #fc-dom-1 {
     font-size: 18px;
+  }
+
+  .foodCheck-container {
+    text-align: center !important;
+    width: 70%;
+    margin: auto;
   }
 }

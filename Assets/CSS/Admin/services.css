@@ -244,3 +244,42 @@ label {
   font-weight: bold;
   margin: 0.5vw 0 0.5vw 0;
 }
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  #serviceCategories {
+    display: flex !important;
+    flex-wrap: wrap;
+  }
+}
+
+/* Tablet Landscape */
+@media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+  #serviceCategories {
+    display: flex !important;
+    flex-wrap: wrap;
+  }
+}
+
+/* Tablet portrait only */
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+  #serviceCategories {
+    display: flex !important;
+    flex-wrap: wrap;
+  }
+}
+
+/* Phone size */
+@media screen and (max-width: 599px) {
+  #serviceCategories {
+    display: flex !important;
+    flex-wrap: wrap;
+  }
+
+  .category-card img {
+    height: 10rem !important;
+  }
+
+  .category-title {
+    font-size: var(--font-size-base);
+  }
+}

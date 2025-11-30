@@ -90,15 +90,15 @@ switch ($userRole) {
             <?php
             $button = !empty($_POST['button']) ? mysqli_real_escape_string($conn, $_POST['button']) : 'booking';
             if ($button === 'booking') { ?>
-                <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/arrowBtnWhite.png"
-                        alt="Back Button"></a>
+            <a href="booking.php" class="btn btn-primary back"><img src="../../Assets/Images/Icon/arrowBtnWhite.png"
+                    alt="Back Button"></a>
             <?php   } elseif ($button === 'payment') {  ?>
-                <form action="viewPayments.php" method="POST" style="display:inline;">
-                    <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
-                    <button type="submit" class="btn btn-primary back">
-                        <img src="../../Assets/Images/Icon/arrowBtnWhite.png" alt="Back Button">
-                    </button>
-                </form>
+            <form action="viewPayments.php" method="POST" style="display:inline;">
+                <input type="hidden" name="bookingID" value="<?= htmlspecialchars($bookingID) ?>">
+                <button type="submit" class="btn btn-primary back">
+                    <img src="../../Assets/Images/Icon/arrowBtnWhite.png" alt="Back Button">
+                </button>
+            </form>
             <?php   } ?>
             <h5 class="page-title">Guest Booking Information</h5>
         </div>
@@ -155,7 +155,7 @@ switch ($userRole) {
                     </div>
 
                     <div class="button-container">
-                        <div id="button-approval-container" class="d-flex w-50 mx-auto">
+                        <div id="button-approval-container" class="d-flex mx-auto">
                             <button type="button" class="btn btn-primary approveReject" data-bs-toggle="modal"
                                 data-bs-target="#finalizedModal">Approve</button>
                             <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal"
@@ -539,7 +539,7 @@ switch ($userRole) {
                                         if (!$getRejectionReason->execute()) {
                                             error_log('Failed getting rejection reason');
                                         ?>
-                                            <option value="other">Other (Please specify)</option>
+                                        <option value="other">Other (Please specify)</option>
                                         <?php
                                         }
 
@@ -547,8 +547,8 @@ switch ($userRole) {
 
                                         while ($row = $result->fetch_assoc()):
                                         ?>
-                                            <option value="<?= $row['reasonID'] ?>">
-                                                <?= htmlspecialchars($row['reasonDescription']) ?></option>
+                                        <option value="<?= $row['reasonID'] ?>">
+                                            <?= htmlspecialchars($row['reasonDescription']) ?></option>
                                         <?php
                                         endwhile;
                                         ?>
@@ -583,11 +583,11 @@ switch ($userRole) {
                             <div class="modal-body finalized-booking-modal-body">
                                 <div class="original-price-container">
                                     <?php if (!empty($foodList)) { ?>
-                                        <div class="mb-3">
-                                            <label class="form-label">Original Food Price (₱)</label>
-                                            <input type="text" class="form-control" id="foodPrice" name="foodPrice"
-                                                value="<?= $foodPriceTotal ?>" readonly>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Original Food Price (₱)</label>
+                                        <input type="text" class="form-control" id="foodPrice" name="foodPrice"
+                                            value="<?= $foodPriceTotal ?>" readonly>
+                                    </div>
                                     <?php } ?>
 
                                     <div class="mb-3">
@@ -599,25 +599,25 @@ switch ($userRole) {
                                 <hr>
                                 <div class="updated-price-container">
                                     <?php if (!empty($foodList)) { ?>
-                                        <div class="mb-3">
-                                            <label for="newFoodPrice" class="form-label">Enter Updated Food Price
-                                                (₱)</label>
-                                            <div class="sameFoodPrice d-flex w-50 mb-1" id="sameFoodPrice">
-                                                <input class="form-check-input" type="checkbox" id="sameAmount">
-                                                <label class="form-check-label ms-2" for="sameAmount">
-                                                    Same as original
-                                                </label>
-                                            </div>
-                                            <input type="text" class="form-control" id="newFoodPrice" name="newFoodPrice"
-                                                placeholder="e.g 10000">
+                                    <div class="mb-3">
+                                        <label for="newFoodPrice" class="form-label">Enter Updated Food Price
+                                            (₱)</label>
+                                        <div class="sameFoodPrice d-flex w-50 mb-1" id="sameFoodPrice">
+                                            <input class="form-check-input" type="checkbox" id="sameAmount">
+                                            <label class="form-check-label ms-2" for="sameAmount">
+                                                Same as original
+                                            </label>
                                         </div>
+                                        <input type="text" class="form-control" id="newFoodPrice" name="newFoodPrice"
+                                            placeholder="e.g 10000">
+                                    </div>
                                     <?php } else { ?>
-                                        <div class="mb-3">
-                                            <label for="newBaseAmount" class="form-label">Enter Updated Total Amount
-                                                (₱)</label>
-                                            <input type="text" class="form-control" id="newBaseAmount" name="newFinalBill"
-                                                placeholder="e.g 10000">
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="newBaseAmount" class="form-label">Enter Updated Total Amount
+                                            (₱)</label>
+                                        <input type="text" class="form-control" id="newBaseAmount" name="newFinalBill"
+                                            placeholder="e.g 10000">
+                                    </div>
                                     <?php  } ?>
                                 </div>
 
@@ -645,8 +645,8 @@ switch ($userRole) {
                                     <p>Food Price: ₱<?= $foodPriceTotal ?> -> <strong> ₱<span
                                                 id="summaryUpdatedFoodPrice">0.00</span></p> </strong>
                                     <?php if (empty($foodList)) { ?>
-                                        <p>Total Amount: ₱<?= $finalBill ?> -> <strong> ₱<span
-                                                    id="summaryUpdatedTotalAmount">0.00</span></p> </strong>
+                                    <p>Total Amount: ₱<?= $finalBill ?> -> <strong> ₱<span
+                                                id="summaryUpdatedTotalAmount">0.00</span></p> </strong>
                                     <?php } ?>
                                     <p>Discount: ₱<span id="summaryDiscount">0.00</span></p>
                                     <hr>
@@ -815,13 +815,18 @@ switch ($userRole) {
                                                     data-input="massage-input" onchange="toggleAdditionalInput()">
                                                 <label for="massage">Massage Chair</label>
                                                 <!-- Additional Input for Quality and Charge -->
-                                                <div class="additional-input  gap-1" id="massage-input" style="display: none;">
+                                                <div class="additional-input  gap-1" id="massage-input"
+                                                    style="display: none;">
                                                     <div class="form-floating mb-1">
-                                                        <input type="number" class="form-control" id="massage-quantity" name="additionalCharges[massage][quantity]" data-role="quantity">
+                                                        <input type="number" class="form-control" id="massage-quantity"
+                                                            name="additionalCharges[massage][quantity]"
+                                                            data-role="quantity">
                                                         <label for="massage-quantity">Quantity</label>
                                                     </div>
                                                     <div class="form-floating mb-1">
-                                                        <input type="number" class="form-control" id="massage-amount" name="additionalCharges[massage][amount]" data-role="amount">
+                                                        <input type="number" class="form-control" id="massage-amount"
+                                                            name="additionalCharges[massage][amount]"
+                                                            data-role="amount">
                                                         <label for="massage-amount">Amount</label>
                                                     </div>
                                                 </div>
@@ -832,13 +837,18 @@ switch ($userRole) {
                                                     data-input="videoke-input" onchange="toggleAdditionalInput()">
                                                 <label for="videoke">Videoke</label>
                                                 <!-- Additional Input for Quality and Charge -->
-                                                <div class="additional-input  gap-1" id="videoke-input" style="display: none;">
+                                                <div class="additional-input  gap-1" id="videoke-input"
+                                                    style="display: none;">
                                                     <div class="form-floating mb-1">
-                                                        <input type="number" class="form-control" id="videoke-quantity" name="additionalCharges[videoke][quantity]" data-role="quantity">
+                                                        <input type="number" class="form-control" id="videoke-quantity"
+                                                            name="additionalCharges[videoke][quantity]"
+                                                            data-role="quantity">
                                                         <label for="videoke-quantity">Quantity</label>
                                                     </div>
                                                     <div class="form-floating mb-1">
-                                                        <input type="number" class="form-control" id="videoke-amount" name="additionalCharges[videoke][amount]" data-role="amount">
+                                                        <input type="number" class="form-control" id="videoke-amount"
+                                                            name="additionalCharges[videoke][amount]"
+                                                            data-role="amount">
                                                         <label for="videoke-amount">Amount</label>
                                                     </div>
                                                 </div>
@@ -849,13 +859,18 @@ switch ($userRole) {
                                                     data-input="billiard-input" onchange="toggleAdditionalInput()">
                                                 <label for="billiard">Billiard</label>
                                                 <!-- Additional Input for Quality and Charge -->
-                                                <div class="additional-input  gap-1" id="billiard-input" style="display: none;">
+                                                <div class="additional-input  gap-1" id="billiard-input"
+                                                    style="display: none;">
                                                     <div class="form-floating mb-1">
-                                                        <input type="number" class="form-control" id="billiard-quantity" name="additionalCharges[billiard][quantity]" data-role="quantity">
+                                                        <input type="number" class="form-control" id="billiard-quantity"
+                                                            name="additionalCharges[billiard][quantity]"
+                                                            data-role="quantity">
                                                         <label for="billiard-quantity">Quantity</label>
                                                     </div>
                                                     <div class="form-floating mb-1">
-                                                        <input type="number" class="form-control" id="billiard-amount" name="additionalCharges[billiard][amount]" data-role="amount">
+                                                        <input type="number" class="form-control" id="billiard-amount"
+                                                            name="additionalCharges[billiard][amount]"
+                                                            data-role="amount">
                                                         <label for="billiard-amount">Amount</label>
                                                     </div>
                                                 </div>
@@ -946,25 +961,27 @@ switch ($userRole) {
                             <input type="hidden" name="bookingCode" id="bookingCode" value="<?= $bookingCode ?>">
                             <div id="typeAndCustomers" class="d-flex w-100">
                                 <input type="hidden" name="startDate" value="<?= $startDate ?>">
-                                <div class="info-container <?= ($bookingType === 'Hotel') ? 'w-100' : 'w-50' ?> px-3" id="booking-info-container">
+                                <div class="info-container <?= ($bookingType === 'Hotel') ? 'w-100' : 'w-50' ?> px-3"
+                                    id="booking-info-container">
                                     <label for="bookingType" class="info-label">Booking Type</label>
-                                    <input type="hidden" name="bookingType" id="bookingType" value="<?= $bookingType ?>">
-                                    <input type="text" class="form-control inputDetail" value="<?= $bookingType ?> Booking"
-                                        readonly>
+                                    <input type="hidden" name="bookingType" id="bookingType"
+                                        value="<?= $bookingType ?>">
+                                    <input type="text" class="form-control inputDetail"
+                                        value="<?= $bookingType ?> Booking" readonly>
                                 </div>
                                 <?php if ($bookingType === 'Resort') { ?>
-                                    <div class="info-container w-50 px-3" id="booking-info-container">
-                                        <label for="tourType" class="info-label">Tour Type</label>
-                                        <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
-                                        <input type="text" class="form-control inputDetail" name="tourType"
-                                            value="<?= $tourType ?> Swimming" readonly>
-                                    </div>
+                                <div class="info-container w-50 px-3" id="booking-info-container">
+                                    <label for="tourType" class="info-label">Tour Type</label>
+                                    <input type="hidden" name="tourType" id="tourType" value="<?= $tourType ?>">
+                                    <input type="text" class="form-control inputDetail" name="tourType"
+                                        value="<?= $tourType ?> Swimming" readonly>
+                                </div>
                                 <?php } elseif ($bookingType === 'Event') { ?>
-                                    <div class="info-container w-50 px-3" id="booking-info-container">
-                                        <label for="eventType" class="info-label">Event Type</label>
-                                        <input type="text" name="eventType" id="eventType" class="form-control inputDetail"
-                                            readonly value="<?= $eventType ?>">
-                                    </div>
+                                <div class="info-container w-50 px-3" id="booking-info-container">
+                                    <label for="eventType" class="info-label">Event Type</label>
+                                    <input type="text" name="eventType" id="eventType" class="form-control inputDetail"
+                                        readonly value="<?= $eventType ?>">
+                                </div>
                                 <?php } ?>
                             </div>
                             <div class="info-container px-3" id="booking-info-container">
@@ -1008,122 +1025,122 @@ switch ($userRole) {
 
                         <div class="bookingDetails mt-3">
                             <?php if ($bookingType !== 'Event') { ?>
-                                <div class="servicesDetails">
-                                    <h1 class="card-title text-center">Services</h1>
-                                    <div class="servicesInfo">
-                                        <ul>
-                                            <?php
+                            <div class="servicesDetails">
+                                <h1 class="card-title text-center">Services</h1>
+                                <div class="servicesInfo">
+                                    <ul>
+                                        <?php
                                             foreach ($services as $service) {
                                             ?>
-                                                <li><?= $service ?></li>
-                                            <?php
+                                        <li><?= $service ?></li>
+                                        <?php
                                             }
                                             ?>
-                                        </ul>
-                                    </div>
+                                    </ul>
                                 </div>
+                            </div>
 
                             <?php } else { ?>
 
-                                <div class="venueDetails">
-                                    <h1 class="card-title text-center">Venue</h1>
-                                    <input type="text" readonly class="form-control inputDetail" name="venue" id="venue"
-                                        value="<?= $venue ?>">
+                            <div class="venueDetails">
+                                <h1 class="card-title text-center">Venue</h1>
+                                <input type="text" readonly class="form-control inputDetail" name="venue" id="venue"
+                                    value="<?= $venue ?>">
+                            </div>
+                            <h1 class="card-title text-center">Selected Menu</h1>
+                            <div class="foodDetails">
+                                <?php if (!empty($foodList)) { ?>
+                                <?php foreach ($foodList as $category => $name) { ?>
+                                <div class="foodList">
+                                    <p><?= htmlspecialchars($category) ?></p>
+                                    <ul>
+                                        <li>
+                                            <input type="text" name="foodIDs[<?= htmlspecialchars($foodID) ?>]"
+                                                class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
+                                        </li>
+                                    </ul>
                                 </div>
-                                <h1 class="card-title text-center">Selected Menu</h1>
-                                <div class="foodDetails">
-                                    <?php if (!empty($foodList)) { ?>
-                                        <?php foreach ($foodList as $category => $name) { ?>
-                                            <div class="foodList">
-                                                <p><?= htmlspecialchars($category) ?></p>
-                                                <ul>
-                                                    <li>
-                                                        <input type="text" name="foodIDs[<?= htmlspecialchars($foodID) ?>]"
-                                                            class="form-control inputDetail" value="<?= htmlspecialchars($name) ?>">
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        <?php } ?>
-                                    <?php } else { ?>
-                                        <h1 class="text-center defaultMess">No Food Selected!</h1>
-                                    <?php } ?>
-                                </div>
-                                <?php $printed = []; ?>
-                                <div class="partnerService">
-                                    <h1 class="card-title text-center">Additional Service/s</h1>
-                                    <?php if (!empty($partnerServices)) { ?>
-                                        <?php foreach ($partnerServices as $partnerID => $services) { ?>
-                                            <ul>
-                                                <?php foreach ($services as $i => $service) { ?>
+                                <?php } ?>
+                                <?php } else { ?>
+                                <h1 class="text-center defaultMess">No Food Selected!</h1>
+                                <?php } ?>
+                            </div>
+                            <?php $printed = []; ?>
+                            <div class="partnerService">
+                                <h1 class="card-title text-center">Additional Service/s</h1>
+                                <?php if (!empty($partnerServices)) { ?>
+                                <?php foreach ($partnerServices as $partnerID => $services) { ?>
+                                <ul>
+                                    <?php foreach ($services as $i => $service) { ?>
 
-                                                    <?php
+                                    <?php
                                                     if (in_array($service['partnershipServiceID'], $printed)) {
                                                         continue;
                                                     }
 
                                                     $printed[] = $service['partnershipServiceID'];
                                                     ?>
-                                                    <li class="servicesList">
-                                                        <?= htmlspecialchars($service['name']) ?> —
-                                                        ₱<?= number_format($service['price'], 2) ?>
-                                                        <span class="badge bg-<?= htmlspecialchars($service['approvalColor']) ?>">
-                                                            <?= htmlspecialchars($service['approvalStatus']) ?>
-                                                        </span>
-                                                        <small class="text-muted">
-                                                            (wait until <?= htmlspecialchars($service['approvalTimeUntil']) ?>)
-                                                        </small>
+                                    <li class="servicesList">
+                                        <?= htmlspecialchars($service['name']) ?> —
+                                        ₱<?= number_format($service['price'], 2) ?>
+                                        <span class="badge bg-<?= htmlspecialchars($service['approvalColor']) ?>">
+                                            <?= htmlspecialchars($service['approvalStatus']) ?>
+                                        </span>
+                                        <small class="text-muted">
+                                            (wait until <?= htmlspecialchars($service['approvalTimeUntil']) ?>)
+                                        </small>
 
-                                                        <!-- Hidden fields -->
-                                                        <input type="hidden" name="partnerServices[<?= $partnerID ?>][<?= $i ?>][id]"
-                                                            value="<?= $service['partnershipServiceID'] ?>">
+                                        <!-- Hidden fields -->
+                                        <input type="hidden" name="partnerServices[<?= $partnerID ?>][<?= $i ?>][id]"
+                                            value="<?= $service['partnershipServiceID'] ?>">
 
-                                                        <input type="hidden"
-                                                            name="partnerServices[<?= $partnerID ?>][<?= $i ?>][status]"
-                                                            value="<?= htmlspecialchars($service['approvalStatus']) ?>">
+                                        <input type="hidden"
+                                            name="partnerServices[<?= $partnerID ?>][<?= $i ?>][status]"
+                                            value="<?= htmlspecialchars($service['approvalStatus']) ?>">
 
-                                                        <input type="hidden" name="partnerServices[<?= $partnerID ?>][<?= $i ?>][price]"
-                                                            value="<?= htmlspecialchars($service['price']) ?>">
-                                                    </li>
-                                                <?php } ?>
-
-                                            </ul>
-                                        <?php } ?>
-                                        <input type="hidden" name="customerChoice" value="<?= $customerChoice ?>">
-                                        <p class="note text-primary text-center">
-                                            <?= htmlspecialchars($customerDecisionMessage) ?></p>
-                                    <?php } else { ?>
-                                        <h1 class="text-center defaultMess">None</h1>
+                                        <input type="hidden" name="partnerServices[<?= $partnerID ?>][<?= $i ?>][price]"
+                                            value="<?= htmlspecialchars($service['price']) ?>">
+                                    </li>
                                     <?php } ?>
 
-                                </div>
+                                </ul>
+                                <?php } ?>
+                                <input type="hidden" name="customerChoice" value="<?= $customerChoice ?>">
+                                <p class="note text-primary text-center">
+                                    <?= htmlspecialchars($customerDecisionMessage) ?></p>
+                                <?php } else { ?>
+                                <h1 class="text-center defaultMess">None</h1>
+                                <?php } ?>
+
+                            </div>
                             <?php  } ?>
 
 
 
                             <div class="row3 mt-4">
                                 <?php if ($bookingType !== 'Event') { ?>
-                                    <div class="additionalServices" id="booking-info-container">
-                                        <label for="addOns" class="info-label mb-2">Additional Service/s</label>
-                                        <input type="text" class="form-control inputDetail" name="addOns" id="addOns"
-                                            value="<?= $additionalServices ?>" readonly>
-                                    </div>
+                                <div class="additionalServices" id="booking-info-container">
+                                    <label for="addOns" class="info-label mb-2">Additional Service/s</label>
+                                    <input type="text" class="form-control inputDetail" name="addOns" id="addOns"
+                                        value="<?= $additionalServices ?>" readonly>
+                                </div>
                                 <?php  } ?>
                             </div>
 
                             <div class="additional-charges-container">
                                 <h6 class="fw-bold">Additional Charge/s Info</h6>
                                 <?php if (!empty($additionalChargesInfo)) { ?>
-                                    <ul>
-                                        <?php foreach ($additionalChargesInfo as $charge): ?>
-                                            <li>
-                                                <p><?= ucfirst($charge['desc']) ?> &mdash;
-                                                    ₱<?= number_format($charge['amount'], 2) ?></p>
-                                            </li>
+                                <ul>
+                                    <?php foreach ($additionalChargesInfo as $charge): ?>
+                                    <li>
+                                        <p><?= ucfirst($charge['desc']) ?> &mdash;
+                                            ₱<?= number_format($charge['amount'], 2) ?></p>
+                                    </li>
 
-                                        <?php endforeach; ?>
-                                    </ul>
+                                    <?php endforeach; ?>
+                                </ul>
                                 <?php     } else { ?>
-                                    <p class="text-center defaultMess">No Additional Charge/s!</p>
+                                <p class="text-center defaultMess">No Additional Charge/s!</p>
                                 <?php  } ?>
 
                             </div>
@@ -1144,38 +1161,38 @@ switch ($userRole) {
                             </div>
 
                             <?php if ($bookingStatusName === 'Approved') { ?>
-                                <div class="info-container paymentInfo">
-                                    <label for="paymentStatus" class="mt-2">Payment Status</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="paymentStatus"
-                                        id="paymentStatus" value="<?= $paymentStatusName ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo">
+                                <label for="paymentStatus" class="mt-2">Payment Status</label>
+                                <input type="text" class="form-control inputDetail w-50" name="paymentStatus"
+                                    id="paymentStatus" value="<?= $paymentStatusName ?>" readonly>
+                            </div>
                             <?php } ?>
 
                             <?php if ($bookingType === 'Event') { ?>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="venuePrice" class="mt-2">Venue Price</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="venuePrice"
-                                        id="venuePrice" value="₱<?= number_format($venuePrice, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="venuePrice" class="mt-2">Venue Price</label>
+                                <input type="text" class="form-control inputDetail w-50" name="venuePrice"
+                                    id="venuePrice" value="₱<?= number_format($venuePrice, 2) ?>" readonly>
+                            </div>
 
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="pricePerHead" class="mt-2">Price Per Head</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="pricePerHead"
-                                        id="pricePerHead" value="₱<?= number_format($pricePerHead, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="pricePerHead" class="mt-2">Price Per Head</label>
+                                <input type="text" class="form-control inputDetail w-50" name="pricePerHead"
+                                    id="pricePerHead" value="₱<?= number_format($pricePerHead, 2) ?>" readonly>
+                            </div>
 
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="foodPriceTotal" class="mt-2">Total Food Price</label>
-                                    <input type="text" class="form-control inputDetail w-50"
-                                        value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="foodPriceTotal" class="mt-2">Total Food Price</label>
+                                <input type="text" class="form-control inputDetail w-50"
+                                    value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
+                            </div>
 
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="additionalServicePrice" class="mt-2">Additional Service/s Price</label>
-                                    <input type="text" class="form-control inputDetail w-50" name="additionalServicePrice"
-                                        id="additionalServicePrice"
-                                        value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="additionalServicePrice" class="mt-2">Additional Service/s Price</label>
+                                <input type="text" class="form-control inputDetail w-50" name="additionalServicePrice"
+                                    id="additionalServicePrice"
+                                    value="₱<?= number_format($additionalServicePrice, 2) ?>" readonly>
+                            </div>
                             <?php } ?>
 
                             <div class="info-container paymentInfo" id="payment-info">
@@ -1185,23 +1202,23 @@ switch ($userRole) {
                             </div>
 
                             <?php if ($bookingStatusName === 'Approved') { ?>
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="paymentDue" class="mt-2">Payment Due Date</label>
-                                    <input type="text" class="form-control inputDetail w-50" value="<?= $paymentDueDate ?>"
-                                        readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="paymentDue" class="mt-2">Payment Due Date</label>
+                                <input type="text" class="form-control inputDetail w-50" value="<?= $paymentDueDate ?>"
+                                    readonly>
+                            </div>
 
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="userBalance" class="mt-2">User Balance</label>
-                                    <input type="text" class="form-control inputDetail w-50"
-                                        value="₱<?= number_format($userBalance, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="userBalance" class="mt-2">User Balance</label>
+                                <input type="text" class="form-control inputDetail w-50"
+                                    value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                            </div>
 
-                                <div class="info-container paymentInfo" id="payment-info">
-                                    <label for="amountPaid" class="mt-2">Amount Paid</label>
-                                    <input type="text" class="form-control inputDetail w-50"
-                                        value="₱<?= number_format($amountPaid, 2) ?>" readonly>
-                                </div>
+                            <div class="info-container paymentInfo" id="payment-info">
+                                <label for="amountPaid" class="mt-2">Amount Paid</label>
+                                <input type="text" class="form-control inputDetail w-50"
+                                    value="₱<?= number_format($amountPaid, 2) ?>" readonly>
+                            </div>
                             <?php } ?>
 
                             <div class="info-container paymentInfo" id="payment-info">
@@ -1254,7 +1271,7 @@ switch ($userRole) {
                     <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus"
                         value="<?= $paymentApprovalStatusName ?? 'None' ?>">
                     <?php foreach ($serviceIDs as $serviceID): ?>
-                        <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
+                    <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
                     <?php endforeach; ?>
                     <input type="hidden" name="endDate" id="endDate" value="<?= $rawEndDate ?>">
                     <input type="hidden" name="startDate" id="startDate" value="<?= $rawStartDate ?>">
@@ -1272,365 +1289,365 @@ switch ($userRole) {
 
     <!-- Allow adding discount and changing final bill -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
 
-            const formControls = document.querySelectorAll('#finalizedModal .form-control');
+        const formControls = document.querySelectorAll('#finalizedModal .form-control');
 
-            const discountContainer = document.getElementById('add-discount-container');
-            const discountInput = document.getElementById('discountAmount');
-            const noDiscountBtn = document.getElementById('noDiscount');
+        const discountContainer = document.getElementById('add-discount-container');
+        const discountInput = document.getElementById('discountAmount');
+        const noDiscountBtn = document.getElementById('noDiscount');
 
-            const foodPrice = document.getElementById('foodPrice');
-            const originalBill = document.getElementById('originalBill');
+        const foodPrice = document.getElementById('foodPrice');
+        const originalBill = document.getElementById('originalBill');
 
-            const newFoodPrice = document.getElementById('newFoodPrice');
-            const newBaseAmount = document.getElementById('newBaseAmount');
+        const newFoodPrice = document.getElementById('newFoodPrice');
+        const newBaseAmount = document.getElementById('newBaseAmount');
 
-            const updatedTotalAmount = document.getElementById('summaryUpdatedTotalAmount');
-            const updatedFoodPrice = document.getElementById('summaryUpdatedFoodPrice');
-            const discountSummary = document.getElementById('summaryDiscount');
+        const updatedTotalAmount = document.getElementById('summaryUpdatedTotalAmount');
+        const updatedFoodPrice = document.getElementById('summaryUpdatedFoodPrice');
+        const discountSummary = document.getElementById('summaryDiscount');
 
-            const finalBill = document.getElementById('finalBill');
-            const summaryFinalBill = document.getElementById('summaryFinalBill');
+        const finalBill = document.getElementById('finalBill');
+        const summaryFinalBill = document.getElementById('summaryFinalBill');
 
-            document.getElementById('addDiscount').addEventListener('click', () => {
-                discountContainer.style.display = 'block';
-                discountInput.style.border = '1px solid red';
-                noDiscountBtn.style.display = 'block';
+        document.getElementById('addDiscount').addEventListener('click', () => {
+            discountContainer.style.display = 'block';
+            discountInput.style.border = '1px solid red';
+            noDiscountBtn.style.display = 'block';
 
-                discountInput.addEventListener('change', () => {
-                    discountInput.style.border = '1px solid rgb(223, 226, 230)';
-                    updateSummary();
-                });
+            discountInput.addEventListener('change', () => {
+                discountInput.style.border = '1px solid rgb(223, 226, 230)';
                 updateSummary();
             });
-
-            noDiscountBtn.addEventListener('click', () => {
-                discountContainer.style.display = 'none';
-                noDiscountBtn.style.display = 'none';
-                discountInput.value = '';
-                updateSummary();
-            });
-
-            function updateSummary() {
-                const foodPriceValue = foodPrice ? parseFloat(foodPrice.value) || 0 : 0;
-                const originalBillValue = parseFloat(originalBill.value) || 0;
-                const discountValue = discountInput ? parseFloat(discountInput.value) || 0 : 0;
-                const baseAmountValue = newBaseAmount ? parseFloat(newBaseAmount.value) || 0 : originalBillValue;
-                const newFoodPriceValue = newFoodPrice ? parseFloat(newFoodPrice.value) || 0 : 0;
-                let totalOriginalBill = 0;
-                if (newFoodPriceValue != 0) {
-                    const originalBillWithoutFood = originalBillValue - foodPriceValue;
-                    totalOriginalBill = (originalBillWithoutFood + newFoodPriceValue) - discountValue;
-                } else {
-                    totalOriginalBill = ((baseAmountValue === 0) ? originalBillValue : baseAmountValue) -
-                        discountValue;
-                }
-
-                // const
-
-                finalBill.value = totalOriginalBill.toFixed(2);
-                if (summaryFinalBill) summaryFinalBill.textContent = totalOriginalBill.toFixed(2);
-                if (updatedFoodPrice) updatedFoodPrice.textContent = newFoodPriceValue.toFixed(2);
-                if (updatedTotalAmount) updatedTotalAmount.textContent = baseAmountValue.toFixed(2);
-                if (discountSummary) discountSummary.textContent = discountValue.toFixed(2);
-            };
-
-            const inputs = [
-                newFoodPrice,
-                newBaseAmount,
-                discountInput
-            ].filter(Boolean);
-
-
-            inputs.forEach(input => {
-                input.addEventListener('input', updateSummary);
-            });
-
-            // console.log(inputs);
-
             updateSummary();
-
-            //Disable any letter but allowed the peiod
-            formControls.forEach(formControl => {
-                formControl.addEventListener('keypress', function(e) {
-                    if (/[0-9]/.test(e.key)) return;
-
-                    if (e.key === '.' && !formControl.value.includes('.')) return;
-
-                    e.preventDefault();
-                });
-            });
-
         });
+
+        noDiscountBtn.addEventListener('click', () => {
+            discountContainer.style.display = 'none';
+            noDiscountBtn.style.display = 'none';
+            discountInput.value = '';
+            updateSummary();
+        });
+
+        function updateSummary() {
+            const foodPriceValue = foodPrice ? parseFloat(foodPrice.value) || 0 : 0;
+            const originalBillValue = parseFloat(originalBill.value) || 0;
+            const discountValue = discountInput ? parseFloat(discountInput.value) || 0 : 0;
+            const baseAmountValue = newBaseAmount ? parseFloat(newBaseAmount.value) || 0 : originalBillValue;
+            const newFoodPriceValue = newFoodPrice ? parseFloat(newFoodPrice.value) || 0 : 0;
+            let totalOriginalBill = 0;
+            if (newFoodPriceValue != 0) {
+                const originalBillWithoutFood = originalBillValue - foodPriceValue;
+                totalOriginalBill = (originalBillWithoutFood + newFoodPriceValue) - discountValue;
+            } else {
+                totalOriginalBill = ((baseAmountValue === 0) ? originalBillValue : baseAmountValue) -
+                    discountValue;
+            }
+
+            // const
+
+            finalBill.value = totalOriginalBill.toFixed(2);
+            if (summaryFinalBill) summaryFinalBill.textContent = totalOriginalBill.toFixed(2);
+            if (updatedFoodPrice) updatedFoodPrice.textContent = newFoodPriceValue.toFixed(2);
+            if (updatedTotalAmount) updatedTotalAmount.textContent = baseAmountValue.toFixed(2);
+            if (discountSummary) discountSummary.textContent = discountValue.toFixed(2);
+        };
+
+        const inputs = [
+            newFoodPrice,
+            newBaseAmount,
+            discountInput
+        ].filter(Boolean);
+
+
+        inputs.forEach(input => {
+            input.addEventListener('input', updateSummary);
+        });
+
+        // console.log(inputs);
+
+        updateSummary();
+
+        //Disable any letter but allowed the peiod
+        formControls.forEach(formControl => {
+            formControl.addEventListener('keypress', function(e) {
+                if (/[0-9]/.test(e.key)) return;
+
+                if (e.key === '.' && !formControl.value.includes('.')) return;
+
+                e.preventDefault();
+            });
+        });
+
+    });
     </script>
 
     <!-- //* to add original price to updated food price  -->
     <script>
-        const sameFoodPrice = document.getElementById('sameFoodPrice');
-        const sameAmount = document.getElementById('sameAmount');
-        const newFoodPrice = document.getElementById('newFoodPrice');
-        const foodPrice = document.getElementById('foodPrice');
+    const sameFoodPrice = document.getElementById('sameFoodPrice');
+    const sameAmount = document.getElementById('sameAmount');
+    const newFoodPrice = document.getElementById('newFoodPrice');
+    const foodPrice = document.getElementById('foodPrice');
 
-        sameAmount.addEventListener('click', (event) => {
-            event.stopPropagation();
+    sameAmount.addEventListener('click', (event) => {
+        event.stopPropagation();
 
-            if (sameAmount.checked) {
-                newFoodPrice.value = foodPrice.value;
-            } else {
-                newFoodPrice.value = "";
-            }
-        });
+        if (sameAmount.checked) {
+            newFoodPrice.value = foodPrice.value;
+        } else {
+            newFoodPrice.value = "";
+        }
+    });
 
-        sameFoodPrice.addEventListener('click', () => {
+    sameFoodPrice.addEventListener('click', () => {
 
-            if (sameAmount.checked) {
-                newFoodPrice.value = foodPrice.value;
-            } else {
-                newFoodPrice.value = "";
-            }
-        });
+        if (sameAmount.checked) {
+            newFoodPrice.value = foodPrice.value;
+        } else {
+            newFoodPrice.value = "";
+        }
+    });
     </script>
 
     <script>
-        function toggleAdditionalInput() {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            var additionalInputs = document.querySelectorAll('.additional-input');
+    function toggleAdditionalInput() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        var additionalInputs = document.querySelectorAll('.additional-input');
 
-            additionalInputs.forEach(function(input) {
-                input.style.display = 'none';
-                input.querySelectorAll('input').forEach(i => i.disabled = true);
-            });
-
-            checkboxes.forEach(function(checkbox) {
-                const inputId = checkbox.getAttribute('data-input');
-                const container = document.getElementById(inputId);
-                const inputs = container.querySelectorAll('input');
-
-                if (checkbox.checked) {
-                    if (inputId === 'others-input') {
-                        document.getElementById(inputId).style.display = 'block';
-                    } else {
-                        document.getElementById(inputId).style.display = 'flex';
-                    }
-                    inputs.forEach(input => input.disabled = false);
-                } else {
-                    container.style.display = 'none';
-                    inputs.forEach(input => {
-                        input.value = '';
-                        input.disabled = true;
-                    });
-
-                    const name = inputId.split('-')[1] || inputId.replace('-input', '');
-
-                    const index = data.findIndex(item => Object.keys(item)[0] === name);
-                    if (index !== -1) {
-                        data.splice(index, 1);
-                    }
-                }
-            });
-
-            updateAddPaymentSummary();
-        }
-
-
-        const finalBill = document.getElementById('finalBillValue');
-        const originalCharge = document.getElementById('additionalChargeValue');
-        const finalBillInput = document.getElementById('new-bill');
-        const additionalChargeInput = document.getElementById('additional-charge');
-        const chargesList = document.getElementById("additional-charges-list");
-        const additionalChargeContainer = document.querySelectorAll('.additionalCharge-container .form-control');
-        const data = [];
-
-        additionalChargeContainer.forEach(form => {
-            form.addEventListener('input', () => {
-                const parts = form.id.split('-');
-                const name = parts[0];
-                const property = parts[1];
-
-                let entry = data.find(item => item[name]);
-                if (!entry) {
-                    entry = {
-                        [name]: {}
-                    };
-                    data.push(entry);
-                }
-                entry[name][property] = isNaN(form.value) ? form.value : Number(form.value);
-                updateAddPaymentSummary();
-                // console.log(data);
-            });
+        additionalInputs.forEach(function(input) {
+            input.style.display = 'none';
+            input.querySelectorAll('input').forEach(i => i.disabled = true);
         });
 
+        checkboxes.forEach(function(checkbox) {
+            const inputId = checkbox.getAttribute('data-input');
+            const container = document.getElementById(inputId);
+            const inputs = container.querySelectorAll('input');
 
-        function updateAddPaymentSummary() {
-            const finalBillValue = parseFloat(finalBill.value) || 0;
-            const originalChargeValue = parseFloat(originalCharge.value) || 0;
-            let additionalChargesTotal = 0;
-            chargesList.innerHTML = '';
-
-            data.forEach(item => {
-                const name = Object.keys(item)[0];
-                const properties = item[name];
-
-                if (name === 'other') {
-                    displayName = properties.desc;
-                } else if (name === 'electricFan') {
-                    displayName = 'Electric Fan';
+            if (checkbox.checked) {
+                if (inputId === 'others-input') {
+                    document.getElementById(inputId).style.display = 'block';
                 } else {
-                    displayName = name;
+                    document.getElementById(inputId).style.display = 'flex';
                 }
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                container.style.display = 'none';
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.disabled = true;
+                });
 
-                const li = document.createElement('li');
+                const name = inputId.split('-')[1] || inputId.replace('-input', '');
 
-                li.textContent =
-                    `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${parseFloat(properties.amount) || 0}`;
-                additionalChargesTotal += parseFloat(properties.amount) || 0;
-
-                chargesList.appendChild(li);
-            });
-
-            const chargesTotal = originalChargeValue + additionalChargesTotal;
-            const totalBill = finalBillValue + chargesTotal;
-            //Summary display
-            document.getElementById('total-additional-charges').textContent = chargesTotal.toFixed(2);
-            document.getElementById('summary-total-amount').textContent = totalBill.toFixed(2);
-
-            finalBillInput.value = totalBill;
-            additionalChargeInput.value = chargesTotal;
-        };
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const checkboxGroups = document.querySelectorAll('.checkbox-group .form-control');
-            checkboxGroups.forEach((input) => {
-                input.disabled = true;
-            })
-            updateAddPaymentSummary();
+                const index = data.findIndex(item => Object.keys(item)[0] === name);
+                if (index !== -1) {
+                    data.splice(index, 1);
+                }
+            }
         });
+
+        updateAddPaymentSummary();
+    }
+
+
+    const finalBill = document.getElementById('finalBillValue');
+    const originalCharge = document.getElementById('additionalChargeValue');
+    const finalBillInput = document.getElementById('new-bill');
+    const additionalChargeInput = document.getElementById('additional-charge');
+    const chargesList = document.getElementById("additional-charges-list");
+    const additionalChargeContainer = document.querySelectorAll('.additionalCharge-container .form-control');
+    const data = [];
+
+    additionalChargeContainer.forEach(form => {
+        form.addEventListener('input', () => {
+            const parts = form.id.split('-');
+            const name = parts[0];
+            const property = parts[1];
+
+            let entry = data.find(item => item[name]);
+            if (!entry) {
+                entry = {
+                    [name]: {}
+                };
+                data.push(entry);
+            }
+            entry[name][property] = isNaN(form.value) ? form.value : Number(form.value);
+            updateAddPaymentSummary();
+            // console.log(data);
+        });
+    });
+
+
+    function updateAddPaymentSummary() {
+        const finalBillValue = parseFloat(finalBill.value) || 0;
+        const originalChargeValue = parseFloat(originalCharge.value) || 0;
+        let additionalChargesTotal = 0;
+        chargesList.innerHTML = '';
+
+        data.forEach(item => {
+            const name = Object.keys(item)[0];
+            const properties = item[name];
+
+            if (name === 'other') {
+                displayName = properties.desc;
+            } else if (name === 'electricFan') {
+                displayName = 'Electric Fan';
+            } else {
+                displayName = name;
+            }
+
+            const li = document.createElement('li');
+
+            li.textContent =
+                `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${parseFloat(properties.amount) || 0}`;
+            additionalChargesTotal += parseFloat(properties.amount) || 0;
+
+            chargesList.appendChild(li);
+        });
+
+        const chargesTotal = originalChargeValue + additionalChargesTotal;
+        const totalBill = finalBillValue + chargesTotal;
+        //Summary display
+        document.getElementById('total-additional-charges').textContent = chargesTotal.toFixed(2);
+        document.getElementById('summary-total-amount').textContent = totalBill.toFixed(2);
+
+        finalBillInput.value = totalBill;
+        additionalChargeInput.value = chargesTotal;
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkboxGroups = document.querySelectorAll('.checkbox-group .form-control');
+        checkboxGroups.forEach((input) => {
+            input.disabled = true;
+        })
+        updateAddPaymentSummary();
+    });
     </script>
 
     <!--//* Hiding buttons -->
     <script>
-        const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
-        const bookingStatus = document.getElementById('bookingStatusName').value;
+    const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
+    const bookingStatus = document.getElementById('bookingStatusName').value;
 
-        const buttonContainer = document.getElementById('button-approval-container');
+    const buttonContainer = document.getElementById('button-approval-container');
 
-        if (paymentApprovalStatus === 'Done' ||
-            bookingStatus === 'Expired' ||
-            bookingStatus === 'Rejected' ||
-            bookingStatus === 'Cancelled' ||
-            paymentApprovalStatus === 'Rejected' ||
-            paymentApprovalStatus === 'Cancelled' ||
-            bookingStatus === 'Approved' ||
-            bookingStatus === 'Reserved') {
-            buttonContainer.style.display = "none";
-        }
+    if (paymentApprovalStatus === 'Done' ||
+        bookingStatus === 'Expired' ||
+        bookingStatus === 'Rejected' ||
+        bookingStatus === 'Cancelled' ||
+        paymentApprovalStatus === 'Rejected' ||
+        paymentApprovalStatus === 'Cancelled' ||
+        bookingStatus === 'Approved' ||
+        bookingStatus === 'Reserved') {
+        buttonContainer.style.display = "none";
+    }
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-        const param = new URLSearchParams(window.location.search);
-        const action = param.get('action');
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const action = urlParams.get('action');
+    const param = new URLSearchParams(window.location.search);
+    const action = param.get('action');
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const action = urlParams.get('action');
 
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-
-        if (action === 'approvalFailed') {
-            const errorMessage = window.approvalErrorMessage ||
-                "The booking request could not be approved. Please try again later.";
-
-            Swal.fire({
-                title: "Failed!",
-                text: errorMessage,
-                icon: 'error',
-            });
-        } else if (action === 'chargesAdded') {
-            Toast.fire({
-                title: "Applied Charges Successfully",
-                icon: 'success',
-            });
-        } else if (action === 'chargesError') {
-            Swal.fire({
-                title: "Failed!",
-                text: 'Server Error: An error occured in database. Please try again later!',
-                icon: 'error',
-            });
-        } else if (action === 'addOnsService-rejected') {
-            Swal.fire({
-                title: "Approval Restriction",
-                text: 'Failed to approve the booking.  The customer chose to cancel the reservation because the additional service they requested was rejected.',
-                icon: 'info',
-            });
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
         }
+    });
+
+    if (action === 'approvalFailed') {
+        const errorMessage = window.approvalErrorMessage ||
+            "The booking request could not be approved. Please try again later.";
+
+        Swal.fire({
+            title: "Failed!",
+            text: errorMessage,
+            icon: 'error',
+        });
+    } else if (action === 'chargesAdded') {
+        Toast.fire({
+            title: "Applied Charges Successfully",
+            icon: 'success',
+        });
+    } else if (action === 'chargesError') {
+        Swal.fire({
+            title: "Failed!",
+            text: 'Server Error: An error occured in database. Please try again later!',
+            icon: 'error',
+        });
+    } else if (action === 'addOnsService-rejected') {
+        Swal.fire({
+            title: "Approval Restriction",
+            text: 'Failed to approve the booking.  The customer chose to cancel the reservation because the additional service they requested was rejected.',
+            icon: 'info',
+        });
+    }
 
 
-        // if (paramValue === "approvalFailed") {
-        //     Swal.fire({
-        //         title: "Failed!",
-        //         text: "The booking request could not be approved. Please try again later.",
-        //         icon: 'error',
-        //     });
-        // } else if (paramValue === 'rejectionEmpty') {
-        //     Swal.fire({
-        //         title: "Oops!",
-        //         text: "Please provide the reason for your rejection",
-        //         icon: 'warning',
-        //         confirmButtonText: 'Okay',
-        //     }).then((result) => {
-        //         const rejectionModal = document.getElementById('rejectionModal');
-        //         const modal = new bootstrap.modal(rejectionModal);
-        //         modal.show();
+    // if (paramValue === "approvalFailed") {
+    //     Swal.fire({
+    //         title: "Failed!",
+    //         text: "The booking request could not be approved. Please try again later.",
+    //         icon: 'error',
+    //     });
+    // } else if (paramValue === 'rejectionEmpty') {
+    //     Swal.fire({
+    //         title: "Oops!",
+    //         text: "Please provide the reason for your rejection",
+    //         icon: 'warning',
+    //         confirmButtonText: 'Okay',
+    //     }).then((result) => {
+    //         const rejectionModal = document.getElementById('rejectionModal');
+    //         const modal = new bootstrap.modal(rejectionModal);
+    //         modal.show();
 
-        //         // document.getElementById('rejectionReason').style.border = '1px solid red';
-        //     });
-        // } else if (paramValue === 'rejectionFailed') {
-        //     Swal.fire({
-        //         title: "Failed!",
-        //         text: "The booking request could not be rejected. Please try again later.",
-        //         icon: 'error',
-        //     });
-        // } else if (paramValue === 'addOnsService-rejected') {
-        //     Swal.fire({
-        //         title: "Oops! You can’t approve this booking",
-        //         text: "The customer’s decision is to cancel this booking if any availed partnership service is declined.",
-        //         icon: 'info',
-        //     });
+    //         // document.getElementById('rejectionReason').style.border = '1px solid red';
+    //     });
+    // } else if (paramValue === 'rejectionFailed') {
+    //     Swal.fire({
+    //         title: "Failed!",
+    //         text: "The booking request could not be rejected. Please try again later.",
+    //         icon: 'error',
+    //     });
+    // } else if (paramValue === 'addOnsService-rejected') {
+    //     Swal.fire({
+    //         title: "Oops! You can’t approve this booking",
+    //         text: "The customer’s decision is to cancel this booking if any availed partnership service is declined.",
+    //         icon: 'info',
+    //     });
 
-        // }
+    // }
 
-        // if (action) {
-        //     const url = new URL(window.location);
-        //     url.search = '';
-        //     history.replaceState({}, document.title, url);
-        // }
+    // if (action) {
+    //     const url = new URL(window.location);
+    //     url.search = '';
+    //     history.replaceState({}, document.title, url);
+    // }
     </script>
 
     <script>
-        function otherReason() {
-            var selectBox = document.getElementById("select-reason");
-            var otherInputGroup = document.getElementById("otherInputGroup");
+    function otherReason() {
+        var selectBox = document.getElementById("select-reason");
+        var otherInputGroup = document.getElementById("otherInputGroup");
 
-            // Show or hide the text box when "Other (Please specify)" is selected
-            if (selectBox.value === "other" || selectBox.value === '17') {
-                otherInputGroup.style.display = "block"; // Show the text box
-            } else {
-                otherInputGroup.style.display = "none"; // Hide the text box
-            }
+        // Show or hide the text box when "Other (Please specify)" is selected
+        if (selectBox.value === "other" || selectBox.value === '17') {
+            otherInputGroup.style.display = "block"; // Show the text box
+        } else {
+            otherInputGroup.style.display = "none"; // Hide the text box
         }
+    }
     </script>
 
     <?php include '../Customer/loader.php'; ?>
