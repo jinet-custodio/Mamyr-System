@@ -115,7 +115,7 @@ switch ($userRole) {
         $profile = $data['userProfile'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_buffer($finfo, $profile);
-        finfo_close($finfo);
+        // finfo_close($finfo);
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
 
 
@@ -160,37 +160,37 @@ switch ($userRole) {
                         <label for="floatingInputValue">Full Name</label>
                     </div>
                     <div class="info form-floating">
-                        <input type="<?= $type ?>" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($phoneNumber) ?>" readonly>
+                        <input type="<?= $type ?>" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($phoneNumber ?? '') ?>" readonly>
                         <label for="floatingInputValue">Phone Number</label>
                     </div>
                     <div class="info form-floating">
-                        <input type="<?= $type ?>" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($birthday) ?>" readonly>
+                        <input type="<?= $type ?>" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($birthday ?? '') ?>" readonly>
                         <label for="floatingInputValue">Birthday</label>
                     </div>
                     <div class="info form-floating">
-                        <input type="texts" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($address) ?>" readonly>
+                        <input type="texts" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars(ucwords($address) ?? '') ?>" readonly>
                         <label for="floatingInputValue">Address</label>
                     </div>
                     <div class="info form-floating">
-                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($data['userStatusName']) ?>" readonly>
+                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($data['userStatusName'] ?? '') ?>" readonly>
                         <label for="floatingInputValue">Status</label>
                     </div>
 
                     <div class="info form-floating">
-                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($confirmedBookingCount) ?>" readonly>
+                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($confirmedBookingCount ?? '') ?>" readonly>
                         <label for="floatingInputValue">Bookings Made</label>
                     </div>
                     <div class="info form-floating">
-                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($userBalance) ?>" readonly>
+                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($userBalance ?? '') ?>" readonly>
                         <label for="floatingInputValue">Balance</label>
                     </div>
-                    <input type="hidden" id="roleName" value="<?= htmlspecialchars($data['roleName']) ?>">
+                    <input type="hidden" id="roleName" value="<?= htmlspecialchars($data['roleName'] ?? '') ?>">
                     <div class="info form-floating" id="companyName" style="display: none;">
-                        <input type=" text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($data['companyName']) ?>" readonly>
+                        <input type=" text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($data['companyName'] ?? '') ?>" readonly>
                         <label for="floatingInputValue">Company Name</label>
                     </div>
                     <div class="info form-floating">
-                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($accountCreated) ?>" readonly>
+                        <input type="text" class="form-control" id="floatingInputValue" value="<?= htmlspecialchars($accountCreated ?? '') ?>" readonly>
                         <label for="floatingInputValue">Account Creation Date</label>
                     </div>
                 </div>

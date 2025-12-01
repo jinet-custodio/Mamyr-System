@@ -210,9 +210,9 @@ if ($result->num_rows > 0) {
             <section class="page-title-container">
                 <nav aria-label="breadcrumb" id="choice-container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active page-title"><a href="#" id="partner-link">Partnerships</a>
+                        <li class="breadcrumb-item active page-title" id="partner-link-li"><a href="#" id="partner-link">Partnerships</a>
                         </li>
-                        <li class="breadcrumb-item page-title" aria-current="page"><a href="#" id="request-link">
+                        <li class="breadcrumb-item page-title" aria-current="page" id="request-link-li"><a href="#" id="request-link">
                                 Partnership Requests</li></a>
                     </ol>
                 </nav>
@@ -222,12 +222,13 @@ if ($result->num_rows > 0) {
             <!-- Display when Partner is Click -->
             <div class="partner-container" id="partner-container">
                 <!-- Partners Table  -->
-                <div class=" partnership-table">
+                <div class="partnership-table">
 
                     <div class="card" id="partner-card">
-                        <table class="table table-striped display nowrap" id="partnersTable">
+                        <table class="table table-striped display nowrap" id="partnerTable">
                             <thead>
                                 <tr>
+                                    <th class="table-header" scope="col">ID</th>
                                     <th class="table-header wrap-date" scope="col">Name</th>
                                     <th class="table-header" scope="col">Partner Type</th>
                                     <th class="table-header wrap-date" scope="col">Date Applied</th>
@@ -252,6 +253,7 @@ if ($result->num_rows > 0) {
                         <table class="table table-striped display nowrap" id="requestTable">
                             <thead>
                                 <tr>
+                                    <th class="table-header" scope="col">ID</th>
                                     <th class="table-header" scope="col">Name</th>
                                     <th class="table-header" scope="col">Partner Type</th>
                                     <th class="table-header wrap-date" scope="col">Request Date</th>
@@ -282,95 +284,67 @@ if ($result->num_rows > 0) {
     <!-- DataTables -->
     <script src="../../Assets/JS/datatables.min.js"></script>
 
+    <!-- Table JS -->
     <script>
-        $('#requestTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '20%',
-                    targets: 0
-                },
-                {
-                    width: '20%',
-                    targets: 1
-                },
-                {
-                    width: '25%',
-                    targets: 2
-                },
-                {
-                    width: '20%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
+        let partnersTable;
+        let requestsTable;
+        $(document).ready(function() {
+            partnersTable = $('#partnerTable').DataTable({
+                responsive: false,
+                scrollX: true,
+                columnDefs: [{
+                        width: '5%',
+                        targets: 0
+                    },
+                    {
+                        width: '25%',
+                        targets: 1
+                    },
+                    {
+                        width: '25%',
+                        targets: 2
+                    },
+                    {
+                        width: '25%',
+                        targets: 3
+                    },
+                    {
+                        width: '20%',
+                        targets: 4
+                    },
+                ],
+                destroy: true
+            });
 
-            ],
-        });
-
-        $('#partnersTable').DataTable({
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '25%',
-                    targets: 0
-                },
-                {
-                    width: '25%',
-                    targets: 1
-                },
-                {
-                    width: '25%',
-                    targets: 2
-                },
-                {
-                    width: '25%',
-                    targets: 3
-                }
-            ],
-        });
-    </script>
-
-
-    <!-- Ajax fort request adn partner -->
-    <script>
-        function loadPartners() {
-            const table = $('#partnersTable');
-            const tableBody = document.getElementById("partners-table-body");
-            tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>Loading...</td></tr>";
-
-            fetch('../../Function/Admin/Partnership/getPartner.php')
-                .then(res => res.text())
-                .then(html => {
-
-                    tableBody.innerHTML = html;
-
-                    table.DataTable();
-                }).catch(err => {
-                    console.log(err);
-                });
-        }
-
-
-        function loadRequests() {
-            const table = $('#requestTable');
-            const tableBody = document.getElementById("requests-table-body");
-            tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Loading...</td></tr>";
-
-            fetch('../../Function/Admin/Partnership/getApplicant.php')
-                .then(res => res.text())
-                .then(html => {
-                    tableBody.innerHTML = html;
-
-                    table.DataTable();
-                }).catch(err => {
-                    console.log(err);
-                });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
+            requestsTable = $('#requestTable').DataTable({
+                responsive: false,
+                scrollX: true,
+                columnDefs: [{
+                        width: '5%',
+                        targets: 0
+                    }, {
+                        width: '20%',
+                        targets: 1
+                    },
+                    {
+                        width: '20%',
+                        targets: 2
+                    },
+                    {
+                        width: '20%',
+                        targets: 3
+                    },
+                    {
+                        width: '20%',
+                        targets: 4
+                    },
+                    {
+                        width: '15%',
+                        targets: 5
+                    }
+                ],
+                destroy: true
+            });
             loadPartners();
             document.getElementById("partner-link").addEventListener("click", function() {
                 loadPartners();
@@ -379,13 +353,84 @@ if ($result->num_rows > 0) {
             document.getElementById("request-link").addEventListener("click", function() {
                 loadRequests();
             });
-
-            const params = new URLSearchParams(window.location.search);
-            const paramValue = params.get('container');
-
-            if (paramValue == 1) loadPartners();
-            else if (paramValue == 2) loadRequests();
         });
+
+
+        function loadPartners() {
+            fetch('../../Function/Admin/Partnership/getPartner.php')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'Server Error',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        return;
+                    }
+
+                    partnersTable.clear();
+
+                    Object.values(data.partners).forEach(p => {
+                        partnersTable.row.add([
+                            p.partnershipID,
+                            p.name,
+                            p.types.join(' & '),
+                            p.startDate,
+                            `<form action="partnership.php?container=3" method="POST">
+                        <input type="hidden" name="partnerID" value="${p.partnershipID}">
+                        <button type="submit" class="btn btn-info" name='view-btn'>View</button>
+                    </form>`
+                        ]);
+                    });
+
+                    partnersTable.draw();
+                })
+                .catch(err => console.log(err));
+        }
+
+        function loadRequests() {
+            fetch('../../Function/Admin/Partnership/getApplicant.php')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'Server Error',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        return;
+                    }
+
+                    requestsTable.clear();
+
+                    Object.values(data.applicants).forEach(a => {
+                        requestsTable.row.add([
+                            a.partnershipID,
+                            a.name,
+                            a.types.join(' & '),
+                            a.requestDate,
+                            `<span class="badge ${a.class}">${a.status}</span>`,
+                            `<form action="partnership.php?container=4" method="POST">
+                        <input type="hidden" name="partnerID" value="${a.partnershipID}">
+                        <button type="submit" class="btn btn-info" name="view-btn">View</button>
+                    </form>`
+                        ]);
+                    });
+
+                    requestsTable.draw();
+                })
+                .catch(err => console.log(err));
+        }
+
+
+
+        // if (paramValue == 1) loadPartners();
+        // else if (paramValue == 2) loadRequests();
     </script>
 
     <!-- Pages hide/show -->
@@ -425,28 +470,8 @@ if ($result->num_rows > 0) {
                 loadPartners();
             });
 
-            // choice1Link.addEventListener('click', function(event) {
-            //     event.preventDefault();
-            //     choices.style.display = "flex";
-            //     partner_Container.style.display = "none";
-            //     request_Container.style.display = "none";
-            //     partner_Card.style.display = "none";
-            //     request_Card.style.display = "none";
-            // });
-
-            // choice2Link.addEventListener('click', function(event) {
-            //     event.preventDefault();
-            //     choices.style.display = "flex";
-            //     partner_Container.style.display = "none";
-            //     request_Container.style.display = "none";
-            //     partner_Card.style.display = "none";
-            //     request_Card.style.display = "none";
-            // });
         });
-    </script>
 
-    <!-- Search URL -->
-    <script>
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('container');
         const action = params.get("action");
@@ -456,24 +481,48 @@ if ($result->num_rows > 0) {
         const requestContainer = document.getElementById("request-container");
         const partnerCard = document.getElementById("partner-card");
         const requestCard = document.getElementById("request-card");
+        const partnerLink = document.getElementById('partner-link-li');
+        const requestLink = document.getElementById('request-link-li');
+        switch (paramValue) {
+            case '1': // partners
+                partnerContainer.style.display = "block";
+                requestContainer.style.display = "none";
+                partnerCard.style.display = "block";
+                requestCard.style.display = "none";
+                partnerLink.classList.add('active');
+                requestLink.classList.remove('active');
+                loadPartners();
+                break;
 
-        if (paramValue == 1) {
-            // choices.style.display = "none";
-            partnerContainer.style.display = "block";
-            requestContainer.style.display = "none";
-            partnerCard.style.display = "block";
-            requestCard.style.display = "none";
+            case '2': // requests
+                partnerContainer.style.display = "none";
+                requestContainer.style.display = "block";
+                partnerCard.style.display = "none";
+                requestCard.style.display = "block";
+                partnerLink.classList.remove('active');
+                requestLink.classList.add('active');
+                loadRequests();
+                break;
 
-            loadPartners()
-        } else if (paramValue == 2) {
-            // choices.style.display = "none";
-            partnerContainer.style.display = "none";
-            requestContainer.style.display = "block";
-            partnerCard.style.display = "none";
-            requestCard.style.display = "block";
+            case '3': // view page
+                partnerContainer.style.display = "none";
+                requestContainer.style.display = "none";
+                partnerCard.style.display = "none";
+                requestCard.style.display = "none";
+                // No table loading here
+                break;
 
-            loadRequests();
+            default:
+                // default to partners table
+                partnerContainer.style.display = "block";
+                requestContainer.style.display = "none";
+                partnerCard.style.display = "block";
+                requestCard.style.display = "none";
+                partnerLink.classList.add('active');
+                requestLink.classList.remove('active');
+                loadPartners();
         }
+
 
         const Toast = Swal.mixin({
             toast: true,
@@ -509,7 +558,7 @@ if ($result->num_rows > 0) {
             // });
         }
 
-        if (action) {
+        if (action || paramValue) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());

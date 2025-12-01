@@ -8,9 +8,6 @@ session_start();
 $env = parse_ini_file(__DIR__ . '/../../.env');
 require '../../vendor/autoload.php';
 
-use PHPMailer\PHPMailer\PHPmailer;
-use PHPMailer\PHPMailer\Exception;
-
 require '../emailSenderFunction.php';
 require '../Helpers/userFunctions.php';
 
@@ -24,8 +21,61 @@ $userID = (int) $_SESSION['userID'];
 
 if (isset($_POST['confirmationBtn'])) {
 
-  $checkTransaction = $conn->prepare("SELECT userID FROM booking WHERE userID = ?");
-  $checkTransaction->bind_param("i", $userID);
+  // error_log(print_r($_POST, true));
+
+  $adminFullName = mysqli_real_escape_string($conn, $_POST['adminFullName'] ?? '');
+  $adminID = (int) $_POST['adminID'] ?? '';
+  $partnershipID = (int) $_POST['partnershipID'] ?? '';
+  switch ($userRole) {
+    case 1: //Customer
+    case 4: //Applicant
+      $checkTransaction = $conn->prepare("SELECT userID FROM booking WHERE userID = ?");
+      $checkTransaction->bind_param("i", $userID);
+      break;
+
+    case 3: //Admin
+      $checkTransaction = $conn->prepare("SELECT 
+        EXISTS (SELECT 1 FROM booking WHERE approvedBy = ?) AS inBooking,
+        EXISTS (SELECT 1 FROM confirmedbooking WHERE approvedBy = ?) AS inConfirmed");
+      $checkTransaction->bind_param("si", $adminFullName, $adminID);
+      break;
+
+    case 2: //Business Partner
+      $partnershipServiceIDs = [];
+      $checkPartnershipServiceID = $conn->prepare("SELECT partnershipServiceID as ID FROM partnershipservice WHERE partnershipID = ?");
+      $checkPartnershipServiceID->bind_param("i", $partnershipID);
+      $checkPartnershipServiceID->execute();
+      $partnerServiceResult = $checkPartnershipServiceID->get_result();
+      if ($partnerServiceResult->num_rows > 0) {
+        while ($row = $partnerServiceResult->fetch_assoc()) {
+          $id = (int) $row['ID'];
+          $checkTransaction = $conn->prepare("SELECT 
+        EXISTS (SELECT 1 FROM booking WHERE userID = ?) AS inBooking,
+        EXISTS (SELECT 1 FROM businesspartneravailedservice WHERE partnershipServiceID = ?) AS isAvailed");
+          $checkTransaction->bind_param("si", $userID, $id);
+          if (!$checkTransaction->execute()) {
+            header("Location: ../../Pages/Account/deleteAccount.php?action=executionFailed");
+            exit();
+          }
+
+          $result = $checkTransaction->get_result();
+          if ($result->num_rows > 0) {
+            header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+          } else {
+            header("Location: ../../Pages/Account/deleteAccount.php?action=noTransaction");
+          }
+          exit();
+        }
+      }
+      break;
+
+    default:
+      $_SESSION['error'] = "Unauthorized Access eh!";
+      session_destroy();
+      header("Location: ../../../../Pages/register.php");
+      exit();
+  }
+
 
   if (!$checkTransaction->execute()) {
     header("Location: ../../Pages/Account/deleteAccount.php?action=executionFailed");
@@ -33,17 +83,29 @@ if (isset($_POST['confirmationBtn'])) {
   }
 
   $result = $checkTransaction->get_result();
-  if ($result->num_rows > 0) {
-    header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+  $row = $result->fetch_assoc();
+
+  if ($userRole == 1 || $userRole == 4) {
+    if ($result->num_rows > 0) {
+      header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+    } else {
+      header("Location: ../../Pages/Account/deleteAccount.php?action=noTransaction");
+    }
     exit();
-  } else {
-    header("Location: ../../Pages/Account/deleteAccount.php?action=noTransaction");
+  }
+
+  if ($userRole == 3) {
+    if ($row['inBooking'] == 1 || $row['inConfirmed'] == 1) {
+      header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+    } else {
+      header("Location: ../../Pages/Account/deleteAccount.php?action=noTransaction");
+    }
     exit();
   }
 }
 
 
-//* Send Otp to user email if user agree to delete the 
+//* Send Otp to user email if user agree to delete the account
 if (isset($_POST['yesDelete'])) {
   $checkTransaction = $conn->prepare("SELECT userID FROM booking WHERE userID = ?");
   $checkTransaction->bind_param("i", $userID);
@@ -179,6 +241,7 @@ elseif (isset($_POST['verifyCode'])) {
       $storedOTP = $storedData['userOTP'];
       $storedTime = $storedData['OTP_expiration_at'];
       $userID = $storedData['userID'];
+      $firstName = $storedData['firstName'];
 
       $timeNow = time();
       $otpExpiration = strtotime($storedTime);
@@ -193,6 +256,41 @@ elseif (isset($_POST['verifyCode'])) {
           $deleteQuery->bind_param("sisiis", $anonymousEmail, $isDeleted, $today, $deletedID, $userID, $email);
 
           if ($deleteQuery->execute()) {
+
+            $subject = "Your Account Has Been Successfully Deleted";
+            $email_message = '<body style="font-family: Arial, sans-serif;         background-color: #f4f4f4; padding: 20px; margin: 0;">
+
+                            <table align="center" width="100%" cellpadding="0" cellspacing="0"
+                                style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+
+                                <tr style="background-color:#365CCE;">
+                                    <td style="text-align:center; ">
+                                        <h4 style="font-family:Poppins Light; color:#ffffff; font-size: 18px;  margin-top: 25px">Account Deletion Confirmed!</h4>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding: 30px; text-align: left; color: #333333;">
+                                        <p style="font-size: 12px; margin: 10px 0 10px;">Hello, ' . $firstName . '</p>
+                                        <p style="font-size: 12px; margin: 8px 0;">This is to confirm that your Mamyr Resort and Events Place account has been successfully deleted. All associated personal data has been removed from our systems in accordance with our data retention and privacy policies.
+                                        </p>
+                                        <p style="font-size: 12px; margin: 8px 0;">If you did not request this change or believe this was done in error, please contact us as soon as possible. 
+                                        </p>
+                                        <p style="font-size: 12px; margin: 8px 0;">Thank you for using our services.
+                                        </p>
+                                        <br>
+                                        <p style="font-size: 14px;">Best regards,</p>
+                                        <p style="font-size: 14px; font-weight: bold;">Mamyr Resort and Events Place.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
+        ';
+            if (!sendEmail($email,   $storedData['firstName'], $subject, $message, $env)) {
+              header("Location: ../../Pages/Account/deleteAccount.php?action=emailFailed");
+              exit;
+            }
+
             header("Location: ../../Pages/register.php?action=deleted");
             exit;
           } else {

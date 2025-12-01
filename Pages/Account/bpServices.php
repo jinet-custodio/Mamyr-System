@@ -95,7 +95,7 @@ switch ($userRole) {
         $profile = $data['userProfile'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_buffer($finfo, $profile);
-        finfo_close($finfo);
+        // finfo_close($finfo);
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
 
         $partnershipID = $data['partnershipID'];
@@ -232,25 +232,33 @@ switch ($userRole) {
 
                             <div class="partnerTypeContainer">
                                 <label for="partnerType" class="addServiceLabel">Partner Type</label>
-                                <select name="partnerTypeID" id="partnerTypeID" class="form-select">
+                                <select name="pptID" id="pptID" class="form-select">
                                     <option value="" disabled
-                                        <?= empty($_SESSION['addServiceForm']['partnerTypeID']) ? 'selected' : '' ?>>
+                                        <?= empty($_SESSION['addServiceForm']['pptID']) ? 'selected' : '' ?>>
                                         Select Partner Service Type
                                     </option>
 
                                     <?php
                                     $isApproved = true;
-                                    $getPartnerTypes = $conn->prepare("SELECT pt.partnerTypeDescription as description, pt.partnerTypeID FROM partnership_partnertype ppt 
+                                    $other = 'Other';
+                                    $getPartnerTypes = $conn->prepare("SELECT 
+                                                        CASE 
+                                                            WHEN pt.partnerTypeDescription = ? 
+                                                            THEN ppt.otherPartnerType
+                                                            ELSE pt.partnerTypeDescription 
+                                                        END AS description,
+                                                        ppt.pptID 
+                                                        FROM partnership_partnertype ppt 
                                                         LEFT JOIN partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID 
                                                         WHERE  ppt.isApproved = ? AND ppt.partnershipID = ?");
-                                    $getPartnerTypes->bind_param('ii', $isApproved, $partnershipID);
+                                    $getPartnerTypes->bind_param('sii', $other, $isApproved, $partnershipID);
                                     if ($getPartnerTypes->execute()) {
                                         $result = $getPartnerTypes->get_result();
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
-                                                $selected = ($_SESSION['addServiceForm']['partnerTypeID'] ?? '') == $row['partnerTypeID'] ? 'selected' : '';
+                                                $selected = ($_SESSION['addServiceForm']['pptID'] ?? '') == $row['pptID'] ? 'selected' : '';
                                     ?>
-                                                <option value="<?= htmlspecialchars($row['partnerTypeID']) ?>" <?= $selected ?>>
+                                                <option value="<?= htmlspecialchars($row['pptID']) ?>" <?= $selected ?>>
                                                     <?= htmlspecialchars($row['description']) ?></option>
                                     <?php
                                             }

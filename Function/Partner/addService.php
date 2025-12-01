@@ -16,7 +16,7 @@ if (isset($_POST['addService'])) {
     $serviceCapacity = intval($_POST['capacity']);
     $serviceDuration = mysqli_real_escape_string($conn, $_POST['duration']);
     $serviceDesc = mysqli_real_escape_string($conn, $_POST['serviceDesc']) ?? 'N/A';
-    $partnerTypeID = (int) $_POST['partnerTypeID'];
+    $pptID = (int) $_POST['pptID'];
     $_SESSION['addServiceForm'] = $_POST;
 
     $storeProofPath = '../../Assets/Images/PartnerServiceImage/';
@@ -58,12 +58,12 @@ if (isset($_POST['addService'])) {
         exit();
     }
 
-    error_log(print_r($_FILES['serviceImage'], true));
+    // error_log(print_r($_FILES['serviceImage'], true));
 
     $conn->begin_transaction();
     try {
         $insertPartnerServiceQuery = $conn->prepare("INSERT INTO `partnershipservice`(`partnershipID`, `PBName`, `PBPrice`, `PBDescription`, `PBcapacity`, `PBduration`, `PSAvailabilityID`, `partnerTypeID`, `serviceImage`) VALUES (?,?,?,?,?,?,?,?,?)");
-        $insertPartnerServiceQuery->bind_param("isdsisiis", $partnershipID, $serviceName, $servicePrice, $serviceDesc, $serviceCapacity, $serviceDuration, $availabilityID, $partnerTypeID, $uniqueFileName);
+        $insertPartnerServiceQuery->bind_param("isdsisiis", $partnershipID, $serviceName, $servicePrice, $serviceDesc, $serviceCapacity, $serviceDuration, $availabilityID, $pptID, $uniqueFileName);
 
         if (!$insertPartnerServiceQuery->execute()) {
             $conn->rollback();

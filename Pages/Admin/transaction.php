@@ -202,11 +202,11 @@ if ($result->num_rows > 0) {
                     <select class="filter-select" name="payment-filter-select" id="payment-filter-select">
                         <!-- <option selected disabled>Filters</option> -->
                         <option value="all">All Payments</option>
-                        <option value="pending">Awaiting Review</option>
-                        <option value="incoming">Upcoming</option>
-                        <option value="ongoing">Ongoing</option>
-                        <option value="finished">Completed</option>
-                        <option value="expired">Cancelled / Rejected / Expired</option>
+                        <option value="pending-payment">Awaiting Payment</option>
+                        <option value="pending-review">Awaiting Payment Review</option>
+                        <option value="partially-paid">Partially Paid</option>
+                        <option value="fully-paid">Fully Paid</option>
+                        <option value="cancelled">Cancelled / Rejected Payments</option>
                     </select>
                     <i class="bi bi-filter"></i>
                 </div>
@@ -253,83 +253,94 @@ if ($result->num_rows > 0) {
 
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#transactionTable').DataTable({
-            scrollX: true,
-            order: [
-                [0, 'desc']
-            ],
-            columnDefs: [{
-                    width: '5%',
-                    target: 0,
-                },
-                {
-                    width: '15%',
-                    target: 1,
-                },
-                {
-                    width: '15%',
-                    target: 2,
-                },
-                {
-                    width: '10%',
-                    target: 4,
-                },
-                {
-                    width: '15%',
-                    target: 5,
-                },
-                {
-                    width: '15%',
-                    target: 6,
-                },
-                {
-                    width: '10%',
-                    target: 7,
-                }
-            ]
+        $(document).ready(function() {
+            $('#transactionTable').DataTable({
+                scrollX: true,
+                order: [
+                    [0, 'desc']
+                ],
+                columnDefs: [{
+                        width: '5%',
+                        target: 0,
+                    },
+                    {
+                        width: '15%',
+                        target: 1,
+                    },
+                    {
+                        width: '15%',
+                        target: 2,
+                    },
+                    {
+                        width: '10%',
+                        target: 4,
+                    },
+                    {
+                        width: '15%',
+                        target: 5,
+                    },
+                    {
+                        width: '15%',
+                        target: 6,
+                    },
+                    {
+                        width: '10%',
+                        target: 7,
+                    }
+                ]
+            });
         });
-    });
     </script>
     <!-- Responsive sidebar -->
     <script src="../../Assets/JS/adminSidebar.js"> </script>
 
     <script>
-    function getStatusBadge(colorClass, status) {
-        return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-    }
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+        }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch("../../Function/Admin/Ajax/getPaymentJSON.php")
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    // console.error("Failed to load payments.");
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message || 'An unknown error occurred.'
-                    });
-                    return;
-                }
-                const payments = data.payments;
-                const table = $('#transactionTable').DataTable();
-                table.clear();
-                // console.log(payments);
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectedFilter = document.getElementById('payment-filter-select');
+            const filterValue = selectedFilter.value;
+            getPayments(filterValue);
+            selectedFilter.addEventListener("change", () => {
+                const filterValue = selectedFilter.value;
+                getPayments(filterValue);
+            })
+        });
 
-                payments.forEach(payment => {
-                    // const row = document.createElement("tr");
-                    table.row.add([
-                        payment.bookingID,
-                        payment.bookingCode,
-                        payment.name,
-                        payment.totalBill,
-                        payment.paymentAmount,
-                        payment.userBalance,
-                        payment.paymentMethod,
-                        getStatusBadge(payment.statusClass, payment.status),
-                        // getStatusBadge(payment.paymentClass, payment.paymentStatusName),
-                        ` <form action = "viewPayments.php"
+
+        function getPayments(selectedFilter) {
+            fetch(`../../Function/Admin/Ajax/getPaymentJSON.php?filter=${encodeURIComponent(selectedFilter)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        // console.error("Failed to load payments.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'An unknown error occurred.'
+                        });
+                        return;
+                    }
+                    const payments = data.payments;
+                    const table = $('#transactionTable').DataTable();
+                    table.clear();
+                    // console.log(payments);
+
+                    payments.forEach(payment => {
+                        // const row = document.createElement("tr");
+                        table.row.add([
+                            payment.bookingID,
+                            payment.bookingCode,
+                            payment.name,
+                            payment.totalBill,
+                            payment.paymentAmount,
+                            payment.userBalance,
+                            payment.paymentMethod,
+                            getStatusBadge(payment.statusClass, payment.status),
+                            // getStatusBadge(payment.paymentClass, payment.paymentStatusName),
+                            ` <form action = "viewPayments.php"
                                         method = "POST" >
                                             <input type = "hidden"
                                         name = "button"
@@ -344,61 +355,61 @@ if ($result->num_rows > 0) {
                                         name="bookingID"
                                         value="${payment.bookingID}">
                                             <button type="submit" class="btn btn-primary viewBtn"> View </button> </form>`
-                    ]);
-                });
-                table.draw();
-            }).catch(error => {
-                console.error("Error loading bookings:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: error.message || 'Failed to load data from the server.'
+                        ]);
+                    });
+                    table.draw();
+                }).catch(error => {
+                    console.error("Error loading bookings:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message || 'Failed to load data from the server.'
+                    })
                 })
-            })
-    })
+        }
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
-    if (paramValue === "approved") {
-        Swal.fire({
-            title: "Payment Approved",
-            text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
-            icon: 'success',
-        });
-    } else if (paramValue === "rejected") {
-        Swal.fire({
-            title: "Payment Rejected",
-            text: "You have reviewed and rejected the payment.",
-            icon: 'success',
-        });
-    } else if (paramValue === "failed") {
-        Swal.fire({
-            title: "Payment Approval Failed",
-            text: "Unable to approve or reject the payment. Please try again later.",
-            icon: 'error',
-        });
-    } else if (paramValue === "paymentSuccess") {
-        Swal.fire({
-            title: "Payment Added",
-            text: "Payment was successfully added and processed.",
-            icon: 'success',
-        });
-    } else if (paramValue === "paymentFailed") {
-        Swal.fire({
-            title: "Payment Failed",
-            text: "Failed to deduct the payment. Please try again later.",
-            icon: 'error',
-        });
-    }
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
+        if (paramValue === "approved") {
+            Swal.fire({
+                title: "Payment Approved",
+                text: "You have successfully reviewed the payment. The booked service is now reserved for the customer.",
+                icon: 'success',
+            });
+        } else if (paramValue === "rejected") {
+            Swal.fire({
+                title: "Payment Rejected",
+                text: "You have reviewed and rejected the payment.",
+                icon: 'success',
+            });
+        } else if (paramValue === "failed") {
+            Swal.fire({
+                title: "Payment Approval Failed",
+                text: "Unable to approve or reject the payment. Please try again later.",
+                icon: 'error',
+            });
+        } else if (paramValue === "paymentSuccess") {
+            Swal.fire({
+                title: "Payment Added",
+                text: "Payment was successfully added and processed.",
+                icon: 'success',
+            });
+        } else if (paramValue === "paymentFailed") {
+            Swal.fire({
+                title: "Payment Failed",
+                text: "Failed to deduct the payment. Please try again later.",
+                icon: 'error',
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location.href);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location.href);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
     <?php include '../Customer/loader.php'; ?>

@@ -10,7 +10,7 @@ require_once __DIR__ . '/Helpers/categoryFunctions.php';
 
 $affectedRows = resetExpiredOTPs($conn);
 $addedUser = addToAdminTable($conn);
-autoChangeStatus($conn);
+$servicesStatus = autoChangeStatus($conn);
 $expiredStatus = changeToExpiredStatus($conn);
 $doneStatus = changeToDoneStatus($conn);
 $deleted = noPayment24hrs($conn);
@@ -22,6 +22,7 @@ $logMessage =
     "Scheduled Date & Time: " . date('F. d, Y g:i A') .
     "\nAdded to admin table: $addedUser\n" .
     "Deleted OTPs: $affectedRows\n" .
+    "Services Status: $servicesStatus\n" .
     "Expired Status: $expiredStatus\n" .
     "Done Status: $doneStatus\n" .
     "Deleted rows in service unavailable: $deleted\n" .

@@ -185,7 +185,7 @@ CREATE TABLE booking_cancellations (
 
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY (userID) REFERENCES user(userID),
-    FOREIGN KEY (reasonID) REFERENCES reasons(reasonID)
+    FOREIGN KEY (reasonID) REFERENCES reason(reasonID)
 );
 
 -- ======================
@@ -201,14 +201,27 @@ CREATE TABLE booking_rejections (
 
     FOREIGN KEY (bookingID) REFERENCES booking(bookingID),
     FOREIGN KEY (adminID) REFERENCES admin(adminID),
-    FOREIGN KEY (reasonID) REFERENCES reasons(reasonID)
+    FOREIGN KEY (reasonID) REFERENCES reason(reasonID)
+);
+
+
+CREATE TABLE partner_rejection (
+    rejectionID INT PRIMARY KEY AUTO_INCREMENT,
+    partnershipID INT NOT NULL,
+    adminID INT NOT NULL,
+    reasonID INT NOT NULL,
+    otherReason TEXT NULL,
+    rejectedOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (partnershipID) REFERENCES partnership(partnershipID),
+    FOREIGN KEY (adminID) REFERENCES admin(adminID),
+    FOREIGN KEY (reasonID) REFERENCES reason(reasonID)
 );
 
 
 RENAME TABLE booking_rejections TO booking_rejection
 RENAME TABLE booking_cancellations TO booking_cancellation
 RENAME TABLE additionalcharges TO additionalcharge
-RENAME TABLE reasons TO reason
 
 ALTER TABLE `reason` CHANGE `category` `category` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE confirmedbooking ADD approvedBy INT(11) NULL AFTER paymentApprovalStatus, ADD approvedDate DATETIME NULL AFTER approvedBy;
