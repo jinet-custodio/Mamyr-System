@@ -7,10 +7,19 @@ session_start();
 //for setting image paths in 'include' statements
 $baseURL = '..';
 
+$sectionName = 'TermsAndConditions';
+$colTitle = "busPartnerTerms";
 
-// echo '<pre>';
-// print_r($_SESSION['partnerData']);
-// echo '</pre>';
+$getContent = $conn->prepare("SELECT title, content FROM websitecontent WHERE sectionName = ? AND title = ?");
+$getContent->bind_param("ss", $sectionName, $colTitle);
+$getContent->execute();
+$contentResult = $getContent->get_result();
+
+$fullText = "";
+while ($row = $contentResult->fetch_assoc()) {
+    $fullText .= $row['content'] . "\n\n"; // Keep spacing between sections
+}
+$fullText = trim($fullText);
 ?>
 
 
@@ -395,193 +404,7 @@ $baseURL = '..';
 
                 </div>
                 <div class="modal-body">
-                    <p class="termsDescription text-center">Welcome to Mamyr Resort and Events Place! By using our
-                        Resort Event Management System, you agree to abide by the terms and conditions outlined below.
-                        These terms apply to all bookings made for the resort, hotel, and event venues via this
-                        platform.
-                        <br><strong> Please read these terms carefully before making any bookings.</strong>
-                    </p>
-                    <h6>1. Booking & Reservation</h6>
-                    <ul>
-                        <li><strong>Eligibility:</strong> Users must be at least 18 years of age to book any
-                            services via the platform. They must also provide a valid ID and show their business
-                            credentials to the resort to prove their eligibility.</li>
-                        <li><strong>Booking Process:</strong> To make a booking, users must provide accurate details,
-                            including full name, contact information, payment details, and any additional requirements
-                            (e.g., room preferences, event specifications).</li>
-                        <li><strong>Confirmation:</strong> A booking is considered confirmed once you receive an
-                            official booking confirmation email or notification. Any reservation made without
-                            this confirmation will not be considered valid.</li>
-                        <li><strong>Booking Modifications:</strong> You may modify or cancel your booking
-                            through the system, provided such changes comply with the cancellation and
-                            modification policy.</li>
-                    </ul>
-                    <h6>2. Payments & Charges</h6>
-                    <ul>
-                        <li><strong>Pricing:</strong> All pricing for resort accommodations, hotel rooms, and
-                            event venues are displayed clearly on the platform. Prices are subject to change
-                            based on seasonality, availability, or promotions.</li>
-                        <li><strong>Payment Methods:</strong> We only accept certain payment methods, namely
-                            GCash and on-site cash payments. Down payments must be made before the time of
-                            booking unless otherwise stated.</li>
-                        <li><strong>Refunds:</strong> Our business does not provide refunds for down payment
-                            upon cancellation. Users are encouraged to ensure that their booking information, as
-                            well as their schedules for their desired booking dates are accurately provided to
-                            avoid the need for cancellations.</li>
-                    </ul>
-                    <h6>3. Check-in & Check-out</h6>
-                    <ul>
-                        <li><strong>Hotel & Resort:</strong> Early check-ins or late check-outs are subject to
-                            availability and may incur additional charges.</li>
-                        <li><strong>Event Venue:</strong> Event venue access will be granted as per the
-                            agreed-upon event time. Additional charges may apply for extended event hours.</li>
-                    </ul>
-                    <h6>4. Limitation of Liability</h6>
-                    <ul>
-                        <li><strong>Hotel/Resort Liability:</strong> Our liability for any loss, injury, or
-                            damage incurred during a stay or event is limited to the amount paid for the
-                            booking. We are not liable for any indirect or consequential damages.</li>
-                        <li><strong>Event Liability:</strong> The resort is not responsible for any third-party
-                            event organizer’s actions or services. Any complaints regarding event services
-                            should be directed to the event organizer.</li>
-                    </ul>
-                    <h6>5. Privacy & User Data Policy</h6>
-                    <p>We respect your privacy and are committed to protecting your personal data in compliance with the
-                        Data Privacy Act of 2012 (Republic Act No. 10173) and other relevant Philippine data protection
-                        laws. By using our platform, you agree to the collection, storage, and use of your data as
-                        outlined below.</p>
-                    <ul>
-                        <li><strong>Types of Data Collected:</strong>
-                            <ul>
-                                <li>Personal Information: We collect your name, email address, phone number, and other
-                                    personal details you provide during booking.</li>
-                                <li>Payment Information: Payment details, such as GCash account numbers and billing
-                                    information, are processed securely through third-party payment gateways.</li>
-                                <li>Booking Data: We collect details of your bookings, such as accommodation type,
-                                    check-in/check-out dates, event preferences, and any additional services requested.
-                                </li>
-                            </ul>
-                        </li>
-                        <li><strong>Use of Data:</strong>
-                            <ul>
-                                <li>We use your personal and booking information to process and manage your
-                                    reservations, send booking confirmations, and provide customer support.</li>
-                                <li>Payment details are used exclusively for processing payments and are never stored on
-                                    our servers.</li>
-                                <li>We may use your contact information to send promotional offers, newsletters, and
-                                    updates about our services (you can opt-out at any time).</li>
-                            </ul>
-                        </li>
-                        <li><strong>Data Protection:</strong>
-                            <ul>
-                                <li>We implement security measures to protect your personal and payment information
-                                    during transmission and storage.</li>
-                                <li>We comply with the Data Privacy Act of 2012 and other applicable laws in the
-                                    Philippines to ensure your data is handled with utmost care and confidentiality.
-                                </li>
-                            </ul>
-                        </li>
-                        <li><strong>Retention of Data:</strong> We retain your data only for as long as necessary to
-                            fulfill the purpose for which it was collected, including legal and accounting obligations.
-                            If you wish to delete your data, please contact us directly.</li>
-                        <li><strong>Your Rights:</strong>
-                            <ul>
-                                <li>Access: You have the right to request a copy of your personal data.</li>
-                                <li>Rectification: You can request corrections to any inaccuracies in your personal
-                                    data.</li>
-                                <li>Deletion: You can request the deletion of your personal data, subject to certain
-                                    legal exceptions.</li>
-                                <li>Opt-Out: You can opt out of marketing communications at any time by following the
-                                    unsubscribe instructions in emails or contacting us directly.</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <p>For more information about how we handle your personal data, please refer to our full Privacy
-                        Policy available on our website.</p>
-                    <h6>6. Modifications to Terms & Conditions</h6>
-                    <p>We reserve the right to modify these terms and conditions at any time. Any changes will be
-                        effective immediately upon posting on the platform. Users are encouraged to review these terms
-                        regularly.</p>
-                    <h6>7. Dispute Resolution</h6>
-                    <p>Any disputes arising from bookings or the use of our Resort Event Management System shall be
-                        resolved through binding arbitration in the jurisdiction of San Ildefonso, Bulacan, Philippines.
-                        In the event that arbitration is not possible, disputes will be subject to Philippine laws and
-                        resolved in the appropriate court.</p>
-                    <h6>8. Governing Law</h6>
-                    <p>These terms and conditions shall be governed by and construed in accordance with the laws of the
-                        Philippines.</p>
-                    <h6>9. Contact Information</h6>
-                    <ul>
-                        <li>Email: <a href="mailto:mamyresort128@gmail.com">mamyresort128@gmail.com</a></li>
-                        <li>Phone: (0998) 962 4697</li>
-                        <li>Address: Sitio Colonia Gabihan, San Ildefonso, Bulacan</li>
-                    </ul>
-                    <h6>10. Business Partner Terms</h6>
-                    <ul>
-                        <li><strong>Eligibility:</strong> Business Partners must be at least 18 years of age to register
-                            and offer services via the platform.</li>
-                        <li><strong>Registration:</strong> Business Partners must complete a registration process and
-                            provide accurate business details, including the business name, contact information,
-                            services offered, and any additional requirements. Once approved, Business Partners will be
-                            granted access to manage and offer their services through the system.</li>
-                        <li><strong>Bookings & Reservations:</strong>
-                            <ul>
-                                <li><strong>Customer Interaction:</strong> Business Partners can list their services on
-                                    the platform for customers to book. While Business Partners can view the bookings
-                                    made for their services, they do not have the ability to approve or reject bookings.
-                                </li>
-                                <li><strong>Booking Details:</strong> All bookings made through the platform will be
-                                    reflected on the Business Partner’s page, and any relevant customer details will be
-                                    provided for them to coordinate and prepare for the service being offered.</li>
-                                <li><strong>Admin Communication:</strong> The Admin will contact the Business Partner
-                                    directly once their services have been booked by a customer. This communication will
-                                    include the booking details and any necessary information regarding the event or
-                                    service.</li>
-                            </ul>
-                        </li>
-                        <li><strong>Commission & Fees:</strong>
-                            <ul>
-                                <li><strong>Commission Disclosure:</strong> The commission rate applicable to Business
-                                    Partners will be disclosed after the scheduled event between the Admin and the
-                                    Business Partner. This will allow for transparent and mutually agreed-upon terms
-                                    following the completion of the event.</li>
-                                <li><strong>Payment Terms:</strong> After the scheduled event, the Admin will inform the
-                                    Business Partner of their commission, and payments will be made according to the
-                                    agreed-upon schedule, after deducting the commission fee.</li>
-                            </ul>
-                        </li>
-                        <li><strong>Liability & Responsibilities:</strong>
-                            <ul>
-                                <li><strong>Service Delivery:</strong> Business Partners are fully responsible for
-                                    delivering the services they offer to customers. They must ensure that services are
-                                    provided as described, in a timely manner, and meet the standards expected by the
-                                    customer.</li>
-                                <li><strong>Customer Complaints:</strong> Any complaints or disputes regarding the
-                                    services provided by the Business Partner should be resolved directly between the
-                                    Business Partner and the customer. The resort is not responsible for the actions or
-                                    services of Business Partners.</li>
-                                <li><strong>Indemnity:</strong> Business Partners agree to indemnify and hold harmless
-                                    Mamyr Resort from any claims, losses, or damages that arise from their services or
-                                    the actions of their employees, contractors, or representatives.</li>
-                            </ul>
-                        </li>
-                        <li><strong>Booking Modifications & Cancellations:</strong>
-                            <ul>
-                                <li>Business Partners may request modifications or cancellations to bookings if
-                                    necessary, but such changes will still be subject to the customer’s terms, as well
-                                    as Mamyr Resort’s cancellation and modification policy.</li>
-                                <li>Business Partners should communicate directly with customers if any changes need to
-                                    be made to the booking or service.</li>
-                            </ul>
-                        </li>
-                        <li><strong>Promotions & Advertising:</strong> Business Partners may participate in promotional
-                            campaigns, discounts, or special offers on the platform. Any such offers or campaigns will
-                            be subject to mutual agreement and will be advertised on the platform.</li>
-                        <li><strong>Compliance with Laws:</strong> Business Partners are responsible for ensuring that
-                            their business and services comply with all applicable laws and regulations, including those
-                            related to safety, licensing, and tax obligations. Mamyr Resort is not responsible for the
-                            legality of the services offered by Business Partners.</li>
-                    </ul>
+                    <?= nl2br(htmlspecialchars($fullText)) ?>
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">
