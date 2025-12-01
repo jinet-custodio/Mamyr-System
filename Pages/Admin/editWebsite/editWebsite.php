@@ -134,7 +134,21 @@ switch ($userRole) {
 
             <button class="btn btn-info" id="footer"><img
                     src="../../../Assets/Images/Icon/footer.png" alt="Footer" class="buttonIcon">Footer</button>
+
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" id="termsDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="../../../Assets/Images/Icon/about.png"
+                        alt="Terms" class="buttonIcon"> Terms and Conditions
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="termsDropdown">
+                    <li><a class="dropdown-item" href="#" id="customerDropdown">Customer Terms</a></li>
+                    <li><a class="dropdown-item" href="#" id="partnerDropdown">Business Partner Terms</a></li>
+                </ul>
+            </div>
         </div>
+
+
     </div>
     <!-- //* Landing Page iFrame -->
     <div class="container-fluid landingPage" id="landingPageContainer">
@@ -160,6 +174,10 @@ switch ($userRole) {
     <!-- //* Events Page iFrame -->
     <div class="container-fluid eventsPage" id="eventsContainer">
         <iframe src="../../events.php" class="editFrame" style="width: 100%; height: 100vh; display:none"></iframe>
+    </div>
+    <!-- //* Terms and Conditions iFrame -->
+    <div class="container-fluid" id="termsContainer">
+        <iframe id="termsFrame" class="editFrame" style="width:100%; height:100vh; display:none; border:none;"></iframe>
     </div>
     <!-- //* Blog Page iFrame -->
     <div class="container-fluid blogPage" id="blogContainer">
@@ -240,6 +258,7 @@ switch ($userRole) {
             const eventsContainer = document.getElementById("eventsContainer");
             const newBlogBtn = document.getElementById("newBlogBtn");
             const footerContainer = document.getElementById("footerContainer");
+            const termsContainer = document.getElementById("termsContainer");
             const landingPageBtn = document.getElementById("landingPage");
             const aboutPageBtn = document.getElementById("about");
             const blogPageBtn = document.getElementById("blog");
@@ -252,7 +271,8 @@ switch ($userRole) {
             const resortContainer = document.getElementById("resortContainer");
             const hotelPageBtn = document.getElementById("hotelBtn");
             const eventPageBtn = document.getElementById("eventBtn");
-
+            const customerDropdown = document.getElementById("customerDropdown");
+            const partnerDropdown = document.getElementById("partnerDropdown");
 
             landingPageBtn.addEventListener('click', function() {
                 hideAllContainers();
@@ -326,6 +346,24 @@ switch ($userRole) {
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Book Now - Resort";
                 newBlogBtn.style.position = "absolute";
+            });
+            customerDropdown.addEventListener('click', function() {
+                hideAllContainers();
+                termsContainer.style.display = "block";
+                termsContainer.querySelector("iframe").style.display = "block";
+                document.getElementById("termsFrame").src = "../../TermsAndConditions.php?type=customer";
+                icon.style.display = "block";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Customer Terms and Conditions";
+            });
+            partnerDropdown.addEventListener('click', function() {
+                hideAllContainers();
+                termsContainer.style.display = "block";
+                termsContainer.querySelector("iframe").style.display = "block";
+                document.getElementById("termsFrame").src = "../../TermsAndConditions.php?type=partner";
+                icon.style.display = "block";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Business Partner Terms and Conditions";
             });
 
 

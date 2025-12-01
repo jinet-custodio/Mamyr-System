@@ -8,7 +8,21 @@ session_start();
 $baseURL = '..';
 require_once '../Function/Helpers/userFunctions.php';
 resetExpiredOTPs($conn);
+$sectionName = 'TermsAndConditions';
+$colTitle = "CustomerTerms";
+
+$getContent = $conn->prepare("SELECT title, content FROM websitecontent WHERE sectionName = ? AND title = ?");
+$getContent->bind_param("ss", $sectionName, $colTitle);
+$getContent->execute();
+$contentResult = $getContent->get_result();
+
+$fullText = "";
+while ($row = $contentResult->fetch_assoc()) {
+    $fullText .= $row['content'] . "\n\n"; // Keep spacing between sections
+}
+$fullText = trim($fullText);
 ?>
+
 
 
 <!DOCTYPE html>
@@ -283,84 +297,7 @@ resetExpiredOTPs($conn);
 
                 </div>
                 <div class="modal-body">
-                    <p class="termsDescription text-center">Welcome to Mamyr Resort and Events Place! By using our
-                        Resort Event Management System, you agree to abide by the terms and conditions outlined below.
-                        These terms apply to all bookings made for the resort, hotel, and event venues via this
-                        platform.
-                        <br><strong> Please read these terms carefully before making any bookings.</strong>
-                    </p>
-                    <h6>1. Booking & Reservation</h6>
-                    <ul>
-                        <li><strong>Eligibility:</strong> Users must be at least 18 years of age to book any
-                            services via our system.</li>
-                        <li><strong>Booking Process:</strong> Users must provide accurate details, including
-                            full name, contact information, payment details, and any additional requirements
-                            (e.g., room preferences, event specifications).</li>
-                        <li><strong>Confirmation:</strong> A booking is considered confirmed once you receive an
-                            official booking confirmation email or notification. Any reservation made without
-                            this confirmation will not be considered valid.</li>
-                        <li><strong>Booking Modifications:</strong> You may modify or cancel your booking
-                            through the system, provided such changes comply with the cancellation and
-                            modification policy.</li>
-                    </ul>
-                    <h6>2. Payments & Charges</h6>
-                    <ul>
-                        <li><strong>Pricing:</strong> All pricing for resort accommodations, hotel rooms, and
-                            event venues are displayed clearly on the platform. Prices are subject to change
-                            based on seasonality, availability, or promotions.</li>
-                        <li><strong>Payment Methods:</strong> We only accept certain payment methods, namely
-                            GCash and on-site cash payments. Down payments must be made before the time of
-                            booking unless otherwise stated.</li>
-                        <li><strong>Refunds:</strong> Our business does not provide refunds for down payment
-                            upon cancellation. Users are encouraged to ensure that their booking information, as
-                            well as their schedules for their desired booking dates are accurately provided to
-                            avoid the need for cancellations.</li>
-                    </ul>
-                    <h6>3. Check-in & Check-out</h6>
-                    <ul>
-                        <li><strong>Hotel & Resort:</strong> Early check-ins or late check-outs are subject to
-                            availability and may incur additional charges.</li>
-                        <li><strong>Event Venue:</strong> Event venue access will be granted as per the
-                            agreed-upon event time. Additional charges may apply for extended event hours.</li>
-                    </ul>
-                    <h6>4. Limitation of Liability</h6>
-                    <ul>
-                        <li><strong>Hotel/Resort Liability:</strong> Our liability for any loss, injury, or
-                            damage incurred during a stay or event is limited to the amount paid for the
-                            booking. We are not liable for any indirect or consequential damages.</li>
-                        <li><strong>Event Liability:</strong> The resort is not responsible for any third-party
-                            event organizer’s actions or services. Any complaints regarding event services
-                            should be directed to the event organizer.</li>
-                    </ul>
-                    <h6>5. Privacy & User Data Policy</h6>
-                    <ul>
-                        <li><strong>Types of Data Collected:</strong> Personal Information, Payment Information,
-                            Booking Data.</li>
-                        <li><strong>Use of Data:</strong> Your personal and booking information is used to
-                            process and manage your reservations, send confirmations, and provide customer
-                            support.</li>
-                        <li><strong>Data Protection:</strong> We implement security measures to protect your
-                            personal and payment information.</li>
-                        <li><strong>Retention of Data:</strong> We retain your data only for as long as
-                            necessary to fulfill the purpose for which it was collected.</li>
-                        <li><strong>Your Rights:</strong> You have the right to access, rectify, delete, or
-                            opt-out of marketing communications regarding your personal data.</li>
-                    </ul>
-                    <h6>6. Modifications to Terms & Conditions</h6>
-                    <p>We reserve the right to modify these terms and conditions at any time. Changes will be
-                        effective immediately upon posting.</p>
-                    <h6>7. Dispute Resolution</h6>
-                    <p>Any disputes arising from bookings will be resolved through arbitration in San Ildefonso,
-                        Bulacan, Philippines.</p>
-                    <h6>8. Governing Law</h6>
-                    <p>These terms shall be governed by the laws of the Philippines.</p>
-                    <h6>9. Contact Information</h6>
-                    <ul>
-                        <li>Email: <a href="mailto:mamyresort128@gmail.com">mamyresort128@gmail.com</a></li>
-                        <li>Phone: (0998) 962 4697</li>
-                        <li>Address: Sitio Colonia Gabihan, San Ildefonso, Bulacan</li>
-                    </ul>
-
+                    <?= nl2br(htmlspecialchars($fullText)) ?>
                 </div>
                 <div class="modal-footer">
                     <div class="declineBtnContainer">

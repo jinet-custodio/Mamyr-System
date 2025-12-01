@@ -21,6 +21,7 @@
 
 #amenitiesDropdown,
 #bookNowDropdown,
+#termsDropdown,
 .show {
   width: 100%;
 }
@@ -91,7 +92,7 @@ i.backButton {
 .pagesContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 18px;
   width: 80%;
   margin: auto;
