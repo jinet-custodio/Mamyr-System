@@ -7,8 +7,8 @@ header('Content-Type: application/json');
 
 if (isset($_GET['filter'])) {
 
-    $filterValue = mysqli_real_escape_string($conn, $_GET['filter']);
-    error_log($filterValue);
+    $filterValue = mysqli_real_escape_string($conn, $_GET['filter'] ?? 'all');
+    // error_log($filterValue);
     try {
 
         switch (strtolower($filterValue)) {

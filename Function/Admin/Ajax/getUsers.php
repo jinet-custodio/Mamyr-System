@@ -12,10 +12,11 @@ $userRole = $_SESSION['userRole'];
 $deletedUserID = 4;
 
 try {
-    $getUsersQuery = $conn->prepare("SELECT userID, firstName, lastName, middleInitial, email, userRole as userRoleID,       userStatusID, createdAt 
-                            FROM user 
-                            WHERE userID != ? AND  userStatusID != ?
-                            ORDER BY userRole ASC");
+    $getUsersQuery = $conn->prepare("SELECT u.userID, u.firstName, u.lastName, u.middleInitial, u.email, u.userRole as userRoleID, u.userStatusID, u.createdAt 
+                            FROM user u
+                            LEFT JOIN usertype ut ON u.userRole = ut.userTypeID 
+                            WHERE u.userID != ? AND  u.userStatusID != ?
+                            ORDER BY ut.typeName ASC");
     $getUsersQuery->bind_param("ii", $userID, $deletedUserID);
 
     if (!$getUsersQuery->execute()) {

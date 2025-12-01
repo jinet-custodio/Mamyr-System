@@ -121,6 +121,33 @@ switch ($userRole) {
 
             <div class="sidebar-header text-center">
                 <h5 class="sidebar-text">User Account</h5>
+
+                <?php
+                $adminFullName = '';
+                $adminID = '';
+                if ($role === 'Admin') {
+                    $getAdminQuery = $conn->prepare("SELECT * FROM admin WHERE userID = ?");
+                    $getAdminQuery->bind_param("i", $userID);
+                    $getAdminQuery->execute();
+                    $adminResult  = $getAdminQuery->get_result();
+                    if ($adminResult->num_rows > 0) {
+                        $adminData = $adminResult->fetch_assoc();
+
+                        $adminFullName = $adminData['fullName'];
+                        $adminID = $adminData['adminID'];
+                    }
+                } elseif ($role === 'Business Partner') {
+                    $getBPQuery = $conn->prepare("SELECT * FROM partnership WHERE userID = ?");
+                    $getBPQuery->bind_param("i", $userID);
+                    $getBPQuery->execute();
+                    $bpResult  = $getBPQuery->get_result();
+                    if ($bpResult->num_rows > 0) {
+                        $bpData = $bpResult->fetch_assoc();
+
+                        $partnershipID = $bpData['partnershipID'];
+                    }
+                }
+                ?>
                 <?php
                 $getProfile = $conn->prepare("SELECT firstName,userProfile, email FROM user WHERE userID = ? AND userRole = ?");
                 $getProfile->bind_param("ii", $userID, $userRole);
@@ -132,7 +159,7 @@ switch ($userRole) {
                     $imageData = $data['userProfile'];
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
                     $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
+                    // finfo_close($finfo);
                     $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>
@@ -221,6 +248,11 @@ switch ($userRole) {
         <main class="main-content" id="main-content">
             <div class="wrapper">
                 <form action="../../Function/Account/deleteAccount.php" method="POST">
+                    <div class="input-hidden">
+                        <input type="hidden" name="adminID" id="adminID" value="<?= $adminID ?? '' ?>">
+                        <input type="hidden" name="adminFullName" value="<?= $adminFullName ?? '' ?>">
+                        <input type="hidden" name="partnershipID" value="<?= $partnershipID ?? '' ?>">
+                    </div>
                     <div class="card">
                         <div class="header">
                             <h5 class="card-title">Account Deletion</h5>
@@ -267,7 +299,7 @@ switch ($userRole) {
                         </div>
                         <div class="modal-body">
                             <p class="text-center">
-                                You have no active bookings or history associated with your account. Please note that account deletion is <strong>permanent</strong> and <strong>cannot be undone</strong>. Once deleted, all your account information will be removed from our system.
+                                This account has no previous activity and can be deleted. Once removed, all account information will be <strong>permanently erased</strong> from our system.
                             </p>
 
                         </div>
@@ -447,9 +479,10 @@ switch ($userRole) {
             Swal.fire({
                 icon: "info",
                 title: "Account Deletion Unavailable",
-                text: "It looks like your account has a booking linked to it, so we`re unable to delete it — even if the booking is completed or cancelled.",
+                text: "This account is linked to previous system activity and cannot be deleted. For audit and record-keeping purposes, only accounts with no activity can be removed.",
                 confirmButtonText: "Okay"
             });
+
         } else if (paramsValue === 'noTransaction') {
             const myModal = new bootstrap.Modal(warningModal);
             myModal.show();

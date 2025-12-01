@@ -10,19 +10,20 @@ $env = parse_ini_file(__DIR__ . '/../../../.env');
 require __DIR__ . '/../../../vendor/autoload.php';
 require '../../emailSenderFunction.php';
 
-// $gcashDetails = '';
-// $resortInfoName = 'gcashNumber';
-// $getPaymentDetails = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
-// $getPaymentDetails->bind_param('s', $resortInfoName);
-// $getPaymentDetails->execute();
-// $result = $getPaymentDetails->get_result();
+$informationName = 'Email';
+$getBusinessEmail = $conn->prepare("SELECT resortInfoDetail WHERE resortInfoName = ?");
+$getBusinessEmail->bind_param("s", $informationName);
+$getBusinessEmail->execute();
 
+// $result = $getBusinessEmail->get_result();
 // if ($result->num_rows > 0) {
 //     $row = $result->fetch_assoc();
-//     $gcashDetails = 'Here is our gcash details where you can send the downpayment. <br> <strong>' . $row['resortInfoDetail'] . '</strong>';
+//     $businessEmail = $row['resortInfoDetail'] ?? '';
+// } else {
+//     $businessEmail = 'mamyresort128@gmail.com';
 // }
 
-$email = 'jeanette.arkurus@gmail.com';
+$businessEmail = 'sgregorio.0020@gmail.com';
 
 
 if (isset($_POST['submitDownpaymentImage'])) {
@@ -315,7 +316,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
         $subject = "New Payment Received – Booking Reference: $bookingCode";
 
         $isSend =  false;
-        if (sendEmail($email, 'Mamyr Admin', $subject, $email_message, $env)) {
+        if (sendEmail($businessEmail, 'Mamyr Admin', $subject, $email_message, $env)) {
             $isSend = true;
         }
 

@@ -133,5 +133,6 @@ INSERT INTO partnershiptype (partnerType, partnerTypeDescription) VALUES
 ('event-hosting', 'Event Hosting'),
 ('photo-booth', 'Photo Booth'),
 ('performer', 'Performer'),
-('food-cart', 'Food Cart');
+('food-cart', 'Food Cart'),
+('Other', 'Other');
 

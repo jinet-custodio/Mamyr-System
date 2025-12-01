@@ -1305,16 +1305,19 @@ if ($role === "Admin") {
         }
     </script>
 
+    <!-- For other reason -->
     <script>
         function otherReason() {
-            var selectBox = document.getElementById("select-reject");
-            var otherInputGroup = document.getElementById("otherInputGroup");
-            // console.log(selectBox.textContent);
-            // Show or hide the text box when "Other (Please specify)" is selected
-            if (selectBox.value === "other" || selectBox.value == 23) {
-                otherInputGroup.style.display = "block"; // Show the text box
+            const selectBox = document.getElementById("select-reject");
+            const otherInputGroup = document.getElementById("otherInputGroup");
+
+            const selectedText = selectBox.options[selectBox.selectedIndex].text.toLowerCase();
+            const selectedValue = selectBox.value;
+
+            if (selectedText === "other") {
+                otherInputGroup.style.display = "block";
             } else {
-                otherInputGroup.style.display = "none"; // Hide the text box
+                otherInputGroup.style.display = "none";
             }
         }
     </script>

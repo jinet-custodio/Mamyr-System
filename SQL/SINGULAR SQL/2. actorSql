@@ -77,4 +77,13 @@ CREATE TABLE partnership_partnertype(
     FOREIGN KEY (partnerTypeID) REFERENCES partnershiptype(partnerTypeID)
 );
 
+ALTER TABLE `partnership_partnertype` ADD `otherPartnerType` VARCHAR(50) NULL DEFAULT NULL AFTER `partnerTypeID`;
 
+ALTER TABLE partnership_partnertype 
+DROP PRIMARY KEY;
+
+ALTER TABLE partnership_partnertype 
+ADD ID INT AUTO_INCREMENT PRIMARY KEY FIRST;
+
+ALTER TABLE `partnership_partnertype` CHANGE `ID` `pptID` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `partnershipservice` DROP FOREIGN KEY `partnershipservice_ibfk_3`; ALTER TABLE `partnershipservice` ADD CONSTRAINT `partnershipservice_ibfk_3` FOREIGN KEY (`partnerTypeID`) REFERENCES `partnership_partnertype`(`pptID`) ON DELETE RESTRICT ON UPDATE RESTRICT;

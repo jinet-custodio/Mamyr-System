@@ -49,3 +49,6 @@ CREATE TABLE pushsubscription (
 
 ALTER TABLE `pushsubscription` DROP FOREIGN KEY `pushsubscription_ibfk_1`; ALTER TABLE `pushsubscription` ADD CONSTRAINT `pushsubscription_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user`(`userID`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `notification` CHANGE `receiver` `receiver` ENUM('Admin','Business Partner','Customer') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+
+ALTER TABLE `notification` CHANGE `receiver` `receiver` ENUM('Admin','Business Partner','Customer', 'Partnership Applicant') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
