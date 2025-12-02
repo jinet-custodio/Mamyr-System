@@ -18,7 +18,7 @@ require '../Helpers/userFunctions.php';
 $userRole = (int) $_SESSION['userRole'];
 $userID = (int) $_SESSION['userID'];
 
-
+//* Confirmation if they have any transaction in the system other than creating an account
 if (isset($_POST['confirmationBtn'])) {
 
   // error_log(print_r($_POST, true));
@@ -41,33 +41,48 @@ if (isset($_POST['confirmationBtn'])) {
       break;
 
     case 2: //Business Partner
-      $partnershipServiceIDs = [];
+
+      $checkUserTransaction = $conn->prepare("SELECT EXISTS(SELECT 1 FROM booking WHERE userID = ?) AS inBooking");
+      $checkUserTransaction->bind_param("i", $userID);
+      $checkUserTransaction->execute();
+      $result = $checkUserTransaction->get_result();
+      $data = $result->fetch_assoc();
+      if ($data['inBooking']) {
+        header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+        exit();
+      }
+
+
       $checkPartnershipServiceID = $conn->prepare("SELECT partnershipServiceID as ID FROM partnershipservice WHERE partnershipID = ?");
       $checkPartnershipServiceID->bind_param("i", $partnershipID);
       $checkPartnershipServiceID->execute();
       $partnerServiceResult = $checkPartnershipServiceID->get_result();
+      $hasTransaction = false;
+
       if ($partnerServiceResult->num_rows > 0) {
         while ($row = $partnerServiceResult->fetch_assoc()) {
           $id = (int) $row['ID'];
-          $checkTransaction = $conn->prepare("SELECT 
-        EXISTS (SELECT 1 FROM booking WHERE userID = ?) AS inBooking,
-        EXISTS (SELECT 1 FROM businesspartneravailedservice WHERE partnershipServiceID = ?) AS isAvailed");
-          $checkTransaction->bind_param("si", $userID, $id);
-          if (!$checkTransaction->execute()) {
-            header("Location: ../../Pages/Account/deleteAccount.php?action=executionFailed");
-            exit();
-          }
-
+          $checkTransaction = $conn->prepare("SELECT EXISTS (SELECT 1 FROM businesspartneravailedservice WHERE partnershipServiceID = ?) AS isAvailed");
+          $checkTransaction->bind_param("i", $id);
+          $checkTransaction->execute();
           $result = $checkTransaction->get_result();
-          if ($result->num_rows > 0) {
-            header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
-          } else {
-            header("Location: ../../Pages/Account/deleteAccount.php?action=noTransaction");
+          $data = $result->fetch_assoc();
+          if ($data['isAvailed']) {
+            $hasTransaction = true;
+            break;
           }
-          exit();
         }
+      } else {
+        $hasTransaction = false;
       }
-      break;
+
+      if ($hasTransaction) {
+        header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
+      } else {
+        header("Location: ../../Pages/Account/deleteAccount.php?action=noTransaction");
+      }
+      exit();
+
 
     default:
       $_SESSION['error'] = "Unauthorized Access eh!";
@@ -107,20 +122,6 @@ if (isset($_POST['confirmationBtn'])) {
 
 //* Send Otp to user email if user agree to delete the account
 if (isset($_POST['yesDelete'])) {
-  $checkTransaction = $conn->prepare("SELECT userID FROM booking WHERE userID = ?");
-  $checkTransaction->bind_param("i", $userID);
-
-  if (!$checkTransaction->execute()) {
-    header("Location: ../../Pages/Account/deleteAccount.php?action=executionFailed");
-    exit();
-  }
-
-  $result = $checkTransaction->get_result();
-  if ($result->num_rows > 0) {
-    header("Location: ../../Pages/Account/deleteAccount.php?action=hasTransaction");
-    exit();
-  }
-
   try {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
@@ -225,7 +226,7 @@ if (isset($_POST['yesDelete'])) {
 
 //* Verify OTP and then delete the Account 
 
-elseif (isset($_POST['verifyCode'])) {
+if (isset($_POST['verifyCode'])) {
   $email = mysqli_real_escape_string($conn, $_POST['email']);
   $enteredOTP = mysqli_real_escape_string($conn, $_POST['enteredOTP']);
   $deletedID = 4;
@@ -313,6 +314,4 @@ elseif (isset($_POST['verifyCode'])) {
   } else {
     echo 'OTP is empty.';
   }
-} else {
-  echo 'Form not submitted properly.';
 }
