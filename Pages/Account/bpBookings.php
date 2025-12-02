@@ -240,6 +240,14 @@ switch ($userRole) {
                             <h2 class="cancelledNumber" id="cancelledBooking"> 0</h2>
                         </div>
                     </div>
+
+                    <div class="card">
+                        <div class="card-header fw-bold fs-5" style="background-color: #db3545; color:#ffff">Rejected
+                        </div>
+                        <div class="card-body">
+                            <h2 class="rejectedNumber" id="rejectedBooking"> 0</h2>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="hidden-input">
@@ -490,11 +498,13 @@ switch ($userRole) {
                     const totalPendings = data.totalPendingBooking || 0;
                     const totalCancelled = data.cancelledBooking || 0;
                     const totalApproved = data.approvedBookings || 0;
+                    const totoalRejected = data.rejectedBookings || 0;
 
                     document.getElementById('bookingNumber').textContent = totalBookings;
                     document.getElementById('approvedBooking').textContent = totalApproved;
                     document.getElementById('pendingBooking').textContent = totalPendings;
                     document.getElementById('cancelledBooking').textContent = totalCancelled;
+                    document.getElementById('rejectedBooking').textContent = totoalRejected;
                 })
                 .catch(err => console.error(err));
         });
@@ -575,7 +585,7 @@ switch ($userRole) {
 
                     viewModal.querySelector('#additionalNotes').value = booking.notes || '';
 
-                    if (booking.statusName === 'Approved' || booking.statusName === 'Rejected') {
+                    if (booking.statusName === 'Approved' || booking.statusName === 'Rejected' || booking.statusName === 'Cancelled') {
                         document.getElementById('btnContainer-footer').style.display = 'none';
                     }
 

@@ -251,14 +251,10 @@ elseif (isset($_POST['verifyCode'])) {
           $today = date('Y-m-d H:i:s');
           $isDeleted = 1;
           $anonymousEmail = 'deletedAt_' . bin2hex(random_bytes(4)) . '@gmail.com';
+          $name = 'deletedUser' . chr(random_int(65, 90)); // A–Z
 
-          $deleteQuery = $conn->prepare("UPDATE user SET email = ?, isDeleted = ?, dateDeleted = ?, userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE userID = ? AND email = ?");
-          $deleteQuery->bind_param("sisiis", $anonymousEmail, $isDeleted, $today, $deletedID, $userID, $email);
-
-          if ($deleteQuery->execute()) {
-
-            $subject = "Your Account Has Been Successfully Deleted";
-            $email_message = '<body style="font-family: Arial, sans-serif;         background-color: #f4f4f4; padding: 20px; margin: 0;">
+          $subject = "Your Account Has Been Successfully Deleted";
+          $email_message = '<body style="font-family: Arial, sans-serif;         background-color: #f4f4f4; padding: 20px; margin: 0;">
 
                             <table align="center" width="100%" cellpadding="0" cellspacing="0"
                                 style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -286,11 +282,16 @@ elseif (isset($_POST['verifyCode'])) {
                             </table>
                         </body>
         ';
-            if (!sendEmail($email,   $storedData['firstName'], $subject, $message, $env)) {
-              header("Location: ../../Pages/Account/deleteAccount.php?action=emailFailed");
-              exit;
-            }
 
+          if (!sendEmail($email,   $storedData['firstName'], $subject, $message, $env)) {
+            header("Location: ../../Pages/Account/deleteAccount.php?action=emailFailed");
+            exit;
+          }
+
+          $deleteQuery = $conn->prepare("UPDATE user SET email = ?, isDeleted = ?, dateDeleted = ?, userStatusID = ?, userOTP = NULL, OTP_expiration_at = NULL WHERE userID = ?");
+          $deleteQuery->bind_param("sisiis", $anonymousEmail, $isDeleted, $today, $deletedID, $userID, $email);
+
+          if ($deleteQuery->execute()) {
             header("Location: ../../Pages/register.php?action=deleted");
             exit;
           } else {
