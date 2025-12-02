@@ -32,12 +32,59 @@
   font-weight: bold;
 }
 
-.cardContainer {
+.topSection {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(1, 1fr);
+  gap: 0.5rem;
+  place-items: center;
+  margin-top: var(--margin-lg);
+  width: 100%;
+}
+
+.statCard {
+  width: 95% !important;
+}
+
+.header {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.header h6 {
+  font-size: var(--font-size-base);
+  color: #a5a5a5;
+}
+
+.header h6 {
+  margin-top: 0.1rem;
+}
+
+.rightSide i {
+  font-size: 1.1vw;
+  color: #a5a5a5;
+}
+
+.leftSide {
+  width: 75%;
+}
+
+.rightSide {
+  width: 20%;
+}
+
+.data-container {
+  margin-top: var(--margin-xs);
+}
+
+.customer {
+  display: flex;
   gap: 1rem;
-  margin-top: 3rem;
+}
+
+.card-data {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
 }
 
 .card {
@@ -206,16 +253,39 @@ textarea {
   .main-content {
     padding: 0 !important;
   }
-  .cardContainer {
-    white-space: nowrap;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
+
+  .topSection {
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+    justify-content: center;
+    align-items: center;
   }
-  .card-header {
-    padding-left: 2.8px;
-    font-size: 18px !important;
+
+  .topSection > .statCard:nth-child(5) {
+    grid-column: span 2;
   }
+  .statCard {
+    width: 100% !important;
+    height: 8rem !important;
+  }
+
+  .header-text {
+    font-size: 15px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-md) !important;
+  }
+
+  .headerText {
+    font-family: "Poppins Light";
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    margin-top: 1rem;
+  }
+
   .dt-length {
     display: flex;
     gap: 1rem;
@@ -250,17 +320,17 @@ textarea {
     padding: 0 !important;
   }
 
-  .cardContainer {
-    white-space: nowrap;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
+  .statCard {
+    width: 100% !important;
+    height: 8rem !important;
   }
 
-  .card-header {
-    margin-top: 0;
-    padding-left: 2.8px;
-    font-size: 18px !important;
+  .header-text {
+    font-size: 12px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-md) !important;
   }
 
   .dt-length {
@@ -303,6 +373,54 @@ textarea {
     margin-left: 16vw;
     width: 85%;
   }
+
+  .topSection {
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(3, 1fr) !important;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .topSection > .statCard:nth-child(5) {
+    grid-column: span 2;
+  }
+
+  .topSection h5 {
+    font-size: 12px;
+  }
+
+  .secondRow-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .topLeft {
+    width: 100%;
+    text-align: center;
+    margin-top: var(--margin-md);
+  }
+
+  .welcomeText {
+    font-size: var(--font-size-md);
+    text-align: center;
+  }
+  .statCard {
+    width: 100% !important;
+    height: 5rem !important;
+    padding: 0 !important;
+  }
+
+  .header-text {
+    font-size: 10px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-xs) !important;
+  }
+
   .dt-length {
     display: flex;
     gap: 1rem;
@@ -352,12 +470,6 @@ textarea {
     justify-items: center;
     justify-content: center;
   }
-  .card {
-    width: 150px !important;
-  }
-  .card-header {
-    font-size: 15px !important;
-  }
 }
 
 @media only screen and (max-width: 400px) {
@@ -370,19 +482,50 @@ textarea {
     font-size: 20px;
   }
 
-  .cardContainer {
-    display: flex;
-    white-space: nowrap;
-    gap: 10px;
-    margin-top: 3rem;
-    flex-direction: row;
-    flex-wrap: nowrap;
+  .topSection {
+    width: 100% !important;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(3, 1fr) !important;
     justify-content: center;
     align-items: center;
   }
-  .card-header {
-    font-size: 12px !important;
-    padding-left: 2.8px;
+
+  .topSection > .statCard:nth-child(5) {
+    grid-column: span 2;
+  }
+
+  .topSection h5 {
+    font-size: 12px;
+  }
+
+  .secondRow-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .topLeft {
+    width: 100%;
+    text-align: center;
+    margin-top: var(--margin-md);
+  }
+
+  .welcomeText {
+    font-size: var(--font-size-md);
+    text-align: center;
+  }
+  .statCard {
+    width: 100% !important;
+    height: 5rem !important;
+  }
+
+  .header-text {
+    font-size: 10px !important;
+  }
+
+  .rightSide i {
+    font-size: var(--font-size-xs) !important;
   }
 
   .btnContainer button {
