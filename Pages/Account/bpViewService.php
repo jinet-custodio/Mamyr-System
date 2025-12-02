@@ -298,7 +298,7 @@ switch ($userRole) {
                             <div class="info-container">
                                 <label for="serviceName">Service Name</label>
                                 <input type="text" class="form-control text-capitalize editable" name="serviceName" id="serviceName"
-                                    placeholder="eg. Snapshot Photography" readonly="" value="<?= $serviceName ?>">
+                                    placeholder="eg. Snapshot Photography" readonly="" value="<?= htmlspecialchars($serviceName) ?>">
                             </div>
                             <div class="info-container">
                                 <label for="servicePrice">Service Price</label>

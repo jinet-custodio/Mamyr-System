@@ -7,19 +7,21 @@ require '../../Config/dbcon.php';
 session_start();
 
 if (isset($_POST['saveServiceInfo'])) {
-    error_log(print_r($_POST, true));
+    // error_log(print_r($_POST, true));
 
     $serviceID = intval($_POST['partnershipServiceID']);
-    $serviceName = mysqli_real_escape_string($conn, $_POST['serviceName']);
-    $rawPrice = mysqli_real_escape_string($conn, $_POST['servicePrice']);
+    $serviceName = $_POST['serviceName'];
+    $rawPrice = $_POST['servicePrice'];
     $servicePrice = str_replace(['₱', ','], '', $rawPrice);
     $serviceCapacity = intval($_POST['serviceCapacity']);
-    $serviceDuration = mysqli_real_escape_string($conn, $_POST['serviceDuration']);
-    $serviceDesc = mysqli_real_escape_string($conn, $_POST['serviceDescription'] ?? 'N/A');
-    $serviceAvailabilityID = mysqli_real_escape_string($conn, $_POST['serviceAvailability']);
-    $serviceImage = mysqli_real_escape_string($conn, $_POST['serviceImageName']);
+    $serviceDuration = $_POST['serviceDuration'];
+    $serviceDesc = $_POST['serviceDescription'] ?? 'N/A';
+    $serviceAvailabilityID = $_POST['serviceAvailability'];
+    $serviceImage = $_POST['serviceImageName'];
+
     $_SESSION['id'] = $serviceID;
     $_SESSION['service-form-data'] = $_POST;
+
     $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
     $allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
 

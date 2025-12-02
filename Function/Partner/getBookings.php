@@ -5,12 +5,14 @@ require '../../Config/dbcon.php';
 if (isset($_GET['id'])) {
     $userID = (int) $_GET['id'];
     try {
-        $getPartnerBooking = $conn->prepare("SELECT 
-                    COUNT(bpas.bookingID) AS totalBookings,
-                    COUNT(CASE WHEN bpas.approvalStatus = 2 THEN b.bookingID END) AS totalApprovedBooking,
-                    COUNT(CASE WHEN bpas.approvalStatus = 1 THEN b.bookingID END) AS totalPendingBooking,
-                    COUNT(CASE WHEN bpas.approvalStatus = 4 THEN b.bookingID END) AS totalCancelledBooking
+        $getPartnerBooking = $conn->prepare("SELECT
+                    COUNT(DISTINCT b.bookingID) AS totalBookings,
+                    COUNT(DISTINCT CASE WHEN bpas.approvalStatus = 2 THEN b.bookingID END) AS totalApprovedBooking,
+                    COUNT(DISTINCT CASE WHEN bpas.approvalStatus = 1 THEN b.bookingID END) AS totalPendingBooking,
+                    COUNT(DISTINCT CASE WHEN bpas.approvalStatus = 4 THEN b.bookingID END) AS totalCancelledBooking,
+                    COUNT(DISTINCT CASE WHEN bpas.approvalStatus = 5 THEN b.bookingID END) AS rejectedBookings
                 FROM booking b
+                LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
                 LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                 LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                 LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
@@ -18,9 +20,7 @@ if (isset($_GET['id'])) {
                 LEFT JOIN service s ON (bs.serviceID = s.serviceID OR cpi.serviceID = s.serviceID)
                 LEFT JOIN partnershipservice ps ON s.partnershipServiceID = ps.partnershipServiceID
                 LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
-                LEFT JOIN businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                -- LEFT JOIN payment pay ON cb.confirmedBookingID = pay.confirmedBookingID
-                WHERE p.userID = ? 
+                WHERE p.userID = ?
                 ");
         $getPartnerBooking->bind_param('i', $userID);
         if (!$getPartnerBooking->execute()) {
@@ -34,6 +34,7 @@ if (isset($_GET['id'])) {
             $allBookingStatus = $data['totalBookings'] ?? 0;
             $approvedBookings = $data['totalApprovedBooking'] ?? 0;
             $cancelledBooking = $data['totalCancelledBooking'] ?? 0;
+            $rejectedBookings = $data['rejectedBookings'] ?? 0;
 
             echo json_encode([
                 'success' => true,
@@ -41,6 +42,7 @@ if (isset($_GET['id'])) {
                 'allBookingStatus' => $allBookingStatus,
                 'cancelledBooking' => $cancelledBooking,
                 'approvedBookings' => $approvedBookings,
+                'rejectedBookings' => $rejectedBookings
             ]);
         }
     } catch (Exception $e) {

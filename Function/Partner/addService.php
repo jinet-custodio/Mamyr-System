@@ -10,14 +10,16 @@ $userRole = intval($_SESSION['userRole']);
 if (isset($_POST['addService'])) {
     $partnershipID = intval($_POST['partnershipID']);
 
-    $serviceName = mysqli_real_escape_string($conn, $_POST['serviceName']);
+    $serviceName = $_POST['serviceName'];
     $availabilityID = intval($_POST['serviceAvailability'] ?? 1);
     $servicePrice = floatval($_POST['price']);
     $serviceCapacity = intval($_POST['capacity']);
-    $serviceDuration = mysqli_real_escape_string($conn, $_POST['duration']);
-    $serviceDesc = mysqli_real_escape_string($conn, $_POST['serviceDesc']) ?? 'N/A';
+    $serviceDuration = $_POST['duration'];
+    $serviceDesc = $_POST['serviceDesc'] ?? 'N/A';
     $pptID = (int) $_POST['pptID'];
+
     $_SESSION['addServiceForm'] = $_POST;
+
 
     $storeProofPath = '../../Assets/Images/PartnerServiceImage/';
 
