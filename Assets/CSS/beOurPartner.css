@@ -265,8 +265,21 @@ div#selectedBusinessTypes {
 
 .other-container {
   margin-top: 1rem !important;
+  width: 100%;
+  margin: auto;
+}
+
+.other-container .form-control {
   width: 50%;
   margin: auto;
+  margin-top: 0.5rem !important;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .other-label {
