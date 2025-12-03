@@ -10,10 +10,10 @@ $env = parse_ini_file(__DIR__ . '/../../../.env');
 require __DIR__ . '/../../../vendor/autoload.php';
 require '../../emailSenderFunction.php';
 
-$informationName = 'Email';
-$getBusinessEmail = $conn->prepare("SELECT resortInfoDetail WHERE resortInfoName = ?");
-$getBusinessEmail->bind_param("s", $informationName);
-$getBusinessEmail->execute();
+// $informationName = 'Email';
+// $getBusinessEmail = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
+// $getBusinessEmail->bind_param("s", $informationName);
+// $getBusinessEmail->execute();
 
 // $result = $getBusinessEmail->get_result();
 // if ($result->num_rows > 0) {
@@ -313,7 +313,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
                     </body>
             ';
 
-        $subject = "New Payment Received – Booking Reference: $bookingCode";
+        $subject = "New Payment Received &mdash; Booking Reference: $bookingCode";
 
         $isSend =  false;
         if (sendEmail($businessEmail, 'Mamyr Admin', $subject, $email_message, $env)) {

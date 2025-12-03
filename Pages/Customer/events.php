@@ -232,7 +232,7 @@ while ($row = $getEventsResult->fetch_assoc()) {
                                     <p class="eventDesc"><?= htmlspecialchars($eventDesc) ?></p>
                                 </div>
                                 <button type="button" class="btn btn-primary" style="margin-top: auto;"
-                                    onclick="window.location.href='eventbooking.php?event=<?= $eventName ?>'">
+                                    onclick="window.location.href='eventBooking.php?event=<?= $eventName ?>'">
                                     BOOK NOW
                                 </button>
                             </div>

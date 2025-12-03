@@ -153,14 +153,14 @@ require '../Function/Helpers/statusFunctions.php';
                                             FROM partnership p 
                                             LEFT JOIN 
                                                 user u ON p.userID = u.userID
-                                            LEFT JOIN 
+                                            INNER JOIN 
                                                 partnershipservice ps ON p.partnershipID = ps.partnershipID
                                             LEFT JOIN 
                                                 partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID 
                                             LEFT JOIN
                                                 partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
                                             WHERE 
-                                                p.partnerStatusID = ? AND ppt.isApproved = ?
+                                                p.partnerStatusID = ? AND ppt.isApproved = true
                                                 ");
         $getPartnersQuery->bind_param('i', $approvedPartnerID);
         if (!$getPartnersQuery->execute()) {

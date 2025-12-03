@@ -103,6 +103,10 @@ if ($result->num_rows > 0) {
 
 
 $formData = $_SESSION['eventFormData'] ?? [];
+
+// echo '<pre>';
+// print_r($formData);
+// echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -159,6 +163,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     $eventType =  isset($formData['eventType']) ?  $formData['eventType'] : '';
                                     $isSelected = (htmlspecialchars($category['categoryName']) === $eventType) ? 'selected' : '';
                                 ?>
+                                    <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
+                                        <?= htmlspecialchars($category['categoryName']) ?></option>
                                     <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
                                         <?= htmlspecialchars($category['categoryName']) ?></option>
                                 <?php
@@ -597,14 +603,21 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         <p class="warning-text">This option applies only when you’ve chosen to avail a partner service.
                             Please select one if that’s the case.</p>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="customer-choice" value="proceed"
-                                <?= (!empty($formData['customer-choice']) ?? $formData['customer-choice'] === 'proceed') ? 'checked' : '' ?>>
+                            <input class="form-check-input"
+                                type="radio"
+                                name="customer-choice"
+                                value="proceed"
+                                <?= (!empty($formData['customer-choice']) && $formData['customer-choice'] === 'proceed') ? 'checked' : '' ?>>
                             <label class="form-check-label" for="radioButton">
                                 Still <strong>proceed </strong> with the event regardless of the partner’s decision.
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="customer-choice" value="cancel">
+                            <input class="form-check-input"
+                                type="radio"
+                                name="customer-choice"
+                                value="cancel"
+                                <?= (!empty($formData['customer-choice']) && $formData['customer-choice'] === 'cancel') ? 'checked' : '' ?>>
                             <label class="form-check-label" for="radioButton">
                                 <strong>Cancel</strong> the event if the availed (chosen) service is declined.
                             </label>
@@ -934,16 +947,25 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
                                 if (Array.isArray(sessionSelectedServices)) {
                                     selectedServiceIDs = sessionSelectedServices.map(String);
-                                } else if (typeof sessionSelectedServices === "object" &&
-                                    sessionSelectedServices !== null) {
-                                    selectedServiceIDs = Object.keys(sessionSelectedServices).map(
-                                        String);
+                                } else if (typeof sessionSelectedServices === "object" && sessionSelectedServices !== null) {
+                                    for (const key in sessionSelectedServices) {
+                                        const entry = sessionSelectedServices[key];
+
+                                        if (entry && entry.partnershipServiceID) {
+                                            selectedServiceIDs.push(String(entry.partnershipServiceID));
+                                        }
+                                    }
                                 }
 
-                                if (selectedServiceIDs.includes(String(category
-                                        .partnershipServiceID))) {
+
+                                if (selectedServiceIDs.includes(String(category.partnershipServiceID))) {
                                     checkbox.checked = true;
+
+                                    partnerListContainer.appendChild(inputPBName);
+                                    partnerListContainer.appendChild(inputPBPrice);
+                                    partnerListContainer.appendChild(inputServiceID);
                                 }
+
 
                                 partnerListContainer.appendChild(checkbox);
                                 partnerListContainer.appendChild(inputPBName);
@@ -1047,6 +1069,9 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 eventClick: function(info) {
                     window.location.href = "/Pages/Customer/Account/bookingHistory.php";
                 },
+                eventClick: function(info) {
+                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                },
 
                 eventDidMount: function(info) {
                     if (info.event.allDay) {
@@ -1064,19 +1089,19 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         }
                     }
                 }
-            });
-
-            calendar.render();
-
-            // Initialize Flatpickr after fetching disabled dates
-            function initFlatpickr(dates) {
-                flatpickr("#eventDate", {
-                    dateFormat: "Y-m-d",
-                    disable: dates,
-                    minDate: minDate,
-                });
-            }
+            })
         });
+
+        calendar.render();
+
+        // Initialize Flatpickr after fetching disabled dates
+        function initFlatpickr(dates) {
+            flatpickr("#eventDate", {
+                dateFormat: "Y-m-d",
+                disable: dates,
+                minDate: minDate,
+            });
+        }
     </script>
 
     <!-- Sweetalert Message  -->
@@ -1211,7 +1236,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         const wrapper = el.closest('.partnerListContainer');
                         if (wrapper) {
                             const labelText = wrapper.querySelector('label')?.textContent || '';
-                            const companyName = labelText.split('-')[0]?.trim() || el.value;
+                            const companyName = labelText.split('—')[0]?.trim() || el.value;
                             return companyName;
                         }
                         return el.value;
