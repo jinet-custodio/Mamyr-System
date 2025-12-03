@@ -241,6 +241,7 @@ unset($_SESSION['eventFormData']);
                                 <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
                                     placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
                                     title="e.g., +639123456789 or 09123456789" required>
+                                <input type="hidden" name="page" value="bookNow.php">
 
                             </div>
                             <div class="modal-footer">
