@@ -128,14 +128,51 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
 
     if (isset($_POST['eventBN'])) {
+
         $_SESSION['eventFormData'] = $_POST;
+        print_r($_SESSION['eventFormData']);
         $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
         $guestNo = intval($_POST['guestNo']);
         $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
-        $additionalRequest = !empty($_POST['additionalRequest'])
-            ? mysqli_real_escape_string($conn, $_POST['additionalRequest'])
-            : 'N/A';
 
+
+        $preferencesList = [];
+        $allergenList = [];
+
+        if (!empty($_POST['foodPreferences'])) {
+
+            foreach ($_POST['foodPreferences'] as $itemKey => $categories) {
+                foreach ($categories as $category => $value) {
+                    $value = trim($value);
+
+                    if ($value === "") continue;
+
+                    if ($category === 'preference') {
+                        $preferencesList[] = $value;
+                    }
+
+                    if ($category === 'allergen')
+                        $allergenList[] = $value;
+                }
+            }
+        }
+
+        $formattedPreferences = !empty($preferencesList)
+            ? implode(", ", $preferencesList)
+            : "None";
+
+        $formattedAllergens = !empty($allergenList)
+            ? implode(", ", $allergenList)
+            : "None";
+
+        $additionalRequest = !empty($_POST['additionalRequest'])
+            ? trim(mysqli_real_escape_string($conn, $_POST['additionalRequest']))
+            : "N/A";
+
+        $finalFullNotes =
+            "Preferences: " . $formattedPreferences . "\n" .
+            "Allergens: " . $formattedAllergens . "\n" .
+            "Additional Request: " . $additionalRequest;
 
         //Date and time
         $eventDate = mysqli_real_escape_string($conn, $_POST['eventDate']);
@@ -158,6 +195,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         // Food 
         $foodSelections = $_POST['foodSelections'] ?? [];
+        echo ("<h1> Selection </h1> <br>");
+        print_r($foodSelections);
         $targetCategory = 'Vegetables';
         $drinkCategory = 'Drink';
         $dessertCategory = 'Dessert';
@@ -165,8 +204,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $dessertCount = 0;
         $totalFoodCount = count($foodSelections);
 
-        // error_log(print_r($_POST['foodSelections'], true));
-        // error_log('Total count: ' . count($_POST['foodSelections']));
 
         if ($totalFoodCount <= 6 && $totalFoodCount != 0) {
             $foundVeggie = false;
@@ -317,7 +354,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <div class="input-container additionalRequestPart">
                         <p>Additional Request</p>
                         <textarea rows="3" class="form-control" name="additionalRequest"
-                            id="additionalRequest"><?= !empty($additionalRequest) ?  htmlspecialchars(ucfirst($additionalRequest)) : '' ?></textarea>
+                            id="additionalRequest"><?= !empty($additionalRequest) ?  htmlspecialchars(ucfirst($finalFullNotes)) : '' ?></textarea>
                     </div>
                 </div>
             </section>
