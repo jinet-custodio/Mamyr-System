@@ -247,10 +247,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         </h5>
                                         <input type="hidden" name="email"
                                             value="<?= htmlspecialchars($data['email']) ?>">
-                                        <div class="closeButtonContainer">
-                                            <button type="button" class="btn-close btn btn-danger"
-                                                data-bs-dismiss="modal" aria-label="Close"> </button>
-                                        </div>
 
                                     </div>
                                     <div class="modal-body">

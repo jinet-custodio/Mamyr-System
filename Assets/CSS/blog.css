@@ -101,6 +101,8 @@ main {
   width: 90%;
   margin: 0 auto;
   display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .blogHeading h4 {
@@ -110,6 +112,16 @@ main {
 
 .featured {
   width: 45%;
+}
+
+.desc {
+  width: 90%;
+  text-align: justify;
+}
+
+.fb-grid-3.fb-img {
+  max-height: 200px;
+  object-fit: cover !important;
 }
 
 .featuredpost {
@@ -131,9 +143,10 @@ main {
 .others {
   display: grid !important;
   width: 54%;
+  overflow: hidden;
 }
 .othersImg {
-  object-fit: contain;
+  object-fit: cover;
   display: flex;
   align-items: center;
   margin: 0 auto;
