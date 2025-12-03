@@ -370,7 +370,7 @@ switch ($userRole) {
                                     placeholder="6 digit security code" required>
                             </div>
 
-                            <div class="button-container">
+                            <div class="button-container d-flex justify-content-center gap-3 mt-3">
                                 <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary"
