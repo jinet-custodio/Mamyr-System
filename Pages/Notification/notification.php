@@ -184,6 +184,7 @@
                     if (data.success) {
                         console.log(data.message);
                         document.querySelectorAll('.notification-item').forEach(el => el.classList.add('read'));
+                        notificationBadge.remove();
                     } else {
                         console.error(data.message);
                     }

@@ -106,7 +106,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 $imageData = $data['userProfile'];
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $imageData);
-                finfo_close($finfo);
+                // finfo_close($finfo);
                 $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
             }
             ?>
@@ -256,11 +256,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         <?php
         $approvedPartnerID = 2;
-        $getPartnersQuery = $conn->prepare("SELECT  u.phoneNumber, p.partnershipID, p.businessEmail,  p.companyName, p.partnerAddress, p.documentLink, pt.partnerTypeDescription, ppt.isApproved, ps.partnershipServiceID, ps.PSAvailabilityID, ps.PBDescription, ps.serviceImage, ps.PBPrice, ps.PBName, ps.PBduration, ps.PBcapacity
+        $getPartnersQuery = $conn->prepare("SELECT  u.phoneNumber, p.partnershipID, p.businessEmail,  p.companyName, p.partnerAddress, p.documentLink, pt.partnerTypeDescription, ppt.isApproved, ps.partnershipServiceID, ps.PSAvailabilityID, ps.PBDescription, ps.serviceImage, ps.PBPrice, ps.PBName, ps.PBduration, ps.PBcapacity, ppt.otherPartnerType
                                             FROM partnership p 
                                             LEFT JOIN 
                                                 user u ON p.userID = u.userID
-                                            LEFT JOIN 
+                                            INNER JOIN 
                                                 partnershipservice ps ON p.partnershipID = ps.partnershipID
                                             LEFT JOIN 
                                                 partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID 
@@ -285,7 +285,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         while ($row = $result->fetch_assoc()) {
             $availability = getAvailabilityStatus($conn, $row['PSAvailabilityID']);
-            $availabilityName = $availability['availabilityName'];
+            $availabilityName = $availability['availabilityName'] ?? '';
 
             switch (strtolower($availabilityName)) {
                 case 'available':
@@ -298,11 +298,14 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     $color = 'danger';
                     break;
             };
+
+
+
             $partners[] = [
                 'availabilityName' => $availabilityName,
                 'color' => $color,
                 'partnershipID' => (int) $row['partnershipID'],
-                'partnerTypeDescription' => $row['partnerTypeDescription'],
+                'partnerTypeDescription' => (strtolower(trim($row['partnerTypeDescription'])) === 'other') ? $row['otherPartnerType'] : $row['partnerTypeDescription'],
                 'companyName' => ucfirst($row['companyName'] ?? ''),
                 'serviceName' => ucfirst($row['PBName'] ?? ''),
                 'serviceDescription' => !empty($row['PBDescription']) ? $row['PBDescription'] : 'No Description Provided',
@@ -328,10 +331,10 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             if (!empty($partners)) {
                 foreach ($partners as $partner): ?>
                     <div class="card bp-card" id="bp1">
-                        <img class="card-img-top" src="../../Assets/Images/PartnerServiceImage/<?= $partner['serviceImage'] ?>" alt="Card image cap">
+                        <img class="card-img-top" src="../../Assets/Images/PartnerServiceImage/<?= $partner['serviceImage'] ?? 'noImage.jpg' ?>" alt="<?= $partner['serviceName'] ?> Image">
                         <div class="card-body">
                             <h5 class="card-title"><?= $partner['companyName'] ?></h5>
-                            <h6 class="card-subtitle"><?= $partner['partnerTypeDescription'] ?> &mdash; <small><?= $partner['serviceName'] ?></small> </h6>
+                            <h6 class="card-subtitle"><?= $partner['partnerTypeDescription'] ?? '' ?> &mdash; <small><?= $partner['serviceName'] ?? '' ?></small> </h6>
                             <div class="button-container">
                                 <span class="badge bg-<?= $partner['color'] ?> text-capitalize"><?= $partner['availabilityName'] ?></span>
 
