@@ -365,8 +365,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <div class=" entranceTitleContainer">
                         <h4 class="entranceTitle" style="color: black;">Room Availability </h4>
                     </div>
-                    <div class="filterBtns">
-                        <input type="text" placeholder="Select your booking date" id="hotelDate">
+                    <div class="filterBtns d-flex justify-content-center">
+                        <input type="text" id="hotelDatePicker" placeholder="Select your booking date">
+                        <input type="hidden" id="hotelDate">
                     </div>
                     <?php
                     $availsql = "SELECT RServiceName, 
@@ -548,12 +549,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 ratesTitle.classList.remove('selected')
             }
         }
-
-        flatpickr('#hotelDate', {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             if (ratesTitle.classList.contains('selected')) {
                 document.getElementById('hotelRooms').style.display = 'none';
@@ -576,12 +571,27 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- filters hotel rooms by the hour -->
     <script>
         let currentAvailabilityFilter = 'all';
+
+        function applyFilters() {
+            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+            allIcons.forEach(icon => {
+                const availability = icon.getAttribute('data-availability');
+                const show = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter === availability);
+                icon.classList.toggle('hidden', !show);
+            });
+        }
+
+        function updateAvailability(filterType, button) {
+            currentAvailabilityFilter = filterType;
+            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+            button.classList.add('selectedIcon');
+            applyFilters();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('allRooms').classList.add('selectedIcon');
-
             applyFilters();
 
-            // Click events
             ['all', 'available', 'unavailable'].forEach(type => {
                 document.getElementById(`${type}Rooms`).addEventListener('click', function() {
                     updateAvailability(type, this);
@@ -589,91 +599,90 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             });
         });
 
-        function updateAvailability(filterType, button) {
-            currentAvailabilityFilter = filterType;
-            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
-            button.classList.add('selectedIcon');
-
-            applyFilters();
-        }
-
-        function filterRooms(filterType) {
-            currentAvailabilityFilter = filterType;
-
-            // Update selected icon
-            document.querySelectorAll('.availabilityIcon').forEach(icon => {
-                icon.classList.remove('selectedIcon');
-            });
-
-            const selectedIcon = document.getElementById(`${filterType}Rooms`);
-            if (selectedIcon) {
-                selectedIcon.classList.add('selectedIcon');
+        // Initialize flatpickr
+        flatpickr("#hotelDatePicker", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            disableMobile: true,
+            onChange: function(selectedDates, dateStr) {
+                document.getElementById('hotelDate').value = dateStr;
+                fetchAvailability();
             }
+        });
 
-            applyFilters(); // Call the filter logic
-        }
-
-        function applyFilters() {
-            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
-            const allRooms = document.querySelectorAll('.hotel');
-
-            allIcons.forEach(icon => {
-                const availability = icon.getAttribute('data-availability');
-                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
-                    availability);
-
-                icon.classList.toggle('hidden', !matchesAvailability);
-            });
-
-            allRooms.forEach(room => {
-                // No duration logic; just show all rooms
-                room.style.display = 'flex';
-            });
-        }
-    </script>
-    <script>
+        // AJAX: Fetch availability from server
         function fetchAvailability() {
-            fetch('/Function/Customer/getAvailability.php', {
+            const dateTime = document.getElementById('hotelDate').value;
+            if (!dateTime) return;
+
+            fetch('../Function/Customer/getAvailability.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: new URLSearchParams({
-                        dateTime: document.getElementById('hotelDate').value
+                        dateTime
                     })
                 })
-                .then(res => res.json())
-                .then(json => {
+                .then(res => {
+                    console.log("HTTP", res.status, res.statusText);
+                    return res.text(); // read raw response
+                })
+                .then(text => {
+                    console.log("RAW RESPONSE:", text);
+
+                    let json;
+                    try {
+                        json = JSON.parse(text);
+                    } catch (e) {
+                        console.error("❌ JSON PARSE ERROR:", e);
+                        return;
+                    }
+
+                    if (!json || !json.rooms) {
+                        console.error("❌ Missing 'rooms' in JSON:", json);
+                        return;
+                    }
+
+                    console.log("Parsed JSON:", json);
+
                     json.rooms.forEach(room => {
-                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
+                        const icons = document.querySelectorAll('.hotelIconWithCaption');
                         icons.forEach(icon => {
                             const name = icon.querySelector('.roomCaption').textContent.trim();
                             if (name === room.service) {
-                                icon.setAttribute('data-availability', room.available ? 'available' :
-                                    'unavailable');
+
+                                icon.setAttribute('data-availability', room.available ? 'available' : 'unavailable');
+
+                                const img = icon.querySelector('img');
+                                if (img) {
+                                    img.src = room.available ?
+                                        "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" :
+                                        "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
+                                }
                             }
                         });
                     });
-                    applyFilters(); // re-apply filtering based on updated availability
+
+                    applyFilters();
                 })
-                .catch(console.error);
+                .catch(err => console.error("❌ FETCH ERROR:", err));
         }
-
-        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
-        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
     </script>
-
-    <script>
-        const icon = document.getElementById("help");
-        icon.addEventListener("click", function() {
-            Swal.fire({
-                title: "Why can't I edit the majority of this?",
-                text: "Most of the contents of this page are already found at the services section. To edit, please head to the Services page to ensure consistency.",
-                icon: "info",
-                confirmButtonText: "Got it!"
+    <?php if ($editMode): ?>
+        <script>
+            const icon = document.getElementById("help");
+            icon.addEventListener("click", function() {
+                Swal.fire({
+                    title: "Why can't I edit the majority of this?",
+                    text: "Most of the contents of this page are already found at the services section. To edit, please head to the Services page to ensure consistency.",
+                    icon: "info",
+                    confirmButtonText: "Got it!"
+                });
             });
-        });
-    </script>
+        </script>
+
+    <?php endif; ?>
     <!-- SwiperJS JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
