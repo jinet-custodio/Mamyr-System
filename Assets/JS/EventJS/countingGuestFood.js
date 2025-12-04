@@ -2,9 +2,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const guestNoInput = document.getElementById("guestNo");
   const eventVenueInput = document.getElementById("eventVenue");
   const bookNowBtn = document.getElementById("bookNowBtn");
-  const foodButton = document.getElementById("confirmDishBtn");
+  // const foodButton = document.getElementById("confirmDishBtn");
 
-  let isFoodSelectionValid = true;
+  // let isFoodSelectionValid = true;
   let isGuestCountValid;
 
   let guestNoValue = parseInt(guestNoInput.value, 10);
@@ -18,7 +18,10 @@ window.addEventListener("DOMContentLoaded", () => {
       eventVenueInput.options[eventVenueInput.selectedIndex];
     if (selectedVenue && selectedVenue.value !== "") {
       eventVenueValue = selectedVenue.value;
-      eventVenueCapacity = parseInt(selectedVenue.dataset.capacity || "0", 10);
+      eventVenueCapacity = parseInt(
+        selectedVenue.dataset.maxcapacity || "0",
+        10
+      );
     }
   }
 
@@ -33,7 +36,10 @@ window.addEventListener("DOMContentLoaded", () => {
       eventVenueInput.options[eventVenueInput.selectedIndex];
     if (selectedVenue && selectedVenue.value !== "") {
       eventVenueValue = selectedVenue.value;
-      eventVenueCapacity = parseInt(selectedVenue.dataset.capacity || "0", 10);
+      eventVenueCapacity = parseInt(
+        selectedVenue.dataset.maxcapacity || "0",
+        10
+      );
     } else {
       eventVenueValue = "";
       eventVenueCapacity = 0;
