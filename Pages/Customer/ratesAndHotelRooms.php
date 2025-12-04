@@ -427,7 +427,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
 
-            <div class="hotelRooms" id="hotelRooms" style="display: block;">
+            <div class="hotelRooms" id="hotelRooms" style="display: none;">
                 <div class="titleContainer" id="hotelTitle">
                     <h4 class="title">Hotel Rooms</h4>
                     <p class="hotelDescription">
@@ -438,8 +438,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     <div class=" entranceTitleContainer">
                         <h4 class="entranceTitle" style="color: black;">Room Availability </h4>
                     </div>
-                    <div class="filterBtns">
-                        <input type="text" placeholder="Select your booking date" id="hotelDate">
+                    <div class="filterBtns d-flex justify-content-center">
+                        <input type="text" id="hotelDatePicker" placeholder="Select your booking date">
+                        <input type="hidden" id="hotelDate">
                     </div>
                     <?php
                     $availsql = "SELECT RServiceName, 
@@ -580,10 +581,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         ?>
     </div>
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!-- Flatpickr for date input -->
@@ -617,11 +615,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             }
         }
 
-        flatpickr('#hotelDate', {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             if (ratesTitle.classList.contains('selected')) {
                 document.getElementById('hotelRooms').style.display = 'none';
@@ -634,18 +627,28 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </script>
     <!-- filters hotel rooms by the hour -->
     <script>
-        // State variables
         let currentAvailabilityFilter = 'all';
 
-        // Initialize filters when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Default 
-            document.getElementById('allRooms').classList.add('selectedIcon');
+        function applyFilters() {
+            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
+            allIcons.forEach(icon => {
+                const availability = icon.getAttribute('data-availability');
+                const show = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter === availability);
+                icon.classList.toggle('hidden', !show);
+            });
+        }
 
-            // Apply filters 
+        function updateAvailability(filterType, button) {
+            currentAvailabilityFilter = filterType;
+            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
+            button.classList.add('selectedIcon');
+            applyFilters();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('allRooms').classList.add('selectedIcon');
             applyFilters();
 
-            // Click events
             ['all', 'available', 'unavailable'].forEach(type => {
                 document.getElementById(`${type}Rooms`).addEventListener('click', function() {
                     updateAvailability(type, this);
@@ -653,81 +656,75 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
         });
 
-        function updateAvailability(filterType, button) {
-            currentAvailabilityFilter = filterType;
-            document.querySelectorAll('.availabilityIcon').forEach(icon => icon.classList.remove('selectedIcon'));
-            button.classList.add('selectedIcon');
-
-            applyFilters();
-        }
-
-        function filterRooms(filterType) {
-            currentAvailabilityFilter = filterType;
-
-            // Update selected icon
-            document.querySelectorAll('.availabilityIcon').forEach(icon => {
-                icon.classList.remove('selectedIcon');
-            });
-
-            const selectedIcon = document.getElementById(`${filterType}Rooms`);
-            if (selectedIcon) {
-                selectedIcon.classList.add('selectedIcon');
+        // Initialize flatpickr
+        flatpickr("#hotelDatePicker", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            disableMobile: true,
+            onChange: function(selectedDates, dateStr) {
+                document.getElementById('hotelDate').value = dateStr;
+                fetchAvailability();
             }
+        });
 
-            applyFilters(); // Call the filter logic
-        }
-
-        function applyFilters() {
-            const allIcons = document.querySelectorAll('.hotelIconWithCaption');
-            const allRooms = document.querySelectorAll('.hotel');
-
-            allIcons.forEach(icon => {
-                const availability = icon.getAttribute('data-availability');
-                const matchesAvailability = (currentAvailabilityFilter === 'all') || (currentAvailabilityFilter ===
-                    availability);
-
-                icon.classList.toggle('hidden', !matchesAvailability);
-            });
-
-            allRooms.forEach(room => {
-                // No duration logic; just show all rooms
-                room.style.display = 'flex';
-            });
-        }
-    </script>
-    <!-- AJAX for fetching real time availability -->
-    <!-- to be further tested after availability is resolved -->
-    <script>
+        // AJAX: Fetch availability from server
         function fetchAvailability() {
+            const dateTime = document.getElementById('hotelDate').value;
+            if (!dateTime) return;
+
             fetch('/Function/Customer/getAvailability.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: new URLSearchParams({
-                        dateTime: document.getElementById('hotelDate').value
+                        dateTime
                     })
                 })
-                .then(res => res.json())
-                .then(json => {
+                .then(res => {
+                    console.log("HTTP", res.status, res.statusText);
+                    return res.text(); // read raw response
+                })
+                .then(text => {
+                    console.log("RAW RESPONSE:", text);
+
+                    let json;
+                    try {
+                        json = JSON.parse(text);
+                    } catch (e) {
+                        console.error("❌ JSON PARSE ERROR:", e);
+                        return;
+                    }
+
+                    if (!json || !json.rooms) {
+                        console.error("❌ Missing 'rooms' in JSON:", json);
+                        return;
+                    }
+
+                    console.log("Parsed JSON:", json);
+
                     json.rooms.forEach(room => {
-                        const icons = document.querySelectorAll(`.hotelIconWithCaption[data-availability]`);
+                        const icons = document.querySelectorAll('.hotelIconWithCaption');
                         icons.forEach(icon => {
                             const name = icon.querySelector('.roomCaption').textContent.trim();
                             if (name === room.service) {
-                                icon.setAttribute('data-availability', room.available ? 'available' :
-                                    'unavailable');
+
+                                icon.setAttribute('data-availability', room.available ? 'available' : 'unavailable');
+
+                                const img = icon.querySelector('img');
+                                if (img) {
+                                    img.src = room.available ?
+                                        "../../Assets/Images/BookNowPhotos/hotelIcons/icon1.png" :
+                                        "../../Assets/Images/BookNowPhotos/hotelIcons/icon2.png";
+                                }
                             }
                         });
                     });
-                    applyFilters(); // re-apply filtering based on updated availability
-                })
-                .catch(console.error);
-        }
 
-        // Re-fetch availability whenever the date changes
-        document.getElementById('hotelDate').addEventListener('change', fetchAvailability);
-        document.getElementById('hotelDate').addEventListener('keyup', fetchAvailability);
+                    applyFilters();
+                })
+                .catch(err => console.error("❌ FETCH ERROR:", err));
+        }
     </script>
 
     <!-- SwiperJS JS -->
