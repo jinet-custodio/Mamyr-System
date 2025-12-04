@@ -222,6 +222,13 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 value="<?= isset($formData['guestNo']) ? htmlspecialchars($formData['guestNo']) : '' ?>"
                                 placeholder="Estimated Number of Guests" required>
 
+                            <button class="icon-note" type="button" data-bs-toggle="collapse" data-bs-target="#guestInfoNoteContainer">
+                                <i class="bi bi-info"></i>
+                            </button>
+                        </div>
+
+                        <div class="info-note collapse" id="guestInfoNoteContainer">
+                            <p id="guestInfoNote"><i class="bi bi-info-circle-fill"></i> Exceeding the main capacity may require additional arrangements , and the event hall may become crowded.</p>
                         </div>
 
                         <div class="eventInfo">
@@ -728,7 +735,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
                             alert("Error: " + data.error);
                             return;
                         }
-
+                        const notes = document.getElementById('guestInfoNote');
 
                         // const venueSelect = document.getElementById("eventVenue");
                         venueSelect.innerHTML = '';
@@ -743,14 +750,13 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         data.Halls.forEach(hall => {
                             const venueOptions = document.createElement('option');
                             venueOptions.value = hall.RServiceName;
-                            venueOptions.dataset.capacity = hall.RSmaxCapacity;
+                            venueOptions.dataset.maincapacity = hall.RScapacity;
+                            venueOptions.dataset.maxcapacity = hall.RSmaxCapacity;
                             venueOptions.textContent =
-                                `${hall.RServiceName} - ${hall.RSmaxCapacity} pax`;
-
+                                `${hall.RServiceName} - ${hall.RScapacity} pax (can extend to ${hall.RSmaxCapacity}) `;
                             if (hall.RServiceName === sessionSelectedVenue) {
                                 venueOptions.selected = true;
                             }
-
                             venueSelect.appendChild(venueOptions);
                         })
 
@@ -762,6 +768,18 @@ $formData = $_SESSION['eventFormData'] ?? [];
                         alert("Failed to load available venues. Please try again later.");
                     });
             }
+
+            venueSelect.addEventListener('change', (e) => {
+                const selectedOption = e.target.selectedOptions[0];
+                if (selectedOption && selectedOption.dataset.maxcapacity && selectedOption.dataset.maincapacity) {
+                    const maxCapacity = selectedOption.dataset.maxcapacity;
+                    const capacity = selectedOption.dataset.maincapacity;
+                    const venueName = selectedOption.value;
+                    guestInfoNote.textContent = `The standard capacity of ${venueName} is ${capacity} pax, but it can extend up to ${maxCapacity}. Exceeding the main capacity may require additional arrangements,  and the event hall may become crowded.`;
+                } else {
+                    guestInfoNote.textContent = '';
+                }
+            });
 
             if (date && startTime) {
                 date.addEventListener("change", getAvailableVenue);
@@ -1248,6 +1266,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
         });
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
