@@ -81,6 +81,29 @@
   gap: 8px;
 }
 
+.icon-note {
+  border: none;
+  background-color: unset;
+  margin-bottom: 0.3rem;
+}
+
+.icon-note:hover {
+  color: rgba(9, 77, 179, 0.8);
+}
+
+.guest-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.info-note {
+  grid-column: 1 / -1; /* Make it span across all columns */
+  text-align: center;
+  font-size: 14px;
+}
+
 #eventBookingCard .eventInfo,
 #eventBookingCard .noteContainer {
   grid-column: span 2;
@@ -107,7 +130,9 @@
   list-style: none;
 }
 
-.noteContainer li {
+.noteContainer li,
+.icon-note,
+.info-note {
   color: rgb(13, 109, 252, 0.8);
 }
 
@@ -765,5 +790,9 @@ input[type="checkbox"],
     text-align: center !important;
     width: 70%;
     margin: auto;
+  }
+
+  .icon-note {
+    margin-bottom: unset !important;
   }
 }
