@@ -297,7 +297,6 @@ if (isset($_POST['approveBtn'])) {
 }
 
 
-
 //Reject Button is Click
 if (isset($_POST['rejectBtn'])) {
     $bookingID = (int) $_POST['bookingID'];
@@ -321,36 +320,38 @@ if (isset($_POST['rejectBtn'])) {
         if (strtolower($bookingType) === 'resort') {
             $getServicesQuery = $conn->prepare("SELECT * FROM service WHERE serviceID = ?");
             //* Insert this to unavailable dates
-            foreach ($serviceIDs as $serviceID) {
-                $getServicesQuery->bind_param("i", $serviceID);
-                if (!$getServicesQuery->execute()) {
-                    $conn->rollback();
-                    throw new Exception("Failed to fetch service for ID: $serviceID");
-                }
-
-                $getServicesQueryResult = $getServicesQuery->get_result();
-                if ($getServicesQueryResult->num_rows === 0) {
-                    $conn->rollback();
-                    throw new Exception("No service found for ID: $serviceID");
-                }
-
-                $row = $getServicesQueryResult->fetch_assoc();
-                $serviceType = $row['serviceType'];
-                switch ($serviceType) {
-                    case 'Resort':
-                        $resortServiceID = $row['resortServiceID'];
-                        $removeFromUnavailableDates = $conn->prepare("DELETE FROM `serviceunavailabledate` WHERE `resortServiceID`= ?");
-                        $removeFromUnavailableDates->bind_param('i', $resortServiceID);
-                        if (!$removeFromUnavailableDates->execute()) {
-                            $conn->rollback();
-                            throw new Exception("Failed to delete unavailable date for resort service ID: $resortServiceID");
-                        }
-                        $removeFromUnavailableDates->close();
-                        break;
-
-                    default:
+            foreach ($serviceIDs as $category => $ids) {
+                foreach ($ids as $serviceID) {
+                    $getServicesQuery->bind_param("i", $serviceID);
+                    if (!$getServicesQuery->execute()) {
                         $conn->rollback();
-                        throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
+                        throw new Exception("Failed to fetch service for ID: $serviceID");
+                    }
+
+                    $getServicesQueryResult = $getServicesQuery->get_result();
+                    if ($getServicesQueryResult->num_rows === 0) {
+                        $conn->rollback();
+                        throw new Exception("No service found for ID: $serviceID");
+                    }
+
+                    $row = $getServicesQueryResult->fetch_assoc();
+                    $serviceType = $row['serviceType'];
+                    switch ($serviceType) {
+                        case 'Resort':
+                            $resortServiceID = $row['resortServiceID'];
+                            $removeFromUnavailableDates = $conn->prepare("DELETE FROM `serviceunavailabledate` WHERE `resortServiceID`= ?");
+                            $removeFromUnavailableDates->bind_param('i', $resortServiceID);
+                            if (!$removeFromUnavailableDates->execute()) {
+                                $conn->rollback();
+                                throw new Exception("Failed to delete unavailable date for resort service ID: $resortServiceID");
+                            }
+                            $removeFromUnavailableDates->close();
+                            break;
+
+                        default:
+                            $conn->rollback();
+                            throw new Exception("Unknown service type: $serviceType for service ID: $serviceID");
+                    }
                 }
             }
         }
@@ -495,6 +496,171 @@ if (isset($_POST['submitCharges'])) {
         $_SESSION['bookingID'] = $bookingID;
         error_log('Exception Error: ' . $e->getMessage());
         header('Location: ../../Pages/Admin/viewBooking.php?action=chargesError');
+        exit();
+    }
+}
+
+
+if (isset($_POST['reschedBtn'])) {
+
+    error_log(print_r($_POST, true));
+    try {
+        //IDs
+        $bookingID = (int) $_POST['bookingID'];
+        $serviceIDs = $_POST['serviceIDs'];
+        $customerID = (int) $_POST['customerID'];
+        $userRoleID = (int) $_POST['userRoleID'];
+        $bookingCode = $_POST['bookingCode'];
+
+        // Date and Time
+        $newStartDateTime = $_POST['newStartDateTime'];
+        $newEndDateTime = $_POST['newEndDateTime'];
+
+
+        //Search for bookingID then check the dates
+        $searchBooking = $conn->prepare("SELECT * FROM serviceunavailabledate WHERE bookingID = ? AND unavailableStartDate > NOW()");
+        $searchBooking->bind_param("i", $bookingID);
+        if (!$searchBooking->execute()) {
+            throw new Exception("Executing search for booking failed. Error: " . $searchBooking->error);
+        }
+
+        $bookingResult = $searchBooking->get_result();
+
+        if ($bookingResult->num_rows > 0) {
+            $servicesIDs = [];
+            while ($row = $bookingResult->fetch_assoc()) {
+                $resortServiceID = (int) $row['resortServiceID'];
+                $partnershipServiceID = (int) $row['partnershipServiceID'];
+
+                if (!empty($row['resortServiceID'])) {
+                    $searchNewDates = $conn->prepare("SELECT serviceUnavailableID FROM serviceunavailabledate WHERE resortServiceID = ? AND unavailableEndDate > ? AND unavailableStartDate < ? AND status != 'cancelled' AND bookingID != ? ");
+                    $searchNewDates->bind_param("issi", $resortServiceID, $newStartDateTime, $newEndDateTime, $bookingID);
+                    if (!$searchNewDates->execute()) {
+                        throw new Exception("Executing search for new dates failed. Error: " . $searchNewDates->error);
+                    }
+
+                    $result = $searchNewDates->get_result();
+
+                    if ($result->num_rows > 0) {
+                        $_SESSION['bookingID'] = $bookingID;
+                        header("Location: ../../../../Pages/Admin/viewBooking.php?action=someServiceNotAvailable");
+                        exit();
+                    }
+                } else {
+                    $searchNewDates = $conn->prepare("SELECT serviceUnavailableID FROM serviceunavailabledate WHERE partnershipServiceID = ? AND unavailableEndDate > ? AND unavailableStartDate < ? AND status != 'cancelled' AND bookingID != ?");
+                    $searchNewDates->bind_param("issi", $partnershipServiceID, $newStartDateTime, $newEndDateTime, $bookingID);
+                    if (!$searchNewDates->execute()) {
+                        throw new Exception("Executing search for new dates failed. Error: " . $searchNewDates->error);
+                    }
+
+                    $result = $searchNewDates->get_result();
+
+                    if ($result->num_rows > 0) {
+                        $_SESSION['bookingID'] = $bookingID;
+                        header("Location: ../../../../Pages/Admin/viewBooking.php?action=someServiceNotAvailable");
+                        exit();
+                    }
+                }
+            }
+
+            $conn->begin_transaction();
+            $updateDates = $conn->prepare("UPDATE `serviceunavailabledate` SET `unavailableStartDate`= ?,`unavailableEndDate`= ? WHERE bookingID = ?");
+            $updateDates->bind_param("ssi", $newStartDateTime, $newEndDateTime, $bookingID);
+            if (!$updateDates->execute()) {
+                $conn->rollback();
+                throw new Exception("Executing updating query for new dates failed. Error: " .  $updateDates->error);
+            }
+
+            $updateBooking = $conn->prepare("UPDATE booking SET startDate= ?, endDate= ? WHERE bookingID = ?");
+            $updateBooking->bind_param("ssi", $newStartDateTime, $newEndDateTime, $bookingID);
+            if (!$updateBooking->execute()) {
+                $conn->rollback();
+                throw new Exception("Executing updating query for new dates failed. Error: " .  $updateBooking->error);
+            }
+
+
+            // Insert notification
+            $receiver = getMessageReceiver($userRoleID);
+            $message = "<strong>$bookingCode</strong> <br>Your booking has been successfully rescheduled. Check your updated details.";
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID, message, receiver) VALUES(?, ?, ?, ?, ?)");
+            $insertNotification->bind_param("iiiss", $bookingID, $userID, $userRoleID, $message, $receiver);
+            if (!$insertNotification->execute()) {
+                $conn->rollback();
+                throw new Exception("Failed to insert notification");
+            }
+
+            $conn->commit();
+            header("Location: ../../../../Pages/Admin/viewBooking.php?action=reschedSuccess");
+            exit();
+        } else {
+            $conn->begin_transaction();
+
+            $searchNewDates = $conn->prepare("SELECT serviceUnavailableID FROM serviceunavailabledate WHERE resortServiceID = ? AND partnershipServiceID = ? AND unavailableEndDate > ? AND unavailableStartDate < ? AND status != 'cancelled' AND bookingID != ? ");
+            foreach ($serviceIDs as $category => $ids) {
+                foreach ($ids as $serviceID) {
+                    if (strtolower($category) === 'resort') {
+                        $resortServiceID = $serviceID;
+                        $partnershipServiceID = null;
+                    } else {
+                        $resortServiceID = null;
+                        $partnershipServiceID = $serviceID;
+                    }
+
+                    $searchNewDates->bind_param("iiiss", $bookingID, $resortServiceID, $partnershipServiceID, $newStartDateTime, $newEndDateTime);
+                    if (!$searchNewDates->execute()) {
+                        throw new Exception("Executing search for new dates failed. Error: " . $searchNewDates->error);
+                    }
+
+                    $result = $searchNewDates->get_result();
+
+                    if ($result->num_rows > 0) {
+                        $_SESSION['bookingID'] = $bookingID;
+                        header("Location: ../../../../Pages/Admin/viewBooking.php?action=someServiceNotAvailable");
+                        exit();
+                    }
+                }
+            }
+
+            $insertUnavailable = $conn->prepare("INSERT INTO serviceunavailabledate (bookingID, resortServiceID, partnershipServiceID, unavailableStartDate, unavailableEndDate, status) VALUES (?, ?, ?, ?, ?, 'hold')");
+
+            foreach ($serviceIDs as $category => $ids) {
+                foreach ($ids as $serviceID) {
+                    if (strtolower($category) === 'resort') {
+                        $resortServiceID = $serviceID;
+                        $partnershipServiceID = null;
+                    } else {
+                        $resortServiceID = null;
+                        $partnershipServiceID = $serviceID;
+                    }
+
+                    $insertUnavailable->bind_param("iiiss", $bookingID, $resortServiceID, $partnershipServiceID, $newStartDateTime, $newEndDateTime);
+                    if (!$insertUnavailable->execute()) {
+                        $conn->rollback();
+                        throw new Exception("Failed to insert new unavailable date. Error: " . $insertUnavailable->error);
+                    }
+                }
+            }
+
+
+            // Insert notification
+            $receiver = getMessageReceiver($userRoleID);
+            $message = "<strong>$bookingCode</strong> <br>Your booking has been successfully rescheduled. Check your updated details.";
+            $insertNotification = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID, message, receiver) VALUES(?, ?, ?, ?, ?)");
+            $insertNotification->bind_param("iiiss", $bookingID, $userID, $userRoleID, $message, $receiver);
+            if (!$insertNotification->execute()) {
+                $conn->rollback();
+                throw new Exception("Failed to insert notification");
+            }
+
+            $conn->commit();
+            $_SESSION['bookingID'] = $bookingID;
+            header("Location: ../../../../Pages/Admin/viewBooking.php?action=reschedNotAllowed");
+            exit();
+        }
+    } catch (Exception $e) {
+        $_SESSION['bookingID'] = $bookingID;
+        error_log("Error: " . $e->getMessage());
+        header("Location: ../../../../Pages/Admin/viewBooking.php?action=reschedError");
         exit();
     }
 }

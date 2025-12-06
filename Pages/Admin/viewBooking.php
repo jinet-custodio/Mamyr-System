@@ -80,6 +80,11 @@ switch ($userRole) {
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/viewBooking.css" />
+
+
+    <!-- flatpickr calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
 </head>
 
 <body>
@@ -126,7 +131,7 @@ switch ($userRole) {
             $file_info = finfo_open(FILEINFO_MIME_TYPE);
             $imageData = $data['userProfile'];
             $mime_type = finfo_buffer($file_info, $imageData);
-            finfo_close($file_info);
+            // finfo_close($file_info);
 
             $userProfile = 'data:' . $mime_type . ';base64,' . base64_encode($imageData);
 
@@ -155,13 +160,16 @@ switch ($userRole) {
                     </div>
 
                     <div class="button-container">
-                        <div id="button-approval-container" class="d-flex mx-auto">
+                        <div id="button-approval-container" style="display: none;">
                             <button type="button" class="btn btn-primary approveReject" data-bs-toggle="modal"
                                 data-bs-target="#finalizedModal">Approve</button>
                             <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal"
                                 data-bs-target="#rejectionModal">Reject</button>
                         </div>
-
+                        <div class="resched-button-container" id="resched-button-container">
+                            <button type="button" class="btn btn-success reschedModal" data-bs-toggle="modal"
+                                data-bs-target="#reschedModal">Reschedule</button>
+                        </div>
                     </div>
                 </div>
 
@@ -466,13 +474,13 @@ switch ($userRole) {
                                 if ($serviceType === 'Resort') {
                                     $venue = $row['RServiceName'] ?? 'none';
                                     $venuePrice = $row['venuePricing'] ?? 0;
-                                    $serviceIDs['resort'] = $row['resortServiceID'];
+                                    $serviceIDs['resort'][] = $row['resortServiceID'];
                                 } elseif ($serviceType === 'Partnership') {
                                     $partnerServicePrice = isset($row['PBPrice']) ? floatval($row['PBPrice']) : null;
                                     $serviceName = $row['PBName'] ?? 'N/A';
                                     $partnerServiceID = $row['partnershipServiceID'] ?? null;
                                     $partnerID = $row['partnershipID'] ?? null;
-                                    $serviceIDs['partner'] = $row['partnershipServiceID'];
+                                    $serviceIDs['partner'][] = $row['partnershipServiceID'];
 
 
                                     if ($partnerServiceID !== null) {
@@ -504,7 +512,7 @@ switch ($userRole) {
                             }
                             if ($serviceType === 'Resort') {
                                 $services[] = $row['RServiceName'] . " - ₱"  . number_format($row['RSprice'], 2);
-                                $serviceIDs['resort'] = $row['resortServiceID'];
+                                $serviceIDs['resort'][] = $row['resortServiceID'];
                             }
                             if ($serviceType === 'Entrance') {
                                 $tourType = $row['tourType'];
@@ -514,11 +522,40 @@ switch ($userRole) {
 
                         $finalBill = ($finalBill === 0) ?  $originalBill : $finalBill;
                         // echo '<pre>';
-                        // print_r($partnerServices);
+                        // print_r($serviceIDs);
                         // echo '</pre>';
                     }
                 }
                 ?>
+                <!-- Reschedule Modal -->
+                <div class="modal fade" id="reschedModal" tabindex="-1" aria-labelledby="reschedModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <h6 class="resched-label fw-bold">Reschedule the Event</h6>
+                                <p>Original Date: <span id="displayDate" class="fw-bold"><?= $bookingDate ?></span></p>
+                                <div class="mb-3">
+                                    <label for="newDate" class="form-label">Select a New Start Date</label>
+                                    <input type="text" id="newStartDateTime" class="form-control" name="newStartDateTime" placeholder="Select date & time">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newDate" class="form-label">Select a New End Date</label>
+                                    <input type="text" id="newEndDateTime" class="form-control" name="newEndDateTime" placeholder="Select date & time">
+                                </div>
+
+                                <p>Selected Start Date: <span id="displayStartDate" class="fw-bold">None</span></p>
+                                <p>Selected End Date: <span id="displayEndDate" class="fw-bold">None</span></p>
+
+                                <p>Make sure they can pay you before rescheduling</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                <button type="submit" class="btn btn-success" name="reschedBtn">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!--Rejection Modal -->
                 <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
@@ -1270,8 +1307,10 @@ switch ($userRole) {
                         value="<?= $bookingStatusName ?>">
                     <input type="hidden" name="paymentApprovalStatus" id="paymentApprovalStatus"
                         value="<?= $paymentApprovalStatusName ?? 'None' ?>">
-                    <?php foreach ($serviceIDs as $serviceID): ?>
-                        <input type="hidden" name="serviceIDs[]" value="<?= $serviceID ?>">
+                    <?php foreach ($serviceIDs as $category => $ids): ?>
+                        <?php foreach ($ids as $id): ?>
+                            <input type="hidden" name="serviceIDs[<?= $category ?>][]" value="<?= $id ?>">
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
                     <input type="hidden" name="endDate" id="endDate" value="<?= $rawEndDate ?>">
                     <input type="hidden" name="startDate" id="startDate" value="<?= $rawStartDate ?>">
@@ -1283,8 +1322,39 @@ switch ($userRole) {
 
     </div>
 
+
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <!-- Flatpickr for date input -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <!-- Flatpickr -->
+    <script>
+        flatpickr("#newStartDateTime", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+            allowInput: true,
+            time_24hr: false,
+            onChange: function(selectedDates, dateStr, instance) {
+                const formatted = instance.formatDate(selectedDates[0], "F j, Y h:i K");
+                document.getElementById("displayStartDate").textContent = formatted;
+            }
+        });
+        flatpickr("#newEndDateTime", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+            time_24hr: false,
+            allowInput: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                const formatted = instance.formatDate(selectedDates[0], "F j, Y h:i K");
+                document.getElementById("displayEndDate").textContent = formatted;
+            }
+        });
+    </script>
 
 
     <!-- Allow adding discount and changing final bill -->
@@ -1389,24 +1459,29 @@ switch ($userRole) {
         const newFoodPrice = document.getElementById('newFoodPrice');
         const foodPrice = document.getElementById('foodPrice');
 
-        sameAmount.addEventListener('click', (event) => {
-            event.stopPropagation();
+        if (sameAmount && sameFoodPrice) {
 
-            if (sameAmount.checked) {
-                newFoodPrice.value = foodPrice.value;
-            } else {
-                newFoodPrice.value = "";
-            }
-        });
 
-        sameFoodPrice.addEventListener('click', () => {
+            sameAmount.addEventListener('click', (event) => {
+                event.stopPropagation();
 
-            if (sameAmount.checked) {
-                newFoodPrice.value = foodPrice.value;
-            } else {
-                newFoodPrice.value = "";
-            }
-        });
+                if (sameAmount.checked) {
+                    newFoodPrice.value = foodPrice.value;
+                } else {
+                    newFoodPrice.value = "";
+                }
+            });
+
+
+            sameFoodPrice.addEventListener('click', () => {
+
+                if (sameAmount.checked) {
+                    newFoodPrice.value = foodPrice.value;
+                } else {
+                    newFoodPrice.value = "";
+                }
+            });
+        }
     </script>
 
     <script>
@@ -1527,21 +1602,30 @@ switch ($userRole) {
 
     <!--//* Hiding buttons -->
     <script>
-        const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
-        const bookingStatus = document.getElementById('bookingStatusName').value;
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttonContainer = document.getElementById('button-approval-container');
+            const reschedButton = document.getElementById("resched-button-container");
+            const bookingStatus = document.getElementById('bookingStatusName').value;
+            const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
+            console.log('Booking status:', bookingStatus);
 
-        const buttonContainer = document.getElementById('button-approval-container');
-
-        if (paymentApprovalStatus === 'Done' ||
-            bookingStatus === 'Expired' ||
-            bookingStatus === 'Rejected' ||
-            bookingStatus === 'Cancelled' ||
-            paymentApprovalStatus === 'Rejected' ||
-            paymentApprovalStatus === 'Cancelled' ||
-            bookingStatus === 'Approved' ||
-            bookingStatus === 'Reserved') {
-            buttonContainer.style.display = "none";
-        }
+            console.log('Payment status:', paymentApprovalStatus);
+            switch (bookingStatus.toLowerCase()) {
+                case 'pending':
+                    buttonContainer.style.display = "flex";
+                    break;
+                case 'expired':
+                case 'cancelled':
+                case 'done':
+                case 'rejected':
+                    reschedButton.style.display = "none";
+                    break;
+                default:
+                    console.log(bookingStatus);
+                    buttonContainer.style.display = "none";
+                    break;
+            }
+        });
     </script>
 
     <!-- Sweetalert Link -->
@@ -1550,8 +1634,6 @@ switch ($userRole) {
     <script>
         const param = new URLSearchParams(window.location.search);
         const action = param.get('action');
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const action = urlParams.get('action');
 
 
         const Toast = Swal.mixin({
@@ -1565,69 +1647,65 @@ switch ($userRole) {
                 toast.onmouseleave = Swal.resumeTimer;
             }
         });
-
-        if (action === 'approvalFailed') {
-            const errorMessage = window.approvalErrorMessage ||
-                "The booking request could not be approved. Please try again later.";
-
-            Swal.fire({
-                title: "Failed!",
-                text: errorMessage,
-                icon: 'error',
-            });
-        } else if (action === 'chargesAdded') {
-            Toast.fire({
-                title: "Applied Charges Successfully",
-                icon: 'success',
-            });
-        } else if (action === 'chargesError') {
-            Swal.fire({
-                title: "Failed!",
-                text: 'Server Error: An error occured in database. Please try again later!',
-                icon: 'error',
-            });
-        } else if (action === 'addOnsService-rejected') {
-            Swal.fire({
-                title: "Approval Restriction",
-                text: 'Failed to approve the booking.  The customer chose to cancel the reservation because the additional service they requested was rejected.',
-                icon: 'info',
-            });
+        switch (action) {
+            case 'approvalFailed':
+                const errorMessage = window.approvalErrorMessage ||
+                    "The booking request could not be approved. Please try again later.";
+                Swal.fire({
+                    title: "Failed!",
+                    text: errorMessage,
+                    icon: 'error',
+                });
+                break;
+            case 'chargesAdded':
+                Toast.fire({
+                    title: "Applied Charges Successfully",
+                    icon: 'success',
+                });
+                break;
+            case 'chargesError':
+                Swal.fire({
+                    title: "Failed!",
+                    text: 'Server Error: An error occurred in database. Please try again later!',
+                    icon: 'error',
+                });
+                break;
+            case 'addOnsService-rejected':
+                Swal.fire({
+                    title: "Approval Restriction",
+                    text: 'Failed to approve the booking.  The customer chose to cancel the reservation because the additional service they requested was rejected.',
+                    icon: 'info',
+                });
+                break;
+            case 'reschedSuccess':
+                Toast.fire({
+                    title: "Rescheduled Successfully",
+                    icon: 'success',
+                });
+                break;
+            case 'reschedError':
+                Swal.fire({
+                    title: "Failed!",
+                    text: 'Server Error: An error occurred in database. Please try again later!',
+                    icon: 'error',
+                });
+                break;
+            case 'reschedNotAllowed':
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Reschedule Not Allowed',
+                    text: 'This booking is either ongoing or already completed, so it cannot be rescheduled.'
+                });
+                break;
+            case 'someServiceNotAvailable':
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Reschedule Not Allowed',
+                    text: 'One or more services included in this booking are not available on the selected dates.'
+                });
+                break;
         }
 
-
-        // if (paramValue === "approvalFailed") {
-        //     Swal.fire({
-        //         title: "Failed!",
-        //         text: "The booking request could not be approved. Please try again later.",
-        //         icon: 'error',
-        //     });
-        // } else if (paramValue === 'rejectionEmpty') {
-        //     Swal.fire({
-        //         title: "Oops!",
-        //         text: "Please provide the reason for your rejection",
-        //         icon: 'warning',
-        //         confirmButtonText: 'Okay',
-        //     }).then((result) => {
-        //         const rejectionModal = document.getElementById('rejectionModal');
-        //         const modal = new bootstrap.modal(rejectionModal);
-        //         modal.show();
-
-        //         // document.getElementById('rejectionReason').style.border = '1px solid red';
-        //     });
-        // } else if (paramValue === 'rejectionFailed') {
-        //     Swal.fire({
-        //         title: "Failed!",
-        //         text: "The booking request could not be rejected. Please try again later.",
-        //         icon: 'error',
-        //     });
-        // } else if (paramValue === 'addOnsService-rejected') {
-        //     Swal.fire({
-        //         title: "Oops! You can’t approve this booking",
-        //         text: "The customer’s decision is to cancel this booking if any availed partnership service is declined.",
-        //         icon: 'info',
-        //     });
-
-        // }
 
         // if (action) {
         //     const url = new URL(window.location);
