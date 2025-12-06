@@ -8,6 +8,8 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 switch ($userRole) {
     case 1: //customer
@@ -163,10 +165,10 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     $eventType =  isset($formData['eventType']) ?  $formData['eventType'] : '';
                                     $isSelected = (htmlspecialchars($category['categoryName']) === $eventType) ? 'selected' : '';
                                 ?>
-                                <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
-                                    <?= htmlspecialchars($category['categoryName']) ?></option>
-                                <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
-                                    <?= htmlspecialchars($category['categoryName']) ?></option>
+                                    <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
+                                        <?= htmlspecialchars($category['categoryName']) ?></option>
+                                    <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
+                                        <?= htmlspecialchars($category['categoryName']) ?></option>
                                 <?php
                                 }
                                 ?>
@@ -405,11 +407,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
                                     <?php foreach ($chickenCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -417,11 +419,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <h4>Pork</h4>
                                     <?php foreach ($porkCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -429,11 +431,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <h4>Beef</h4>
                                     <?php foreach ($beefCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -441,11 +443,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <h4>Pasta</h4>
                                     <?php foreach ($pastaCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -453,11 +455,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <h4>Vegetables</h4>
                                     <?php foreach ($vegetablesCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -465,11 +467,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <h4>Seafood</h4>
                                     <?php foreach ($seafoodCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -483,11 +485,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <h4>Drinks</h4>
                                     <?php foreach ($drinkCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -495,11 +497,11 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <h4>Desserts</h4>
                                     <?php foreach ($dessertCategory as $item):
                                         if ($item['ageGroup'] === 'Adult'): ?>
-                                    <div class="food-item-container">
-                                        <input type="checkbox" class="food-item"
-                                            name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
-                                            value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
-                                    </div>
+                                            <div class="food-item-container">
+                                                <input type="checkbox" class="food-item"
+                                                    name="foodSelections[<?= $item['foodItemID'] ?>][<?= $item['foodCategory'] ?>]"
+                                                    value="<?= $item['foodName'] ?>">&nbsp;<?= $item['foodName'] ?>
+                                            </div>
                                     <?php endif;
                                     endforeach; ?>
                                 </div>
@@ -644,7 +646,7 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
         </div>
     </form>
-
+    <?php include 'loader.php'; ?>
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
@@ -664,650 +666,649 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
     <!--Back Functions -->
     <script>
-    function backToSelection() {
-        location.href = "bookNow.php"
-    };
+        function backToSelection() {
+            location.href = "bookNow.php"
+        };
     </script>
 
     <!-- Calendar -->
     <script>
-    const today = new Date();
-    const minDate = new Date();
-    minDate.setDate(today.getDate() + 8);
-    minDate.setHours(0, 0, 0, 0);
+        const today = new Date();
+        const minDate = new Date();
+        minDate.setDate(today.getDate() + 8);
+        minDate.setHours(0, 0, 0, 0);
 
-    flatpickr('#eventDate', {
-        minDate: minDate,
-        dateFormat: "Y-m-d",
-        disableMobile: true
-    });
+        flatpickr('#eventDate', {
+            minDate: minDate,
+            dateFormat: "Y-m-d",
+            disableMobile: true
+        });
 
-    flatpickr('#eventStartTime', {
-        enableTime: true,
-        noCalendar: true,
-        minTime: "06:00",
-        maxTime: "17:00",
-        dateFormat: "H:i",
-        disableMobile: true
-    });
+        flatpickr('#eventStartTime', {
+            enableTime: true,
+            noCalendar: true,
+            minTime: "06:00",
+            maxTime: "17:00",
+            dateFormat: "H:i",
+            disableMobile: true
+        });
     </script>
 
 
     <!-- Event Hall-->
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const date = document.getElementById('eventDate');
-        const startTime = document.getElementById('eventStartTime');
-        const venueSelect = document.getElementById('eventVenue');
+        document.addEventListener('DOMContentLoaded', () => {
+            const date = document.getElementById('eventDate');
+            const startTime = document.getElementById('eventStartTime');
+            const venueSelect = document.getElementById('eventVenue');
 
 
-        const sessionSelectedVenue =
-            <?= isset($formData['eventVenue']) ? json_encode($formData['eventVenue']) : '""' ?>;
+            const sessionSelectedVenue =
+                <?= isset($formData['eventVenue']) ? json_encode($formData['eventVenue']) : '""' ?>;
 
-        venueSelect.innerHTML = '';
-        const defaultOption = document.createElement('option');
-        defaultOption.textContent = 'Select event schedule first';
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        venueSelect.appendChild(defaultOption);
+            venueSelect.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = 'Select event schedule first';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            venueSelect.appendChild(defaultOption);
 
-        function getAvailableVenue() {
-            const selectedDate = date.value;
-            const selectedStartTime = startTime.value;
+            function getAvailableVenue() {
+                const selectedDate = date.value;
+                const selectedStartTime = startTime.value;
 
-            if (!selectedDate || !selectedStartTime) return;
+                if (!selectedDate || !selectedStartTime) return;
 
-            const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
-            const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000);
+                const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
+                const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000);
 
-            const formattedStartDateTime = formatDateTime(startDateTimeObj);
-            const formattedEndDateTime = formatDateTime(endDateTimeObj);
+                const formattedStartDateTime = formatDateTime(startDateTimeObj);
+                const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
-            // console.log(formattedStartDateTime);
-            // console.log(formattedEndDateTime);
+                // console.log(formattedStartDateTime);
+                // console.log(formattedEndDateTime);
 
-            fetch(
-                    `../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
-                )
-                .then(response => {
-                    if (!response.ok) throw new Error('Network Error');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        alert("Error: " + data.error);
-                        return;
-                    }
-                    const notes = document.getElementById('guestInfoNote');
-
-                    // const venueSelect = document.getElementById("eventVenue");
-                    venueSelect.innerHTML = '';
-
-                    const venueOption = document.createElement('option')
-                    venueOption.value = "";
-                    venueOption.disabled = true;
-                    venueOption.selected = true;
-                    venueOption.textContent = "Choose...";
-                    venueSelect.appendChild(venueOption);
-
-                    data.Halls.forEach(hall => {
-                        const venueOptions = document.createElement('option');
-                        venueOptions.value = hall.RServiceName;
-                        venueOptions.dataset.maincapacity = hall.RScapacity;
-                        venueOptions.dataset.maxcapacity = hall.RSmaxCapacity;
-                        venueOptions.textContent =
-                            `${hall.RServiceName} - ${hall.RScapacity} pax (can extend to ${hall.RSmaxCapacity}) `;
-                        if (hall.RServiceName === sessionSelectedVenue) {
-                            venueOptions.selected = true;
-                        }
-                        venueSelect.appendChild(venueOptions);
+                fetch(
+                        `../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
+                    )
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network Error');
+                        return response.json();
                     })
+                    .then(data => {
+                        if (data.error) {
+                            alert("Error: " + data.error);
+                            return;
+                        }
+                        const notes = document.getElementById('guestInfoNote');
 
-                    venueSelect.dispatchEvent(new Event('change'));
+                        // const venueSelect = document.getElementById("eventVenue");
+                        venueSelect.innerHTML = '';
 
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation', error);
-                    alert("Failed to load available venues. Please try again later.");
-                });
-        }
+                        const venueOption = document.createElement('option')
+                        venueOption.value = "";
+                        venueOption.disabled = true;
+                        venueOption.selected = true;
+                        venueOption.textContent = "Choose...";
+                        venueSelect.appendChild(venueOption);
 
-        venueSelect.addEventListener('change', (e) => {
-            const selectedOption = e.target.selectedOptions[0];
-            if (selectedOption && selectedOption.dataset.maxcapacity && selectedOption.dataset
-                .maincapacity) {
-                const maxCapacity = selectedOption.dataset.maxcapacity;
-                const capacity = selectedOption.dataset.maincapacity;
-                const venueName = selectedOption.value;
-                guestInfoNote.textContent =
-                    `The standard capacity of ${venueName} is ${capacity} pax, but it can extend up to ${maxCapacity}. Exceeding the main capacity may require additional arrangements,  and the event hall may become crowded.`;
-            } else {
-                guestInfoNote.textContent = '';
+                        data.Halls.forEach(hall => {
+                            const venueOptions = document.createElement('option');
+                            venueOptions.value = hall.RServiceName;
+                            venueOptions.dataset.maincapacity = hall.RScapacity;
+                            venueOptions.dataset.maxcapacity = hall.RSmaxCapacity;
+                            venueOptions.textContent =
+                                `${hall.RServiceName} - ${hall.RScapacity} pax (can extend to ${hall.RSmaxCapacity}) `;
+                            if (hall.RServiceName === sessionSelectedVenue) {
+                                venueOptions.selected = true;
+                            }
+                            venueSelect.appendChild(venueOptions);
+                        })
+
+                        venueSelect.dispatchEvent(new Event('change'));
+
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation', error);
+                        alert("Failed to load available venues. Please try again later.");
+                    });
+            }
+
+            venueSelect.addEventListener('change', (e) => {
+                const selectedOption = e.target.selectedOptions[0];
+                if (selectedOption && selectedOption.dataset.maxcapacity && selectedOption.dataset
+                    .maincapacity) {
+                    const maxCapacity = selectedOption.dataset.maxcapacity;
+                    const capacity = selectedOption.dataset.maincapacity;
+                    const venueName = selectedOption.value;
+                    guestInfoNote.textContent =
+                        `The standard capacity of ${venueName} is ${capacity} pax, but it can extend up to ${maxCapacity}. Exceeding the main capacity may require additional arrangements,  and the event hall may become crowded.`;
+                } else {
+                    guestInfoNote.textContent = '';
+                }
+            });
+
+            if (date && startTime) {
+                date.addEventListener("change", getAvailableVenue);
+                startTime.addEventListener("change", getAvailableVenue);
+                getAvailableVenue();
             }
         });
-
-        if (date && startTime) {
-            date.addEventListener("change", getAvailableVenue);
-            startTime.addEventListener("change", getAvailableVenue);
-            getAvailableVenue();
-        }
-    });
     </script>
 
     <!-- Session Selected Food -->
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sessionFoodSelections =
-            <?= isset($formData['foodSelections']) ? json_encode($formData['foodSelections']) : '[]' ?>;
-        const sessionSelectedFoods =
-            <?= isset($formData['selectedFoods']) ? json_encode($formData['selectedFoods']) : '[]' ?>;
+        document.addEventListener('DOMContentLoaded', () => {
+            const sessionFoodSelections =
+                <?= isset($formData['foodSelections']) ? json_encode($formData['foodSelections']) : '[]' ?>;
+            const sessionSelectedFoods =
+                <?= isset($formData['selectedFoods']) ? json_encode($formData['selectedFoods']) : '[]' ?>;
 
-        let selectedFoods = [];
+            let selectedFoods = [];
 
-        const checkboxes = document.querySelectorAll('.food-item');
+            const checkboxes = document.querySelectorAll('.food-item');
 
 
-        if (typeof sessionFoodSelections === "object" && sessionFoodSelections !== null) {
-            Object.values(sessionFoodSelections).forEach(categoryObj => {
-                if (typeof categoryObj === "object" && categoryObj !== null) {
-                    Object.values(categoryObj).forEach(foodName => {
-                        selectedFoods.push(String(foodName));
-                    });
+            if (typeof sessionFoodSelections === "object" && sessionFoodSelections !== null) {
+                Object.values(sessionFoodSelections).forEach(categoryObj => {
+                    if (typeof categoryObj === "object" && categoryObj !== null) {
+                        Object.values(categoryObj).forEach(foodName => {
+                            selectedFoods.push(String(foodName));
+                        });
+                    }
+                });
+            }
+
+
+            if (typeof sessionSelectedFoods === 'object' && sessionSelectedFoods !== null && Object.keys(
+                    sessionSelectedFoods).length > 0) {
+                selectedFoods = Object.values(sessionSelectedFoods).map(String);
+            }
+
+            console.log(selectedFoods);
+
+            checkboxes.forEach((checkbox) => {
+                if (selectedFoods.includes(String(checkbox.value))) {
+                    checkbox.checked = true;
                 }
             });
-        }
-
-
-        if (typeof sessionSelectedFoods === 'object' && sessionSelectedFoods !== null && Object.keys(
-                sessionSelectedFoods).length > 0) {
-            selectedFoods = Object.values(sessionSelectedFoods).map(String);
-        }
-
-        console.log(selectedFoods);
-
-        checkboxes.forEach((checkbox) => {
-            if (selectedFoods.includes(String(checkbox.value))) {
-                checkbox.checked = true;
-            }
         });
-    });
     </script>
 
     <!-- Fetch Partner service -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const date = document.getElementById('eventDate');
-        const startTime = document.getElementById('eventStartTime');
-        const mainContainer = document.getElementById('additionalService');
-        const sessionSelectedServices =
-            <?= isset($formData['additionalServiceSelected']) ? json_encode($formData['additionalServiceSelected']) : '[]' ?>;
+        document.addEventListener('DOMContentLoaded', function() {
+            const date = document.getElementById('eventDate');
+            const startTime = document.getElementById('eventStartTime');
+            const mainContainer = document.getElementById('additionalService');
+            const sessionSelectedServices =
+                <?= isset($formData['additionalServiceSelected']) ? json_encode($formData['additionalServiceSelected']) : '[]' ?>;
 
-        function showDefaultText() {
-            const div = document.createElement('div');
-            div.classList.add('no-data-container');
+            function showDefaultText() {
+                const div = document.createElement('div');
+                div.classList.add('no-data-container');
 
-            const cardText = document.createElement('h5');
-            cardText.classList.add('card-text');
-            cardText.innerHTML = 'Choose the date and time';
+                const cardText = document.createElement('h5');
+                cardText.classList.add('card-text');
+                cardText.innerHTML = 'Choose the date and time';
 
-            div.appendChild(cardText);
-            mainContainer.appendChild(div);
-        }
+                div.appendChild(cardText);
+                mainContainer.appendChild(div);
+            }
 
-        date.addEventListener('change', getAvailablePartnerService);
-        startTime.addEventListener('change', getAvailablePartnerService);
+            date.addEventListener('change', getAvailablePartnerService);
+            startTime.addEventListener('change', getAvailablePartnerService);
 
-        if (date.value === '' && startTime.value === '') {
-            showDefaultText();
-        } else {
+            if (date.value === '' && startTime.value === '') {
+                showDefaultText();
+            } else {
 
-            getAvailablePartnerService();
-        }
+                getAvailablePartnerService();
+            }
 
-        function getAvailablePartnerService() {
-            const selectedDate = date.value;
-            const selectedStartTime = startTime.value;
+            function getAvailablePartnerService() {
+                const selectedDate = date.value;
+                const selectedStartTime = startTime.value;
 
-            if (!selectedDate || !selectedStartTime) return;
+                if (!selectedDate || !selectedStartTime) return;
 
-            const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
-            const endDateTimeObj = new Date(
-                startDateTimeObj.getTime() + 5 * 60 * 60 * 1000
-            ); // +5 hours
+                const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
+                const endDateTimeObj = new Date(
+                    startDateTimeObj.getTime() + 5 * 60 * 60 * 1000
+                ); // +5 hours
 
-            const formattedStartDateTime = formatDateTime(startDateTimeObj);
-            const formattedEndDateTime = formatDateTime(endDateTimeObj);
+                const formattedStartDateTime = formatDateTime(startDateTimeObj);
+                const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
-            fetch(
-                    `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(
+                fetch(
+                        `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(
                     formattedStartDateTime
                     )}&endDate=${encodeURIComponent(formattedEndDateTime)}`
-                )
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network Error");
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    if (data.error) {
-                        Swal.fire({
-                            title: "Error",
-                            text: "Error: " + data.error,
-                            icon: "error",
-                        });
-                        return;
-                    }
-                    mainContainer.innerHTML = "";
-                    if (data.Categories && data.Categories.length > 0) {
-                        data.Categories.forEach((category) => {
-                            const wrapper = document.createElement("div");
-                            wrapper.classList.add("photography");
-
-
-                            const bpTypeContainer = document.createElement("div");
-                            bpTypeContainer.classList.add("bpTypeContainer");
-
-                            const categoryHeading = document.createElement("h6");
-                            categoryHeading.classList.add("bpCategory", "fw-bold");
-                            categoryHeading.innerText = category.eventCategory || "Category Name";
-
-                            bpTypeContainer.appendChild(categoryHeading);
-                            wrapper.appendChild(bpTypeContainer);
-
-                            const partnerListContainer = document.createElement("div");
-                            partnerListContainer.classList.add("partnerListContainer");
-
-                            const checkbox = document.createElement("input");
-                            checkbox.type = "checkbox";
-                            checkbox.classList.add("form-check-input");
-                            checkbox.name =
-                                `additionalServiceSelected[${category.partnershipID}][selected]`;
-                            checkbox.value = category.partnershipServiceID;
-                            checkbox.id = `service-${category.partnershipServiceID}`;
-
-                            const inputPBName = document.createElement("input");
-                            inputPBName.type = "hidden";
-                            inputPBName.name =
-                                `additionalServiceSelected[${category.partnershipID}][PBName]`;
-                            inputPBName.value = category.PBName;
-
-                            const inputPBPrice = document.createElement("input");
-                            inputPBPrice.type = "hidden";
-                            inputPBPrice.name =
-                                `additionalServiceSelected[${category.partnershipID}][PBPrice]`;
-                            inputPBPrice.value = category.PBPrice;
-
-                            const inputServiceID = document.createElement("input");
-                            inputServiceID.type = "hidden";
-                            inputServiceID.name =
-                                `additionalServiceSelected[${category.partnershipID}][partnershipServiceID]`;
-                            inputServiceID.value = category.partnershipServiceID;
-
-                            checkbox.addEventListener("change", function() {
-                                if (this.checked) {
-                                    partnerListContainer.appendChild(inputPBName);
-                                    partnerListContainer.appendChild(inputPBPrice);
-                                    partnerListContainer.appendChild(inputServiceID);
-                                } else {
-                                    inputPBName.remove();
-                                    inputPBPrice.remove();
-                                    inputServiceID.remove();
-                                }
+                    )
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network Error");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data.error) {
+                            Swal.fire({
+                                title: "Error",
+                                text: "Error: " + data.error,
+                                icon: "error",
                             });
+                            return;
+                        }
+                        mainContainer.innerHTML = "";
+                        if (data.Categories && data.Categories.length > 0) {
+                            data.Categories.forEach((category) => {
+                                const wrapper = document.createElement("div");
+                                wrapper.classList.add("photography");
 
-                            const label = document.createElement("label");
-                            label.classList.add("form-check-label");
-                            label.setAttribute("for", checkbox.id);
-                            label.innerHTML = `${category.companyName} - ${
+
+                                const bpTypeContainer = document.createElement("div");
+                                bpTypeContainer.classList.add("bpTypeContainer");
+
+                                const categoryHeading = document.createElement("h6");
+                                categoryHeading.classList.add("bpCategory", "fw-bold");
+                                categoryHeading.innerText = category.eventCategory || "Category Name";
+
+                                bpTypeContainer.appendChild(categoryHeading);
+                                wrapper.appendChild(bpTypeContainer);
+
+                                const partnerListContainer = document.createElement("div");
+                                partnerListContainer.classList.add("partnerListContainer");
+
+                                const checkbox = document.createElement("input");
+                                checkbox.type = "checkbox";
+                                checkbox.classList.add("form-check-input");
+                                checkbox.name =
+                                    `additionalServiceSelected[${category.partnershipID}][selected]`;
+                                checkbox.value = category.partnershipServiceID;
+                                checkbox.id = `service-${category.partnershipServiceID}`;
+
+                                const inputPBName = document.createElement("input");
+                                inputPBName.type = "hidden";
+                                inputPBName.name =
+                                    `additionalServiceSelected[${category.partnershipID}][PBName]`;
+                                inputPBName.value = category.PBName;
+
+                                const inputPBPrice = document.createElement("input");
+                                inputPBPrice.type = "hidden";
+                                inputPBPrice.name =
+                                    `additionalServiceSelected[${category.partnershipID}][PBPrice]`;
+                                inputPBPrice.value = category.PBPrice;
+
+                                const inputServiceID = document.createElement("input");
+                                inputServiceID.type = "hidden";
+                                inputServiceID.name =
+                                    `additionalServiceSelected[${category.partnershipID}][partnershipServiceID]`;
+                                inputServiceID.value = category.partnershipServiceID;
+
+                                checkbox.addEventListener("change", function() {
+                                    if (this.checked) {
+                                        partnerListContainer.appendChild(inputPBName);
+                                        partnerListContainer.appendChild(inputPBPrice);
+                                        partnerListContainer.appendChild(inputServiceID);
+                                    } else {
+                                        inputPBName.remove();
+                                        inputPBPrice.remove();
+                                        inputServiceID.remove();
+                                    }
+                                });
+
+                                const label = document.createElement("label");
+                                label.classList.add("form-check-label");
+                                label.setAttribute("for", checkbox.id);
+                                label.innerHTML = `${category.companyName} - ${
                                     category.PBName
                                 } &mdash; ₱ ${Number(category.PBPrice).toLocaleString(undefined, {
                                     minimumFractionDigits: 2,
                                     maximumFractionDigits: 2,
                                 })} &mdash; ${category.phoneNumber}`;
 
-                            let selectedServiceIDs = [];
+                                let selectedServiceIDs = [];
 
-                            if (Array.isArray(sessionSelectedServices)) {
-                                selectedServiceIDs = sessionSelectedServices.map(String);
-                            } else if (typeof sessionSelectedServices === "object" &&
-                                sessionSelectedServices !== null) {
-                                for (const key in sessionSelectedServices) {
-                                    const entry = sessionSelectedServices[key];
+                                if (Array.isArray(sessionSelectedServices)) {
+                                    selectedServiceIDs = sessionSelectedServices.map(String);
+                                } else if (typeof sessionSelectedServices === "object" &&
+                                    sessionSelectedServices !== null) {
+                                    for (const key in sessionSelectedServices) {
+                                        const entry = sessionSelectedServices[key];
 
-                                    if (entry && entry.partnershipServiceID) {
-                                        selectedServiceIDs.push(String(entry.partnershipServiceID));
+                                        if (entry && entry.partnershipServiceID) {
+                                            selectedServiceIDs.push(String(entry.partnershipServiceID));
+                                        }
                                     }
                                 }
-                            }
 
 
-                            if (selectedServiceIDs.includes(String(category
-                                    .partnershipServiceID))) {
-                                checkbox.checked = true;
+                                if (selectedServiceIDs.includes(String(category
+                                        .partnershipServiceID))) {
+                                    checkbox.checked = true;
 
+                                    partnerListContainer.appendChild(inputPBName);
+                                    partnerListContainer.appendChild(inputPBPrice);
+                                    partnerListContainer.appendChild(inputServiceID);
+                                }
+
+
+                                partnerListContainer.appendChild(checkbox);
                                 partnerListContainer.appendChild(inputPBName);
                                 partnerListContainer.appendChild(inputPBPrice);
                                 partnerListContainer.appendChild(inputServiceID);
-                            }
+                                partnerListContainer.appendChild(label);
 
+                                wrapper.appendChild(partnerListContainer);
+                                mainContainer.appendChild(wrapper);
+                            });
+                        } else {
+                            const div = document.createElement("div");
+                            div.classList.add("no-data-container");
 
-                            partnerListContainer.appendChild(checkbox);
-                            partnerListContainer.appendChild(inputPBName);
-                            partnerListContainer.appendChild(inputPBPrice);
-                            partnerListContainer.appendChild(inputServiceID);
-                            partnerListContainer.appendChild(label);
+                            const cardText = document.createElement("h3");
+                            cardText.classList.add("card-text");
+                            cardText.innerHTML = "No Additional Services Available";
 
-                            wrapper.appendChild(partnerListContainer);
-                            mainContainer.appendChild(wrapper);
+                            div.appendChild(cardText);
+                            mainContainer.appendChild(div);
+                        }
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            title: "Error",
+                            text: error.Message,
+                            icon: "error",
                         });
-                    } else {
-                        const div = document.createElement("div");
-                        div.classList.add("no-data-container");
-
-                        const cardText = document.createElement("h3");
-                        cardText.classList.add("card-text");
-                        cardText.innerHTML = "No Additional Services Available";
-
-                        div.appendChild(cardText);
-                        mainContainer.appendChild(div);
-                    }
-                })
-                .catch((error) => {
-                    Swal.fire({
-                        title: "Error",
-                        text: error.Message,
-                        icon: "error",
+                        console.error("There was a problem with the fetch operation", error);
                     });
-                    console.error("There was a problem with the fetch operation", error);
-                });
-        }
+            }
 
-        // console.log('Date value:', date.value);
-        // console.log('StartTime value:', startTime.value);
-    });
+            // console.log('Date value:', date.value);
+            // console.log('StartTime value:', startTime.value);
+        });
     </script>
 
     <!-- Auto select event -->
     <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const params = new URLSearchParams(window.location.search);
-        const selectedEvent = params.get('event');
-        const select = document.getElementById('eventType');
-        if (selectedEvent) {
-            if (select) {
-                select.value = selectedEvent;
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const selectedEvent = params.get('event');
+            const select = document.getElementById('eventType');
+            if (selectedEvent) {
+                if (select) {
+                    select.value = selectedEvent;
+                }
+            };
+            // console.log(selectedEvent);
+
+            if (selectedEvent) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
             }
-        };
-        // console.log(selectedEvent);
+            // // const kidsMeal = document.getElementById('kidMeal');
+            // const foodItem = document.querySelectorAll('.food-item');
+            // if (select.value) {
+            //     if (select.value === 'Kids Party') {
+            //         // kidsMeal.style.display = 'block';
 
-        if (selectedEvent) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
-        // // const kidsMeal = document.getElementById('kidMeal');
-        // const foodItem = document.querySelectorAll('.food-item');
-        // if (select.value) {
-        //     if (select.value === 'Kids Party') {
-        //         // kidsMeal.style.display = 'block';
+            //         foodItem.forEach((food) => {
+            //             if (foodItem.value === 'Chocolate fountain machine') {
+            //                 foodItem.checked = true;
+            //             }
+            //         })
+            //     }
+            //     select.addEventListener('change', () => {
+            //         if (select.value === 'Kids Party') {
+            //             kidsMeal.style.display = 'block';
+            //         } else {
+            //             kidsMeal.style.display = 'none';
+            //         }
+            //         console.log(select.value);
+            //     })
+            // }
 
-        //         foodItem.forEach((food) => {
-        //             if (foodItem.value === 'Chocolate fountain machine') {
-        //                 foodItem.checked = true;
-        //             }
-        //         })
-        //     }
-        //     select.addEventListener('change', () => {
-        //         if (select.value === 'Kids Party') {
-        //             kidsMeal.style.display = 'block';
-        //         } else {
-        //             kidsMeal.style.display = 'none';
-        //         }
-        //         console.log(select.value);
-        //     })
-        // }
-
-    });
+        });
     </script>
 
     <!-- Fetching events for calendar  -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var disabledDates = []; // store dates to disable in Flatpickr
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var disabledDates = []; // store dates to disable in Flatpickr
 
-        // Initialize FullCalendar
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: '../../Function/fetchUserBookings.php',
+            // Initialize FullCalendar
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '../../Function/fetchUserBookings.php',
 
-            eventsSet: function(events) {
-                disabledDates = events
-                    .filter(e => e.extendedProps.type && e.extendedProps.type.toLowerCase() ===
-                        'event')
-                    .map(e => e.startStr.split('T')[0]);
+                eventsSet: function(events) {
+                    disabledDates = events
+                        .filter(e => e.extendedProps.type && e.extendedProps.type.toLowerCase() ===
+                            'event')
+                        .map(e => e.startStr.split('T')[0]);
 
-                initFlatpickr(disabledDates);
-            },
+                    initFlatpickr(disabledDates);
+                },
 
-            eventClick: function(info) {
-                window.location.href = "/Pages/Customer/Account/bookingHistory.php";
-            },
-            eventClick: function(info) {
-                window.location.href = "/Pages/Customer/Account/bookingHistory.php";
-            },
+                eventClick: function(info) {
+                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                },
+                eventClick: function(info) {
+                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                },
 
-            eventDidMount: function(info) {
-                if (info.event.allDay) {
-                    const dateStr = info.event.startStr;
-                    const dayCell = document.querySelector(
-                        `.fc-daygrid-day[data-date="${dateStr}"]`);
-                    if (dayCell) {
-                        let baseColor = info.event.backgroundColor || info.event.extendedProps
-                            .color || '#dc3545';
-                        dayCell.style.backgroundColor = baseColor;
-                        dayCell.style.color = '#000';
-                    }
-                    if (info.el) {
-                        info.el.style.display = 'none';
+                eventDidMount: function(info) {
+                    if (info.event.allDay) {
+                        const dateStr = info.event.startStr;
+                        const dayCell = document.querySelector(
+                            `.fc-daygrid-day[data-date="${dateStr}"]`);
+                        if (dayCell) {
+                            let baseColor = info.event.backgroundColor || info.event.extendedProps
+                                .color || '#dc3545';
+                            dayCell.style.backgroundColor = baseColor;
+                            dayCell.style.color = '#000';
+                        }
+                        if (info.el) {
+                            info.el.style.display = 'none';
+                        }
                     }
                 }
-            }
-        })
-    });
-
-    calendar.render();
-
-    // Initialize Flatpickr after fetching disabled dates
-    function initFlatpickr(dates) {
-        flatpickr("#eventDate", {
-            dateFormat: "Y-m-d",
-            disable: dates,
-            minDate: minDate,
+            })
+            calendar.render();
         });
-    }
+
+        // Initialize Flatpickr after fetching disabled dates
+        function initFlatpickr(dates) {
+            flatpickr("#eventDate", {
+                dateFormat: "Y-m-d",
+                disable: dates,
+                minDate: minDate,
+            });
+        }
     </script>
 
     <!-- Sweetalert Message  -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const action = params.get('action');
+        const params = new URLSearchParams(window.location.search);
+        const action = params.get('action');
 
-    if (action === 'errorBooking') {
-        Swal.fire({
-            title: 'Error Booking',
-            text: 'An error occured while booking. Try again later',
-            icon: 'error',
-        })
-    } else if (action === 'NoSelectedChoice') {
-        Swal.fire({
-            title: 'Oops',
-            text: 'Selection required! Choose whether to proceed or cancel the event before moving forward.',
-            icon: 'warning',
-            confirmButtonText: 'Okay',
-        }).then((result) => {
-            const additionalServicesModal = document.getElementById('additionalServicesModal');
-            const modal = new bootstrap.Modal(additionalServicesModal);
-            modal.show();
+        if (action === 'errorBooking') {
+            Swal.fire({
+                title: 'Error Booking',
+                text: 'An error occured while booking. Try again later',
+                icon: 'error',
+            })
+        } else if (action === 'NoSelectedChoice') {
+            Swal.fire({
+                title: 'Oops',
+                text: 'Selection required! Choose whether to proceed or cancel the event before moving forward.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then((result) => {
+                const additionalServicesModal = document.getElementById('additionalServicesModal');
+                const modal = new bootstrap.Modal(additionalServicesModal);
+                modal.show();
 
-            // const container = document.querySelector('.customer-choice-container');
-            // container.style.setProperty("border", "1px solid red", "important");
+                // const container = document.querySelector('.customer-choice-container');
+                // container.style.setProperty("border", "1px solid red", "important");
 
-        })
-    } else if (action === 'exceedFoodCount') {
-        Swal.fire({
-            title: 'Oops!',
-            text: 'You can select a maximum of 4 dishes.',
-            icon: 'warning',
-            confirmButtonText: 'Okay',
-        }).then(() => {
-            const dishModal = document.getElementById('dishModal');
-            const modal = new bootstrap.Modal(dishModal);
-            modal.show();
-        });
-    } else if (action === 'noSelectedVegie') {
-        Swal.fire({
-            title: 'Oops!',
-            text: 'You must include at least one vegetable dish in your selection.',
-            icon: 'warning',
-            confirmButtonText: 'Okay',
-        }).then(() => {
-            const dishModal = document.getElementById('dishModal');
-            const modal = new bootstrap.Modal(dishModal);
-            document.getElementById('adultVeggieContainer').style.border = '1px solid red';
-            modal.show();
-        });
-    } else if (action === 'noDrinkOrDessert') {
-        Swal.fire({
-            title: 'Oops!',
-            text: 'If you selected 6 dishes, at least one must be a drink and one must be a dessert.',
-            icon: 'warning',
-            confirmButtonText: 'Okay',
-        }).then(() => {
-            const dishModal = document.getElementById('dishModal');
-            const modal = new bootstrap.Modal(dishModal);
-            modal.show();
-        });
-    }
+            })
+        } else if (action === 'exceedFoodCount') {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'You can select a maximum of 4 dishes.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then(() => {
+                const dishModal = document.getElementById('dishModal');
+                const modal = new bootstrap.Modal(dishModal);
+                modal.show();
+            });
+        } else if (action === 'noSelectedVegie') {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'You must include at least one vegetable dish in your selection.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then(() => {
+                const dishModal = document.getElementById('dishModal');
+                const modal = new bootstrap.Modal(dishModal);
+                document.getElementById('adultVeggieContainer').style.border = '1px solid red';
+                modal.show();
+            });
+        } else if (action === 'noDrinkOrDessert') {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'If you selected 6 dishes, at least one must be a drink and one must be a dessert.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+            }).then(() => {
+                const dishModal = document.getElementById('dishModal');
+                const modal = new bootstrap.Modal(dishModal);
+                modal.show();
+            });
+        }
 
 
-    if (action) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (action) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", () => {
 
-        document.querySelectorAll('.food-item-container').forEach(container => {
-            const checkbox = container.querySelector('input[type="checkbox"]');
-            container.addEventListener('click', (e) => {
-                if (e.target.tagName.toLowerCase() !== 'input') {
-                    checkbox.checked = !checkbox.checked;
+            document.querySelectorAll('.food-item-container').forEach(container => {
+                const checkbox = container.querySelector('input[type="checkbox"]');
+                container.addEventListener('click', (e) => {
+                    if (e.target.tagName.toLowerCase() !== 'input') {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                });
+            });
+
+            function renderSelectedList(containerId, label, items) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                container.innerHTML = "";
+
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("selected-inline");
+
+                const labelEl = document.createElement("span");
+                labelEl.classList.add("selected-label-inline");
+                labelEl.textContent = label + " ";
+
+                wrapper.appendChild(labelEl);
+
+                if (items.length === 0) {
+                    const none = document.createElement("span");
+                    none.textContent = "None selected";
+                    none.style.color = "#777";
+                    wrapper.appendChild(none);
+                } else {
+                    items.forEach(item => {
+                        const tag = document.createElement("span");
+                        tag.classList.add("selected-tag");
+                        tag.textContent = item;
+                        wrapper.appendChild(tag);
+                    });
+                }
+
+                container.appendChild(wrapper);
+            }
+
+            const dishModal = document.getElementById('dishModal');
+
+            function updateSelectedDishes() {
+                const selected = Array.from(document.querySelectorAll('#dishModal input[type="checkbox"]:checked'))
+                    .map(el => el.value);
+                renderSelectedList('selectedDishesContainer', 'Selected Dishes:', selected);
+            }
+
+            dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
+
+            const additionalModal = document.getElementById('additionalServicesModal');
+
+            function updateSelectedServices() {
+                const selected = Array.from(additionalModal.querySelectorAll('input[type="checkbox"]:checked'))
+                    .map(el => {
+                        const wrapper = el.closest('.partnerListContainer');
+                        if (wrapper) {
+                            const labelText = wrapper.querySelector('label')?.textContent || '';
+                            const companyName = labelText.split('—')[0]?.trim() || el.value;
+                            return companyName;
+                        }
+                        return el.value;
+                    });
+                renderSelectedList('selectedAdditionalServicesContainer', 'Selected Services:', selected);
+            }
+
+            additionalModal.addEventListener('hidden.bs.modal', updateSelectedServices);
+
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Preference Other
+            const otherPrefCheck = document.getElementById("otherPrefCheck");
+            const otherPrefInput = document.getElementById("otherPrefInput");
+
+            otherPrefCheck.addEventListener("change", function() {
+                if (this.checked) {
+                    otherPrefInput.classList.remove("d-none");
+                    otherPrefInput.required = true;
+                } else {
+                    otherPrefInput.classList.add("d-none");
+                    otherPrefInput.value = "";
+                    otherPrefInput.required = false;
+                }
+            });
+
+            // Allergen Other
+            const otherAllergenCheck = document.getElementById("otherAllergenCheck");
+            const otherAllergenInput = document.getElementById("otherAllergenInput");
+
+            otherAllergenCheck.addEventListener("change", function() {
+                if (this.checked) {
+                    otherAllergenInput.classList.remove("d-none");
+                    console.log("Clicked");
+                    otherAllergenInput.required = true;
+                } else {
+                    otherAllergenInput.classList.add("d-none");
+                    otherAllergenInput.value = "";
+                    otherAllergenInput.required = false;
                 }
             });
         });
-
-        function renderSelectedList(containerId, label, items) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            container.innerHTML = "";
-
-            const wrapper = document.createElement("div");
-            wrapper.classList.add("selected-inline");
-
-            const labelEl = document.createElement("span");
-            labelEl.classList.add("selected-label-inline");
-            labelEl.textContent = label + " ";
-
-            wrapper.appendChild(labelEl);
-
-            if (items.length === 0) {
-                const none = document.createElement("span");
-                none.textContent = "None selected";
-                none.style.color = "#777";
-                wrapper.appendChild(none);
-            } else {
-                items.forEach(item => {
-                    const tag = document.createElement("span");
-                    tag.classList.add("selected-tag");
-                    tag.textContent = item;
-                    wrapper.appendChild(tag);
-                });
-            }
-
-            container.appendChild(wrapper);
-        }
-
-        const dishModal = document.getElementById('dishModal');
-
-        function updateSelectedDishes() {
-            const selected = Array.from(document.querySelectorAll('#dishModal input[type="checkbox"]:checked'))
-                .map(el => el.value);
-            renderSelectedList('selectedDishesContainer', 'Selected Dishes:', selected);
-        }
-
-        dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
-
-        const additionalModal = document.getElementById('additionalServicesModal');
-
-        function updateSelectedServices() {
-            const selected = Array.from(additionalModal.querySelectorAll('input[type="checkbox"]:checked'))
-                .map(el => {
-                    const wrapper = el.closest('.partnerListContainer');
-                    if (wrapper) {
-                        const labelText = wrapper.querySelector('label')?.textContent || '';
-                        const companyName = labelText.split('—')[0]?.trim() || el.value;
-                        return companyName;
-                    }
-                    return el.value;
-                });
-            renderSelectedList('selectedAdditionalServicesContainer', 'Selected Services:', selected);
-        }
-
-        additionalModal.addEventListener('hidden.bs.modal', updateSelectedServices);
-
-    });
-    </script>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        // Preference Other
-        const otherPrefCheck = document.getElementById("otherPrefCheck");
-        const otherPrefInput = document.getElementById("otherPrefInput");
-
-        otherPrefCheck.addEventListener("change", function() {
-            if (this.checked) {
-                otherPrefInput.classList.remove("d-none");
-                otherPrefInput.required = true;
-            } else {
-                otherPrefInput.classList.add("d-none");
-                otherPrefInput.value = "";
-                otherPrefInput.required = false;
-            }
-        });
-
-        // Allergen Other
-        const otherAllergenCheck = document.getElementById("otherAllergenCheck");
-        const otherAllergenInput = document.getElementById("otherAllergenInput");
-
-        otherAllergenCheck.addEventListener("change", function() {
-            if (this.checked) {
-                otherAllergenInput.classList.remove("d-none");
-                console.log("Clicked");
-                otherAllergenInput.required = true;
-            } else {
-                otherAllergenInput.classList.add("d-none");
-                otherAllergenInput.value = "";
-                otherAllergenInput.required = false;
-            }
-        });
-    });
     </script>
 </body>
 

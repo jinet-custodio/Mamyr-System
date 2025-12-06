@@ -35,6 +35,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
+
 
 ?>
 
@@ -465,6 +468,7 @@ $userRole = $_SESSION['userRole'];
                         style="display: none;"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                 </div>
             </form>
+            <?php include '../Customer/loader.php'; ?>
         </main>
     </div>
 
@@ -740,7 +744,17 @@ $userRole = $_SESSION['userRole'];
                 confirmButtonText: "Yes, logout!",
                 customClass: {
                     title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
+                    htmlContainer: 'swal-custom-text',
+                    confirmButton: 'loaderTrigger',
+                },
+                didOpen: () => {
+                    const btn = document.querySelector('.loaderTrigger');
+                    if (btn) {
+                        console.log("Trigger found");
+                        btn.addEventListener('click', () => {
+                            loaderOverlay.style.display = 'flex';
+                        });
+                    }
                 }
             }).then((result) => {
                 if (result.isConfirmed) {

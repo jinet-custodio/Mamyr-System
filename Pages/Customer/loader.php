@@ -23,7 +23,6 @@ if ($row = $getLogoResult->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <style>
         .loader {
             display: grid;
@@ -42,6 +41,16 @@ if ($row = $getLogoResult->fetch_assoc()) {
             justify-content: center;
             align-items: center;
             z-index: 9999;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+            background-color: #1475AD !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+            background-color: transparent;
+            border: 1px solid #1475AD;
+            color: #1475AD !important;
         }
 
         /* From Uiverse.io by adamgiebl */
@@ -169,6 +178,15 @@ if ($row = $getLogoResult->fetch_assoc()) {
                 const triggers = document.querySelectorAll('.loaderTrigger');
                 triggers.forEach(trigger => {
                     trigger.addEventListener('click', function(e) {
+                        loaderOverlay.style.display = 'flex';
+                    })
+                })
+            }
+
+            if (document.querySelectorAll('.backToSelection')) {
+                const backBtns = document.querySelectorAll('.backToSelection');
+                backBtns.forEach(backBtn => {
+                    backBtn.addEventListener('click', function(e) {
                         loaderOverlay.style.display = 'flex';
                     })
                 })

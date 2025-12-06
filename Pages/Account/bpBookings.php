@@ -33,12 +33,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
-
-
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
-
-
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 switch ($userRole) {
     case 2:
@@ -111,17 +109,17 @@ switch ($userRole) {
             </div>
             <div class="home">
                 <?php if ($role === 'Customer') { ?>
-                <a href="../Customer/dashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Customer/dashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../Admin/adminDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                <a href="../BusinessPartner/bpDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } ?>
             </div>
 
@@ -141,40 +139,40 @@ switch ($userRole) {
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
-                        <i class="bi bi-calendar2-check sidebar-icon"></i>
-                        <span class="sidebar-text">Booking History</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
-                        <i class="bi bi-credit-card-2-front sidebar-icon"></i>
-                        <span class="sidebar-text">Payment</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
+                            <i class="bi bi-calendar2-check sidebar-icon"></i>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
+                        </a>
+                    </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                <li class="sidebar-item">
-                    <a href="userManagement.php" class="list-group-item">
-                        <i class="bi bi-person-gear sidebar-icon"></i>
-                        <span class="sidebar-text">Manage Users</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="bi bi-person-gear sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bpBookings.php" class="list-group-item active">
-                        <i class="bi bi-calendar-week sidebar-icon"></i>
-                        <span class="sidebar-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item">
-                        <i class="bi bi-bell sidebar-icon"></i>
-                        <span class="sidebar-text">Services</span>
-                    </a>
-                </li>
-                <!-- <li class="sidebar-item">
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item active">
+                            <i class="bi bi-calendar-week sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item">
+                            <i class="bi bi-bell sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <!-- <li class="sidebar-item">
                     <a href="bpSales.php" class="list-group-item">
                         <i class="bi bi-tags sidebar-icon"></i>
                         <span class="sidebar-text">Sales</span>
@@ -423,7 +421,7 @@ switch ($userRole) {
                                         if (!$getRejectionReason->execute()) {
                                             error_log('Failed getting rejection reason');
                                         ?>
-                                        <option value="other">Other (Please specify)</option>
+                                            <option value="other">Other (Please specify)</option>
                                         <?php
                                         }
 
@@ -431,8 +429,8 @@ switch ($userRole) {
 
                                         while ($row = $result->fetch_assoc()):
                                         ?>
-                                        <option value="<?= $row['reasonID'] ?>">
-                                            <?= htmlspecialchars($row['reasonDescription']) ?></option>
+                                            <option value="<?= $row['reasonID'] ?>">
+                                                <?= htmlspecialchars($row['reasonDescription']) ?></option>
                                         <?php
                                         endwhile;
                                         ?>
@@ -456,7 +454,7 @@ switch ($userRole) {
                 </div>
             </form>
 
-
+            <?php include '../Customer/loader.php'; ?>
         </main>
     </div>
 
@@ -473,296 +471,306 @@ switch ($userRole) {
     <script src="../../../Assets/JS/datatables.min.js"></script>
     <!-- Table JS -->
     <script>
-    $(document).ready(function() {
-        $('#booking').DataTable({
-            language: {
-                emptyTable: "No data available",
-            },
-            responsive: false,
-            scrollX: true,
-            columnDefs: [{
-                    width: '10%',
-                    targets: 0
+        $(document).ready(function() {
+            $('#booking').DataTable({
+                language: {
+                    emptyTable: "No data available",
                 },
-                {
-                    width: '20%',
-                    targets: 1
-                },
-                {
-                    width: '15%',
-                    targets: 2
-                },
-                {
-                    width: '20%',
-                    targets: 3
-                },
-                {
-                    width: '15%',
-                    targets: 4
-                },
-                {
-                    width: '20%',
-                    targets: 5
-                },
-            ],
+                responsive: false,
+                scrollX: true,
+                columnDefs: [{
+                        width: '10%',
+                        targets: 0
+                    },
+                    {
+                        width: '20%',
+                        targets: 1
+                    },
+                    {
+                        width: '15%',
+                        targets: 2
+                    },
+                    {
+                        width: '20%',
+                        targets: 3
+                    },
+                    {
+                        width: '15%',
+                        targets: 4
+                    },
+                    {
+                        width: '20%',
+                        targets: 5
+                    },
+                ],
+            });
         });
-    });
     </script>
 
     <!-- Fetch cards -->
     <script>
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-        const userID = document.getElementById('userID').value;
-        console.log(userID)
-        fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
-            .then(result => {
-                if (!result.ok) throw new Error("Network Error");
-                return result.json();
-            })
-            .then(data => {
-                if (!data.success) {
-                    Toast.fire({
-                        icon: "error",
-                        title: data.message || "An error occurred"
-                    });
-                    return;
-                }
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const userID = document.getElementById('userID').value;
+            console.log(userID)
+            fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
+                .then(result => {
+                    if (!result.ok) throw new Error("Network Error");
+                    return result.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        Toast.fire({
+                            icon: "error",
+                            title: data.message || "An error occurred"
+                        });
+                        return;
+                    }
 
-                const totalBookings = data.allBookingStatus || 0;
-                const totalPendings = data.totalPendingBooking || 0;
-                const totalCancelled = data.cancelledBooking || 0;
-                const totalApproved = data.approvedBookings || 0;
-                const totoalRejected = data.rejectedBookings || 0;
+                    const totalBookings = data.allBookingStatus || 0;
+                    const totalPendings = data.totalPendingBooking || 0;
+                    const totalCancelled = data.cancelledBooking || 0;
+                    const totalApproved = data.approvedBookings || 0;
+                    const totoalRejected = data.rejectedBookings || 0;
 
-                document.getElementById('bookingNumber').textContent = totalBookings;
-                document.getElementById('approvedBooking').textContent = totalApproved;
-                document.getElementById('pendingBooking').textContent = totalPendings;
-                document.getElementById('cancelledBooking').textContent = totalCancelled;
-                document.getElementById('rejectedBooking').textContent = totoalRejected;
-            })
-            .catch(err => console.error(err));
-    });
+                    document.getElementById('bookingNumber').textContent = totalBookings;
+                    document.getElementById('approvedBooking').textContent = totalApproved;
+                    document.getElementById('pendingBooking').textContent = totalPendings;
+                    document.getElementById('cancelledBooking').textContent = totalCancelled;
+                    document.getElementById('rejectedBooking').textContent = totoalRejected;
+                })
+                .catch(err => console.error(err));
+        });
     </script>
 
     <script>
-    function getStatusBadge(colorClass, status) {
-        return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-    }
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+        }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const userID = document.getElementById('userID').value;
-        const bookingMap = {};
+        document.addEventListener("DOMContentLoaded", function() {
+            const userID = document.getElementById('userID').value;
+            const bookingMap = {};
 
-        fetch(`../../Function/Partner/getPartnerBookings.php?userID=${encodeURIComponent(userID)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    throw new Error(data.message || "Failed to load user data.");
-                }
+            fetch(`../../Function/Partner/getPartnerBookings.php?userID=${encodeURIComponent(userID)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error(data.message || "Failed to load user data.");
+                    }
 
-                const bookings = data.bookings;
-                const table = $('#booking').DataTable();
-                table.clear();
+                    const bookings = data.bookings;
+                    const table = $('#booking').DataTable();
+                    table.clear();
 
-                bookings.forEach(booking => {
-                    bookingMap[booking.bookingID] = booking;
-                    table.row.add([
-                        booking.formattedBookingID,
-                        booking.guestName,
-                        booking.bookingType,
-                        booking.service,
-                        booking.bookingDate,
-                        getStatusBadge(booking.color, booking.statusName),
-                        `
+                    bookings.forEach(booking => {
+                        bookingMap[booking.bookingID] = booking;
+                        table.row.add([
+                            booking.formattedBookingID,
+                            booking.guestName,
+                            booking.bookingType,
+                            booking.service,
+                            booking.bookingDate,
+                            getStatusBadge(booking.color, booking.statusName),
+                            `
                             <button type="button" class="btn btn-info viewInfo" data-bookingid="${booking.bookingID}"> View </button>
                         `
-                    ]);
-                });
+                        ]);
+                    });
 
-                table.draw();
-            })
-            .catch(error =>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: error.message || 'An unknown error occurred.',
-                    showConfirmButton: false,
-                    timer: 1500,
+                    table.draw();
                 })
-            );
+                .catch(error =>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message || 'An unknown error occurred.',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                );
 
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('viewInfo')) {
-                const bookingID = e.target.getAttribute("data-bookingid");
-                const booking = bookingMap[bookingID];
-                if (!booking) return;
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('viewInfo')) {
+                    const bookingID = e.target.getAttribute("data-bookingid");
+                    const booking = bookingMap[bookingID];
+                    if (!booking) return;
 
-                const viewModal = document.getElementById('bookingModal');
-                if (!viewModal) return;
+                    const viewModal = document.getElementById('bookingModal');
+                    if (!viewModal) return;
 
-                viewModal.querySelector('.user-info img').src = booking.profileImage ||
-                    '../../Assets/Images/defaultProfile.png';
-                viewModal.querySelector('.user-info .name').textContent = booking.guestName;
-                viewModal.querySelector('.user-info .contact').textContent = booking.contact;
-                viewModal.querySelector('.user-info .address').textContent = booking.address;
+                    viewModal.querySelector('.user-info img').src = booking.profileImage ||
+                        '../../Assets/Images/defaultProfile.png';
+                    viewModal.querySelector('.user-info .name').textContent = booking.guestName;
+                    viewModal.querySelector('.user-info .contact').textContent = booking.contact;
+                    viewModal.querySelector('.user-info .address').textContent = booking.address;
 
-                viewModal.querySelector('#eventType').value = booking.eventType;
-                viewModal.querySelector('#eventDate').value = booking.bookingDate;
-                viewModal.querySelector('#eventDuration').value = booking.timeDuration;
-                viewModal.querySelector('#eventVenue').value = booking.venue;
-                viewModal.querySelector("#service").textContent = booking.serviceInfo;
-                viewModal.querySelector('#bookingID').value = booking.bookingID;
-                viewModal.querySelector('#guestID').value = booking.guestID;
-                viewModal.querySelector('#guestRole').value = booking.guestRole;
-                viewModal.querySelector('#note-approval-time').innerHTML =
-                    `Please note that this booking must be approved by <strong> ${booking.approvalTimeUntil} </strong>. After this time, it will be automatically rejected.`;
+                    viewModal.querySelector('#eventType').value = booking.eventType;
+                    viewModal.querySelector('#eventDate').value = booking.bookingDate;
+                    viewModal.querySelector('#eventDuration').value = booking.timeDuration;
+                    viewModal.querySelector('#eventVenue').value = booking.venue;
+                    viewModal.querySelector("#service").textContent = booking.serviceInfo;
+                    viewModal.querySelector('#bookingID').value = booking.bookingID;
+                    viewModal.querySelector('#guestID').value = booking.guestID;
+                    viewModal.querySelector('#guestRole').value = booking.guestRole;
+                    viewModal.querySelector('#note-approval-time').innerHTML =
+                        `Please note that this booking must be approved by <strong> ${booking.approvalTimeUntil} </strong>. After this time, it will be automatically rejected.`;
 
-                viewModal.querySelector('#additionalNotes').value = booking.notes || '';
+                    viewModal.querySelector('#additionalNotes').value = booking.notes || '';
 
-                if (booking.statusName === 'Approved' || booking.statusName === 'Rejected' || booking
-                    .statusName === 'Cancelled') {
-                    document.getElementById('btnContainer-footer').style.display = 'none';
+                    if (booking.statusName === 'Approved' || booking.statusName === 'Rejected' || booking
+                        .statusName === 'Cancelled') {
+                        document.getElementById('btnContainer-footer').style.display = 'none';
+                    }
+
+                    const modal = new bootstrap.Modal(viewModal);
+                    modal.show();
                 }
-
-                const modal = new bootstrap.Modal(viewModal);
-                modal.show();
-            }
+            });
         });
-    });
     </script>
 
 
     <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container')
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
 
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center"
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 1240) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    mainContent.style.marginLeft = "15vw";
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    mainContent.style.marginLeft = "290px"
+                    sidebar.classList.remove('collapsed');
+                }
             }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
         });
-
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 1240) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                mainContent.style.marginLeft = "15vw";
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
-
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                mainContent.style.marginLeft = "290px"
-                sidebar.classList.remove('collapsed');
-            }
-        }
-
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
     </script>
 
     <!-- Show Logout -->
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
-    const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text',
+                    confirmButton: 'loaderTrigger',
+                },
+                didOpen: () => {
+                    const btn = document.querySelector('.loaderTrigger');
+                    if (btn) {
+                        console.log("Trigger found");
+                        btn.addEventListener('click', () => {
+                            loaderOverlay.style.display = 'flex';
+                        });
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../../Function/logout.php";
+                }
+            });
+        })
     </script>
 
     <!-- For other reason -->
     <script>
-    function otherReason() {
-        const selectBox = document.getElementById("select-reason");
-        const otherInputGroup = document.getElementById("otherInputGroup");
+        function otherReason() {
+            const selectBox = document.getElementById("select-reason");
+            const otherInputGroup = document.getElementById("otherInputGroup");
 
-        const selectedText = selectBox.options[selectBox.selectedIndex].text.toLowerCase();
-        const selectedValue = selectBox.value;
+            const selectedText = selectBox.options[selectBox.selectedIndex].text.toLowerCase();
+            const selectedValue = selectBox.value;
 
-        if (selectedText === "other") {
-            otherInputGroup.style.display = "block";
-        } else {
-            otherInputGroup.style.display = "none";
+            if (selectedText === "other") {
+                otherInputGroup.style.display = "block";
+            } else {
+                otherInputGroup.style.display = "none";
+            }
         }
-    }
     </script>
 
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('action');
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
 
-    if (paramValue === 'reject-success') {
-        Toast.fire({
-            title: 'Rejection Successful',
-            icon: 'success'
-        });
-    } else if (paramValue === 'approve-success') {
-        Toast.fire({
-            title: 'Approval Successful',
-            icon: 'success'
-        });
-    } else if (paramValue === 'reject-failed' || paramValue === 'approve-failed') {
-        Swal.fire({
-            title: 'Unexpected Error',
-            text: 'A server error occured. Please try again later',
-            icon: 'error'
-        })
-    }
+        if (paramValue === 'reject-success') {
+            Toast.fire({
+                title: 'Rejection Successful',
+                icon: 'success'
+            });
+        } else if (paramValue === 'approve-success') {
+            Toast.fire({
+                title: 'Approval Successful',
+                icon: 'success'
+            });
+        } else if (paramValue === 'reject-failed' || paramValue === 'approve-failed') {
+            Swal.fire({
+                title: 'Unexpected Error',
+                text: 'A server error occured. Please try again later',
+                icon: 'error'
+            })
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 </body>
 

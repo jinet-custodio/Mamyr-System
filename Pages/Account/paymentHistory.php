@@ -10,6 +10,8 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -287,6 +289,7 @@ switch ($userRole) {
                 </div>
             </div>
         </main>
+        <?php include '../Customer/loader.php'; ?>
     </div>
 
     <!-- Bootstrap Link -->
@@ -624,7 +627,17 @@ switch ($userRole) {
                 confirmButtonText: "Yes, logout!",
                 customClass: {
                     title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
+                    htmlContainer: 'swal-custom-text',
+                    confirmButton: 'loaderTrigger',
+                },
+                didOpen: () => {
+                    const btn = document.querySelector('.loaderTrigger');
+                    if (btn) {
+                        console.log("Trigger found");
+                        btn.addEventListener('click', () => {
+                            loaderOverlay.style.display = 'flex';
+                        });
+                    }
                 }
             }).then((result) => {
                 if (result.isConfirmed) {

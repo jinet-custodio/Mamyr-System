@@ -36,6 +36,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 switch ($userRole) {
     case 2:
@@ -349,7 +351,7 @@ switch ($userRole) {
             </main>
         </form>
     </div>
-
+    <?php include '../Customer/loader.php'; ?>
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>

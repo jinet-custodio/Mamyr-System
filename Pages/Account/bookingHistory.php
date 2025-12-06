@@ -10,6 +10,9 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
+
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -386,9 +389,8 @@ unset($_SESSION['tempImage']) ?>
                 </div>
             </div>
         </main>
+        <?php include '../Customer/loader.php'; ?>
     </div>
-
-
 
     <!-- Jquery Link -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -774,7 +776,17 @@ unset($_SESSION['tempImage']) ?>
                 confirmButtonText: "Yes, logout!",
                 customClass: {
                     title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
+                    htmlContainer: 'swal-custom-text',
+                    confirmButton: 'loaderTrigger',
+                },
+                didOpen: () => {
+                    const btn = document.querySelector('.loaderTrigger');
+                    if (btn) {
+                        console.log("Trigger found");
+                        btn.addEventListener('click', () => {
+                            loaderOverlay.style.display = 'flex';
+                        });
+                    }
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -823,7 +835,6 @@ unset($_SESSION['tempImage']) ?>
             });
         });
     </script>
-
 
 </body>
 
