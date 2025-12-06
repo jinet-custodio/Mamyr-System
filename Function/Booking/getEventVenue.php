@@ -6,12 +6,13 @@ header('Content-Type: application/json');
 
 $categories = [];
 $halls = [];
-
-if (isset($_GET['startDate']) && isset($_GET['endDate'])) {
+$startDate = "2025-12-19 12:00:00";
+$endDate = "2025-12-19 17:00:00";
+if (isset($startDate) && isset($endDate)) {
 
     // Date & Time
-    $startDate = $_GET['startDate'];
-    $endDate = $_GET['endDate'];
+    // $startDate = $_GET['startDate'];
+    // $endDate = $_GET['endDate'];
 
 
     // Get Event Categories
