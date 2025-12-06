@@ -9,6 +9,8 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 switch ($userRole) {
     case 1: //customer
@@ -594,7 +596,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
     </form>
 
-
+    <?php include 'loader.php'; ?>
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 

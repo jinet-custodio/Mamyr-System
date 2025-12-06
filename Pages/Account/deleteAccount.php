@@ -8,6 +8,8 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 
 if (isset($_SESSION['userID'])) {
@@ -329,7 +331,7 @@ switch ($userRole) {
                             <div class="button-container">
                                 <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">No</button>
-                                <button type="submit" class="btn btn-danger" name="yesDelete"
+                                <button type="submit" class="btn btn-danger loaderTrigger" name="yesDelete"
                                     id="yesDelete">Yes</button>
                             </div>
                         </div>
@@ -381,6 +383,7 @@ switch ($userRole) {
                 </div>
             </div>
         </form>
+        <?php include '../Customer/loader.php'; ?>
     </div>
 
     <!-- Bootstrap Link -->
@@ -458,7 +461,17 @@ switch ($userRole) {
                 confirmButtonText: "Yes, logout!",
                 customClass: {
                     title: 'swal-custom-title',
-                    htmlContainer: 'swal-custom-text'
+                    htmlContainer: 'swal-custom-text',
+                    confirmButton: 'loaderTrigger',
+                },
+                didOpen: () => {
+                    const btn = document.querySelector('.loaderTrigger');
+                    if (btn) {
+                        console.log("Trigger found");
+                        btn.addEventListener('click', () => {
+                            loaderOverlay.style.display = 'flex';
+                        });
+                    }
                 }
             }).then((result) => {
                 if (result.isConfirmed) {

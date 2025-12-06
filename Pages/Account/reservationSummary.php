@@ -10,6 +10,8 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     header("Location: ../register.php");
@@ -956,13 +958,13 @@ switch ($userRole) {
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
                             data-bs-target="#gcashPayment1stModal">Back</button>
-                        <button type="submit" class="btn btn-success" name="submitDownpaymentImage">Submit</button>
+                        <button type="submit" class="btn btn-success loaderTrigger" name="submitDownpaymentImage">Submit</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-
+    <?php include '../Customer/loader.php'; ?>
 
 
     <!-- Bootstrap Link -->

@@ -8,6 +8,8 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -249,6 +251,7 @@ unset($_SESSION['account-form']);
                 </div>
             </div>
         </main>
+        <?php include '../Customer/loader.php'; ?>
     </div>
 
     <!-- Bootstrap Link -->

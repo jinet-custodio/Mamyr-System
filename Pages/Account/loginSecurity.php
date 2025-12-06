@@ -8,6 +8,8 @@ checkSessionTimeout();
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
+//for setting image paths in 'include' statements
+$baseURL = '../..';
 
 if (isset($_SESSION['userID'])) {
     $stmt = $conn->prepare("SELECT userID, userRole FROM user WHERE userID = ?");
@@ -108,19 +110,19 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             </div>
             <div class="home">
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant') { ?>
-                <a href="../Customer/dashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
+                    <a href="../Customer/dashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
 
-                </a>
+                    </a>
                 <?php } elseif ($role === 'Admin') { ?>
-                <a href="../Admin/adminDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
+                    <a href="../Admin/adminDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
 
-                </a>
+                    </a>
                 <?php } elseif ($role === 'Business Partner') { ?>
-                <a href="../BusinessPartner/bpDashboard.php">
-                    <i class="bi bi-house homeIcon"></i>
-                </a>
+                    <a href="../BusinessPartner/bpDashboard.php">
+                        <i class="bi bi-house homeIcon"></i>
+                    </a>
                 <?php } ?>
             </div>
 
@@ -140,40 +142,40 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </li>
 
                 <?php if ($role === 'Customer' || $role === 'Partnership Applicant' || $role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
-                        <i class="bi bi-calendar2-check sidebar-icon"></i>
-                        <span class="sidebar-text">Booking History</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
-                        <i class="bi bi-credit-card-2-front sidebar-icon"></i>
-                        <span class="sidebar-text">Payment</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="bookingHistory.php" class="list-group-item" id="BookingHist">
+                            <i class="bi bi-calendar2-check sidebar-icon"></i>
+                            <span class="sidebar-text">Booking History</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="paymentHistory.php" class="list-group-item" id="paymentHist">
+                            <i class="bi bi-credit-card-2-front sidebar-icon"></i>
+                            <span class="sidebar-text">Payment</span>
+                        </a>
+                    </li>
                 <?php } elseif ($role === 'Admin') { ?>
-                <li class="sidebar-item">
-                    <a href="userManagement.php" class="list-group-item">
-                        <i class="bi bi-person-gear sidebar-icon"></i>
-                        <span class="sidebar-text">Manage Users</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a href="userManagement.php" class="list-group-item">
+                            <i class="bi bi-person-gear sidebar-icon"></i>
+                            <span class="sidebar-text">Manage Users</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if ($role === 'Business Partner') { ?>
-                <li class="sidebar-item">
-                    <a href="bpBookings.php" class="list-group-item">
-                        <i class="bi bi-calendar-week sidebar-icon"></i>
-                        <span class="sidebar-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="bpServices.php" class="list-group-item">
-                        <i class="bi bi-bell sidebar-icon"></i>
-                        <span class="sidebar-text">Services</span>
-                    </a>
-                </li>
-                <!-- <li class="sidebar-item">
+                    <li class="sidebar-item">
+                        <a href="bpBookings.php" class="list-group-item">
+                            <i class="bi bi-calendar-week sidebar-icon"></i>
+                            <span class="sidebar-text">Bookings</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="bpServices.php" class="list-group-item">
+                            <i class="bi bi-bell sidebar-icon"></i>
+                            <span class="sidebar-text">Services</span>
+                        </a>
+                    </li>
+                    <!-- <li class="sidebar-item">
                         <a href="bpSales.php" class="list-group-item">
                             <i class="bi bi-tags sidebar-icon"></i>
                             <span class="sidebar-text">Sales</span>
@@ -409,6 +411,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
             </div>
         </main>
+        <?php include '../Customer/loader.php'; ?>
     </div>
     <!-- Bootstrap Link -->
     <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
@@ -422,190 +425,200 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
     <script>
-    //Show Modal
-    document.addEventListener("DOMContentLoaded", function() {
-        const changeEmailBtn = document.getElementById("changeEmailBtn");
-        const changePasswordBtn = document.getElementById("changePasswordBtn");
-        const emailModal = document.getElementById("emailModal");
-        const passwordModal = document.getElementById("passwordModal");
+        //Show Modal
+        document.addEventListener("DOMContentLoaded", function() {
+            const changeEmailBtn = document.getElementById("changeEmailBtn");
+            const changePasswordBtn = document.getElementById("changePasswordBtn");
+            const emailModal = document.getElementById("emailModal");
+            const passwordModal = document.getElementById("passwordModal");
 
-        changeEmailBtn.addEventListener("click", function() {
-            const myEmailModal = new bootstrap.Modal(emailModal);
-            myEmailModal.show();
+            changeEmailBtn.addEventListener("click", function() {
+                const myEmailModal = new bootstrap.Modal(emailModal);
+                myEmailModal.show();
+            });
+            changePasswordBtn.addEventListener("click", function() {
+                const myPasswordModal = new bootstrap.Modal(passwordModal);
+                myPasswordModal.show();
+            });
         });
-        changePasswordBtn.addEventListener("click", function() {
-            const myPasswordModal = new bootstrap.Modal(passwordModal);
-            myPasswordModal.show();
-        });
-    });
     </script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    //Handle sidebar for responsiveness
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('toggle-btn');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const items = document.querySelectorAll('.list-group-item');
-        const toggleCont = document.getElementById('toggle-container')
+        //Handle sidebar for responsiveness
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const items = document.querySelectorAll('.list-group-item');
+            const toggleCont = document.getElementById('toggle-container')
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
 
-            if (sidebar.classList.contains('collapsed')) {
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                });
-                toggleCont.style.justifyContent = "center"
-            } else {
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                toggleCont.style.justifyContent = "flex-end"
+                if (sidebar.classList.contains('collapsed')) {
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    });
+                    toggleCont.style.justifyContent = "center"
+                } else {
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    toggleCont.style.justifyContent = "flex-end"
+                }
+            });
+
+            function handleResponsiveSidebar() {
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.style.display = "flex";
+                    mainContent.style.marginLeft = "15vw"
+                    items.forEach(item => {
+                        item.style.justifyContent = "center";
+                    })
+
+                } else {
+                    toggleBtn.style.display = "none";
+                    items.forEach(item => {
+                        item.style.justifyContent = "flex-start";
+                    });
+                    mainContent.style.marginLeft = "290px";
+                    sidebar.classList.remove('collapsed');
+                }
             }
+
+            // Run on load and when window resizes
+            handleResponsiveSidebar();
+            window.addEventListener('resize', handleResponsiveSidebar);
         });
-
-        function handleResponsiveSidebar() {
-            if (window.innerWidth <= 1024) {
-                sidebar.classList.add('collapsed');
-                toggleBtn.style.display = "flex";
-                mainContent.style.marginLeft = "15vw"
-                items.forEach(item => {
-                    item.style.justifyContent = "center";
-                })
-
-            } else {
-                toggleBtn.style.display = "none";
-                items.forEach(item => {
-                    item.style.justifyContent = "flex-start";
-                });
-                mainContent.style.marginLeft = "290px";
-                sidebar.classList.remove('collapsed');
-            }
-        }
-
-        // Run on load and when window resizes
-        handleResponsiveSidebar();
-        window.addEventListener('resize', handleResponsiveSidebar);
-    });
     </script>
 
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('step');
-    const email2Modal = document.getElementById("email2Modal");
-    const email3Modal = document.getElementById("email3Modal");
-    const passwordModal = document.getElementById("passwordModal");
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('step');
+        const email2Modal = document.getElementById("email2Modal");
+        const email3Modal = document.getElementById("email3Modal");
+        const passwordModal = document.getElementById("passwordModal");
 
-    if (paramValue === '2') {
-        const myEmail2Modal = new bootstrap.Modal(email2Modal);
-        myEmail2Modal.show();
+        if (paramValue === '2') {
+            const myEmail2Modal = new bootstrap.Modal(email2Modal);
+            myEmail2Modal.show();
+            if (paramValue) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+            };
+        } else if (paramValue === '3') {
+            const myEmail3Modal = new bootstrap.Modal(email3Modal);
+            myEmail3Modal.show();
+            if (paramValue) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+            };
+        } else if (paramValue === 'success') {
+            Swal.fire({
+                title: "Success",
+                text: "Your email has been updated successfully.",
+                icon: "success"
+            });
+        } else if (paramValue === 'success-password') {
+            Swal.fire({
+                title: "Success",
+                text: "Your password has been updated successfully.",
+                icon: "success"
+            });
+        } else if (paramValue === '4') {
+            const myPasswordModal = new bootstrap.Modal(passwordModal);
+            myPasswordModal.show();
+            if (paramValue) {
+                const url = new URL(window.location);
+                url.search = '';
+                history.replaceState({}, document.title, url.toString());
+            };
+        }
         if (paramValue) {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());
         };
-    } else if (paramValue === '3') {
-        const myEmail3Modal = new bootstrap.Modal(email3Modal);
-        myEmail3Modal.show();
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
-    } else if (paramValue === 'success') {
-        Swal.fire({
-            title: "Success",
-            text: "Your email has been updated successfully.",
-            icon: "success"
-        });
-    } else if (paramValue === 'success-password') {
-        Swal.fire({
-            title: "Success",
-            text: "Your password has been updated successfully.",
-            icon: "success"
-        });
-    } else if (paramValue === '4') {
-        const myPasswordModal = new bootstrap.Modal(passwordModal);
-        myPasswordModal.show();
-        if (paramValue) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        };
-    }
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
     </script>
 
     <!-- Eye icon of password show and hide -->
     <script>
-    const passwordField = document.getElementById('passwordEntered');
-    const passwordField1 = document.getElementById('currentPassword');
-    const passwordField2 = document.getElementById('newPassword');
-    const passwordField3 = document.getElementById('confirmPassword');
-    const togglePassword = document.getElementById('togglePassword');
-    const togglePassword1 = document.getElementById('togglePassword2');
-    const togglePassword2 = document.getElementById('togglePassword3');
-    const togglePassword3 = document.getElementById('togglePassword4');
+        const passwordField = document.getElementById('passwordEntered');
+        const passwordField1 = document.getElementById('currentPassword');
+        const passwordField2 = document.getElementById('newPassword');
+        const passwordField3 = document.getElementById('confirmPassword');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePassword1 = document.getElementById('togglePassword2');
+        const togglePassword2 = document.getElementById('togglePassword3');
+        const togglePassword3 = document.getElementById('togglePassword4');
 
-    function togglePasswordVisibility(passwordField, toggleIcon) {
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('bxs-hide');
-            toggleIcon.classList.add('bx-show-alt');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('bx-show-alt');
-            toggleIcon.classList.add('bxs-hide');
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
         }
-    }
 
-    togglePassword.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField, togglePassword);
-    });
+        togglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField, togglePassword);
+        });
 
-    togglePassword1.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField1, togglePassword1);
-    });
+        togglePassword1.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField1, togglePassword1);
+        });
 
-    togglePassword2.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField2, togglePassword2);
-    });
+        togglePassword2.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField2, togglePassword2);
+        });
 
-    togglePassword3.addEventListener('click', () => {
-        togglePasswordVisibility(passwordField3, togglePassword3);
-    });
+        togglePassword3.addEventListener('click', () => {
+            togglePasswordVisibility(passwordField3, togglePassword3);
+        });
     </script>
 
     <script>
-    const logoutBtn = document.getElementById('logoutBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-    logoutBtn.addEventListener("click", function() {
-        Swal.fire({
-            title: "Are you sure you want to log out?",
-            text: "You will need to log in again to access your account.",
-            icon: "warning",
-            showCancelButton: true,
-            // confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, logout!",
-            customClass: {
-                title: 'swal-custom-title',
-                htmlContainer: 'swal-custom-text'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "../../Function/logout.php";
-            }
-        });
-    })
+        logoutBtn.addEventListener("click", function() {
+            Swal.fire({
+                title: "Are you sure you want to log out?",
+                text: "You will need to log in again to access your account.",
+                icon: "warning",
+                showCancelButton: true,
+                // confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, logout!",
+                customClass: {
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text',
+                    confirmButton: 'loaderTrigger',
+                },
+                didOpen: () => {
+                    const btn = document.querySelector('.loaderTrigger');
+                    if (btn) {
+                        console.log("Trigger found");
+                        btn.addEventListener('click', () => {
+                            loaderOverlay.style.display = 'flex';
+                        });
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../../Function/logout.php";
+                }
+            });
+        })
     </script>
 
 
