@@ -9,6 +9,9 @@ require_once '../emailSenderFunction.php';
 $env = parse_ini_file(__DIR__ . '/../../.env');
 require '../../vendor/autoload.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 function getMessageReceiver($userRoleID)
 {
     switch ($userRoleID) {
@@ -79,20 +82,6 @@ if (isset($_POST['approveBtn'])) {
             }
         }
 
-        //Not Approved
-        // $updatePartnerTypeFalse = $conn->prepare("UPDATE `partnership_partnertype` SET `isApproved`= ? WHERE partnershipID = ? AND pptID != ? AND partnerTypeID != ?");
-        // foreach ($partnerTypes as $id => $type) {
-        //     foreach ($type as $pptID) {
-        //         $isApproved = false;
-        //         $updatePartnerTypeFalse->bind_param("iiii", $isApproved, $partnerID, $pptID, $id);
-        //         error_log("PPTID: " . $pptID . "ID: " . $id);
-        //         if (!$updatePartnerTypeFalse->execute()) {
-        //             $conn->rollback();
-        //             throw new Exception("Updating partner type failed: " . $updatePartnerTypeFalse->error);
-        //         }
-        //     }
-        // }
-
         $approvedPartnerID = 2;
         $updatePartnerStatus = $conn->prepare("UPDATE partnership 
                         SET partnerStatusID = ?, startDate = ?
@@ -153,10 +142,38 @@ if (isset($_POST['approveBtn'])) {
                         </body>
         ';
 
-        if (!sendEmail($businessEmail, $partnerName, $subject, $email_message, $env)) {
+        // if (!sendEmail($businessEmail, $partnerName, $subject, $email_message, $env)) {
+        //     header('Location: ../../Pages/Admin/partnership.php?container=4&action=emailFailed');
+        //     exit();
+        // }
+
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->SMTPAuth = true;
+            $mail->Username = $env['SMTP_USER'];
+            $mail->Host = $env['SMTP_HOST'];
+            $mail->Password = $env['SMTP_PASS'];
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = $env['SMTP_PORT'];
+
+            $mail->setFrom($env['SMTP_USER'], 'Mamyr Resort and Event Place');
+            $mail->addReplyTo($env['SMTP_USER'], 'No Reply');
+            $mail->addAddress($businessEmail, $partnerName);
+
+            $mail->addAttachment(__DIR__ . '/../../Assets/Documents/Terms-Conditions-for-BP.pdf');
+
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body = $email_message;
+
+            $mail->send();
+        } catch (Exception $e) {
+            error_log('Email failed: ' . $mail->ErrorInfo);
             header('Location: ../../Pages/Admin/partnership.php?container=4&action=emailFailed');
             exit();
         }
+
 
         $conn->commit();
         unset($_SESSION['partnerID']);

@@ -8,3 +8,17 @@ Deleted rows in service unavailable: 0
 Reject partner booking request: 0
 Updated Cancel Status (partner): 0 
  
+Scheduled Date & Time: December. 06, 2025 11:42 AM
+Added to admin table: 0
+Deleted OTPs: 0
+Services Status: 
+Expired Status: 0 booking(s) marked as expired.
+Done Status: 0 booking(s) marked as done.
+Deleted rows in service unavailable: 0
+Reject partner booking request: 0
+Updated Cancel Status (partner): 0 
+ 
+Scheduled Date & Time: December. 06, 2025 3:28 PMReminders: 
+ You don't have booking to review!
+You have 1 pending payment/s to review!
+Payment reminder sent to 1 customer/s

@@ -313,7 +313,7 @@ if (isset($_POST['submitDownpaymentImage'])) {
                     </body>
             ';
 
-        $subject = "New Payment Received &mdash; Booking Reference: $bookingCode";
+        $subject = "New Payment Received for $bookingCode";
 
         $isSend =  false;
         if (sendEmail($businessEmail, 'Mamyr Admin', $subject, $email_message, $env)) {
