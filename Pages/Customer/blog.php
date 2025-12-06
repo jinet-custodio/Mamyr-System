@@ -326,7 +326,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
                                     </div>
 
-                                    <button class="btn btn-primary"
+                                    <button class="btn btn-primary readmore-btn"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modal<?= htmlspecialchars($postID) ?>"
                                         id="featuredReadmore">
@@ -339,7 +339,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                 <div class="others">
                                 <?php endif; ?>
 
-                                <div class="post row align-items-start mb-3">
+                                <div class="post row mb-3">
                                     <div class="col-md-5 othersImg">
 
                                         <?php
@@ -351,13 +351,11 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                             <?php if ($imageCount === 1): ?>
 
-                                                <!-- 1 IMAGE -->
                                                 <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[0]['imageData']) ?>"
                                                     class="fb-img fb-img-1" />
 
                                             <?php elseif ($imageCount === 2): ?>
 
-                                                <!-- 2 IMAGES -->
                                                 <div class="fb-grid fb-grid-2">
                                                     <?php foreach ($images as $img): ?>
                                                         <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
@@ -366,27 +364,26 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                                 </div>
 
                                             <?php elseif ($imageCount === 3): ?>
+                                                <div class="fb-3-layout">
+                                                    <div class="fb-3-left">
+                                                        <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[0]['imageData']) ?>" class="fb-img" />
+                                                    </div>
 
-                                                <!-- 3 IMAGES -->
-                                                <div class="fb-grid fb-grid-3">
-                                                    <?php foreach ($images as $img): ?>
-                                                        <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
-                                                            class="fb-img" />
-                                                    <?php endforeach; ?>
+                                                    <div class="fb-3-right">
+                                                        <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[1]['imageData']) ?>" class="fb-img small-img" />
+                                                        <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[2]['imageData']) ?>" class="fb-img small-img" />
+                                                    </div>
                                                 </div>
 
                                             <?php elseif ($imageCount >= 4): ?>
 
-                                                <!-- 4+ IMAGES WITH OVERLAY -->
                                                 <div class="fb-grid fb-grid-3">
 
-                                                    <!-- First 3 images -->
                                                     <?php for ($i = 0; $i < 3; $i++): ?>
                                                         <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[$i]['imageData']) ?>"
                                                             class="fb-img" />
                                                     <?php endfor; ?>
 
-                                                    <!-- Overflow tile -->
                                                     <div class="fb-more-wrapper">
                                                         <img src="../../Assets/Images/blogposts/<?= htmlspecialchars($images[3]['imageData']) ?>"
                                                             class="fb-img fb-img-more" />
@@ -398,8 +395,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                                 </div>
 
                                             <?php else: ?>
-
-                                                <!-- NO IMAGES -->
                                                 <img src="../../Assets/Images/no-picture.jpg" class="img-fluid" />
 
                                             <?php endif; ?>
@@ -422,7 +417,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                             <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
                                         </div>
 
-                                        <button class="btn btn-primary mb-3 othersReadmore"
+                                        <button class="btn btn-primary mb-3 othersReadmore readmore-btn"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
                                             Read More
@@ -506,6 +501,23 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             });
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".post, .featured").forEach(post => {
+
+                post.addEventListener("click", (e) => {
+                    // Prevent double trigger when clicking inside a button
+                    if (e.target.closest("button")) return;
+
+                    const btn = post.querySelector(".readmore-btn");
+                    if (btn) btn.click();
+                });
+
+            });
+        });
+    </script>
+
 
 </body>
 
