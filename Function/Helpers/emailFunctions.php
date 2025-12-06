@@ -241,7 +241,7 @@ function paymentReminder($conn, $env)
                                         <p style="font-size: 12px; margin: 10px 0 10px;">Hello, ' . $name . '</p>
                                         <p style="font-size: 12px; margin: 8px 0;">We noticed you created a booking (' . $bookingCode . ') 12 hours ago, but you haven’t sent the down payment yet.
                                         </p>
-                                        <p style="font-size: 12px; margin: 8px 0;"> To secure your spot, please complete your payment and send the receipt in the website.
+                                        <p style="font-size: 12px; margin: 8px 0;"> To secure your slot, please complete your payment and send the receipt in the website.
                                         </p>
                                         <p style="font-size: 12px; margin: 8px 0;">If you have any questions, feel free to contact us.
                                         </p>
