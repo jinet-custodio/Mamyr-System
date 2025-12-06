@@ -167,7 +167,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
                         <?php if ($index === 0): ?>
                             <!-- FEATURED POST (LEFT SIDE) -->
-                            <div class="featured">
+                            <div class="featured clickable" data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
                                 <?php
                                 $images = $imageMap[$post['contentID']] ?? [];
                                 $imageCount = count($images);
@@ -192,14 +192,16 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
                                     <?php elseif ($imageCount === 3): ?>
 
-                                        <!-- 3 IMAGES -->
-                                        <div class="fb-grid fb-grid-3">
-                                            <?php foreach ($images as $img): ?>
-                                                <img src="../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
-                                                    class="fb-img" />
-                                            <?php endforeach; ?>
-                                        </div>
+                                        <div class="fb-3-layout">
+                                            <div class="fb-3-left">
+                                                <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[0]['imageData']) ?>" class="fb-img" />
+                                            </div>
 
+                                            <div class="fb-3-right">
+                                                <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[1]['imageData']) ?>" class="fb-img small-img" />
+                                                <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[2]['imageData']) ?>" class="fb-img small-img" />
+                                            </div>
+                                        </div>
                                     <?php elseif ($imageCount >= 4): ?>
 
                                         <!-- 4+ IMAGES WITH OVERLAY -->
@@ -239,7 +241,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                         <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
                                     </div>
 
-                                    <button class="btn btn-primary"
+                                    <button class="btn btn-primary readmore-btn"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modal<?= htmlspecialchars($postID) ?>"
                                         id="featuredReadmore">
@@ -249,10 +251,10 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                             </div>
                         <?php else: ?>
                             <?php if ($index === 1): ?>
-                                <div class="others">
+                                <div class="others clickable" data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
                                 <?php endif; ?>
 
-                                <div class="post row align-items-start mb-3">
+                                <div class="post row mb-3">
                                     <div class="col-md-5 othersImg">
 
                                         <?php
@@ -264,13 +266,11 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
                                             <?php if ($imageCount === 1): ?>
 
-                                                <!-- 1 IMAGE -->
                                                 <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[0]['imageData']) ?>"
                                                     class="fb-img fb-img-1" />
 
                                             <?php elseif ($imageCount === 2): ?>
 
-                                                <!-- 2 IMAGES -->
                                                 <div class="fb-grid fb-grid-2">
                                                     <?php foreach ($images as $img): ?>
                                                         <img src="../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
@@ -280,26 +280,27 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
                                             <?php elseif ($imageCount === 3): ?>
 
-                                                <!-- 3 IMAGES -->
-                                                <div class="fb-grid fb-grid-3">
-                                                    <?php foreach ($images as $img): ?>
-                                                        <img src="../Assets/Images/blogposts/<?= htmlspecialchars($img['imageData']) ?>"
-                                                            class="fb-img" />
-                                                    <?php endforeach; ?>
+                                                <div class="fb-3-layout">
+                                                    <div class="fb-3-left">
+                                                        <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[0]['imageData']) ?>" class="fb-img" />
+                                                    </div>
+
+                                                    <div class="fb-3-right">
+                                                        <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[1]['imageData']) ?>" class="fb-img small-img" />
+                                                        <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[2]['imageData']) ?>" class="fb-img small-img" />
+                                                    </div>
                                                 </div>
+
 
                                             <?php elseif ($imageCount >= 4): ?>
 
-                                                <!-- 4+ IMAGES WITH OVERLAY -->
                                                 <div class="fb-grid fb-grid-3">
 
-                                                    <!-- First 3 images -->
                                                     <?php for ($i = 0; $i < 3; $i++): ?>
                                                         <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[$i]['imageData']) ?>"
                                                             class="fb-img" />
                                                     <?php endfor; ?>
 
-                                                    <!-- Overflow tile -->
                                                     <div class="fb-more-wrapper">
                                                         <img src="../Assets/Images/blogposts/<?= htmlspecialchars($images[3]['imageData']) ?>"
                                                             class="fb-img fb-img-more" />
@@ -312,7 +313,6 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 
                                             <?php else: ?>
 
-                                                <!-- NO IMAGES -->
                                                 <img src="../Assets/Images/no-picture.jpg" class="img-fluid" />
 
                                             <?php endif; ?>
@@ -335,7 +335,7 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
                                             <p><?= htmlspecialchars($post['Content'] ?? '') ?></p>
                                         </div>
 
-                                        <button class="btn btn-primary mb-3 othersReadmore"
+                                        <button class="btn btn-primary mb-3 othersReadmore readmore-btn"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modal<?= htmlspecialchars($postID) ?>">
                                             Read More
@@ -409,6 +409,24 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
             include '../Pages/Customer/loader.php';
         } ?>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".post, .featured").forEach(post => {
+
+                post.addEventListener("click", (e) => {
+                    // Prevent double trigger when clicking inside a button
+                    if (e.target.closest("button")) return;
+
+                    const btn = post.querySelector(".readmore-btn");
+                    if (btn) btn.click();
+                });
+
+            });
+        });
+    </script>
+
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
