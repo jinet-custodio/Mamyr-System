@@ -345,6 +345,11 @@ label {
     gap: 1rem;
   }
 
+  #button-approval-container {
+    display: flex;
+    margin: auto;
+  }
+
   .btn-danger {
     margin-left: 0 !important;
   }
