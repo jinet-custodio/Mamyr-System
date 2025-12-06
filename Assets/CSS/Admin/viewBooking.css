@@ -55,6 +55,10 @@ body {
   font-size: clamp(16px, 14px, 12px) !important;
 }
 
+.approveReject .btn {
+  width: 100%;
+}
+
 .card {
   /* border: 1px solid red !important; */
   width: 90%;
@@ -215,10 +219,39 @@ label {
   margin-left: 0 !important;
 }
 
-.button-container {
+div#button-approval-container {
   width: 50%;
+  margin: auto;
+  display: flex !important;
+  gap: 1rem;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.button-container {
   display: flex;
-  gap: 1vw;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* div#button-approval-container {
+  width: 50%;
+  margin: auto;
+  display: flex !important;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+*/
+
+div#resched-button-container {
+  width: 50%;
+  margin: auto;
+  display: flex !important;
+  flex-direction: column;
+  margin-top: 0.5rem !important;
 }
 
 .discountform {
@@ -297,7 +330,7 @@ label {
   }
   .approveReject {
     margin-right: 0;
-    margin-left: 3rem;
+    /* margin-left: 3rem; */
   }
   .row1 {
     display: flex;
@@ -401,6 +434,12 @@ label {
     gap: 4px;
     white-space: normal;
   }
+
+  .img-fluid {
+    height: 90px;
+    width: auto;
+  }
+
   .name {
     font-size: 20px !important;
   }
@@ -412,7 +451,28 @@ label {
     margin-top: 2rem;
     height: 6vh;
   }
+
   .button-container {
+    width: 50%;
+  }
+
+  div#button-approval-container {
+    width: 50%;
+    margin: auto;
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  div#resched-button-container {
+    width: 50%;
+    margin: auto;
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem !important;
+  }
+  /* .button-container {
     width: 45%;
     display: flex;
     flex-wrap: nowrap;
@@ -421,23 +481,24 @@ label {
     align-items: center;
     gap: 3px;
     margin-bottom: 1rem;
-  }
+  } */
   .btn-danger {
     margin-left: 0 !important;
   }
 
-  div#button-approval-container {
+  /* div#button-approval-container {
+    display: unset !important;
     gap: 1rem;
-  }
+  } */
 
-  .approveReject {
+  /* .approveReject {
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
     margin-left: 3rem;
     margin-bottom: 1rem;
     font-size: 12px;
-  }
+  } */
   .row1 {
     display: flex;
     flex-direction: column;
@@ -522,6 +583,9 @@ label {
 
   div#button-approval-container {
     gap: 1rem;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
   }
 
   .button-container {
@@ -529,6 +593,7 @@ label {
     flex-wrap: nowrap;
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
 
   .row1 {
