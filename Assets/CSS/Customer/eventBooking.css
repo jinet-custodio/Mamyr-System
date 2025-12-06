@@ -340,6 +340,7 @@ td {
 .legend {
   color: rgb(22, 22, 22);
   font-size: 16px !important;
+  text-align: center;
 }
 
 .legend:hover {

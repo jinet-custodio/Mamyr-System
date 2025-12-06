@@ -270,7 +270,10 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                     <i class="fa-solid fa-circle" style="color: #FF9999"></i> Event
                                 </div>
                                 <div class="legend ">
-                                    <i class="fa-solid fa-circle" style="color: #ffdb6d;"></i> Resort/Hotel
+                                    <i class="fa-solid fa-circle" style="color: rgb(127, 140, 141)"></i> Venue Unavailable
+                                </div>
+                                <div class="legend ">
+                                    <i class="fa-solid fa-circle" style="color: #ffdb6d;"></i> Resort/ Hotel
                                 </div>
                                 <div class="legend ">
                                     <i class="fa-solid fa-circle" style="color: #b3e0f2 ;"></i> Resort Entrance
@@ -725,8 +728,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 const formattedStartDateTime = formatDateTime(startDateTimeObj);
                 const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
-                // console.log(formattedStartDateTime);
-                // console.log(formattedEndDateTime);
+                console.log(formattedStartDateTime);
+                console.log(formattedEndDateTime);
 
                 fetch(
                         `../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
@@ -1086,9 +1089,12 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
                 eventsSet: function(events) {
                     disabledDates = events
-                        .filter(e => e.extendedProps.type && e.extendedProps.type.toLowerCase() ===
-                            'event')
+                        .filter(e =>
+                            e.extendedProps.type === 'event' ||
+                            e.extendedProps.type === 'unavailable'
+                        )
                         .map(e => e.startStr.split('T')[0]);
+
 
                     initFlatpickr(disabledDates);
                 },
