@@ -232,7 +232,7 @@ function paymentReminder($conn, $env)
 
                                 <tr style="background-color:#365CCE;">
                                     <td style="text-align:center; ">
-                                        <h4 style="font-family:Poppins Light; color:#ffffff; font-size: 18px;  margin-top: 25px">Complete Your Booking to Secure Your Spot!</h4>
+                                        <h4 style="font-family:Poppins Light; color:#ffffff; font-size: 18px;  margin-top: 25px">Confirm you Reservation with Payment!</h4>
                                     </td>
                                 </tr>
 
@@ -241,7 +241,7 @@ function paymentReminder($conn, $env)
                                         <p style="font-size: 12px; margin: 10px 0 10px;">Hello, ' . $name . '</p>
                                         <p style="font-size: 12px; margin: 8px 0;">We noticed you created a booking (' . $bookingCode . ') 12 hours ago, but you haven’t sent the down payment yet.
                                         </p>
-                                        <p style="font-size: 12px; margin: 8px 0;"> To secure your slot, please complete your payment and send the receipt in the website.
+                                        <p style="font-size: 12px; margin: 8px 0;"> To secure your slot, please complete your downpayment and send the receipt in the website.
                                         </p>
                                         <p style="font-size: 12px; margin: 8px 0;">If you have any questions, feel free to contact us.
                                         </p>
