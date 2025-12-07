@@ -6,7 +6,8 @@ ini_set('display_errors', 1);
 require '../Config/dbcon.php';
 //for setting image paths in 'include' statements
 $baseURL = '..';
-
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 require '../Function/Helpers/statusFunctions.php';
 ?>
 <!DOCTYPE html>
@@ -61,12 +62,14 @@ require '../Function/Helpers/statusFunctions.php';
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Book Now</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="signUpBtn" href="register.php">Log In</a>
-                </li>
+                <?php if (!$editMode): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signUpBtn" href="register.php">Log In</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
@@ -79,8 +82,9 @@ require '../Function/Helpers/statusFunctions.php';
             </h2>
             <h5 class="subtext">Let's work together. Collaborate with us to grow your business and to better serve
                 mutual customers.</h5>
-
-            <a href="busPartnerRegister.php" class="btn btn-primary" id="applyasPartner">Apply as Partner</a>
+            <?php if (!$editMode) : ?>
+                <a href="busPartnerRegister.php" class="btn btn-primary" id="applyasPartner">Apply as Partner</a>
+            <?php endif; ?>
         </div>
 
         <div class="topRight">
@@ -338,7 +342,10 @@ require '../Function/Helpers/statusFunctions.php';
     </section>
 
 
-    <?php include 'footer.php';
+    <?php
+    if (!$editMode) {
+        include 'footer.php';
+    }
     include '../Pages/Customer/loader.php'; ?>
 
     <script src="../Assets/JS/bootstrap.bundle.min.js"></script>

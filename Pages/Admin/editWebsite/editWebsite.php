@@ -97,14 +97,14 @@ switch ($userRole) {
 
 
         <div class="pagesContainer" id="pagesContainer">
-            <button class="btn btn-info" id="landingPage"><img
-                    src="../../../Assets/Images/Icon/landing-page.png" alt="Landing Page" class="buttonIcon">Landing
-                Page</button>
+            <button class="btn btn-info d-flex align-items-center justify-content-center" id="landingPage">
+                <i class="fa-regular fa-hard-drive buttonIcon" style="color: #ffffff;"></i>
+                Landing Page</button>
 
             <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" id="amenitiesDropdown"
+                <button class="btn btn-info dropdown-toggle d-flex align-items-center justify-content-center" type="button" id="amenitiesDropdown"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../../../Assets/Images/Icon/amenities.png" alt="Amenities" class="buttonIcon"> Amenities
+                    <i class="fa-regular fa-building buttonIcon" style="color: #ffffff;"> </i>Amenities
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="amenitiesDropdown">
                     <li><a class="dropdown-item" href="#" id="amenities">Resort Amenities</a></li>
@@ -113,39 +113,39 @@ switch ($userRole) {
                 </ul>
             </div>
 
-            <button class="btn btn-info" id="blog"><img src="../../../Assets/Images/Icon/blog.png"
-                    alt="Blog" class="buttonIcon">Blog</button>
+            <button class="btn btn-info d-flex align-items-center justify-content-center" id="blog"><i class="fa-regular fa-pen-to-square buttonIcon" style="color: #ffffff;"> </i>Blog</button>
 
-            <button class="btn btn-info" id="about"><img src="../../../Assets/Images/Icon/about.png"
-                    alt="About" class="buttonIcon">About</button>
+            <button class="btn btn-info d-flex align-items-center justify-content-center" id="about">
+                <i class="fa-regular fa-lightbulb buttonIcon" style="color: #ffffff;"></i>About
+            </button>
 
 
             <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" id="bookNowDropdown"
+                <button class="btn btn-info dropdown-toggle d-flex align-items-center justify-content-center" type="button" id="bookNowDropdown"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../../../Assets/Images/Icon/bookNow.png" alt="Book Now" class="buttonIcon"> Book Now
+                    <i class="fa-regular fa-calendar-check buttonIcon" style="color: #ffffff;"></i> Book Now
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="amenitiesDropdown">
                     <li><a class="dropdown-item" href="#" id="resortBtn">Book Now - Resort</a></li>
                     <li><a class="dropdown-item" href="#" id="hotelBtn">Book Now - Hotel</a></li>
-                    <li><a class="dropdown-item" href="#" id="eventBtn">Book Now - Events</a></li>
+                    <li><a class="dropdown-item" href="#" id="eventBtn">Book Now - Event</a></li>
                 </ul>
             </div>
 
-            <button class="btn btn-info" id="footer"><img
-                    src="../../../Assets/Images/Icon/footer.png" alt="Footer" class="buttonIcon">Footer</button>
+            <button class="btn btn-info d-flex align-items-center justify-content-center" id="footer"><i class="fa-regular fa-rectangle-list buttonIcon" style="color: #ffffff;"></i>Footer</button>
 
             <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" id="termsDropdown"
+                <button class="btn btn-info dropdown-toggle d-flex align-items-center justify-content-center" type="button" id="termsDropdown"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../../../Assets/Images/Icon/about.png"
-                        alt="Terms" class="buttonIcon"> Terms and Conditions
+                    <i class="fa-regular fa-handshake buttonIcon" style="color: #ffffff;"></i> Terms and Conditions
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="termsDropdown">
                     <li><a class="dropdown-item" href="#" id="customerDropdown">Customer Terms</a></li>
                     <li><a class="dropdown-item" href="#" id="partnerDropdown">Business Partner Terms</a></li>
                 </ul>
             </div>
+            <button class="btn btn-info d-flex align-items-center justify-content-center" id="resortInfo">
+                <i class="fa-regular fa-circle-question buttonIcon" style="color: #ffffff;"></i> Resort Info</button>
         </div>
 
 
@@ -162,6 +162,14 @@ switch ($userRole) {
     <!-- //* Resort Book Now Page iFrame -->
     <div class="container-fluid resortPage" id="resortContainer">
         <iframe src="../../Customer/resortBooking.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
+    </div>
+    <!-- //* Hotel Book Now Page iFrame -->
+    <div class="container-fluid resortPage" id="hotelContainer">
+        <iframe src="../../Customer/hotelBooking.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
+    </div>
+    <!-- //* Event Book Now Page iFrame -->
+    <div class="container-fluid resortPage" id="eventContainer">
+        <iframe src="../../Customer/eventBooking.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
     </div>
     <!-- //* Amenities Page iFrame -->
     <div class="container-fluid amenitiesPage" id="amenitiesContainer">
@@ -189,7 +197,10 @@ switch ($userRole) {
     <div class="container-fluid footerPage" id="footerContainer">
         <iframe src="../../footer.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
     </div>
-
+    <!-- //* Resort Info Page iFrame -->
+    <div class="container-fluid infoPage" id="infoContainer">
+        <iframe src="../resortInfo.php" class="editFrame" style="width: 100%;  height: 100vh; display:none"></iframe>
+    </div>
 
     <!-- //! MODAL FOR ADDING A NEW BLOG POST -->
     <!-- Modal -->
@@ -270,9 +281,13 @@ switch ($userRole) {
             const resortPageBtn = document.getElementById("resortBtn");
             const resortContainer = document.getElementById("resortContainer");
             const hotelPageBtn = document.getElementById("hotelBtn");
+            const hotelContainer = document.getElementById("hotelContainer");
             const eventPageBtn = document.getElementById("eventBtn");
+            const eventContainer = document.getElementById("eventContainer");
             const customerDropdown = document.getElementById("customerDropdown");
             const partnerDropdown = document.getElementById("partnerDropdown");
+            const infoPageBtn = document.getElementById("resortInfo");
+            const infoContainer = document.getElementById("infoContainer");
 
             landingPageBtn.addEventListener('click', function() {
                 hideAllContainers();
@@ -345,7 +360,30 @@ switch ($userRole) {
                 icon.style.display = "block";
                 document.getElementById("backBtn").href = "editWebsite.php";
                 document.getElementById("title").innerHTML = "Book Now - Resort";
-                newBlogBtn.style.position = "absolute";
+            });
+            hotelPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                hotelContainer.style.display = "block";
+                hotelContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Book Now - Hotel";
+            });
+            eventPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                eventContainer.style.display = "block";
+                eventContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Book Now - Event";
+            });
+            infoPageBtn.addEventListener('click', function() {
+                hideAllContainers();
+                infoContainer.style.display = "block";
+                infoContainer.querySelector("iframe").style.display = "block";
+                icon.style.display = "block";
+                document.getElementById("backBtn").href = "editWebsite.php";
+                document.getElementById("title").innerHTML = "Resort Info";
             });
             customerDropdown.addEventListener('click', function() {
                 hideAllContainers();

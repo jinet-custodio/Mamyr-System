@@ -117,7 +117,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Resort Booking -->
     <form action="confirmBooking.php" method="POST" id="resortBookingForm">
         <div class="resort" id="resort">
-            <button type="button" class="backToSelection btn btn-info" id="backToSelection">
+            <button type="button" class="backToSelection btn btn-info set-editable" id="backToSelection">
                 <i class="fa-solid fa-arrow-left" style="color: #fafdff;"></i>
             </button>
             <div class="titleContainer">
@@ -291,7 +291,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     </div>
 
                     <div class="additional-info-container">
-                        <ul>
+                        <ul class="list-unstyled">
                             <li style="color: #0076d1ff;">
                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>&nbsp;
                                 The resort staff will double check the number of people on the day of the scheduled
@@ -551,7 +551,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary set-editable " data-bs-dismiss="modal" id="modal-close">Close</button>
-                                            <!-- <button type="button" id="saveChangesBtn" class="btn btn-success set-editable ">Save Changes</button> -->
+                                            <button type="button" id="saveChangesBtn" class="btn btn-success set-editable ">Save Changes</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1021,6 +1021,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </script>
 
     <?php else: ?>
+        <!-- //* Disables buttons and  input boxes  during Edit Mode -->
         <script>
             const viewRulesBtn = document.getElementById("viewRulesBtn");
 
