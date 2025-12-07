@@ -34,6 +34,14 @@ if (isset($_POST['submitDownpaymentImage'])) {
     $paymentAmount = (float) $_POST['payment-amount'];
     $downpayment = (float) $_POST['downpayment'];
     $finalBill = (float) $_POST['finalBill'];
+
+    $paymentStatus = mysqli_real_escape_string($conn, $_POST['paymentStatus']);
+
+    if (strtolower($paymentStatus) === 'payment sent') {
+        header("Location: ../../../Pages/Account/reservationSummary.php?action=paymentSent");
+        exit();
+    }
+
     $customerName = mysqli_real_escape_string($conn, $_POST['fullName']);
     $bookingCode = mysqli_real_escape_string($conn, $_POST['bookingCode']);
 

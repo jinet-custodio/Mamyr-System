@@ -86,7 +86,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
 
 
-    $getUserInfo = $conn->prepare("SELECT * FROM user WHERE userID = ? AND userRole = ?");
+    $getUserInfo = $conn->prepare("SELECT firstName, email, userProfile FROM user WHERE userID = ? AND userRole = ?");
     $getUserInfo->bind_param("ii", $userID, $userRole);
     $getUserInfo->execute();
     $getUserInfoResult = $getUserInfo->get_result();
@@ -94,9 +94,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $data =  $getUserInfoResult->fetch_assoc();
 
         $imageData = $data['userProfile'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_buffer($finfo, $imageData);
-        finfo_close($finfo);
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->buffer($imageData);
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
     }
     ?>
@@ -497,6 +496,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     </script>
 
     <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('step');
         const email2Modal = document.getElementById("email2Modal");
@@ -520,15 +531,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 history.replaceState({}, document.title, url.toString());
             };
         } else if (paramValue === 'success') {
-            Swal.fire({
-                title: "Success",
-                text: "Your email has been updated successfully.",
+            Toast.fire({
+                title: "Your email has been updated successfully.",
                 icon: "success"
             });
         } else if (paramValue === 'success-password') {
-            Swal.fire({
-                title: "Success",
-                text: "Your password has been updated successfully.",
+            Toast.fire({
+                title: "Your password has been updated successfully.",
                 icon: "success"
             });
         } else if (paramValue === '4') {

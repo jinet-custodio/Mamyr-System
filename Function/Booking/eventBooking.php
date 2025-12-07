@@ -12,6 +12,8 @@ require '../Helpers/userFunctions.php';
 
 if (isset($_POST['eventBook'])) {
     $bookingType = 'Event';
+    $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
+
     $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
     $guestNo = intval($_POST['guestNo']);
     $pricingID = intval($_POST['pricingID']);
@@ -54,6 +56,12 @@ if (isset($_POST['eventBook'])) {
     $serviceIDs = [];
     $customerChoice = isset($_POST['customer-choice']) ?  mysqli_real_escape_string($conn, $_POST['customer-choice']) : '';
     $bookingCode = 'EVT' . date('ymd') . generateCode(5);
+
+    if (empty($phoneNumber)) {
+        header('Location: ../../Pages/Customer/eventBooking.php?action=phoneNumber');
+        exit;
+    }
+
 
     if (!empty($venueID)) {
         $getServiceID = $conn->prepare("SELECT * FROM `service` WHERE resortServiceID = ?");

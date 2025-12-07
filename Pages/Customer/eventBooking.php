@@ -167,8 +167,6 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 ?>
                                     <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
                                         <?= htmlspecialchars($category['categoryName']) ?></option>
-                                    <option value="<?= htmlspecialchars($category['categoryName']) ?>" <?= $isSelected ?>>
-                                        <?= htmlspecialchars($category['categoryName']) ?></option>
                                 <?php
                                 }
                                 ?>
@@ -648,6 +646,33 @@ $formData = $_SESSION['eventFormData'] ?? [];
             </div>
 
         </div>
+
+        <!-- Phone Number Modal -->
+        <form action="../../Function/getPhoneNumber.php" method="POST">
+            <div class="modal fade" id="phoneNumberModal" tabindex=" -1"
+                aria-labelledby="phoneNumberModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="phoneNumberModalLabel">Required Phone Number</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-center">Phone number is required before booking please enter your phone
+                                number
+                            </p>
+                            <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control w-100 mt-2"
+                                placeholder="+63 9XX XXX XXXX" pattern="^(?:\+63|0)9\d{9}$"
+                                title="e.g., +639123456789 or 09123456789" required>
+                            <input type="hidden" name="page" value="bookNow.php">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" name="submitPhoneNumber">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </form>
     <?php include 'loader.php'; ?>
     <!-- Bootstrap Link -->
@@ -1051,27 +1076,6 @@ $formData = $_SESSION['eventFormData'] ?? [];
                 url.search = '';
                 history.replaceState({}, document.title, url.toString());
             }
-            // // const kidsMeal = document.getElementById('kidMeal');
-            // const foodItem = document.querySelectorAll('.food-item');
-            // if (select.value) {
-            //     if (select.value === 'Kids Party') {
-            //         // kidsMeal.style.display = 'block';
-
-            //         foodItem.forEach((food) => {
-            //             if (foodItem.value === 'Chocolate fountain machine') {
-            //                 foodItem.checked = true;
-            //             }
-            //         })
-            //     }
-            //     select.addEventListener('change', () => {
-            //         if (select.value === 'Kids Party') {
-            //             kidsMeal.style.display = 'block';
-            //         } else {
-            //             kidsMeal.style.display = 'none';
-            //         }
-            //         console.log(select.value);
-            //     })
-            // }
 
         });
     </script>
@@ -1138,6 +1142,15 @@ $formData = $_SESSION['eventFormData'] ?? [];
 
     <!-- Sweetalert Message  -->
     <script>
+        //* For not allowing letters
+        const phoneNumber = document.getElementById('phoneNumber');
+
+        phoneNumber.addEventListener('keypress', function(e) {
+            if (!/[0-9+]/.test(e.key)) {
+                e.preventDefault();
+            }
+        })
+
         const params = new URLSearchParams(window.location.search);
         const action = params.get('action');
 
@@ -1194,6 +1207,17 @@ $formData = $_SESSION['eventFormData'] ?? [];
             }).then(() => {
                 const dishModal = document.getElementById('dishModal');
                 const modal = new bootstrap.Modal(dishModal);
+                modal.show();
+            });
+        } else if (action === 'phoneNumber') {
+            Swal.fire({
+                icon: 'info',
+                text: 'Phone number is required!',
+                title: 'Oops',
+                confirmButtonText: 'Okay'
+            }).then((result) => {
+                const phoneNumberModal = document.getElementById('phoneNumberModal');
+                const modal = new bootstrap.Modal(phoneNumberModal);
                 modal.show();
             });
         }

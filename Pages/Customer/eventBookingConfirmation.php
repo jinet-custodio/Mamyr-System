@@ -80,7 +80,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 <body>
 
     <?php
-    $query = $conn->prepare("SELECT firstName, middleInitial, lastName FROM user WHERE userID = ? AND userRole = ?");
+    $query = $conn->prepare("SELECT firstName, middleInitial, lastName, phoneNumber FROM user WHERE userID = ? AND userRole = ?");
     $query->bind_param('ii', $userID, $userRole);
     $query->execute();
     $result =  $query->get_result();
@@ -93,6 +93,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $customerName = ucfirst($firstName) . " " .
             ucfirst($middleInitial) . ". " .
             ucfirst($lastName);
+
+        $phoneNumber = $data['phoneNumber'] ?? null;
     }
     ?>
 
@@ -195,8 +197,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         // Food 
         $foodSelections = $_POST['foodSelections'] ?? [];
-        echo ("<h1> Selection </h1> <br>");
-        print_r($foodSelections);
+        // echo ("<h1> Selection </h1> <br>");
+        // print_r($foodSelections);
         $targetCategory = 'Vegetables';
         $drinkCategory = 'Drink';
         $dessertCategory = 'Dessert';
@@ -314,6 +316,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         </div>
     </header>
     <form action="../../Function/Booking/eventBooking.php" method="POST">
+        <input type="hidden" name="phoneNumber" value="<?= $phoneNumber ?? null ?>">
         <main class="card mainCard mb-4">
             <section class="event-details-container">
                 <h4 id="top-title">Event Details</h4>
