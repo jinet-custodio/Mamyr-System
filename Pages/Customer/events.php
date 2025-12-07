@@ -131,9 +131,8 @@ while ($row = $getEventsResult->fetch_assoc()) {
             if (mysqli_num_rows($result) > 0) {
                 $data = mysqli_fetch_assoc($result);
                 $imageData = $data['userProfile'];
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_buffer($finfo, $imageData);
-                finfo_close($finfo);
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $mimeType = $finfo->buffer($imageData);
                 $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
             }
             ?>

@@ -137,9 +137,8 @@ unset($_SESSION['tempImage']) ?>
                     $data = $getProfileResult->fetch_assoc();
                     $firstName = $data['firstName'];
                     $imageData = $data['userProfile'];
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_buffer($finfo, $imageData);
-                    finfo_close($finfo);
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $mimeType = $finfo->buffer($imageData);
                     $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
                 }
                 ?>

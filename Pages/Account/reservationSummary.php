@@ -852,6 +852,8 @@ switch ($userRole) {
         <input type="hidden" name="bookingCode" value="<?= $bookingCode ?>">
         <input type="hidden" name="phoneNumber" value="<?= $clientInfo['phoneNumber'] ?? '' ?>">
         <input type="hidden" name="finalBill" value="<?= $finalBill ?>">
+        <input type="hidden" name="paymentStatus" id="paymentStatus"
+            value="<?= !empty($paymentStatus['paymentStatusName']) ?  htmlspecialchars($paymentStatus['paymentStatusName']) : '' ?>">
 
         <div class="modal fade" id="gcashPayment1stModal" aria-hidden="true" aria-labelledby="gcashPayment1stModalLabel"
             tabindex="-1">
@@ -1122,7 +1124,14 @@ switch ($userRole) {
                 icon: 'warning',
                 confirmButtonText: 'Okay'
             })
-        };
+        } else if (paramValue === 'paymentSent') {
+            Swal.fire({
+                title: 'Already Submitted',
+                text: 'Your payment is already being processed.',
+                icon: 'info'
+            });
+
+        }
 
         if (paramValue) {
             const url = new URL(window.location);
