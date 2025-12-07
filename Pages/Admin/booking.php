@@ -107,9 +107,8 @@ switch ($userRole) {
             $adminName = ($data['firstName'] ?? '') . ' ' . ($data['lastName'] ?? '');
 
             $imageData = $data['userProfile'];
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_buffer($finfo, $imageData);
-            // finfo_close($finfo);
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($imageData);
             $image = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
         }
     } else {
@@ -275,144 +274,144 @@ switch ($userRole) {
 
     <!-- Table JS -->
     <script>
-    $('#bookingTable').DataTable({
-        responsive: false,
-        scrollX: true,
-        "order": [],
-        columnDefs: [{
-                width: '5%',
-                targets: 0
-            },
-            {
-                width: '15%',
-                targets: 1
-            },
-            {
-                width: '15%',
-                targets: 2
-            },
-            {
-                width: '15%',
-                targets: 3
-            },
-            {
-                width: '15%',
-                targets: 4
-            },
-            {
-                width: '10%',
-                targets: 5
-            },
-            {
-                width: '10%',
-                targets: 6
-            },
-        ],
-    });
+        $('#bookingTable').DataTable({
+            responsive: false,
+            scrollX: true,
+            "order": [],
+            columnDefs: [{
+                    width: '5%',
+                    targets: 0
+                },
+                {
+                    width: '15%',
+                    targets: 1
+                },
+                {
+                    width: '15%',
+                    targets: 2
+                },
+                {
+                    width: '15%',
+                    targets: 3
+                },
+                {
+                    width: '15%',
+                    targets: 4
+                },
+                {
+                    width: '10%',
+                    targets: 5
+                },
+                {
+                    width: '10%',
+                    targets: 6
+                },
+            ],
+        });
     </script>
     <!-- Booking Ajax -->
     <script>
-    function getStatusBadge(colorClass, status) {
-        return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
-    }
+        function getStatusBadge(colorClass, status) {
+            return `<span class="badge bg-${colorClass} text-capitalize">${status}</span>`;
+        }
 
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const filterSelected = document.getElementById('booking-filter-select');
-        getBookings(filterSelected.value);
-        filterSelected.addEventListener('change', () => {
+        document.addEventListener("DOMContentLoaded", function() {
+            const filterSelected = document.getElementById('booking-filter-select');
             getBookings(filterSelected.value);
+            filterSelected.addEventListener('change', () => {
+                getBookings(filterSelected.value);
+                // console.log(filterSelected.value);
+            });
             // console.log(filterSelected.value);
         });
-        // console.log(filterSelected.value);
-    });
 
 
 
-    function getBookings(filterSelectedValue) {
-        fetch(`../../Function/Admin/Ajax/getBookingsJSON.php?filter=${encodeURIComponent(filterSelectedValue)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    // console.error("Failed to load bookings.");
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message || 'An unknown error occurred.',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                    return;
-                }
-                const bookings = data.bookings;
-                const table = $('#bookingTable').DataTable();
-                table.clear();
+        function getBookings(filterSelectedValue) {
+            fetch(`../../Function/Admin/Ajax/getBookingsJSON.php?filter=${encodeURIComponent(filterSelectedValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        // console.error("Failed to load bookings.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'An unknown error occurred.',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                        return;
+                    }
+                    const bookings = data.bookings;
+                    const table = $('#bookingTable').DataTable();
+                    table.clear();
 
-                bookings.forEach(booking => {
-                    table.row.add([
-                        booking.bookingID,
-                        booking.bookingCode,
-                        booking.name,
-                        booking.bookingType + ` Booking`,
-                        booking.bookingDate,
-                        booking.createdOn,
-                        // booking.checkOut,
-                        getStatusBadge(booking.statusClass, booking.status),
-                        `<form action="viewBooking.php" method="POST">
+                    bookings.forEach(booking => {
+                        table.row.add([
+                            booking.bookingID,
+                            booking.bookingCode,
+                            booking.name,
+                            booking.bookingType + ` Booking`,
+                            booking.bookingDate,
+                            booking.createdOn,
+                            // booking.checkOut,
+                            getStatusBadge(booking.statusClass, booking.status),
+                            `<form action="viewBooking.php" method="POST">
                                     <input type="hidden" name="button" value="booking">
                                     <input type="hidden" name="bookingType" value="${booking.bookingType}">
                                     <input type="hidden" name="bookingStatus" value="${booking.bookingStatus}">
                                     <input type="hidden" name="bookingID" value="${booking.bookingID}">
                                     <button type="submit" class="btn btn-primary viewBooking">View</button>
                             </form>`
-                    ]);
-                });
+                        ]);
+                    });
 
-                table.draw();
+                    table.draw();
 
-            }).catch(error => {
-                console.error("Error loading bookings:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: data.message || 'An unknown error occurred.',
-                    showConfirmButton: false,
-                    timer: 1500,
+                }).catch(error => {
+                    console.error("Error loading bookings:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message || 'An unknown error occurred.',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
                 })
-            })
-    }
+        }
     </script>
 
     <!-- Sweetalert Popup -->
     <script>
-    const param = new URLSearchParams(window.location.search);
-    const paramValue = param.get('action');
+        const param = new URLSearchParams(window.location.search);
+        const paramValue = param.get('action');
 
-    if (paramValue === "approvedSuccess") {
-        Swal.fire({
-            position: "top-end",
-            title: "Booking Approved!",
-            text: "The booking has been successfully approved.",
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    } else if (paramValue === 'rejectedSuccess') {
-        Swal.fire({
-            position: "top-end",
-            title: "Booking Rejected!",
-            text: "The booking has been successfully rejected.",
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
+        if (paramValue === "approvedSuccess") {
+            Swal.fire({
+                position: "top-end",
+                title: "Booking Approved!",
+                text: "The booking has been successfully approved.",
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } else if (paramValue === 'rejectedSuccess') {
+            Swal.fire({
+                position: "top-end",
+                title: "Booking Rejected!",
+                text: "The booking has been successfully rejected.",
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    }
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
     <?php include '../Customer/loader.php'; ?>
 </body>

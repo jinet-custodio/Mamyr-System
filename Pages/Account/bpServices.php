@@ -95,9 +95,8 @@ switch ($userRole) {
             ucfirst($middleInitial) . " " .
             ucfirst($data['lastName'] ?? '');
         $profile = $data['userProfile'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_buffer($finfo, $profile);
-        // finfo_close($finfo);
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->buffer($profile);
         $image = 'data:' . $mimeType . ';base64,' . base64_encode($profile);
 
         $partnershipID = $data['partnershipID'];
