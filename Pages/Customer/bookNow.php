@@ -15,6 +15,9 @@ $userRole = $_SESSION['userRole'];
 //for setting image paths in 'include' statements
 $baseURL = '../..';
 
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
+
 switch ($userRole) {
     case 1: //customer
         $role = "Customer";
@@ -117,75 +120,75 @@ unset($_SESSION['eventFormData']);
         ?>
 
         <input type="hidden" name="phoneNumber" id="phoneNumber" value="<?= $phoneNumber ?>">
-
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar"
-            style="background-color: rgba(255, 255, 255, 0.562);">
-            <!-- Account Icon on the Left -->
-            <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
-                <li class="nav-item account-nav">
-                    <a href="../Account/account.php">
-                        <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
-                    </a>
-                </li>
-
-                <div class="notification-container position-relative">
-                    <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                        data-bs-target="#notificationModal" id="notificationButton">
-                        <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
-                    </button>
-                </div>
-
-                <div class="hidden-inputs" style="display: none;">
-                    <input type="hidden" id="receiver" value="<?= $role ?>">
-                    <input type="hidden" id="userID" value="<?= $userID ?>">
-                </div>
-            </ul>
-
-            <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10" id="toggledNav">
-                    <li class="nav-item">
-                        <?php if ($userRole !== 2): ?>
-                            <a class="nav-link" href="dashboard.php"> Home</a>
-                        <?php else: ?>
-                            <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
-                        <?php endif; ?>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Amenities
+        <?php if (!$editMode): ?>
+            <nav class="navbar navbar-expand-lg fixed-top" id="navbar"
+                style="background-color: rgba(255, 255, 255, 0.562);">
+                <!-- Account Icon on the Left -->
+                <ul class="navbar-nav d-flex flex-row align-items-center gap-2" id="profileAndNotif">
+                    <li class="nav-item account-nav">
+                        <a href="../Account/account.php">
+                            <img src="<?= htmlspecialchars($image) ?>" alt="User Profile" class="profile-pic">
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
-                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                            <li><a class="dropdown-item" href="events.php">Events</a></li>
-                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog.php">Blog</a>
-                    </li>
-                    <?php if ($userRole !== 2): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
-                        </li>
-                    <?php endif; ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.php">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="bookNow.php">Book Now</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
 
+                    <div class="notification-container position-relative">
+                        <button type="button" class="btn position-relative" data-bs-toggle="modal"
+                            data-bs-target="#notificationModal" id="notificationButton">
+                            <img src="../../Assets/Images/Icon/bell.png" alt="Notification Icon" class="notificationIcon">
+                        </button>
+                    </div>
+
+                    <div class="hidden-inputs" style="display: none;">
+                        <input type="hidden" id="receiver" value="<?= $role ?>">
+                        <input type="hidden" id="userID" value="<?= $userID ?>">
+                    </div>
+                </ul>
+
+                <button class=" navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto me-10" id="toggledNav">
+                        <li class="nav-item">
+                            <?php if ($userRole !== 2): ?>
+                                <a class="nav-link" href="dashboard.php"> Home</a>
+                            <?php else: ?>
+                                <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                            <?php endif; ?>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link  dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Amenities
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="amenities.php">Resort Amenities</a></li>
+                                <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                                <li><a class="dropdown-item" href="events.php">Events</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="blog.php">Blog</a>
+                        </li>
+                        <?php if ($userRole !== 2): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.php">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="bookNow.php">Book Now</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="../../Function/logout.php" class="btn btn-outline-danger" id="logOutBtn">Log Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        <?php endif; ?>
         <main>
             <!-- Made every section visible except for the selection section to see the errors -->
             <div class="categories-page" id="category-page">
@@ -253,7 +256,9 @@ unset($_SESSION['eventFormData']);
             </form>
         </main>
         <?php
-        include 'footer.php';
+        if (!$editMode) {
+            include 'footer.php';
+        }
         include 'loader.php';
         include '../Notification/notification.php';
         ?>

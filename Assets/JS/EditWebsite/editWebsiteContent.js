@@ -12,7 +12,6 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
         return;
       }
 
-      // Check if any image has a file selected or changed alt text
       const hasModifiedImages = Array.from(editableImages).some(
         (img) => img.fileObject || img.dataset.alttextChanged === "true"
       );
@@ -24,15 +23,46 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
       }
     });
 
-    function saveTextContent() {
+    /**
+     * NEW: Merges grouped inputs (ex: field_0, field_1, field_2)
+     * into a single multi-line string before saving
+     */
+    function mergeGroupedInputs() {
       const inputs = document.querySelectorAll(".editable-input");
-      const data = { sectionName };
+      const merged = {};
+      const grouped = {};
 
       inputs.forEach((input) => {
-        const title = input.getAttribute("data-title");
-        const value = input.value;
-        data[title] = value;
+        const key = input.dataset.title;
+        const value = input.value.trim();
+
+        if (!key) return;
+
+        // Detect grouped inputs (ex: dishSelect_0)
+        if (key.includes("_")) {
+          const baseKey = key.split("_")[0];
+
+          if (!grouped[baseKey]) {
+            grouped[baseKey] = [];
+          }
+
+          grouped[baseKey].push(value);
+        } else {
+          merged[key] = value;
+        }
       });
+
+      // Combine grouped lines
+      Object.keys(grouped).forEach((key) => {
+        merged[key] = grouped[key].join("\n");
+      });
+
+      return merged;
+    }
+
+    function saveTextContent() {
+      const data = mergeGroupedInputs();
+      data["sectionName"] = sectionName; // must remain for backend
 
       fetch(endpointUrl, {
         method: "POST",
@@ -54,7 +84,7 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
             Swal.fire({
               icon: "success",
               title: "Content Updated!",
-              text: "Text content has been successfully updated. Title was ",
+              text: "Your changes were saved successfully.",
               timer: 2000,
               showConfirmButton: false,
             });

@@ -13,6 +13,8 @@ $userRole = $_SESSION['userRole'];
 //for setting image paths in 'include' statements
 $baseURL = '../..';
 
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 switch ($userRole) {
     case 1: //customer
         $role = "Customer";
@@ -57,9 +59,18 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
-// echo '<pre>';
-// print_r($_SESSION['hotelFormData']);
-// echo '</pre>';
+$sectionName = 'BookNowHotel';
+$contentMap = [];
+$getContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getContent->bind_param("s", $sectionName);
+$getContent->execute();
+$contentResult = $getContent->get_result();
+
+while ($row = $contentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -90,11 +101,13 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 </head>
 
 <body id="hotel-page">
-
+    <?php if ($editMode): ?>
+        <button id="saveChangesBtn" class="btn btn-success set-editable">Save Changes</button>
+    <?php endif; ?>
     <!-- Hotel Booking -->
     <form action="confirmBooking.php" method="POST">
         <div class="hotel" id="hotel">
-            <div class="backToSelection" id="backToSelection" onclick="backToSelection()">
+            <div class="backToSelection set-editable" id="backToSelection" onclick="backToSelection()">
                 <i class="fa-solid fa-arrow-left" style="color: #178FEB;"></i>
             </div>
             <div class=" titleContainer">
@@ -284,20 +297,22 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                     <div class="additional-info-container">
                         <ul style="list-style: none;">
-                            <li style="color: #0076d1ff;">
-                                <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
-                                &nbsp;If the maximum pax exceeded, extra guest is charged
-                                ₱250 per head
-                            </li>
-                            <li style="color: #0076d1ff;">
-                                <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
-                                &nbsp;Children 3 years old and below are free
-                            </li>
-                            <li style="color: #0076d1ff;">
-                                <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
-                                &nbsp;Any request for an additional hour of stay must be arranged directly with the resort.
-                            </li>
-                            <li style="color: #0076d1ff;">
+                            <?php foreach ($contentMap as $key => $value): ?>
+                                <li style="color: #0076d1ff;">
+                                    <?php if (!$editMode): ?>
+                                        <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
+                                        &nbsp;
+                                        <?= htmlspecialchars($value) ?>
+                                    <?php else: ?>
+                                        <input
+                                            type="text"
+                                            class="editable-input form-control set-editable"
+                                            data-title="<?= htmlspecialchars($key) ?>"
+                                            value="<?= htmlspecialchars($value ?: 'No Title found') ?>">
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
+                            <li style="color: #0076d1ff;" <?php if ($editMode): ?> title="You can edit this in services" <?php endif; ?>>
                                 <i class="fa-solid fa-circle-info" style="color: #37a5fff1;"></i>
                                 <?php
                                 $chargeType = 'Room';
@@ -369,339 +384,356 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             location.href = "bookNow.php"
         };
     </script>
+    <?php if (!$editMode): ?>
+        <!-- Calendar -->
+        <script>
+            const calIcon = document.getElementById("calendarIcon");
 
-    <!-- Calendar -->
-    <script>
-        const calIcon = document.getElementById("calendarIcon");
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() + 2);
 
-        const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 2);
-
-        //hotel calendar
-        flatpickr('#checkInDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d h:i K",
-            // minTime: "06:00",
-            // maxTime: "22:00",
-            disableMobile: true,
-        });
-
-
-        flatpickr('#checkOutDate', {
-            enableTime: true,
-            minDate: minDate,
-            dateFormat: "Y-m-d h:i K",
-            // minTime: "06:00",
-            // maxTime: "22:00",
-            disableMobile: true,
-        });
-
-        flatpickr('#arrivalTime', {
-            enableTime: true,
-            noCalendar: true,
-            minTime: "06:00",
-            maxTime: "22:00",
-            dateFormat: "H:i",
-            disableMobile: true,
-        });
-    </script>
-
-
-    <!-- Hotel check-in check-out  -->
-    <script>
-        const checkInInput = document.getElementById('checkInDate');
-        const checkOutInput = document.getElementById('checkOutDate');
-        // const daysCountInput = document.getElementById('daysCount');
-
-        checkInInput.addEventListener('change', () => {
-            const selectedValue = '22 hours';
-            const checkInDate = new Date(checkInInput.value);
-            const addHours = parseInt(selectedValue);
-            if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
-                const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
-
-                const year = checkOutDate.getFullYear();
-                const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
-                const day = String(checkOutDate.getDate()).padStart(2, '0');
-                const hours = String(checkOutDate.getHours()).padStart(2, '0');
-                const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
-
-                const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
-                checkOutInput.value = formattedDate;
-            }
-        });
-    </script>
-
-
-    <!-- Get the available hotel/room depends on the customer selected date -->
-    <script>
-        function formatDate(date) {
-            const y = date.getFullYear().toString();
-            const m = (date.getMonth() + 1).toString().padStart(2, '0');
-            const d = date.getDate().toString().padStart(2, '0');
-            const h = date.getHours().toString().padStart(2, '0');
-            const i = date.getMinutes().toString().padStart(2, '0');
-            return `${y}${m}${d} ${h}${i}`;
-        }
-
-        hotelSelectionSession = <?= isset($_SESSION['hotelFormData']) ? json_encode($_SESSION['hotelFormData']['hotelSelections']) : '[]' ?>;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const checkInDate = document.getElementById('checkInDate');
-            const checkOutDate = document.getElementById('checkOutDate');
-
-            if (checkInDate && !checkInDate.value) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Select your choice of date',
-                    text: 'Please pick a booking date to continue',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    checkInDate.style.border = '2px solid red';
-                    checkInDate.focus();
-                });
-            }
-        });
-
-
-        function fetchAvailableRooms() {
-            const checkInDateValue = checkInDate.value;
-            const checkOutDateValue = checkOutDate.value;
-            const hoursSelectedValue = "22 hours";
-
-            const checkInDateObj = new Date(checkInDateValue);
-            const checkOutDateObj = new Date(checkOutDateValue);
-
-            const formattedCheckIn = formatDate(checkInDateObj);
-            const formattedCheckOut = formatDate(checkOutDateObj);
-
-            if (!formattedCheckIn || !hoursSelectedValue) return;
-            fetch(
-                    `../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(formattedCheckIn)}&hotelCheckOutDate=${encodeURIComponent(formattedCheckOut)}&duration=${encodeURIComponent(hoursSelectedValue)}`
-                )
-                .then(response => {
-                    if (!response.ok) throw new Error('Network Problem');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        alert("Error: " + data.error);
-                        return;
-                    }
-
-                    const hotelRoomContainer = document.getElementById("hotelDisplaySelection");
-                    hotelRoomContainer.innerHTML = '';
-
-                    data.hotels.forEach(hotel => {
-                        const wrapper = document.createElement('div');
-                        wrapper.classList.add('checkbox-item');
-
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.name = 'hotelSelections[]';
-                        checkbox.value = hotel.RServiceName;
-                        checkbox.id = hotel.RServiceName;
-                        checkbox.dataset.capacity = hotel.RScapacity;
-
-                        const content = document.createElement('div');
-                        content.classList.add('content');
-                        const label = document.createElement('label');
-                        label.setAttribute('for', checkbox.id);
-                        label.textContent =
-                            `${hotel.RServiceName} good for ${hotel.RScapacity} pax (₱${Number(hotel.RSprice).toLocaleString()}.00)`;
-
-                        const img = document.createElement('img');
-                        img.classList.add('hotel-image');
-                        img.src = `../../Assets/Images/Services/Hotel/${hotel.RSimageData}`;
-                        img.alt = `${hotel.RServiceName} image`;
-                        img.style.width = "50%";
-
-                        // Check if selected from session
-                        if (hotelSelectionSession.includes(String(hotel.RServiceName))) {
-                            checkbox.checked = true;
-                        }
-
-                        // 🔹 Make entire div clickable
-                        wrapper.addEventListener("click", (e) => {
-                            if (e.target.tagName !== "INPUT") {
-                                checkbox.checked = !checkbox.checked;
-                            }
-                        });
-
-                        content.appendChild(checkbox);
-                        content.appendChild(label);
-                        wrapper.appendChild(img);
-                        wrapper.appendChild(content);
-                        hotelRoomContainer.appendChild(wrapper);
-                    });
-
-                }).catch(error => {
-                    console.error(error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to fetch hotels. Please try again.',
-                    });
-                });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            if (checkInDate && checkInDate.value) {
-                fetchAvailableRooms();
-                checkInDate.style.border = '1px solid rgb(223, 226, 230)';
-            }
-        });
-
-        if (checkInDate) {
-            checkInDate.addEventListener("change", () => {
-                fetchAvailableRooms();
-                checkInDate.style.border = checkInDate.value ? '' : '2px solid red';
-            });
-        }
-        if (checkOutDate) {
-            checkOutDate.addEventListener("change", fetchAvailableRooms);
-        }
-
-        const hotelBookingBtn = document.getElementById('hotelBooking');
-
-        hotelBookingBtn.addEventListener("click", function() {
-
-            let totalCapacity = 0;
-
-            const hotelSelected = document.querySelectorAll('input[name="hotelSelections[]"]:checked');
-            hotelSelected.forEach(item => {
-                totalCapacity += parseInt(item.dataset.capacity) || 0;
+            //hotel calendar
+            flatpickr('#checkInDate', {
+                enableTime: true,
+                minDate: minDate,
+                dateFormat: "Y-m-d h:i K",
+                // minTime: "06:00",
+                // maxTime: "22:00",
+                disableMobile: true,
             });
 
-            if (totalCapacity === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops',
-                    text: 'Select a cottage(s) or room(s)',
-                });
-                hotelBookingBtn.type = 'button';
-            } else {
-                hotelBookingBtn.type = 'submit';
+
+            flatpickr('#checkOutDate', {
+                enableTime: true,
+                minDate: minDate,
+                dateFormat: "Y-m-d h:i K",
+                // minTime: "06:00",
+                // maxTime: "22:00",
+                disableMobile: true,
+            });
+
+            flatpickr('#arrivalTime', {
+                enableTime: true,
+                noCalendar: true,
+                minTime: "06:00",
+                maxTime: "22:00",
+                dateFormat: "H:i",
+                disableMobile: true,
+            });
+        </script>
+
+
+        <!-- Hotel check-in check-out  -->
+        <script>
+            const checkInInput = document.getElementById('checkInDate');
+            const checkOutInput = document.getElementById('checkOutDate');
+            // const daysCountInput = document.getElementById('daysCount');
+
+            checkInInput.addEventListener('change', () => {
+                const selectedValue = '22 hours';
+                const checkInDate = new Date(checkInInput.value);
+                const addHours = parseInt(selectedValue);
+                if (!isNaN(checkInDate.getTime()) && !isNaN(addHours)) {
+                    const checkOutDate = new Date(checkInDate.getTime() + addHours * 60 * 60 * 1000);
+
+                    const year = checkOutDate.getFullYear();
+                    const month = String(checkOutDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(checkOutDate.getDate()).padStart(2, '0');
+                    const hours = String(checkOutDate.getHours()).padStart(2, '0');
+                    const minutes = String(checkOutDate.getMinutes()).padStart(2, '0');
+
+                    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+                    checkOutInput.value = formattedDate;
+                }
+            });
+        </script>
+
+
+        <!-- Get the available hotel/room depends on the customer selected date -->
+        <script>
+            function formatDate(date) {
+                const y = date.getFullYear().toString();
+                const m = (date.getMonth() + 1).toString().padStart(2, '0');
+                const d = date.getDate().toString().padStart(2, '0');
+                const h = date.getHours().toString().padStart(2, '0');
+                const i = date.getMinutes().toString().padStart(2, '0');
+                return `${y}${m}${d} ${h}${i}`;
             }
-        });
-    </script>
 
-    <!-- Displays user's selected rooms -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
+            hotelSelectionSession = <?= isset($_SESSION['hotelFormData']) ? json_encode($_SESSION['hotelFormData']['hotelSelections']) : '[]' ?>;
 
-            function renderSelectedRooms(containerId, label, items) {
-                const container = document.getElementById(containerId);
-                if (!container) return;
+            document.addEventListener("DOMContentLoaded", function() {
+                const checkInDate = document.getElementById('checkInDate');
+                const checkOutDate = document.getElementById('checkOutDate');
 
-                container.innerHTML = ""; // Clear previous
-
-                if (items.length === 0) return;
-
-                const wrapper = document.createElement("div");
-                wrapper.classList.add("selected-inline");
-
-                const labelEl = document.createElement("span");
-                labelEl.classList.add("selected-label-inline");
-                labelEl.textContent = label + " ";
-
-                wrapper.appendChild(labelEl);
-
-                items.forEach(item => {
-                    const tag = document.createElement("span");
-                    tag.classList.add("selected-tag");
-                    tag.textContent = item;
-                    wrapper.appendChild(tag);
-                });
-
-                container.appendChild(wrapper);
-            }
-
-            function updateSelectedRooms() {
-                const selectedRooms = Array.from(document.querySelectorAll('input[name="hotelSelections[]"]:checked'))
-                    .map(el => el.value);
-                renderSelectedRooms('selectedHotelRoomsContainer', 'Selected Room/s:', selectedRooms);
-            }
-
-            const hotelModal = document.getElementById('hotelRoomModal');
-            const okBtn = hotelModal.querySelector('.modal-footer .btn-primary');
-
-            okBtn.addEventListener('click', updateSelectedRooms);
-
-            hotelModal.addEventListener('hidden.bs.modal', updateSelectedRooms);
-
-            updateSelectedRooms();
-        });
-    </script>
-
-
-    <script>
-        //* For not allowing letters
-        const phoneNumber = document.getElementById('phoneNumber');
-
-        phoneNumber.addEventListener('keypress', function(e) {
-            if (!/[0-9+]/.test(e.key)) {
-                e.preventDefault();
-            }
-        })
-
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const param = new URLSearchParams(window.location.search);
-            const paramValue = param.get('action');
-
-            switch (paramValue) {
-                case 'errorBooking':
-                    Swal.fire({
-                        icon: 'error',
-                        text: 'An error occurred. Please try again.',
-                        title: 'Oops'
-                    })
-                    break;
-                case 'phoneNumber':
+                if (checkInDate && !checkInDate.value) {
                     Swal.fire({
                         icon: 'info',
-                        text: 'Phone number is required!',
-                        title: 'Oops',
-                        confirmButtonText: 'Okay'
-                    }).then((result) => {
-                        const phoneNumberModal = document.getElementById('phoneNumberModal');
-                        const modal = new bootstrap.Modal(phoneNumberModal);
-                        modal.show();
+                        title: 'Select your choice of date',
+                        text: 'Please pick a booking date to continue',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        checkInDate.style.border = '2px solid red';
+                        checkInDate.focus();
                     });
-                    break;
-                case 'phoneAdded':
-                    Toast.fire({
-                        text: "Your phone number has been submitted successfully. You may now proceed with booking.",
-                        icon: "success"
+                }
+            });
+
+
+            function fetchAvailableRooms() {
+                const checkInDateValue = checkInDate.value;
+                const checkOutDateValue = checkOutDate.value;
+                const hoursSelectedValue = "22 hours";
+
+                const checkInDateObj = new Date(checkInDateValue);
+                const checkOutDateObj = new Date(checkOutDateValue);
+
+                const formattedCheckIn = formatDate(checkInDateObj);
+                const formattedCheckOut = formatDate(checkOutDateObj);
+
+                if (!formattedCheckIn || !hoursSelectedValue) return;
+                fetch(
+                        `../../Function/Booking/getAvailableAmenities.php?hotelCheckInDate=${encodeURIComponent(formattedCheckIn)}&hotelCheckOutDate=${encodeURIComponent(formattedCheckOut)}&duration=${encodeURIComponent(hoursSelectedValue)}`
+                    )
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network Problem');
+                        return response.json();
                     })
-                    break;
-                default:
+                    .then(data => {
+                        if (data.error) {
+                            alert("Error: " + data.error);
+                            return;
+                        }
+
+                        const hotelRoomContainer = document.getElementById("hotelDisplaySelection");
+                        hotelRoomContainer.innerHTML = '';
+
+                        data.hotels.forEach(hotel => {
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('checkbox-item');
+
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.name = 'hotelSelections[]';
+                            checkbox.value = hotel.RServiceName;
+                            checkbox.id = hotel.RServiceName;
+                            checkbox.dataset.capacity = hotel.RScapacity;
+
+                            const content = document.createElement('div');
+                            content.classList.add('content');
+                            const label = document.createElement('label');
+                            label.setAttribute('for', checkbox.id);
+                            label.textContent =
+                                `${hotel.RServiceName} good for ${hotel.RScapacity} pax (₱${Number(hotel.RSprice).toLocaleString()}.00)`;
+
+                            const img = document.createElement('img');
+                            img.classList.add('hotel-image');
+                            img.src = `../../Assets/Images/Services/Hotel/${hotel.RSimageData}`;
+                            img.alt = `${hotel.RServiceName} image`;
+                            img.style.width = "50%";
+
+                            // Check if selected from session
+                            if (hotelSelectionSession.includes(String(hotel.RServiceName))) {
+                                checkbox.checked = true;
+                            }
+
+                            // 🔹 Make entire div clickable
+                            wrapper.addEventListener("click", (e) => {
+                                if (e.target.tagName !== "INPUT") {
+                                    checkbox.checked = !checkbox.checked;
+                                }
+                            });
+
+                            content.appendChild(checkbox);
+                            content.appendChild(label);
+                            wrapper.appendChild(img);
+                            wrapper.appendChild(content);
+                            hotelRoomContainer.appendChild(wrapper);
+                        });
+
+                    }).catch(error => {
+                        console.error(error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to fetch hotels. Please try again.',
+                        });
+                    });
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                if (checkInDate && checkInDate.value) {
+                    fetchAvailableRooms();
+                    checkInDate.style.border = '1px solid rgb(223, 226, 230)';
+                }
+            });
+
+            if (checkInDate) {
+                checkInDate.addEventListener("change", () => {
+                    fetchAvailableRooms();
+                    checkInDate.style.border = checkInDate.value ? '' : '2px solid red';
+                });
+            }
+            if (checkOutDate) {
+                checkOutDate.addEventListener("change", fetchAvailableRooms);
+            }
+
+            const hotelBookingBtn = document.getElementById('hotelBooking');
+
+            hotelBookingBtn.addEventListener("click", function() {
+
+                let totalCapacity = 0;
+
+                const hotelSelected = document.querySelectorAll('input[name="hotelSelections[]"]:checked');
+                hotelSelected.forEach(item => {
+                    totalCapacity += parseInt(item.dataset.capacity) || 0;
+                });
+
+                if (totalCapacity === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops',
+                        text: 'Select a cottage(s) or room(s)',
+                    });
+                    hotelBookingBtn.type = 'button';
+                } else {
+                    hotelBookingBtn.type = 'submit';
+                }
+            });
+        </script>
+
+        <!-- Displays user's selected rooms -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+
+                function renderSelectedRooms(containerId, label, items) {
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+
+                    container.innerHTML = ""; // Clear previous
+
+                    if (items.length === 0) return;
+
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("selected-inline");
+
+                    const labelEl = document.createElement("span");
+                    labelEl.classList.add("selected-label-inline");
+                    labelEl.textContent = label + " ";
+
+                    wrapper.appendChild(labelEl);
+
+                    items.forEach(item => {
+                        const tag = document.createElement("span");
+                        tag.classList.add("selected-tag");
+                        tag.textContent = item;
+                        wrapper.appendChild(tag);
+                    });
+
+                    container.appendChild(wrapper);
+                }
+
+                function updateSelectedRooms() {
+                    const selectedRooms = Array.from(document.querySelectorAll('input[name="hotelSelections[]"]:checked'))
+                        .map(el => el.value);
+                    renderSelectedRooms('selectedHotelRoomsContainer', 'Selected Room/s:', selectedRooms);
+                }
+
+                const hotelModal = document.getElementById('hotelRoomModal');
+                const okBtn = hotelModal.querySelector('.modal-footer .btn-primary');
+
+                okBtn.addEventListener('click', updateSelectedRooms);
+
+                hotelModal.addEventListener('hidden.bs.modal', updateSelectedRooms);
+
+                updateSelectedRooms();
+            });
+        </script>
+
+
+        <script>
+            //* For not allowing letters
+            const phoneNumber = document.getElementById('phoneNumber');
+
+            phoneNumber.addEventListener('keypress', function(e) {
+                if (!/[0-9+]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            })
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const param = new URLSearchParams(window.location.search);
+                const paramValue = param.get('action');
+
+                switch (paramValue) {
+                    case 'errorBooking':
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'An error occurred. Please try again.',
+                            title: 'Oops'
+                        })
+                        break;
+                    case 'phoneNumber':
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'Phone number is required!',
+                            title: 'Oops',
+                            confirmButtonText: 'Okay'
+                        }).then((result) => {
+                            const phoneNumberModal = document.getElementById('phoneNumberModal');
+                            const modal = new bootstrap.Modal(phoneNumberModal);
+                            modal.show();
+                        });
+                        break;
+                    case 'phoneAdded':
+                        Toast.fire({
+                            text: "Your phone number has been submitted successfully. You may now proceed with booking.",
+                            icon: "success"
+                        })
+                        break;
+                    default:
+                        const cleanUrl = window.location.origin + window.location.pathname;
+                        history.replaceState({}, document.title, cleanUrl);
+                        break;
+                }
+
+                if (paramValue) {
                     const cleanUrl = window.location.origin + window.location.pathname;
                     history.replaceState({}, document.title, cleanUrl);
-                    break;
-            }
 
-            if (paramValue) {
-                const cleanUrl = window.location.origin + window.location.pathname;
-                history.replaceState({}, document.title, cleanUrl);
+                }
+            });
+        </script>
+    <?php else: ?>
+        <!-- //* Disables buttons and  input boxes  during Edit Mode -->
+        <script>
+            document.querySelectorAll('input, button, select, textarea').forEach(el => el.disabled = true);
+            document.querySelectorAll('.set-editable').forEach(el => el.disabled = false);
+        </script>
 
-            }
-        });
-    </script>
+        <!-- AJAX for editing website content -->
+        <?php if ($editMode): ?>
+            <script type="module">
+                import {
+                    initWebsiteEditor
+                } from '../../Assets/JS/EditWebsite/editWebsiteContent.js';
 
+                initWebsiteEditor('BookNowHotel', '../../Function/Admin/editWebsite/editWebsiteContent.php');
+            </script>
+        <?php endif; ?>
+    <?php endif; ?>
 
 </body>
 

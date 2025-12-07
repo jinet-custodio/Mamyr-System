@@ -11,6 +11,8 @@ $userRole = $_SESSION['userRole'];
 //for setting image paths in 'include' statements
 $baseURL = '../..';
 
+//for edit website, this will enable edit mode from the iframe
+$editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 switch ($userRole) {
     case 1: //customer
         $role = "Customer";
@@ -90,7 +92,6 @@ function getPartnershipType($conn)
     $getPartnershipTypeQuery->close();
 }
 
-
 $gcashDetails = '';
 $resortInfoName = 'ContactNum';
 $getContactDetails = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
@@ -103,9 +104,22 @@ if ($result->num_rows > 0) {
     $contactNumber = $row['resortInfoDetail'];
 }
 
-
 $formData = $_SESSION['eventFormData'] ?? [];
 
+$sectionName = 'BookNowEvent';
+$contentMap = [];
+$getContent = $conn->prepare("SELECT * FROM websitecontent WHERE sectionName = ?");
+$getContent->bind_param("s", $sectionName);
+$getContent->execute();
+$contentResult = $getContent->get_result();
+
+while ($row = $contentResult->fetch_assoc()) {
+    $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
+    $contentID = $row['contentID'];
+    $contentMap[$cleanTitle] = $row['content'];
+}
+
+$listItems = explode("\n", $contentMap['foodInclusions']);
 // echo '<pre>';
 // print_r($formData);
 // echo '</pre>';
@@ -140,6 +154,9 @@ $formData = $_SESSION['eventFormData'] ?? [];
 </head>
 
 <body id="event-page">
+    <?php if ($editMode): ?>
+        <button id="saveChangesBtn" class="btn btn-success set-editable">Save Changes</button>
+    <?php endif; ?>
     <!-- Event Booking -->
     <form action="eventBookingConfirmation.php" method="POST">
         <div class="event" id="event">
@@ -251,10 +268,22 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 <li> <i class="bi bi-info-circle-fill"></i> &nbsp;For any concerns or details regarding
                                     food and other services, contact us
                                     at <?= $contactNumber ?>.</li>
-                                <li> <i class="bi bi-info-circle-fill"></i> &nbsp;If you already have a catering service
-                                    in mind or food to bring, you don’t need to select a dish.</li>
-                                <li><i class="bi bi-info-circle-fill"></i> &nbsp;Kindly contact us first to confirm your
-                                    food preference before adding it in the request field. </li>
+
+                                <?php if (!$editMode) : ?>
+                                    <li> <i class="bi bi-info-circle-fill"></i> &nbsp;<?= htmlspecialchars($contentMap['dishSelect']) ?> ?></li>
+                                    <li> <i class="bi bi-info-circle-fill"></i> &nbsp;<?= htmlspecialchars($contentMap['foodPreference']) ?> ?></li>
+                                <?php else: ?>
+                                    <input
+                                        type="text"
+                                        class="editable-input form-control set-editable"
+                                        data-title="dishSelect"
+                                        value="<?= htmlspecialchars($contentMap['dishSelect'] ?: 'No Title found') ?>">
+                                    <input
+                                        type="text"
+                                        class="editable-input form-control set-editable"
+                                        data-title="foodPreference"
+                                        value="<?= htmlspecialchars($contentMap['foodPreference'] ?: 'No Title found') ?>">
+                                <?php endif; ?>
                                 <li> <i class="bi bi-info-circle-fill"></i> &nbsp;You can contact us on <a
                                         href="https://www.facebook.com/messages/t/100888189251567"
                                         target="_blank">Facebook</a>.</li>
@@ -296,8 +325,8 @@ $formData = $_SESSION['eventFormData'] ?? [];
                                 event’s needs.
                                 Select dishes that will delight your guests and complement your celebration.</p>
 
-                            <button type="button" class="btn btn-primary mt-3 w-100" data-bs-toggle="modal"
-                                data-bs-target="#dishModal">Open Menu</button>
+                            <button type="button" class="btn btn-primary mt-3 w-100 set-editable" data-bs-toggle="modal"
+                                data-bs-target="#dishModal" id="menuBtn">Open Menu</button>
 
                             <div class="form-check foodCheck-container">
                                 <input class="form-check-input" type="checkbox" value="" id="foodCheck">
@@ -350,11 +379,31 @@ $formData = $_SESSION['eventFormData'] ?? [];
                     <div class="note-container">
                         <h6 class="noteLabel">Catering Services Inclusions:</h6>
                         <ul>
-                            <li>Basic design for tables, chair & stage</li>
-                            <li>4 Dishes (vegetables is included)</li>
-                            <li>w/ Rice & Drink/Juice</li>
-                            <li>Dessert</li>
+                            <?php if (empty($listItems)): ?>
+                                <h5>None found</h5>
+
+                            <?php else: ?>
+                                <?php foreach ($listItems as $index => $line): ?>
+                                    <?php if (trim($line) !== ''): ?>
+
+                                        <?php if (!$editMode): ?>
+                                            <li><?= htmlspecialchars(trim($line)) ?></li>
+
+                                        <?php else: ?>
+                                            <li class="mb-2" style="list-style: none;">
+                                                <input
+                                                    type="text"
+                                                    class="editable-input form-control set-editable"
+                                                    data-title="foodInclusions_<?= $index ?>"
+                                                    value="<?= htmlspecialchars(trim($line)) ?>">
+                                            </li>
+                                        <?php endif; ?>
+
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
+
                     </div>
                     <div class="modal-body dishMenu" id="dishMenuContainer">
                         <?php
@@ -697,625 +746,622 @@ $formData = $_SESSION['eventFormData'] ?? [];
         });
     </script>
 
+    <?php if (!$editMode): ?>
+        <!-- Event Hall-->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const date = document.getElementById('eventDate');
+                const startTime = document.getElementById('eventStartTime');
+                const venueSelect = document.getElementById('eventVenue');
 
-    <!-- Event Hall-->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const date = document.getElementById('eventDate');
-            const startTime = document.getElementById('eventStartTime');
-            const venueSelect = document.getElementById('eventVenue');
 
+                const sessionSelectedVenue =
+                    <?= isset($formData['eventVenue']) ? json_encode($formData['eventVenue']) : '""' ?>;
 
-            const sessionSelectedVenue =
-                <?= isset($formData['eventVenue']) ? json_encode($formData['eventVenue']) : '""' ?>;
+                venueSelect.innerHTML = '';
+                const defaultOption = document.createElement('option');
+                defaultOption.textContent = 'Select event schedule first';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                venueSelect.appendChild(defaultOption);
 
-            venueSelect.innerHTML = '';
-            const defaultOption = document.createElement('option');
-            defaultOption.textContent = 'Select event schedule first';
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            venueSelect.appendChild(defaultOption);
+                function getAvailableVenue() {
+                    const selectedDate = date.value;
+                    const selectedStartTime = startTime.value;
 
-            function getAvailableVenue() {
-                const selectedDate = date.value;
-                const selectedStartTime = startTime.value;
+                    if (!selectedDate || !selectedStartTime) return;
 
-                if (!selectedDate || !selectedStartTime) return;
+                    const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
+                    const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000);
 
-                const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
-                const endDateTimeObj = new Date(startDateTimeObj.getTime() + 5 * 60 * 60 * 1000);
+                    const formattedStartDateTime = formatDateTime(startDateTimeObj);
+                    const formattedEndDateTime = formatDateTime(endDateTimeObj);
 
-                const formattedStartDateTime = formatDateTime(startDateTimeObj);
-                const formattedEndDateTime = formatDateTime(endDateTimeObj);
+                    console.log(formattedStartDateTime);
+                    console.log(formattedEndDateTime);
 
-                console.log(formattedStartDateTime);
-                console.log(formattedEndDateTime);
-
-                fetch(
-                        `../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
-                    )
-                    .then(response => {
-                        if (!response.ok) throw new Error('Network Error');
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.error) {
-                            alert("Error: " + data.error);
-                            return;
-                        }
-                        const notes = document.getElementById('guestInfoNote');
-
-                        // const venueSelect = document.getElementById("eventVenue");
-                        venueSelect.innerHTML = '';
-
-                        const venueOption = document.createElement('option')
-                        venueOption.value = "";
-                        venueOption.disabled = true;
-                        venueOption.selected = true;
-                        venueOption.textContent = "Choose...";
-                        venueSelect.appendChild(venueOption);
-
-                        data.Halls.forEach(hall => {
-                            const venueOptions = document.createElement('option');
-                            venueOptions.value = hall.RServiceName;
-                            venueOptions.dataset.maincapacity = hall.RScapacity;
-                            venueOptions.dataset.maxcapacity = hall.RSmaxCapacity;
-                            venueOptions.textContent =
-                                `${hall.RServiceName} - ${hall.RScapacity} pax (can extend to ${hall.RSmaxCapacity}) `;
-                            if (hall.RServiceName === sessionSelectedVenue) {
-                                venueOptions.selected = true;
-                            }
-                            venueSelect.appendChild(venueOptions);
+                    fetch(
+                            `../../Function/Booking/getEventVenue.php?startDate=${encodeURIComponent(formattedStartDateTime)}&endDate=${encodeURIComponent(formattedEndDateTime)}`
+                        )
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network Error');
+                            return response.json();
                         })
+                        .then(data => {
+                            if (data.error) {
+                                alert("Error: " + data.error);
+                                return;
+                            }
+                            const notes = document.getElementById('guestInfoNote');
 
-                        venueSelect.dispatchEvent(new Event('change'));
+                            // const venueSelect = document.getElementById("eventVenue");
+                            venueSelect.innerHTML = '';
 
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the fetch operation', error);
-                        alert("Failed to load available venues. Please try again later.");
-                    });
-            }
+                            const venueOption = document.createElement('option')
+                            venueOption.value = "";
+                            venueOption.disabled = true;
+                            venueOption.selected = true;
+                            venueOption.textContent = "Choose...";
+                            venueSelect.appendChild(venueOption);
 
-            venueSelect.addEventListener('change', (e) => {
-                const selectedOption = e.target.selectedOptions[0];
-                if (selectedOption && selectedOption.dataset.maxcapacity && selectedOption.dataset
-                    .maincapacity) {
-                    const maxCapacity = selectedOption.dataset.maxcapacity;
-                    const capacity = selectedOption.dataset.maincapacity;
-                    const venueName = selectedOption.value;
-                    guestInfoNote.textContent =
-                        `The standard capacity of ${venueName} is ${capacity} pax, but it can extend up to ${maxCapacity}. Exceeding the main capacity may require additional arrangements,  and the event hall may become crowded.`;
-                } else {
-                    guestInfoNote.textContent = '';
-                }
-            });
+                            data.Halls.forEach(hall => {
+                                const venueOptions = document.createElement('option');
+                                venueOptions.value = hall.RServiceName;
+                                venueOptions.dataset.maincapacity = hall.RScapacity;
+                                venueOptions.dataset.maxcapacity = hall.RSmaxCapacity;
+                                venueOptions.textContent =
+                                    `${hall.RServiceName} - ${hall.RScapacity} pax (can extend to ${hall.RSmaxCapacity}) `;
+                                if (hall.RServiceName === sessionSelectedVenue) {
+                                    venueOptions.selected = true;
+                                }
+                                venueSelect.appendChild(venueOptions);
+                            })
 
-            if (date && startTime) {
-                date.addEventListener("change", getAvailableVenue);
-                startTime.addEventListener("change", getAvailableVenue);
-                getAvailableVenue();
-            }
-        });
-    </script>
+                            venueSelect.dispatchEvent(new Event('change'));
 
-    <!-- Session Selected Food -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sessionFoodSelections =
-                <?= isset($formData['foodSelections']) ? json_encode($formData['foodSelections']) : '[]' ?>;
-            const sessionSelectedFoods =
-                <?= isset($formData['selectedFoods']) ? json_encode($formData['selectedFoods']) : '[]' ?>;
-
-            let selectedFoods = [];
-
-            const checkboxes = document.querySelectorAll('.food-item');
-
-
-            if (typeof sessionFoodSelections === "object" && sessionFoodSelections !== null) {
-                Object.values(sessionFoodSelections).forEach(categoryObj => {
-                    if (typeof categoryObj === "object" && categoryObj !== null) {
-                        Object.values(categoryObj).forEach(foodName => {
-                            selectedFoods.push(String(foodName));
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation', error);
+                            alert("Failed to load available venues. Please try again later.");
                         });
+                }
+
+                venueSelect.addEventListener('change', (e) => {
+                    const selectedOption = e.target.selectedOptions[0];
+                    if (selectedOption && selectedOption.dataset.maxcapacity && selectedOption.dataset
+                        .maincapacity) {
+                        const maxCapacity = selectedOption.dataset.maxcapacity;
+                        const capacity = selectedOption.dataset.maincapacity;
+                        const venueName = selectedOption.value;
+                        guestInfoNote.textContent =
+                            `The standard capacity of ${venueName} is ${capacity} pax, but it can extend up to ${maxCapacity}. Exceeding the main capacity may require additional arrangements,  and the event hall may become crowded.`;
+                    } else {
+                        guestInfoNote.textContent = '';
                     }
                 });
-            }
 
-
-            if (typeof sessionSelectedFoods === 'object' && sessionSelectedFoods !== null && Object.keys(
-                    sessionSelectedFoods).length > 0) {
-                selectedFoods = Object.values(sessionSelectedFoods).map(String);
-            }
-
-            console.log(selectedFoods);
-
-            checkboxes.forEach((checkbox) => {
-                if (selectedFoods.includes(String(checkbox.value))) {
-                    checkbox.checked = true;
+                if (date && startTime) {
+                    date.addEventListener("change", getAvailableVenue);
+                    startTime.addEventListener("change", getAvailableVenue);
+                    getAvailableVenue();
                 }
             });
-        });
-    </script>
+        </script>
 
-    <!-- Fetch Partner service -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const date = document.getElementById('eventDate');
-            const startTime = document.getElementById('eventStartTime');
-            const mainContainer = document.getElementById('additionalService');
-            const sessionSelectedServices =
-                <?= isset($formData['additionalServiceSelected']) ? json_encode($formData['additionalServiceSelected']) : '[]' ?>;
+        <!-- Session Selected Food -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const sessionFoodSelections =
+                    <?= isset($formData['foodSelections']) ? json_encode($formData['foodSelections']) : '[]' ?>;
+                const sessionSelectedFoods =
+                    <?= isset($formData['selectedFoods']) ? json_encode($formData['selectedFoods']) : '[]' ?>;
 
-            function showDefaultText() {
-                const div = document.createElement('div');
-                div.classList.add('no-data-container');
+                let selectedFoods = [];
 
-                const cardText = document.createElement('h5');
-                cardText.classList.add('card-text');
-                cardText.innerHTML = 'Choose the date and time';
+                const checkboxes = document.querySelectorAll('.food-item');
 
-                div.appendChild(cardText);
-                mainContainer.appendChild(div);
-            }
 
-            date.addEventListener('change', getAvailablePartnerService);
-            startTime.addEventListener('change', getAvailablePartnerService);
+                if (typeof sessionFoodSelections === "object" && sessionFoodSelections !== null) {
+                    Object.values(sessionFoodSelections).forEach(categoryObj => {
+                        if (typeof categoryObj === "object" && categoryObj !== null) {
+                            Object.values(categoryObj).forEach(foodName => {
+                                selectedFoods.push(String(foodName));
+                            });
+                        }
+                    });
+                }
 
-            if (date.value === '' && startTime.value === '') {
-                showDefaultText();
-            } else {
 
-                getAvailablePartnerService();
-            }
+                if (typeof sessionSelectedFoods === 'object' && sessionSelectedFoods !== null && Object.keys(
+                        sessionSelectedFoods).length > 0) {
+                    selectedFoods = Object.values(sessionSelectedFoods).map(String);
+                }
 
-            function getAvailablePartnerService() {
-                const selectedDate = date.value;
-                const selectedStartTime = startTime.value;
+                console.log(selectedFoods);
 
-                if (!selectedDate || !selectedStartTime) return;
+                checkboxes.forEach((checkbox) => {
+                    if (selectedFoods.includes(String(checkbox.value))) {
+                        checkbox.checked = true;
+                    }
+                });
+            });
+        </script>
 
-                const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
-                const endDateTimeObj = new Date(
-                    startDateTimeObj.getTime() + 5 * 60 * 60 * 1000
-                ); // +5 hours
+        <!-- Fetch Partner service -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const date = document.getElementById('eventDate');
+                const startTime = document.getElementById('eventStartTime');
+                const mainContainer = document.getElementById('additionalService');
+                const sessionSelectedServices =
+                    <?= isset($formData['additionalServiceSelected']) ? json_encode($formData['additionalServiceSelected']) : '[]' ?>;
 
-                const formattedStartDateTime = formatDateTime(startDateTimeObj);
-                const formattedEndDateTime = formatDateTime(endDateTimeObj);
+                function showDefaultText() {
+                    const div = document.createElement('div');
+                    div.classList.add('no-data-container');
 
-                fetch(
-                        `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(
+                    const cardText = document.createElement('h5');
+                    cardText.classList.add('card-text');
+                    cardText.innerHTML = 'Choose the date and time';
+
+                    div.appendChild(cardText);
+                    mainContainer.appendChild(div);
+                }
+
+                date.addEventListener('change', getAvailablePartnerService);
+                startTime.addEventListener('change', getAvailablePartnerService);
+
+                if (date.value === '' && startTime.value === '') {
+                    showDefaultText();
+                } else {
+
+                    getAvailablePartnerService();
+                }
+
+                function getAvailablePartnerService() {
+                    const selectedDate = date.value;
+                    const selectedStartTime = startTime.value;
+
+                    if (!selectedDate || !selectedStartTime) return;
+
+                    const startDateTimeObj = new Date(`${selectedDate}T${selectedStartTime}`);
+                    const endDateTimeObj = new Date(
+                        startDateTimeObj.getTime() + 5 * 60 * 60 * 1000
+                    ); // +5 hours
+
+                    const formattedStartDateTime = formatDateTime(startDateTimeObj);
+                    const formattedEndDateTime = formatDateTime(endDateTimeObj);
+
+                    fetch(
+                            `../../Function/Booking/getPartnerService.php?startDate=${encodeURIComponent(
                     formattedStartDateTime
                     )}&endDate=${encodeURIComponent(formattedEndDateTime)}`
-                    )
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error("Network Error");
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        if (data.error) {
-                            Swal.fire({
-                                title: "Error",
-                                text: "Error: " + data.error,
-                                icon: "error",
-                            });
-                            return;
-                        }
-                        mainContainer.innerHTML = "";
-                        if (data.Categories && data.Categories.length > 0) {
-                            data.Categories.forEach((category) => {
-                                const wrapper = document.createElement("div");
-                                wrapper.classList.add("photography");
-
-
-                                const bpTypeContainer = document.createElement("div");
-                                bpTypeContainer.classList.add("bpTypeContainer");
-
-                                const categoryHeading = document.createElement("h6");
-                                categoryHeading.classList.add("bpCategory", "fw-bold");
-                                categoryHeading.innerText = category.eventCategory || "Category Name";
-
-                                bpTypeContainer.appendChild(categoryHeading);
-                                wrapper.appendChild(bpTypeContainer);
-
-                                const partnerListContainer = document.createElement("div");
-                                partnerListContainer.classList.add("partnerListContainer");
-
-                                const checkbox = document.createElement("input");
-                                checkbox.type = "checkbox";
-                                checkbox.classList.add("form-check-input");
-                                checkbox.name =
-                                    `additionalServiceSelected[${category.partnershipID}][selected]`;
-                                checkbox.value = category.partnershipServiceID;
-                                checkbox.id = `service-${category.partnershipServiceID}`;
-
-                                const inputPBName = document.createElement("input");
-                                inputPBName.type = "hidden";
-                                inputPBName.name =
-                                    `additionalServiceSelected[${category.partnershipID}][PBName]`;
-                                inputPBName.value = category.PBName;
-
-                                const inputPBPrice = document.createElement("input");
-                                inputPBPrice.type = "hidden";
-                                inputPBPrice.name =
-                                    `additionalServiceSelected[${category.partnershipID}][PBPrice]`;
-                                inputPBPrice.value = category.PBPrice;
-
-                                const inputServiceID = document.createElement("input");
-                                inputServiceID.type = "hidden";
-                                inputServiceID.name =
-                                    `additionalServiceSelected[${category.partnershipID}][partnershipServiceID]`;
-                                inputServiceID.value = category.partnershipServiceID;
-
-                                checkbox.addEventListener("change", function() {
-                                    if (this.checked) {
-                                        partnerListContainer.appendChild(inputPBName);
-                                        partnerListContainer.appendChild(inputPBPrice);
-                                        partnerListContainer.appendChild(inputServiceID);
-                                    } else {
-                                        inputPBName.remove();
-                                        inputPBPrice.remove();
-                                        inputServiceID.remove();
-                                    }
+                        )
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Network Error");
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            if (data.error) {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: "Error: " + data.error,
+                                    icon: "error",
                                 });
+                                return;
+                            }
+                            mainContainer.innerHTML = "";
+                            if (data.Categories && data.Categories.length > 0) {
+                                data.Categories.forEach((category) => {
+                                    const wrapper = document.createElement("div");
+                                    wrapper.classList.add("photography");
 
-                                const label = document.createElement("label");
-                                label.classList.add("form-check-label");
-                                label.setAttribute("for", checkbox.id);
-                                label.innerHTML = `${category.companyName} - ${
+
+                                    const bpTypeContainer = document.createElement("div");
+                                    bpTypeContainer.classList.add("bpTypeContainer");
+
+                                    const categoryHeading = document.createElement("h6");
+                                    categoryHeading.classList.add("bpCategory", "fw-bold");
+                                    categoryHeading.innerText = category.eventCategory || "Category Name";
+
+                                    bpTypeContainer.appendChild(categoryHeading);
+                                    wrapper.appendChild(bpTypeContainer);
+
+                                    const partnerListContainer = document.createElement("div");
+                                    partnerListContainer.classList.add("partnerListContainer");
+
+                                    const checkbox = document.createElement("input");
+                                    checkbox.type = "checkbox";
+                                    checkbox.classList.add("form-check-input");
+                                    checkbox.name =
+                                        `additionalServiceSelected[${category.partnershipID}][selected]`;
+                                    checkbox.value = category.partnershipServiceID;
+                                    checkbox.id = `service-${category.partnershipServiceID}`;
+
+                                    const inputPBName = document.createElement("input");
+                                    inputPBName.type = "hidden";
+                                    inputPBName.name =
+                                        `additionalServiceSelected[${category.partnershipID}][PBName]`;
+                                    inputPBName.value = category.PBName;
+
+                                    const inputPBPrice = document.createElement("input");
+                                    inputPBPrice.type = "hidden";
+                                    inputPBPrice.name =
+                                        `additionalServiceSelected[${category.partnershipID}][PBPrice]`;
+                                    inputPBPrice.value = category.PBPrice;
+
+                                    const inputServiceID = document.createElement("input");
+                                    inputServiceID.type = "hidden";
+                                    inputServiceID.name =
+                                        `additionalServiceSelected[${category.partnershipID}][partnershipServiceID]`;
+                                    inputServiceID.value = category.partnershipServiceID;
+
+                                    checkbox.addEventListener("change", function() {
+                                        if (this.checked) {
+                                            partnerListContainer.appendChild(inputPBName);
+                                            partnerListContainer.appendChild(inputPBPrice);
+                                            partnerListContainer.appendChild(inputServiceID);
+                                        } else {
+                                            inputPBName.remove();
+                                            inputPBPrice.remove();
+                                            inputServiceID.remove();
+                                        }
+                                    });
+
+                                    const label = document.createElement("label");
+                                    label.classList.add("form-check-label");
+                                    label.setAttribute("for", checkbox.id);
+                                    label.innerHTML = `${category.companyName} - ${
                                     category.PBName
                                 } &mdash; ₱ ${Number(category.PBPrice).toLocaleString(undefined, {
                                     minimumFractionDigits: 2,
                                     maximumFractionDigits: 2,
                                 })} &mdash; ${category.phoneNumber}`;
 
-                                let selectedServiceIDs = [];
+                                    let selectedServiceIDs = [];
 
-                                if (Array.isArray(sessionSelectedServices)) {
-                                    selectedServiceIDs = sessionSelectedServices.map(String);
-                                } else if (typeof sessionSelectedServices === "object" &&
-                                    sessionSelectedServices !== null) {
-                                    for (const key in sessionSelectedServices) {
-                                        const entry = sessionSelectedServices[key];
+                                    if (Array.isArray(sessionSelectedServices)) {
+                                        selectedServiceIDs = sessionSelectedServices.map(String);
+                                    } else if (typeof sessionSelectedServices === "object" &&
+                                        sessionSelectedServices !== null) {
+                                        for (const key in sessionSelectedServices) {
+                                            const entry = sessionSelectedServices[key];
 
-                                        if (entry && entry.partnershipServiceID) {
-                                            selectedServiceIDs.push(String(entry.partnershipServiceID));
+                                            if (entry && entry.partnershipServiceID) {
+                                                selectedServiceIDs.push(String(entry.partnershipServiceID));
+                                            }
                                         }
                                     }
-                                }
 
 
-                                if (selectedServiceIDs.includes(String(category
-                                        .partnershipServiceID))) {
-                                    checkbox.checked = true;
+                                    if (selectedServiceIDs.includes(String(category
+                                            .partnershipServiceID))) {
+                                        checkbox.checked = true;
 
+                                        partnerListContainer.appendChild(inputPBName);
+                                        partnerListContainer.appendChild(inputPBPrice);
+                                        partnerListContainer.appendChild(inputServiceID);
+                                    }
+
+
+                                    partnerListContainer.appendChild(checkbox);
                                     partnerListContainer.appendChild(inputPBName);
                                     partnerListContainer.appendChild(inputPBPrice);
                                     partnerListContainer.appendChild(inputServiceID);
-                                }
+                                    partnerListContainer.appendChild(label);
 
+                                    wrapper.appendChild(partnerListContainer);
+                                    mainContainer.appendChild(wrapper);
+                                });
+                            } else {
+                                const div = document.createElement("div");
+                                div.classList.add("no-data-container");
 
-                                partnerListContainer.appendChild(checkbox);
-                                partnerListContainer.appendChild(inputPBName);
-                                partnerListContainer.appendChild(inputPBPrice);
-                                partnerListContainer.appendChild(inputServiceID);
-                                partnerListContainer.appendChild(label);
+                                const cardText = document.createElement("h3");
+                                cardText.classList.add("card-text");
+                                cardText.innerHTML = "No Additional Services Available";
 
-                                wrapper.appendChild(partnerListContainer);
-                                mainContainer.appendChild(wrapper);
+                                div.appendChild(cardText);
+                                mainContainer.appendChild(div);
+                            }
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: "Error",
+                                text: error.Message,
+                                icon: "error",
                             });
-                        } else {
-                            const div = document.createElement("div");
-                            div.classList.add("no-data-container");
-
-                            const cardText = document.createElement("h3");
-                            cardText.classList.add("card-text");
-                            cardText.innerHTML = "No Additional Services Available";
-
-                            div.appendChild(cardText);
-                            mainContainer.appendChild(div);
-                        }
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: "Error",
-                            text: error.Message,
-                            icon: "error",
+                            console.error("There was a problem with the fetch operation", error);
                         });
-                        console.error("There was a problem with the fetch operation", error);
-                    });
+                }
+
+                // console.log('Date value:', date.value);
+                // console.log('StartTime value:', startTime.value);
+            });
+        </script>
+
+        <!-- Auto select event -->
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const params = new URLSearchParams(window.location.search);
+                const selectedEvent = params.get('event');
+                const select = document.getElementById('eventType');
+                if (selectedEvent) {
+                    if (select) {
+                        select.value = selectedEvent;
+                    }
+                };
+                // console.log(selectedEvent);
+
+                if (selectedEvent) {
+                    const url = new URL(window.location);
+                    url.search = '';
+                    history.replaceState({}, document.title, url.toString());
+                }
+
+            });
+        </script>
+
+        <!-- Fetching events for calendar  -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+                var disabledDates = []; // store dates to disable in Flatpickr
+
+                // Initialize FullCalendar
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    events: '../../Function/fetchUserBookings.php',
+
+                    eventsSet: function(events) {
+                        disabledDates = events
+                            .filter(e =>
+                                e.extendedProps.type === 'event' ||
+                                e.extendedProps.type === 'unavailable'
+                            )
+                            .map(e => e.startStr.split('T')[0]);
+
+
+                        initFlatpickr(disabledDates);
+                    },
+
+                    eventClick: function(info) {
+                        window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                    },
+                    eventClick: function(info) {
+                        window.location.href = "/Pages/Customer/Account/bookingHistory.php";
+                    },
+
+                    eventDidMount: function(info) {
+                        if (info.event.allDay) {
+                            const dateStr = info.event.startStr;
+                            const dayCell = document.querySelector(
+                                `.fc-daygrid-day[data-date="${dateStr}"]`);
+                            if (dayCell) {
+                                let baseColor = info.event.backgroundColor || info.event.extendedProps
+                                    .color || '#dc3545';
+                                dayCell.style.backgroundColor = baseColor;
+                                dayCell.style.color = '#000';
+                            }
+                            if (info.el) {
+                                info.el.style.display = 'none';
+                            }
+                        }
+                    }
+                })
+                calendar.render();
+            });
+
+            // Initialize Flatpickr after fetching disabled dates
+            function initFlatpickr(dates) {
+                flatpickr("#eventDate", {
+                    dateFormat: "Y-m-d",
+                    disable: dates,
+                    minDate: minDate,
+                });
+            }
+        </script>
+
+        <!-- Sweetalert Message  -->
+        <script>
+            const params = new URLSearchParams(window.location.search);
+            const action = params.get('action');
+
+            if (action === 'errorBooking') {
+                Swal.fire({
+                    title: 'Error Booking',
+                    text: 'An error occured while booking. Try again later',
+                    icon: 'error',
+                })
+            } else if (action === 'NoSelectedChoice') {
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Selection required! Choose whether to proceed or cancel the event before moving forward.',
+                    icon: 'warning',
+                    confirmButtonText: 'Okay',
+                }).then((result) => {
+                    const additionalServicesModal = document.getElementById('additionalServicesModal');
+                    const modal = new bootstrap.Modal(additionalServicesModal);
+                    modal.show();
+
+                    // const container = document.querySelector('.customer-choice-container');
+                    // container.style.setProperty("border", "1px solid red", "important");
+
+                })
+            } else if (action === 'exceedFoodCount') {
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'You can select a maximum of 4 dishes.',
+                    icon: 'warning',
+                    confirmButtonText: 'Okay',
+                }).then(() => {
+                    const dishModal = document.getElementById('dishModal');
+                    const modal = new bootstrap.Modal(dishModal);
+                    modal.show();
+                });
+            } else if (action === 'noSelectedVegie') {
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'You must include at least one vegetable dish in your selection.',
+                    icon: 'warning',
+                    confirmButtonText: 'Okay',
+                }).then(() => {
+                    const dishModal = document.getElementById('dishModal');
+                    const modal = new bootstrap.Modal(dishModal);
+                    document.getElementById('adultVeggieContainer').style.border = '1px solid red';
+                    modal.show();
+                });
+            } else if (action === 'noDrinkOrDessert') {
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'If you selected 6 dishes, at least one must be a drink and one must be a dessert.',
+                    icon: 'warning',
+                    confirmButtonText: 'Okay',
+                }).then(() => {
+                    const dishModal = document.getElementById('dishModal');
+                    const modal = new bootstrap.Modal(dishModal);
+                    modal.show();
+                });
             }
 
-            // console.log('Date value:', date.value);
-            // console.log('StartTime value:', startTime.value);
-        });
-    </script>
 
-    <!-- Auto select event -->
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const selectedEvent = params.get('event');
-            const select = document.getElementById('eventType');
-            if (selectedEvent) {
-                if (select) {
-                    select.value = selectedEvent;
-                }
-            };
-            // console.log(selectedEvent);
-
-            if (selectedEvent) {
+            if (action) {
                 const url = new URL(window.location);
                 url.search = '';
                 history.replaceState({}, document.title, url.toString());
             }
-            // // const kidsMeal = document.getElementById('kidMeal');
-            // const foodItem = document.querySelectorAll('.food-item');
-            // if (select.value) {
-            //     if (select.value === 'Kids Party') {
-            //         // kidsMeal.style.display = 'block';
+        </script>
 
-            //         foodItem.forEach((food) => {
-            //             if (foodItem.value === 'Chocolate fountain machine') {
-            //                 foodItem.checked = true;
-            //             }
-            //         })
-            //     }
-            //     select.addEventListener('change', () => {
-            //         if (select.value === 'Kids Party') {
-            //             kidsMeal.style.display = 'block';
-            //         } else {
-            //             kidsMeal.style.display = 'none';
-            //         }
-            //         console.log(select.value);
-            //     })
-            // }
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
 
-        });
-    </script>
-
-    <!-- Fetching events for calendar  -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var disabledDates = []; // store dates to disable in Flatpickr
-
-            // Initialize FullCalendar
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: '../../Function/fetchUserBookings.php',
-
-                eventsSet: function(events) {
-                    disabledDates = events
-                        .filter(e =>
-                            e.extendedProps.type === 'event' ||
-                            e.extendedProps.type === 'unavailable'
-                        )
-                        .map(e => e.startStr.split('T')[0]);
-
-
-                    initFlatpickr(disabledDates);
-                },
-
-                eventClick: function(info) {
-                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
-                },
-                eventClick: function(info) {
-                    window.location.href = "/Pages/Customer/Account/bookingHistory.php";
-                },
-
-                eventDidMount: function(info) {
-                    if (info.event.allDay) {
-                        const dateStr = info.event.startStr;
-                        const dayCell = document.querySelector(
-                            `.fc-daygrid-day[data-date="${dateStr}"]`);
-                        if (dayCell) {
-                            let baseColor = info.event.backgroundColor || info.event.extendedProps
-                                .color || '#dc3545';
-                            dayCell.style.backgroundColor = baseColor;
-                            dayCell.style.color = '#000';
+                document.querySelectorAll('.food-item-container').forEach(container => {
+                    const checkbox = container.querySelector('input[type="checkbox"]');
+                    container.addEventListener('click', (e) => {
+                        if (e.target.tagName.toLowerCase() !== 'input') {
+                            checkbox.checked = !checkbox.checked;
                         }
-                        if (info.el) {
-                            info.el.style.display = 'none';
-                        }
+                    });
+                });
+
+                function renderSelectedList(containerId, label, items) {
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+
+                    container.innerHTML = "";
+
+                    const wrapper = document.createElement("div");
+                    wrapper.classList.add("selected-inline");
+
+                    const labelEl = document.createElement("span");
+                    labelEl.classList.add("selected-label-inline");
+                    labelEl.textContent = label + " ";
+
+                    wrapper.appendChild(labelEl);
+
+                    if (items.length === 0) {
+                        const none = document.createElement("span");
+                        none.textContent = "None selected";
+                        none.style.color = "#777";
+                        wrapper.appendChild(none);
+                    } else {
+                        items.forEach(item => {
+                            const tag = document.createElement("span");
+                            tag.classList.add("selected-tag");
+                            tag.textContent = item;
+                            wrapper.appendChild(tag);
+                        });
                     }
+
+                    container.appendChild(wrapper);
                 }
-            })
-            calendar.render();
-        });
 
-        // Initialize Flatpickr after fetching disabled dates
-        function initFlatpickr(dates) {
-            flatpickr("#eventDate", {
-                dateFormat: "Y-m-d",
-                disable: dates,
-                minDate: minDate,
-            });
-        }
-    </script>
-
-    <!-- Sweetalert Message  -->
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const action = params.get('action');
-
-        if (action === 'errorBooking') {
-            Swal.fire({
-                title: 'Error Booking',
-                text: 'An error occured while booking. Try again later',
-                icon: 'error',
-            })
-        } else if (action === 'NoSelectedChoice') {
-            Swal.fire({
-                title: 'Oops',
-                text: 'Selection required! Choose whether to proceed or cancel the event before moving forward.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then((result) => {
-                const additionalServicesModal = document.getElementById('additionalServicesModal');
-                const modal = new bootstrap.Modal(additionalServicesModal);
-                modal.show();
-
-                // const container = document.querySelector('.customer-choice-container');
-                // container.style.setProperty("border", "1px solid red", "important");
-
-            })
-        } else if (action === 'exceedFoodCount') {
-            Swal.fire({
-                title: 'Oops!',
-                text: 'You can select a maximum of 4 dishes.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then(() => {
                 const dishModal = document.getElementById('dishModal');
-                const modal = new bootstrap.Modal(dishModal);
-                modal.show();
+
+                function updateSelectedDishes() {
+                    const selected = Array.from(document.querySelectorAll('#dishModal input[type="checkbox"]:checked'))
+                        .map(el => el.value);
+                    renderSelectedList('selectedDishesContainer', 'Selected Dishes:', selected);
+                }
+
+                dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
+
+                const additionalModal = document.getElementById('additionalServicesModal');
+
+                function updateSelectedServices() {
+                    const selected = Array.from(additionalModal.querySelectorAll('input[type="checkbox"]:checked'))
+                        .map(el => {
+                            const wrapper = el.closest('.partnerListContainer');
+                            if (wrapper) {
+                                const labelText = wrapper.querySelector('label')?.textContent || '';
+                                const companyName = labelText.split('—')[0]?.trim() || el.value;
+                                return companyName;
+                            }
+                            return el.value;
+                        });
+                    renderSelectedList('selectedAdditionalServicesContainer', 'Selected Services:', selected);
+                }
+
+                additionalModal.addEventListener('hidden.bs.modal', updateSelectedServices);
+
             });
-        } else if (action === 'noSelectedVegie') {
-            Swal.fire({
-                title: 'Oops!',
-                text: 'You must include at least one vegetable dish in your selection.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then(() => {
-                const dishModal = document.getElementById('dishModal');
-                const modal = new bootstrap.Modal(dishModal);
-                document.getElementById('adultVeggieContainer').style.border = '1px solid red';
-                modal.show();
-            });
-        } else if (action === 'noDrinkOrDessert') {
-            Swal.fire({
-                title: 'Oops!',
-                text: 'If you selected 6 dishes, at least one must be a drink and one must be a dessert.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then(() => {
-                const dishModal = document.getElementById('dishModal');
-                const modal = new bootstrap.Modal(dishModal);
-                modal.show();
-            });
-        }
+        </script>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
 
-        if (action) {
-            const url = new URL(window.location);
-            url.search = '';
-            history.replaceState({}, document.title, url.toString());
-        }
-    </script>
+                // Preference Other
+                const otherPrefCheck = document.getElementById("otherPrefCheck");
+                const otherPrefInput = document.getElementById("otherPrefInput");
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
+                otherPrefCheck.addEventListener("change", function() {
+                    if (this.checked) {
+                        otherPrefInput.classList.remove("d-none");
+                        otherPrefInput.required = true;
+                    } else {
+                        otherPrefInput.classList.add("d-none");
+                        otherPrefInput.value = "";
+                        otherPrefInput.required = false;
+                    }
+                });
 
-            document.querySelectorAll('.food-item-container').forEach(container => {
-                const checkbox = container.querySelector('input[type="checkbox"]');
-                container.addEventListener('click', (e) => {
-                    if (e.target.tagName.toLowerCase() !== 'input') {
-                        checkbox.checked = !checkbox.checked;
+                // Allergen Other
+                const otherAllergenCheck = document.getElementById("otherAllergenCheck");
+                const otherAllergenInput = document.getElementById("otherAllergenInput");
+
+                otherAllergenCheck.addEventListener("change", function() {
+                    if (this.checked) {
+                        otherAllergenInput.classList.remove("d-none");
+                        console.log("Clicked");
+                        otherAllergenInput.required = true;
+                    } else {
+                        otherAllergenInput.classList.add("d-none");
+                        otherAllergenInput.value = "";
+                        otherAllergenInput.required = false;
                     }
                 });
             });
+        </script>
+    <?php else: ?>
+        <!-- //* Disables buttons and  input boxes  during Edit Mode -->
+        <script>
+            document.querySelectorAll('input, button, select, textarea').forEach(el => el.disabled = true);
+            document.querySelectorAll('.set-editable').forEach(el => el.disabled = false);
+        </script>
 
-            function renderSelectedList(containerId, label, items) {
-                const container = document.getElementById(containerId);
-                if (!container) return;
+        <!-- AJAX for editing website content -->
+        <?php if ($editMode): ?>
+            <script type="module">
+                import {
+                    initWebsiteEditor
+                } from '../../Assets/JS/EditWebsite/editWebsiteContent.js';
 
-                container.innerHTML = "";
-
-                const wrapper = document.createElement("div");
-                wrapper.classList.add("selected-inline");
-
-                const labelEl = document.createElement("span");
-                labelEl.classList.add("selected-label-inline");
-                labelEl.textContent = label + " ";
-
-                wrapper.appendChild(labelEl);
-
-                if (items.length === 0) {
-                    const none = document.createElement("span");
-                    none.textContent = "None selected";
-                    none.style.color = "#777";
-                    wrapper.appendChild(none);
-                } else {
-                    items.forEach(item => {
-                        const tag = document.createElement("span");
-                        tag.classList.add("selected-tag");
-                        tag.textContent = item;
-                        wrapper.appendChild(tag);
-                    });
-                }
-
-                container.appendChild(wrapper);
-            }
-
-            const dishModal = document.getElementById('dishModal');
-
-            function updateSelectedDishes() {
-                const selected = Array.from(document.querySelectorAll('#dishModal input[type="checkbox"]:checked'))
-                    .map(el => el.value);
-                renderSelectedList('selectedDishesContainer', 'Selected Dishes:', selected);
-            }
-
-            dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
-
-            const additionalModal = document.getElementById('additionalServicesModal');
-
-            function updateSelectedServices() {
-                const selected = Array.from(additionalModal.querySelectorAll('input[type="checkbox"]:checked'))
-                    .map(el => {
-                        const wrapper = el.closest('.partnerListContainer');
-                        if (wrapper) {
-                            const labelText = wrapper.querySelector('label')?.textContent || '';
-                            const companyName = labelText.split('—')[0]?.trim() || el.value;
-                            return companyName;
-                        }
-                        return el.value;
-                    });
-                renderSelectedList('selectedAdditionalServicesContainer', 'Selected Services:', selected);
-            }
-
-            additionalModal.addEventListener('hidden.bs.modal', updateSelectedServices);
-
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-
-            // Preference Other
-            const otherPrefCheck = document.getElementById("otherPrefCheck");
-            const otherPrefInput = document.getElementById("otherPrefInput");
-
-            otherPrefCheck.addEventListener("change", function() {
-                if (this.checked) {
-                    otherPrefInput.classList.remove("d-none");
-                    otherPrefInput.required = true;
-                } else {
-                    otherPrefInput.classList.add("d-none");
-                    otherPrefInput.value = "";
-                    otherPrefInput.required = false;
-                }
-            });
-
-            // Allergen Other
-            const otherAllergenCheck = document.getElementById("otherAllergenCheck");
-            const otherAllergenInput = document.getElementById("otherAllergenInput");
-
-            otherAllergenCheck.addEventListener("change", function() {
-                if (this.checked) {
-                    otherAllergenInput.classList.remove("d-none");
-                    console.log("Clicked");
-                    otherAllergenInput.required = true;
-                } else {
-                    otherAllergenInput.classList.add("d-none");
-                    otherAllergenInput.value = "";
-                    otherAllergenInput.required = false;
-                }
-            });
-        });
-    </script>
+                initWebsiteEditor('BookNowEvent', '../../Function/Admin/editWebsite/editWebsiteContent.php');
+            </script>
+        <?php endif; ?>
+    <?php endif; ?>
 </body>
 
 </html>

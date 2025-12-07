@@ -299,6 +299,9 @@ if ($result->num_rows > 0) {
                         "data": "timestamp"
                     }
                 ],
+                order: [
+                    [0, 'desc']
+                ]
             });
         });
     </script>

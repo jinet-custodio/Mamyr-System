@@ -64,49 +64,49 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <?php if ($editMode): ?>
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
-    <?php if (!$editMode): ?>
-        <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-            <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
-            <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+        <a href="../index.php"><img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"></a>
+        <button class=" navbar-toggler ms-auto collapsed" id="bg-nav-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse " id="navbarNav">
-                <ul class="navbar-nav ms-auto me-10" id="navUL">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.php"> Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Amenities
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item active" href="amenities.php">Resort Amenities</a></li>
-                            <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
-                            <li><a class="dropdown-item" href="events.php">Events</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog.php">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.php">About</a>
-                    </li>
+        <div class="collapse navbar-collapse " id="navbarNav">
+            <ul class="navbar-nav ms-auto me-10" id="navUL">
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.php"> Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Amenities
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item active" href="amenities.php">Resort Amenities</a></li>
+                        <li><a class="dropdown-item" href="ratesAndHotelRooms.php">Rates and Hotel Rooms</a></li>
+                        <li><a class="dropdown-item" href="events.php">Events</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="blog.php">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="beOurPartnerNew.php" id="bopNav">Be Our Partner</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.php">About</a>
+                </li>
+                <?php if (!$editMode): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="register.php">Book Now</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="signUpBtn" href="register.php">Log In</a>
                     </li>
-                </ul>
-            </div>
-        </nav>
-    <?php endif; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </nav>
 
     <div class="amenities" id="amenities">
         <h1 class="title">OUR AMENITIES</h1>
