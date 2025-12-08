@@ -8,7 +8,7 @@ $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
 
 if (isset($_POST['submitPhoneNumber'])) {
-    $page = mysqli_real_escape_string($conn, $_POST['page']) ?? 'bookNow.php';
+    $page = mysqli_real_escape_string($conn, $_POST['page']) ?? 'bookNow';
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
 
     $checkPhoneNumber = $conn->prepare("SELECT phoneNumber FROM user WHERE userID = ? AND userRole = ?");
@@ -23,9 +23,9 @@ if (isset($_POST['submitPhoneNumber'])) {
         $updatePhoneNumber = $conn->prepare("UPDATE user SET phoneNumber = ? WHERE userID = ? AND userRole = ?");
         $updatePhoneNumber->bind_param("sii", $phoneNumber, $userID, $userRole);
         if ($updatePhoneNumber->execute()) {
-            header("Location: ../Pages/Customer/$page?action=phoneAdded");
+            header("Location: ../Pages/Customer/$page.php?action=phoneAdded");
         }
     } else {
-        header("Location: ../Pages/Customer/$page?action=errorAdding");
+        header("Location: ../Pages/Customer/$page.php?action=errorAdding");
     }
 }
