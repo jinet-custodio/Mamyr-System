@@ -120,7 +120,7 @@ $fullText = trim($fullText);
                         <i class='bx bxs-user-circle'></i>
                     </div>
                     <div class="input-box">
-                        <input type="text" class="form-control" id="middleInitial" name="middleInitial" maxlength="2" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
+                        <input type="text" class="form-control" id="middleInitial" name="middleInitial" maxlength="2" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{1,100}$"
                             placeholder="M.I. (Optional)"
                             value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
                         <i class='bx bxs-user-circle'></i>

@@ -20,6 +20,12 @@ while ($row = $contentResult->fetch_assoc()) {
     $fullText .= $row['content'] . "\n\n"; // Keep spacing between sections
 }
 $fullText = trim($fullText);
+
+
+
+// echo '<pre>';
+// print_r($_SESSION['registerFormData']);
+// echo '</pre>';
 ?>
 
 
@@ -58,16 +64,16 @@ $fullText = trim($fullText);
                 <div class="col" id="repInfoContainer">
                     <h4 class="repInfoLabel">Representative Information</h4>
                     <div class="repInfoFormContainer">
-                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name"
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
                         <!-- <i class='bx bxs-user-circle'></i> -->
 
-                        <input type="text" class="form-control" id="middleInitial" name="middleInitial"
+                        <input type="text" class="form-control" id="middleInitial" name="middleInitial" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{1,100}$"
                             placeholder="M.I. (Optional)"
                             value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
                         <!-- <i class='bx bxs-user-circle'></i> -->
-                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
                         <!-- <i class='bx bxs-user-circle'></i> -->
@@ -242,7 +248,7 @@ $fullText = trim($fullText);
                         <h6 class="label">Upload a Valid ID</h6>
 
                         <?php if (isset($_SESSION['partnerData']['imageName'])) { ?>
-                            <input type="text" class="form-control validIDFIle" id="validID" name="validID"
+                            <input type="text" class="form-control validIDFIle"
                                 value="<?php echo isset($_SESSION['partnerData']['imageName']) ? htmlspecialchars(trim($_SESSION['partnerData']['imageName'])) : ''; ?>">
                         <?php } ?>
                         <input type="file" class="form-control validIDFIle" id="validID" name="validID">

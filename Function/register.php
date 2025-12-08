@@ -20,10 +20,20 @@ if (isset($_POST['signUp'])) {
     $middleInitial = mysqli_real_escape_string($conn, $_POST['middleInitial']);
     $lastName = mysqli_real_escape_string($conn, $_POST['lastName']);
 
+    // store the data in session that user enter
+    $_SESSION['registerFormData'] = $_POST;
+
     //If the user is directly signing up as business partner, their personal address will not be provided
+
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
+    $extensions = ['gmail.com', 'yahoo.com', 'outlook.com', 'protonmail.com', 'icloud.com'];
+
+
     if ($registerStatus === "Partner") {
         $userAddress = "Personal address not provided";
-
+        $_SESSION['partnerData'] = $_POST;
         //For validID
 
         $imageMaxSize = 5 * 1024 * 1024; // 5 MB max
@@ -42,13 +52,13 @@ if (isset($_POST['signUp'])) {
             $imageSize = $_FILES['validID']['size'];
 
             if (!in_array($imageExt, $allowedExt)) {
-                unset($_SESSION['tempImage']);
-                header("Location: ../../../Pages/busPartnerRegister.php?result=extError");
+                unset($_SESSION['imageName']);
+                header("Location: ../../../Pages/busPartnerRegister.php?action=extError");
                 exit();
             }
 
             if ($imageSize > $imageMaxSize) {
-                header("Location: ../../../Pages/busPartnerRegister.php?result=imageSize");
+                header("Location: ../../../Pages/busPartnerRegister.php?action=imageSize");
                 exit();
             }
 
@@ -56,31 +66,26 @@ if (isset($_POST['signUp'])) {
             $tempFilePath = $tempUploadPath . $tempFileName;
 
             if (!move_uploaded_file($_FILES['validID']['tmp_name'], $tempFilePath)) {
-                header("Location: ../../../Pages/busPartnerRegister.php?result=imageFailed");
+                header("Location: ../../../Pages/busPartnerRegister.php?action=imageFailed");
                 exit();
             }
 
-            $_SESSION['tempImage'] = $tempFileName;
-        } else if (!empty($_SESSION['tempImage'])) {
-            $tempFileName = $_SESSION['tempImage'];
+            $_SESSION['imageName'] = $tempFileName;
+        } else if (!empty($_SESSION['imageName'])) {
+            $tempFileName = $_SESSION['imageName'];
         } else {
-            header("Location: ../../../Pages/busPartnerRegister.php?result=imageFailed");
+            header("Location: ../../../Pages/busPartnerRegister.php?action=imageFailed");
             exit();
         }
 
-        $imageName = $firstName . '_' . basename($_SESSION['tempImage']);
+        $imageName = $firstName . '_' . basename($_SESSION['imageName']);
         $finalFilePath = $storeProofPath . $imageName;
 
-        rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
+        rename($tempUploadPath . $_SESSION['imageName'], $finalFilePath);
     } else {
         $userAddress = mysqli_real_escape_string($conn, $_POST['userAddress']);
         $imageName = null;
     }
-
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
-    $extensions = ['gmail.com', 'yahoo.com', 'outlook.com', 'protonmail.com', 'icloud.com'];
 
 
 
@@ -104,7 +109,7 @@ if (isset($_POST['signUp'])) {
         'proofLink'      => trim($_POST['proofLink'] ?? '')
     ];
 
-    error_log(print_r($partnerData, true));
+    // error_log(print_r($partnerData, true));
     $defaultImage = '../Assets/Images/defaultProfile.png';
     if (file_exists($defaultImage)) {
         $userProfile = file_get_contents($defaultImage);
@@ -123,7 +128,6 @@ if (isset($_POST['signUp'])) {
             $checkEmail->bind_param("s", $email);
             $checkEmail->execute();
             $checkEmailResult = $checkEmail->get_result();
-            $_SESSION['registerFormData'] = $_POST;  // store the data in session that user enter
             if ($checkEmailResult->num_rows > 0) {
                 //Unchecked - partnerside
                 if ($registerStatus == "Partner") {
