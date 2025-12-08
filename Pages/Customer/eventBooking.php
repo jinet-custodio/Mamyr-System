@@ -1191,6 +1191,15 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
 
         <!-- Sweetalert Message  -->
         <script>
+            //* For not allowing letters
+            const phoneNumber = document.getElementById('phoneNumber');
+
+            phoneNumber.addEventListener('keypress', function(e) {
+                if (!/[0-9+]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            })
+
             const params = new URLSearchParams(window.location.search);
             const action = params.get('action');
 
@@ -1257,6 +1266,7 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
                 url.search = '';
                 history.replaceState({}, document.title, url.toString());
             }
+        </script>
 
         <script>
             document.addEventListener("DOMContentLoaded", () => {
@@ -1273,88 +1283,6 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
                 function renderSelectedList(containerId, label, items) {
                     const container = document.getElementById(containerId);
                     if (!container) return;
-
-    <!-- Sweetalert Message  -->
-    <script>
-        //* For not allowing letters
-        const phoneNumber = document.getElementById('phoneNumber');
-
-        phoneNumber.addEventListener('keypress', function(e) {
-            if (!/[0-9+]/.test(e.key)) {
-                e.preventDefault();
-            }
-        })
-
-        const params = new URLSearchParams(window.location.search);
-        const action = params.get('action');
-
-        if (action === 'errorBooking') {
-            Swal.fire({
-                title: 'Error Booking',
-                text: 'An error occured while booking. Try again later',
-                icon: 'error',
-            })
-        } else if (action === 'NoSelectedChoice') {
-            Swal.fire({
-                title: 'Oops',
-                text: 'Selection required! Choose whether to proceed or cancel the event before moving forward.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then((result) => {
-                const additionalServicesModal = document.getElementById('additionalServicesModal');
-                const modal = new bootstrap.Modal(additionalServicesModal);
-                modal.show();
-
-                // const container = document.querySelector('.customer-choice-container');
-                // container.style.setProperty("border", "1px solid red", "important");
-
-            })
-        } else if (action === 'exceedFoodCount') {
-            Swal.fire({
-                title: 'Oops!',
-                text: 'You can select a maximum of 4 dishes.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then(() => {
-                const dishModal = document.getElementById('dishModal');
-                const modal = new bootstrap.Modal(dishModal);
-                modal.show();
-            });
-        } else if (action === 'noSelectedVegie') {
-            Swal.fire({
-                title: 'Oops!',
-                text: 'You must include at least one vegetable dish in your selection.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then(() => {
-                const dishModal = document.getElementById('dishModal');
-                const modal = new bootstrap.Modal(dishModal);
-                document.getElementById('adultVeggieContainer').style.border = '1px solid red';
-                modal.show();
-            });
-        } else if (action === 'noDrinkOrDessert') {
-            Swal.fire({
-                title: 'Oops!',
-                text: 'If you selected 6 dishes, at least one must be a drink and one must be a dessert.',
-                icon: 'warning',
-                confirmButtonText: 'Okay',
-            }).then(() => {
-                const dishModal = document.getElementById('dishModal');
-                const modal = new bootstrap.Modal(dishModal);
-                modal.show();
-            });
-        } else if (action === 'phoneNumber') {
-            Swal.fire({
-                icon: 'info',
-                text: 'Phone number is required!',
-                title: 'Oops',
-                confirmButtonText: 'Okay'
-            }).then((result) => {
-                const phoneNumberModal = document.getElementById('phoneNumberModal');
-                const modal = new bootstrap.Modal(phoneNumberModal);
-                modal.show();
-            });
-        }
 
                     const wrapper = document.createElement("div");
                     wrapper.classList.add("selected-inline");
