@@ -223,12 +223,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         value="<?php echo isset($_SESSION['partnerData']['businessEmail']) ? htmlspecialchars(trim($_SESSION['partnerData']['businessEmail'])) : ''; ?>"
                                         required>
 
-                                    <input type="text" class="form-control" id="firstName" name="firstName"
+                                    <input type="text" class="form-control" id="firstName" name="firstName" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                                         value="<?= htmlspecialchars($firstName) ?>" placeholder="First Name" required>
                                     <input type="text" class="form-control" id="middleInitial"
-                                        value="<?= htmlspecialchars($middleInitial) ?>" name="middleInitial"
+                                        value="<?= htmlspecialchars($middleInitial) ?>" name="middleInitial" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{1,100}$"
                                         placeholder="Middle Initial (Optional)">
-                                    <input type="text" class="form-control" id="lastName" name="lastName"
+                                    <input type="text" class="form-control" id="lastName" name="lastName" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                                         value="<?= htmlspecialchars($lastName) ?>" placeholder="Last Name" required>
                                     <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                                         pattern="^(?:\+63|0)9\d{9}$" title="e.g., +639123456789 or 09123456789"
@@ -293,7 +293,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                     <h6 class="label">Upload a Valid ID</h6>
                                     <?php if (isset($_SESSION['partnerData']['imageName'])) { ?>
-                                        <input type="text" class="form-control validIDFIle" id="validID" name="validID" value="<?php echo isset($_SESSION['partnerData']['imageName']) ? htmlspecialchars(trim($_SESSION['partnerData']['imageName'])) : ''; ?>">
+                                        <input type="text" class="form-control validIDFIle" value="<?php echo isset($_SESSION['partnerData']['imageName']) ? htmlspecialchars(trim($_SESSION['partnerData']['imageName'])) : ''; ?>">
                                     <?php }  ?>
                                     <input type="file" class="form-control validIDFIle" id="validID" name="validID">
 

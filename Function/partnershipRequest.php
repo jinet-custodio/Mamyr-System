@@ -52,7 +52,7 @@ if (isset($_POST['submit_request'])) {
         $imageSize = $_FILES['validID']['size'];
 
         if (!in_array($imageExt, $allowedExt)) {
-            unset($_SESSION['tempImage']);
+            unset($_SESSION['imageName']);
             header("Location: ../../../Pages/Customer/partnerApplication.php?result=extError");
             exit();
         }
@@ -70,18 +70,18 @@ if (isset($_POST['submit_request'])) {
             exit();
         }
 
-        $_SESSION['tempImage'] = $tempFileName;
-    } else if (!empty($_SESSION['tempImage'])) {
-        $tempFileName = $_SESSION['tempImage'];
+        $_SESSION['imageName'] = $tempFileName;
+    } else if (!empty($_SESSION['imageName'])) {
+        $tempFileName = $_SESSION['imageName'];
     } else {
         header("Location: ../../../Pages/Customer/partnerApplication.php?result=imageFailed");
         exit();
     }
 
-    $finalFileName = $firstName . '_' . basename($_SESSION['tempImage']);
+    $finalFileName = $firstName . '_' . basename($_SESSION['imageName']);
     $finalFilePath = $storeProofPath . $finalFileName;
 
-    rename($tempUploadPath . $_SESSION['tempImage'], $finalFilePath);
+    rename($tempUploadPath . $_SESSION['imageName'], $finalFilePath);
 
 
 

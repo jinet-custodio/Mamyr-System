@@ -980,31 +980,75 @@ switch ($userRole) {
         const paymentMethod = document.getElementById("paymentMethod").value;
         const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
         const viewTransactionBtn = document.getElementById('viewTransaction');
+        const downpaymentBtn = document.getElementById("makeDownpaymentBtn");
         // console.log("Booking Stat: " + bookingStatus);
         // console.log("payment App Stat" + paymentApprovalStatus);
-        if ((bookingStatus === "Pending" && (paymentApprovalStatus === 'Pending' ||
-                paymentApprovalStatus === '')) || (bookingStatus === 'Cancelled') || (
-                bookingStatus === 'Rejected')) {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-            downloadReceiptBtn.style.display = 'none';
-            viewTransactionBtn.style.display = 'none';
-        } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && (paymentStatus === "Unpaid" || paymentStatus === "Payment Sent")) {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
-            downloadReceiptBtn.style.display = 'none';
-            viewTransactionBtn.style.display = 'block';
-        } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && (paymentStatus === "Partially Paid" || paymentStatus === "Fully Paid")) {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-            viewTransactionBtn.style.display = 'block';
-        } else if ((bookingStatus === "Done" && paymentStatus === "Fully Paid") || bookingStatus === 'Expired') {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-            viewTransactionBtn.style.display = 'block';
-        } else if (paymentMethod === 'Cash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        } else if (paymentMethod === 'GCash') {
-            document.getElementById("makeDownpaymentBtn").style.display = "block";
-        } else {
-            document.getElementById("makeDownpaymentBtn").style.display = "none";
-        };
+
+        switch (bookingStatus.toLowerCase()) {
+            case 'pending':
+            case 'cancel':
+            case 'rejected':
+                downpaymentBtn.style.display = "none";
+                downloadReceiptBtn.style.display = 'none';
+                viewTransactionBtn.style.display = 'none';
+                break;
+            case 'approved':
+                switch (paymentApprovalStatus) {
+                    case 'pending':
+                        switch (paymentStatus) {
+                            case 'unpaid':
+                                downpaymentBtn.style.display = "block";
+                                downloadReceiptBtn.style.display = 'none';
+                                viewTransactionBtn.style.display = 'none';
+                                break;
+                            case 'payment sent':
+                                downpaymentBtn.style.display = "block";
+                                downloadReceiptBtn.style.display = 'none';
+                                viewTransactionBtn.style.display = 'block';
+                                break;
+                        }
+                        break;
+                }
+                break;
+            case 'reserved':
+            case 'done':
+                downpaymentBtn.style.display = "none";
+                viewTransactionBtn.style.display = 'block';
+                break;
+        }
+
+
+        switch (paymentMethod.toLowerCase()) {
+            case 'cash':
+                downpaymentBtn.style.display = "none";
+                break;
+            case 'gcash':
+                downpaymentBtn.style.display = "block";
+                break;
+        }
+        // if ((bookingStatus === "Pending" && (paymentApprovalStatus === 'Pending' ||
+        //         paymentApprovalStatus === '')) || (bookingStatus === 'Cancelled') || (
+        //         bookingStatus === 'Rejected')) {
+        //     downpaymentBtn.style.display = "none";
+        //     downloadReceiptBtn.style.display = 'none';
+        //     viewTransactionBtn.style.display = 'none';
+        // } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && (paymentStatus === "Unpaid" || paymentStatus === "Payment Sent")) {
+        //     downpaymentBtn.style.display = "block";
+        //     downloadReceiptBtn.style.display = 'none';
+        //     viewTransactionBtn.style.display = 'block';
+        // } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && (paymentStatus === "Partially Paid" || paymentStatus === "Fully Paid")) {
+        //     downpaymentBtn.style.display = "none";
+        //     viewTransactionBtn.style.display = 'block';
+        // } else if ((bookingStatus === "Done" && paymentStatus === "Fully Paid") || bookingStatus === 'Expired') {
+        //     downpaymentBtn.style.display = "none";
+        //     viewTransactionBtn.style.display = 'block';
+        // } else if (paymentMethod === 'Cash') {
+        //     downpaymentBtn.style.display = "none";
+        // } else if (paymentMethod === 'GCash') {
+        //     downpaymentBtn.style.display = "block";
+        // } else {
+        //     downpaymentBtn.style.display = "none";
+        // };
 
 
         const input = document.getElementById('payment-amount');
@@ -1034,26 +1078,6 @@ switch ($userRole) {
             reader.readAsDataURL(event.target.files[0]);
         });
     </script>
-
-    <!-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const bookingType = document.getElementById("bookingType").value;
-
-            // const downpaymentNoteContainer = document.getElementById("downpaymentNoteContainer");
-            const addOnsContainer = document.getElementById("addOns");
-            // const tourTypeContainer = document.getElementById("tourType");
-
-            if (bookingType === "Resort") {
-                addOnsContainer.style.display = "flex";
-                // tourTypeContainer.style.display = "flex";
-            } else if (bookingType === "Hotel") {
-                addOnsContainer.style.display = "none";
-                // tourTypeContainer.style.display = "none";
-            } else {
-                addOnsContainer.style.display = "none";
-            }
-        });
-    </script> -->
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
