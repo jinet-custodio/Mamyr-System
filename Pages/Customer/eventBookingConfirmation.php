@@ -132,7 +132,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     if (isset($_POST['eventBN'])) {
 
         $_SESSION['eventFormData'] = $_POST;
-        print_r($_SESSION['eventFormData']);
+        // print_r($_SESSION['eventFormData']);
         $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
         $guestNo = intval($_POST['guestNo']);
         $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
