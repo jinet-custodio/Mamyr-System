@@ -810,4 +810,12 @@ input[type="checkbox"],
   .icon-note {
     margin-bottom: unset !important;
   }
+
+  .calContainer {
+    width: 100%;
+  }
+  #additionalServicesCard,
+  #foodSelectionCard {
+    width: 100%;
+  }
 }

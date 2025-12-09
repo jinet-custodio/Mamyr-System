@@ -124,7 +124,7 @@ while ($row = $getEventsResult->fetch_assoc()) {
             </ul>
         </div>
     </nav>
-    <?php if (!$editMode): ?>
+    <?php if ($editMode): ?>
         <button id="saveChangesBtn" class="btn btn-success">Save Changes</button>
     <?php endif; ?>
 
