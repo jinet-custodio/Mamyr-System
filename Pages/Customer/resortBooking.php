@@ -551,7 +551,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary set-editable " data-bs-dismiss="modal" id="modal-close">Close</button>
-                                            <button type="button" id="saveChangesBtn" class="btn btn-success set-editable ">Save Changes</button>
+                                            <?php if ($editMode): ?>
+                                                <button type="button" id="saveChangesBtn" class="btn btn-success set-editable ">Save Changes</button>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
