@@ -222,7 +222,7 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
     }
 } elseif (isset($_POST['addFoodItem'])) { //* Catering Food
     $foodName = mysqli_real_escape_string($conn, $_POST['foodName']) ?? '';
-    $foodCategory = strtoupper(mysqli_real_escape_string($conn, $_POST['foodCategory'])) ?? '';
+    $foodCategory = ucfirst(mysqli_real_escape_string($conn, $_POST['foodCategory'])) ?? '';
     $foodAvailability = intval($_POST['foodAvailability']) ?? 1;
 
 

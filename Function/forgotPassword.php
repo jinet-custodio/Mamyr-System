@@ -24,93 +24,122 @@ if (isset($_POST['verify_email'])) {
   if ($result->num_rows > 0) {
     $storedData = $result->fetch_assoc();
     $statusID = intval($storedData['userStatusID']);
-    if ($statusID === $isVerified) //Verified User
-    {
-      $resetPasswordOTP = generateCode(6);
-      $time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
-      $updateOTP = $conn->prepare("UPDATE user SET userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
-      $updateOTP->bind_param("sss", $resetPasswordOTP, $time, $email);
 
-      if ($updateOTP->execute()) {
-        $message = '<body>
-    <table
-      align="center"
-      width="100%"
-      cellpadding="0"
-      cellspacing="0"
-      style="
-        max-width: 600px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      "
-    >
-      <tr style="background-color: #365cce">
-        <td style="text-align: center">
-          <h2
+    $userOTP = trim($storedData['userOTP']);
+    $OTP_expiration_at = trim($storedData['OTP_expiration_at']);
+    $allowed = false;
+    if (empty($OTP_expiration_at) && empty($userOTP)) {
+      $allowed = true;
+    } else {
+      $expirationAt = new DateTime($OTP_expiration_at);
+      $now = new DateTime();
+
+      if ($expirationAt->format('Y-m-d') === $now->format('Y-m-d')) {
+
+        if ($now >= $expirationAt) {
+          $allowed = true;
+        } else {
+          $interval = $now->diff($expirationAt);
+          $minutes = ($interval->h * 60) + $interval->i;
+        }
+      }
+    }
+
+
+    if ($allowed) {
+      if ($statusID === $isVerified) //Verified User
+      {
+        $resetPasswordOTP = generateCode(6);
+        $time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+        $updateOTP = $conn->prepare("UPDATE user SET userOTP = ?, OTP_expiration_at = ? WHERE email = ?");
+        $updateOTP->bind_param("sss", $resetPasswordOTP, $time, $email);
+
+        if ($updateOTP->execute()) {
+          $message = '<body>
+          <table
+            align="center"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
             style="
-              font-family: Poppins Light;
-              color: #ffffff;
-              font-size: 18px;
-              margin-top: 25px;
+              max-width: 600px;
+              background-color: #ffffff;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             "
           >
-            Your OTP Code for Changing your Password
-          </h2>
-        </td>
-      </tr>
-      <tr>
-        <td
-          style="
-            padding: 30px;
-            text-align: left;
-            color: #333333;
-            font-family: Arial;
-          "
-        >
-          <p style="font-size: 12px; margin: 10px 0 10px">Hello,</p>
-          <p style="font-size: 12px; margin: 8px 0">
-            Your One-Time Password (OTP) for Changing your Password is:
-          </p>
-          <h2 style="color: rgb(12, 6, 5); font-size: 20px; text-align: center">
-            ' . $resetPasswordOTP . '
-          </h2>
-          <p style="font-size: 12px; margin: 8px 0">
-            This OTP is valid for <strong>5 minutes</strong>. Do not share it
-            with anyone.
-          </p>
-          <p style="font-size: 12px; margin: 8px 0">
-            If you did not request this code, please ignore this email.
-          </p>
-          <br />
-          <p style="font-size: 14px">Thank you,</p>
-          <p style="font-size: 14px; font-weight: bold">
-            <strong>Mamyr Resort and Events Place</strong>
-          </p>
-        </td>
-      </tr>
-    </table>
-  </body>';
-        $subject = 'Changing of Password';
-        if (sendEmail($email, $firstName, $subject, $message, $env)) {
-          $_SESSION['email'] = $email;
-          $_SESSION['action'] = 'forgot-password';
-          header("Location: ../Pages/verify_email.php");
-          exit;
+            <tr style="background-color: #365cce">
+              <td style="text-align: center">
+                <h2
+                  style="
+                    font-family: Poppins Light;
+                    color: #ffffff;
+                    font-size: 18px;
+                    margin-top: 25px;
+                  "
+                >
+                  Your OTP Code for Changing your Password
+                </h2>
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  padding: 30px;
+                  text-align: left;
+                  color: #333333;
+                  font-family: Arial;
+                "
+              >
+                <p style="font-size: 12px; margin: 10px 0 10px">Hello,</p>
+                <p style="font-size: 12px; margin: 8px 0">
+                  Your One-Time Password (OTP) for Changing your Password is:
+                </p>
+                <h2 style="color: rgb(12, 6, 5); font-size: 20px; text-align: center">
+                  ' . $resetPasswordOTP . '
+                </h2>
+                <p style="font-size: 12px; margin: 8px 0">
+                  This OTP is valid for <strong>5 minutes</strong>. Do not share it
+                  with anyone.
+                </p>
+                <p style="font-size: 12px; margin: 8px 0">
+                  If you did not request this code, please ignore this email.
+                </p>
+                <br />
+                <p style="font-size: 14px">Thank you,</p>
+                <p style="font-size: 14px; font-weight: bold">
+                  <strong>Mamyr Resort and Events Place</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </body>';
+          $subject = 'Changing of Password';
+          if (sendEmail($email, $firstName, $subject, $message, $env)) {
+            $_SESSION['email'] = $email;
+            $_SESSION['action'] = 'forgot-password';
+            header("Location: ../Pages/verify_email.php");
+            exit;
+          } else {
+            $_SESSION['OTP'] = 'Failed to send OTP. Try again.';
+            header("Location: ../Pages/verify_email.php");
+            exit;
+          }
         } else {
-          $_SESSION['OTP'] = 'Failed to send OTP. Try again.';
-          header("Location: ../Pages/verify_email.php");
+          $_SESSION['error'] = 'Error Updating the Data. Please try again later.';
+          header("Location: ../Pages/forgotPassword.php");
           exit;
         }
       } else {
-        $_SESSION['error'] = 'Error Updating the Data. Please try again later.';
-        header("Location: ../Pages/forgotPassword.php");
+        $_SESSION['error'] = 'User not verified';
+        header("Location: ../Pages/register.php");
         exit;
       }
     } else {
-      $_SESSION['error'] = 'User not verified';
-      header("Location: ../Pages/register.php");
+      $_SESSION['action'] = 'forgot-password';
+      $_SESSION['email'] = $email;
+      header("Location: ../Pages/enterEmail.php?action=hasOTP&time=$minutes");
       exit;
     }
   } else {

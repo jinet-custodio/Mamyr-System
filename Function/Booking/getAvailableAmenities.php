@@ -61,7 +61,7 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $entertainments = [];
 
     while ($row = $getAvailableAmenitiesResult->fetch_assoc()) {
-        error_log(print_r($row, true));
+        // error_log(print_r($row, true));
         $duration = $row['RSduration'];
         $serviceName = trim($row['RServiceName']);
 

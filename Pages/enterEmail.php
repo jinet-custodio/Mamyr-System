@@ -26,6 +26,7 @@ if (isset($_SESSION['action'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
+    <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../Assets/CSS/enterEmail.css">
     <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -53,7 +54,7 @@ if (isset($_SESSION['action'])) {
                     </div>
                 </div>
                 <div class="input-box">
-                    <input type="email" class="form-control" id="email" name="email"
+                    <input type="email" class="form-control" id="email" name="email" value="<?php echo !empty($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : '' ?>"
                         placeholder="Enter your email" required>
                 </div>
                 <button type="submit" class="btn btn-primary" id="verify_email" name="verify_email">Verify Email</button>
@@ -63,6 +64,37 @@ if (isset($_SESSION['action'])) {
     </div>
 
     <?php include 'Customer/loader.php'; ?>
+
+    <!-- Sweetalert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Sweetalert Message -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const action = params.get('action');
+        const time = params.get('time');
+
+        const email = document.getElementById('email');
+
+        switch (action) {
+            case 'hasOTP':
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Wait a minute',
+                    html: `An OTP was sent to <strong> ${email.value} </strong> a few minutes ago. Please wait <strong> ${time} minute/s </strong> before requesting another one. You can still enter the OTP you received earlier.`,
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancel',
+                    confirmButtonText: 'Okay',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'verify_email.php';
+                    } else {
+                        Swal.close();
+                    }
+                })
+                break;
+        }
+    </script>
 
     <!-- Script for loader -->
     <script>
