@@ -36,7 +36,12 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $endDateTime = DateTime::createFromFormat('Y-m-d h:i a', $selectedDate . ' ' . $endTime);
 
     $startStr = $startDateTime->format('Y-m-d H:i:s');
-    $endStr = $endDateTime->format('Y-m-d H:i:s');
+    if (strtolower($selectedTour) === 'overnight') {
+        $endStr = $endDateTime->modify('+1 day')->format('Y-m-d H:i:s');
+    } else {
+        $endStr = $endDateTime->format('Y-m-d H:i:s');
+    }
+
 
     $getAvailableAmenities = $conn->prepare("SELECT * FROM resortamenity ra
         WHERE ra.RSAvailabilityID = ?
@@ -56,6 +61,7 @@ if (isset($_GET['date']) && isset($_GET['tour'])) {
     $entertainments = [];
 
     while ($row = $getAvailableAmenitiesResult->fetch_assoc()) {
+        error_log(print_r($row, true));
         $duration = $row['RSduration'];
         $serviceName = trim($row['RServiceName']);
 

@@ -708,16 +708,16 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                 const checkbox = document.createElement('input');
                                 checkbox.type = 'checkbox';
                                 checkbox.name = 'cottageOptions[]';
-                                checkbox.value = cottage.RServiceName;
-                                checkbox.id = `${cottage.RServiceName}`;
+                                checkbox.value = cottage.RServiceName.trim();
+                                checkbox.id = `${cottage.RServiceName.trim()}`;
                                 checkbox.dataset.capacity = cottage.RScapacity;
 
                                 const label = document.createElement('label');
                                 label.setAttribute('for', checkbox.id);
-                                label.textContent = `${cottage.RServiceName} - (${cottage.RScapacity} pax)`;
+                                label.textContent = `${cottage.RServiceName.trim()} - (${cottage.RScapacity} pax)`;
 
                                 const cottageSelections = cottageSelectionsSession.map(String);
-                                if (cottageSelections.includes(String(cottage.RServiceName))) {
+                                if (cottageSelections.includes(String(cottage.RServiceName.trim()))) {
                                     checkbox.checked = true;
                                 }
 
@@ -738,8 +738,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                 const checkbox = document.createElement('input');
                                 checkbox.type = 'checkbox';
                                 checkbox.name = 'roomOptions[]';
-                                checkbox.value = room.RServiceName;
-                                checkbox.id = `${room.RServiceName}`;
+                                checkbox.value = room.RServiceName.trim();
+                                checkbox.id = `${room.RServiceName.trim()}`;
                                 checkbox.dataset.capacity = room.RScapacity;
 
                                 const label = document.createElement('label');
@@ -748,7 +748,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     `<strong>${room.RServiceName} </strong> for ₱${Number(room.RSprice).toLocaleString()}.00 - Good for ${room.RScapacity} pax`;
 
                                 const roomSelection = roomSelectionSession.map(String);
-                                if (roomSelection.includes(String(room.RServiceName))) {
+                                if (roomSelection.includes(String(room.RServiceName.trim()))) {
                                     checkbox.checked = true;
                                 }
 
@@ -779,8 +779,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                 const checkbox = document.createElement('input');
                                 checkbox.type = 'checkbox';
                                 checkbox.name = 'entertainmentOptions[]';
-                                checkbox.value = ent.RServiceName;
-                                checkbox.id = `ent-${ent.RServiceName}`;
+                                checkbox.value = ent.RServiceName.trim();
+                                checkbox.id = `ent-${ent.RServiceName.trim()}`;
 
                                 const label = document.createElement('label');
                                 label.setAttribute('for', checkbox.id);
@@ -788,7 +788,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     `${ent.RServiceName} - ₱${Number(ent.RSprice).toLocaleString()}.00`;
 
                                 const addOnsServices = addOnsServicesSession.map(String);
-                                if (addOnsServices.includes(String(ent.RServiceName))) {
+                                if (addOnsServices.includes(String(ent.RServiceName.trim()))) {
                                     checkbox.checked = true;
                                 }
 
