@@ -981,14 +981,13 @@ switch ($userRole) {
         const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
         const viewTransactionBtn = document.getElementById('viewTransaction');
         const downpaymentBtn = document.getElementById("makeDownpaymentBtn");
-        // console.log("Booking Stat: " + bookingStatus);
+        console.log("Booking Stat: " + bookingStatus);
         // console.log("payment App Stat" + paymentApprovalStatus);
-
-        switch (bookingStatus.toLowerCase()) {
+        switch (bookingStatus.toLowerCase().trim()) {
             case 'pending':
             case 'cancel':
             case 'rejected':
-                downpaymentBtn.style.display = "none";
+                downpaymentBtn.style.display = 'none';
                 downloadReceiptBtn.style.display = 'none';
                 viewTransactionBtn.style.display = 'none';
                 break;
@@ -997,12 +996,12 @@ switch ($userRole) {
                     case 'pending':
                         switch (paymentStatus) {
                             case 'unpaid':
-                                downpaymentBtn.style.display = "block";
+                                downpaymentBtn.style.display = 'block';
                                 downloadReceiptBtn.style.display = 'none';
                                 viewTransactionBtn.style.display = 'none';
                                 break;
                             case 'payment sent':
-                                downpaymentBtn.style.display = "block";
+                                downpaymentBtn.style.display = 'block';
                                 downloadReceiptBtn.style.display = 'none';
                                 viewTransactionBtn.style.display = 'block';
                                 break;
@@ -1012,18 +1011,8 @@ switch ($userRole) {
                 break;
             case 'reserved':
             case 'done':
-                downpaymentBtn.style.display = "none";
+                downpaymentBtn.style.display = 'none';
                 viewTransactionBtn.style.display = 'block';
-                break;
-        }
-
-
-        switch (paymentMethod.toLowerCase()) {
-            case 'cash':
-                downpaymentBtn.style.display = "none";
-                break;
-            case 'gcash':
-                downpaymentBtn.style.display = "block";
                 break;
         }
         // if ((bookingStatus === "Pending" && (paymentApprovalStatus === 'Pending' ||
