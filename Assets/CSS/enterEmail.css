@@ -118,6 +118,13 @@ form {
   display: flex;
   margin: auto;
 }
+
+.swal2-cancel {
+  background-color: #db3545 !important;
+  border: 1px solid rgb(219, 53, 69) !important;
+  color: white !important;
+}
+
 @media screen and (max-width: 650px) {
   .container {
     height: calc(55vh - 40px);
