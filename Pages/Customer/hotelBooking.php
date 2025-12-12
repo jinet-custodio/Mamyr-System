@@ -131,10 +131,13 @@ while ($row = $contentResult->fetch_assoc()) {
                     <div class="hotelIconContainer mt-3">
                         <?php
                         $hotelCategoryID = 1;
-                        $getAllHotelQuery = $conn->prepare("SELECT RServiceName, RSduration, RSAvailabilityID FROM resortamenity 
-                                                                WHERE RScategoryID = ? 
-                                                                GROUP BY RServiceName
-                                                                ORDER BY CAST(SUBSTRING(RServiceName, LOCATE(' ', RServiceName) + 1) AS UNSIGNED)");
+                        $getAllHotelQuery = $conn->prepare("SELECT RServiceName, 
+                        MIN(RSAvailabilityID) AS RSAvailabilityID, 
+                        MIN(RSduration) AS RSduration
+                        FROM resortamenity
+                        WHERE RSCategoryID = ?
+                        GROUP BY RServiceName
+                        ORDER BY CAST(REGEXP_SUBSTR(RServiceName, '\\d+') AS UNSIGNED)");
                         $getAllHotelQuery->bind_param("i", $hotelCategoryID);
                         $getAllHotelQuery->execute();
                         $getAllHotelResult = $getAllHotelQuery->get_result();
