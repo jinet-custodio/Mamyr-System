@@ -123,7 +123,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--padding-md);
   background-color: rgba(244, 244, 244, 0.566);
   -webkit-box-shadow: 1px 2px 10px -3px oklch(14.7% 0.004 49.25);
   box-shadow: 1px 2px 10px -3px oklch(14.7% 0.004 49.25);
