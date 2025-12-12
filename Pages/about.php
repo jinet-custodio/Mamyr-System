@@ -290,9 +290,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         </div>
 
         <div class="embed-responsive embed-responsive-16by9">
-            <video id="mamyrVideo" autoplay muted controls class="embed-responsive-item"
+            <video id="mamyrVideo" muted controls class="embed-responsive-item"
                 poster="../Assets/videos/thumbnail2.jpg">
-                <source src="../../Assets/videos/mamyrVideo2.mp4" type="video/mp4">
+                <source src="../Assets/videos/mamyrVideo2.mp4" type="video/mp4">
 
             </video>
         </div>
