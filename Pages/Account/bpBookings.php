@@ -625,11 +625,13 @@ switch ($userRole) {
                     viewModal.querySelector('#note-approval-time').innerHTML =
                         `Please note that this booking must be approved by <strong> ${booking.approvalTimeUntil} </strong>. After this time, it will be automatically rejected.`;
 
-                    viewModal.querySelector('#additionalNotes').value = booking.notes || '';
+                    viewModal.querySelector('#additionalNotes').value = (booking.notes || '').replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n');
 
                     if (booking.statusName === 'Approved' || booking.statusName === 'Rejected' || booking
                         .statusName === 'Cancelled') {
                         document.getElementById('btnContainer-footer').style.display = 'none';
+                    } else {
+                        document.getElementById('btnContainer-footer').style.display = 'block';
                     }
 
                     const modal = new bootstrap.Modal(viewModal);

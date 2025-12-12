@@ -96,7 +96,6 @@ if (isset($_GET['userID'])) {
                     break;
                 case 2:
                     $approvalClass = 'success';
-                    $approvalStatusName = 'Reserved';
                     break;
                 case 4:
                     $approvalClass = 'danger';

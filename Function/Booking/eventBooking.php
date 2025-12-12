@@ -231,7 +231,7 @@ if (isset($_POST['eventBook'])) {
 
         if (!empty($partnershipIDs)) {
             foreach ($partnershipIDs as $id => $name):
-                $receiver = 'Partner';
+                $receiver = 'Business Partner';
                 $message = "You have received a new customer booking request for your <strong>" . strtolower($name) . "</strong> service.";
                 $insertPartnerNotification = $conn->prepare("INSERT INTO `notification`(`bookingID`, `senderID`, `receiverID` , `message`, `receiver`) VALUES (?,?,?,?,?)");
                 $insertPartnerNotification->bind_param("iiiss", $bookingID, $userID, $id, $message, $receiver);

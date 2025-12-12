@@ -987,21 +987,22 @@ switch ($userRole) {
             case 'pending':
             case 'cancel':
             case 'rejected':
+            case 'expired':
                 downpaymentBtn.style.display = 'none';
                 downloadReceiptBtn.style.display = 'none';
                 viewTransactionBtn.style.display = 'none';
                 break;
             case 'approved':
-                switch (paymentApprovalStatus) {
+                switch (paymentApprovalStatus.toLowerCase().trim()) {
                     case 'pending':
-                        switch (paymentStatus) {
+                        switch (paymentStatus.toLowerCase().trim()) {
                             case 'unpaid':
                                 downpaymentBtn.style.display = 'block';
                                 downloadReceiptBtn.style.display = 'none';
                                 viewTransactionBtn.style.display = 'none';
                                 break;
                             case 'payment sent':
-                                downpaymentBtn.style.display = 'block';
+                                downpaymentBtn.style.display = 'none';
                                 downloadReceiptBtn.style.display = 'none';
                                 viewTransactionBtn.style.display = 'block';
                                 break;

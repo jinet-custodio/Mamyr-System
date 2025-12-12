@@ -4,9 +4,10 @@ require '../../Config/dbcon.php';
 require '../Helpers/userFunctions.php';
 
 $env = parse_ini_file(__DIR__ . '/../../.env');
-require '../../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
-require '../emailSenderFunction.php';
+require __DIR__ . '/../emailSenderFunction.php';
+require __DIR__ . '../../Helpers/statusFunctions.php';
 session_start();
 date_default_timezone_set('Asia/Manila');
 
@@ -299,14 +300,17 @@ if (isset($_POST['approveBtn'])) {
 
 //Reject Button is Click
 if (isset($_POST['rejectBtn'])) {
+    error_log(print_r($_POST, true));
     $bookingID = (int) $_POST['bookingID'];
     $bookingStatusID = (int) $_POST['bookingStatusID'];
     $customerID = (int) $_POST['customerID'];
     $reason = (int) $_POST['rejection-reason'];
     $serviceIDs = $_POST['serviceIDs'];
-    $otherReason = mysqli_real_escape_string($conn, $_POST['reasonDescription']) ?? NULL;
+    $otherReason = mysqli_real_escape_string($conn, $_POST['reasonDescription'] ?? '');
     $userRoleID = (int) $_POST['userRoleID'];
-    // $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
+
+    $partnerServices = $_POST['partnerServices'];
+    $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     // error_log('reasonID: ' . $reason);
     // error_log("AdminID: " . $adminID);
 
@@ -375,6 +379,48 @@ if (isset($_POST['rejectBtn'])) {
         if (!$updateStatus->execute()) {
             $conn->rollback();
             throw new Exception("Failed to update booking status.");
+        }
+
+
+        $updatePartnerBookingStatus = $conn->prepare("UPDATE businesspartneravailedservice SET approvalStatus = ? WHERE partnershipServiceID = ?");
+        foreach ($partnerServices as $partner => $data) {
+            foreach ($data as $items) {
+                $rejectedID = 5;
+                $status = getStatuses($conn, $rejectedID);
+                $statusID = $status['statusID'];
+                $id     = $items['id'];
+
+                $updatePartnerBookingStatus->bind_param("si", $statusID, $id);
+                $updatePartnerBookingStatus->execute();
+            }
+        }
+
+
+        $sendNotificationToPartner = $conn->prepare("INSERT INTO notification(bookingID, senderID, receiverID,  message, receiver) VALUES(?,?,?,?,?)");
+        foreach ($partnerServices as $partner => $data) {
+            foreach ($data as $items) {
+                $partnershipID = (int) $partner;
+
+
+                $getPartnerUserID = $conn->prepare("SELECT userID FROM partnership WHERE partnershipID = ?");
+                $getPartnerUserID->bind_param('i', $partnershipID);
+                if (!$getPartnerUserID->execute()) {
+                    throw new Exception("Failed executing the query for getting partner user ID. " . $getPartnerUserID->error);
+                }
+
+                $result = $getPartnerUserID->get_result();
+
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $partnerUserID = intval($row['userID']);
+                }
+
+                $message = "Your service related to the  <strong> $bookingType booking </strong> has been automatically <strong> rejected </strong>, as the admin has declined the main event booking.";
+                $receiver = 'Business Partner';
+
+                $sendNotificationToPartner->bind_param("iiiss", $bookingID, $adminID, $partnerUserID, $message, $receiver);
+                $sendNotificationToPartner->execute();
+            }
         }
 
         $insertRejectionReason = $conn->prepare("INSERT INTO `booking_rejection`(`bookingID`, `adminID`, `reasonID`, `otherReason`) VALUES (?,?,?,?)");
