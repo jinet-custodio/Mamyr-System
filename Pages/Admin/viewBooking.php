@@ -402,11 +402,11 @@ switch ($userRole) {
                         $guestCount = intval($row['guestCount']);
 
                         //Additionals
-                        $additionalReq = $row['additionalRequest'];
+                        $additionalReq = str_replace(["\\r\\n", "\r\n"], "\n", $row['additionalRequest']);
+
                         $additionalServices = $row['addOns'] ?? 'None';
 
                         $additionalChargeID = $row['additionalChargeID'] ?? null;
-
                         if (!empty($additionalChargeID)) {
                             $alreadyAdded = array_column($additionalChargesInfo ?? [], 'id');
                             if (!in_array($additionalChargeID, $alreadyAdded)) {
@@ -1296,8 +1296,8 @@ switch ($userRole) {
                         <div class="notesContainer mt-3">
                             <div class="info-container notes">
                                 <label for="req" class="info-label mt-2 mb-2">Additional Request(s)/Note(s)</label>
-                                <textarea class="form-control inputDetail" rows="4" name="req" id="req"
-                                    readonly><?= $additionalReq ?></textarea>
+                                <textarea class="form-control inputDetail" rows="4" name="req" id="req" readonly><?= htmlspecialchars($additionalReq) ?></textarea
+
                             </div>
                         </div>
                     </div>
