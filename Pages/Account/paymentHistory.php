@@ -677,11 +677,87 @@ switch ($userRole) {
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
+
+            const isMobile = window.innerWidth < 600;
+
             $('#paymentHistory').DataTable({
                 language: {
                     emptyTable: "You have no approved bookings and no payment has been made yet."
-                }
+                },
+
+                order: [],
+                autoWidth: false,
+
+                responsive: !isMobile,
+                scrollX: isMobile,
+
+                columnDefs: isMobile ? [{
+                        width: '50px',
+                        targets: 0
+                    },
+                    {
+                        width: '150px',
+                        targets: 1
+                    },
+                    {
+                        width: '100px',
+                        targets: 2
+                    },
+                    {
+                        width: '100px',
+                        targets: 3
+                    },
+                    {
+                        width: '120px',
+                        targets: 4
+                    },
+                    {
+                        width: '180px',
+                        targets: 5
+                    },
+                    {
+                        width: '180px',
+                        targets: 6
+                    },
+                    {
+                        width: '120px',
+                        targets: 7
+                    }
+                ] : [{
+                        width: '5%',
+                        targets: 0
+                    },
+                    {
+                        width: '15%',
+                        targets: 1
+                    },
+                    {
+                        width: '10%',
+                        targets: 2
+                    },
+                    {
+                        width: '10%',
+                        targets: 3
+                    },
+                    {
+                        width: '10%',
+                        targets: 4
+                    },
+                    {
+                        width: '20%',
+                        targets: 5
+                    },
+                    {
+                        width: '20%',
+                        targets: 6
+                    },
+                    {
+                        width: '10%',
+                        targets: 7
+                    }
+                ]
             });
+
         });
     </script>
 

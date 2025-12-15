@@ -234,7 +234,7 @@ switch ($userRole) {
                     <div class="end">
                         <label for="roomDescription"> Description: </label>
                         <textarea rows="4" name="roomDescription" class="roomDescription form-control" id="roomDescription"
-                            style="padding: 0.5vw; font-size: 1.5vw;"><?= $roomInfo['RSdescription'] ?>
+                            style="padding: 0.5vw; font-size: 1.3vw;"><?= $roomInfo['RSdescription'] ?>
                         </textarea>
                     </div>
                 </div>
@@ -282,8 +282,10 @@ switch ($userRole) {
                     overlay.style.display = "none";
                     btns.style.display = "none";
                 } else {
-                    input.disabled = false;
-                    rentorName.disabled = true;
+                    if (rentorName) {
+                        input.disabled = false;
+                        rentorName.disabled = true;
+                    }
                 }
             })
         });

@@ -1317,6 +1317,12 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
                     const container = document.getElementById(containerId);
                     if (!container) return;
 
+                    // ✅ Clear previous content to prevent duplication
+                    container.innerHTML = "";
+
+                    // ✅ Do not render anything if nothing is selected
+                    if (items.length === 0) return;
+
                     const wrapper = document.createElement("div");
                     wrapper.classList.add("selected-inline");
 
@@ -1326,29 +1332,36 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
 
                     wrapper.appendChild(labelEl);
 
-                    if (items.length === 0) {
-                        const none = document.createElement("span");
-                        none.textContent = "None selected";
-                        none.style.color = "#777";
-                        wrapper.appendChild(none);
-                    } else {
-                        items.forEach(item => {
-                            const tag = document.createElement("span");
-                            tag.classList.add("selected-tag");
-                            tag.textContent = item;
-                            wrapper.appendChild(tag);
-                        });
-                    }
+                    items.forEach(item => {
+                        const tag = document.createElement("span");
+                        tag.classList.add("selected-tag");
+                        tag.textContent = item;
+                        wrapper.appendChild(tag);
+                    });
 
                     container.appendChild(wrapper);
                 }
 
+
                 const dishModal = document.getElementById('dishModal');
 
-                function updateSelectedDishes() {
-                    const selected = Array.from(document.querySelectorAll('#dishModal input[type="checkbox"]:checked'))
-                        .map(el => el.value);
-                    renderSelectedList('selectedDishesContainer', 'Selected Dishes:', selected);
+                function updateSelectedServices() {
+                    const selected = Array.from(
+                        additionalModal.querySelectorAll('input[type="checkbox"]:checked')
+                    ).map(el => {
+                        const wrapper = el.closest('.partnerListContainer');
+                        if (wrapper) {
+                            const labelText = wrapper.querySelector('label')?.textContent || '';
+                            return labelText.split('—')[0].trim();
+                        }
+                        return el.value;
+                    });
+
+                    renderSelectedList(
+                        'selectedAdditionalServicesContainer',
+                        'Selected Services:',
+                        selected
+                    );
                 }
 
                 dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
