@@ -29,6 +29,11 @@ body {
   display: flex;
   gap: 1rem;
 }
+.room-container,
+.card,
+section.room-containerr {
+  min-width: 0;
+}
 
 .notification-toggler-container {
   display: flex;
@@ -85,7 +90,6 @@ label {
 #roomsTable {
   width: 100% !important;
   max-width: 100%;
-  display: block;
   margin: auto;
 }
 
@@ -111,7 +115,6 @@ th {
 
 .dt-column-title {
   display: inline-block;
-  width: 2vw !important;
 }
 
 .dt-info,

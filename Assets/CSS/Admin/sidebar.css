@@ -348,6 +348,10 @@ main {
     font-size: var(--font-size-lg);
   }
 
+  .nav.flex-column {
+    gap: 2vw;
+  }
+
   #sidebar {
     width: 35% !important;
   }
@@ -400,6 +404,10 @@ main {
     font-size: var(--font-size-sm);
   }
 
+  .nav.flex-column {
+    gap: 2vw;
+  }
+
   #pfpContainer {
     padding: 0 !important;
     flex-direction: column;
@@ -415,6 +423,10 @@ main {
 @media screen and (max-width: 400px) {
   #sidebar .nav-link {
     padding: 0.5vw 1vw;
+  }
+
+  .nav.flex-column {
+    gap: 3.5vw;
   }
 
   #sidebar {

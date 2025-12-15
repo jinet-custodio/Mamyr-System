@@ -162,8 +162,6 @@ body {
 table {
   width: 100% !important;
   max-width: 100%;
-  max-height: 10vh !important;
-  overflow-y: auto;
 }
 
 tbody {
@@ -220,7 +218,7 @@ th {
 #addServicePricing,
 #editServicePricing,
 #deleteServicePricing {
-  width: 5re;
+  width: 5rem;
 }
 
 .saveBtnContainer {
@@ -247,7 +245,7 @@ label {
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
   #serviceCategories {
-    display: flex !important;
+    display: flex;
     flex-wrap: wrap;
   }
 }
@@ -255,7 +253,7 @@ label {
 /* Tablet Landscape */
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
   #serviceCategories {
-    display: flex !important;
+    display: flex;
     flex-wrap: wrap;
   }
 }
@@ -270,8 +268,19 @@ label {
 
 /* Phone size */
 @media screen and (max-width: 599px) {
+  .backArrowContainer img {
+    width: 5vw;
+  }
+  .resortContainer,
+  .resortRatesContainer,
+  .eventContainer,
+  .cateringContainer {
+    margin: unset;
+    padding-right: 0;
+  }
+
   #serviceCategories {
-    display: flex !important;
+    display: flex;
     flex-wrap: wrap;
   }
 
@@ -281,5 +290,10 @@ label {
 
   .category-title {
     font-size: var(--font-size-base);
+  }
+
+  .btn-primary,
+  .deleteBtn {
+    width: unset;
   }
 }

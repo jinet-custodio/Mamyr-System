@@ -826,12 +826,71 @@ unset($_SESSION['tempImage']) ?>
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
+
+            const isMobile = window.innerWidth < 600;
+
             $('#bookingHistory').DataTable({
-                "order": [],
                 language: {
                     emptyTable: "You have not made any bookings yet"
-                }
+                },
+
+                order: [],
+                autoWidth: false,
+
+                responsive: !isMobile,
+                scrollX: isMobile,
+
+                columnDefs: isMobile ? [{
+                        width: '50px',
+                        targets: 0
+                    },
+                    {
+                        width: '150px',
+                        targets: 1
+                    },
+                    {
+                        width: '100px',
+                        targets: 2
+                    },
+                    {
+                        width: '120px',
+                        targets: 3
+                    },
+                    {
+                        width: '150px',
+                        targets: 4
+                    },
+                    {
+                        width: '150px',
+                        targets: 5
+                    }
+                ] : [{
+                        width: '10%',
+                        targets: 0
+                    },
+                    {
+                        width: '20%',
+                        targets: 1
+                    },
+                    {
+                        width: '10%',
+                        targets: 2
+                    },
+                    {
+                        width: '20%',
+                        targets: 3
+                    },
+                    {
+                        width: '20%',
+                        targets: 4
+                    },
+                    {
+                        width: '20%',
+                        targets: 5
+                    }
+                ]
             });
+
         });
     </script>
 

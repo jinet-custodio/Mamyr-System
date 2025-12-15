@@ -223,7 +223,7 @@ if ($result->num_rows > 0) {
 
                 <div class="room-container">
 
-                    <div class="card " style="width: 80%;">
+                    <div class="card " style="width: 90%;">
                         <div class="addHotelContainer">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#addHotelModal" id="addHotelBtn">Add Hotel Room</button>
@@ -413,24 +413,68 @@ if ($result->num_rows > 0) {
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
+
+            const isMobile = window.matchMedia('(max-width: 600px)').matches;
+
             $('#roomsTable').DataTable({
-                responsive: false,
-                scrollX: true,
                 language: {
                     emptyTable: "No Hotel Rooms"
                 },
-                columnDefs: [{
-                    width: "30%",
-                    target: 4
-                }],
+
                 search: {
                     regex: true,
                     smart: false
-                }
+                },
+                responsive: !isMobile,
+                scrollX: isMobile,
+                autoWidth: false,
 
-            })
+                columnDefs: isMobile ? [{
+                        width: '100px',
+                        targets: 0
+                    },
+                    {
+                        width: '100px',
+                        targets: 1
+                    },
+                    {
+                        width: '100px',
+                        targets: 2
+                    },
+                    {
+                        width: '120px',
+                        targets: 3
+                    },
+                    {
+                        width: '200px',
+                        targets: 4
+                    }
+                ] : [{
+                        width: '15%',
+                        targets: 0
+                    },
+                    {
+                        width: '25%',
+                        targets: 1
+                    },
+                    {
+                        width: '20%',
+                        targets: 2
+                    },
+                    {
+                        width: '20%',
+                        targets: 3
+                    },
+                    {
+                        width: '20%',
+                        targets: 4
+                    }
+                ]
+            });
+
         });
     </script>
+
 
     <?php include '../Customer/loader.php'; ?>
 

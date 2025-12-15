@@ -468,6 +468,9 @@ div.action-button-container {
 
 /* Phone size */
 @media screen and (max-width: 600px) {
+  .btn {
+    --bs-padding-x: 0;
+  }
   .main-content {
     margin-left: 16vw;
     width: 85%;
@@ -601,10 +604,6 @@ div.action-button-container {
   table.dataTable thead > tr > th div.dt-column-header {
     justify-content: start !important;
     gap: 1px !important;
-  }
-
-  .badge {
-    width: 5rem;
   }
 
   table .btn {

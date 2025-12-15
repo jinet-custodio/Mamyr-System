@@ -1023,20 +1023,30 @@ if ($result->num_rows > 0) {
     <script>
         // console.log("Script loaded1");
         $(document).ready(function() {
+            const isMobile = window.innerWidth < 600;
+
             $('#resortServices').DataTable({
                 language: {
                     emptyTable: "No Services"
                 },
+
+                autoWidth: false,
+                responsive: !isMobile,
+                scrollX: isMobile,
+
                 columnDefs: [{
                         targets: [0, 1, 2, 3, 4],
                         render: function(data, type, row, meta) {
                             if (type === 'display') {
                                 return data;
                             }
-                            var cell = $('#resortServices tbody tr').eq(meta.row).find('td').eq(meta
-                                .col);
-                            var input = cell.find('input');
 
+                            var cell = $('#resortServices tbody tr')
+                                .eq(meta.row)
+                                .find('td')
+                                .eq(meta.col);
+
+                            var input = cell.find('input');
                             return input.length ? input.val() : data;
                         }
                     },
@@ -1047,10 +1057,12 @@ if ($result->num_rows > 0) {
                                 return data;
                             }
 
-                            var cell = $('#resortServices tbody tr').eq(meta.row).find('td').eq(meta
-                                .col);
-                            var textarea = cell.find('textarea');
+                            var cell = $('#resortServices tbody tr')
+                                .eq(meta.row)
+                                .find('td')
+                                .eq(meta.col);
 
+                            var textarea = cell.find('textarea');
                             return textarea.length ? textarea.val() : data;
                         }
                     },
@@ -1061,13 +1073,50 @@ if ($result->num_rows > 0) {
                                 return data;
                             }
 
-                            var cell = $('#resortServices tbody tr').eq(meta.row).find('td').eq(meta
-                                .col);
-                            var select = cell.find('select');
+                            var cell = $('#resortServices tbody tr')
+                                .eq(meta.row)
+                                .find('td')
+                                .eq(meta.col);
 
-                            return select.length ? select.find('option:selected').text() : data;
+                            var select = cell.find('select');
+                            return select.length ?
+                                select.find('option:selected').text() :
+                                data;
                         }
-                    }
+                    },
+                    ...(isMobile ? [{
+                            width: '50px',
+                            targets: 0
+                        },
+                        {
+                            width: '160px',
+                            targets: 1
+                        },
+                        {
+                            width: '140px',
+                            targets: 2
+                        },
+                        {
+                            width: '140px',
+                            targets: 3
+                        },
+                        {
+                            width: '160px',
+                            targets: 4
+                        },
+                        {
+                            width: '280px',
+                            targets: 5
+                        },
+                        {
+                            width: '160px',
+                            targets: 6
+                        },
+                        {
+                            width: '160px',
+                            targets: 7
+                        }
+                    ] : [])
                 ]
             });
 
@@ -1075,6 +1124,9 @@ if ($result->num_rows > 0) {
                 language: {
                     emptyTable: "No Data"
                 },
+                autoWidth: false,
+                responsive: !isMobile,
+                scrollX: isMobile,
                 columnDefs: [{
                         targets: [1, 3],
                         render: function(data, type, row, meta) {
@@ -1108,6 +1160,9 @@ if ($result->num_rows > 0) {
                 language: {
                     emptyTable: "No Data"
                 },
+                autoWidth: false,
+                responsive: !isMobile,
+                scrollX: isMobile,
                 columnDefs: [{
                         targets: 1,
                         render: function(data, type, row, meta) {
@@ -1148,13 +1203,41 @@ if ($result->num_rows > 0) {
 
                             return select.length ? select.find('option:selected').text() : data;
                         }
-                    }
+                    },
+                    ...(isMobile ? [{
+                            width: '300px',
+                            targets: 0
+                        },
+                        {
+                            width: '160px',
+                            targets: 1
+                        },
+                        {
+                            width: '140px',
+                            targets: 2
+                        },
+                        {
+                            width: '140px',
+                            targets: 3
+                        },
+                        {
+                            width: '160px',
+                            targets: 4
+                        },
+                        {
+                            width: '280px',
+                            targets: 5
+                        }
+                    ] : [])
                 ]
             });
             $('#cateringServices').DataTable({
                 language: {
                     emptyTable: "No Data"
                 },
+                autoWidth: false,
+                responsive: !isMobile,
+                scrollX: isMobile,
                 columnDefs: [{
                         targets: 0,
                         render: function(data, type, row, meta) {
