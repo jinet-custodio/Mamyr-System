@@ -23,13 +23,13 @@
                     ps.partnershipServiceID, 
                     ps.PBName, 
                     ps.PBPrice,
-                    pt.partnerTypeDescription AS eventCategory
+                    CASE WHEN ppt.otherPartnerType is NULL THEN pt.partnerTypeDescription ELSE ppt.otherPartnerType END AS eventCategory
                 FROM `partnership` p
                 LEFT JOIN `partnershipservice` ps ON p.partnershipID = ps.partnershipID
                 LEFT JOIN  `user` u ON p.userID = u.userID
-                LEFT JOIN `partnership_partnertype` ppt ON p.partnershipID = ppt.partnershipID
+                LEFT JOIN `partnership_partnertype` ppt ON ps.partnerTypeID = ppt.pptID AND ppt.isApproved = ?
                 LEFT JOIN `partnershiptype` pt ON ppt.partnerTypeID = pt.partnerTypeID
-                WHERE ps.PSAvailabilityID = ? AND p.partnerStatusID = ? AND ppt.isApproved = ?
+                WHERE ps.PSAvailabilityID = ? AND p.partnerStatusID = ?
                 AND NOT EXISTS 
                 (
                     SELECT 1 
@@ -43,7 +43,7 @@
                 throw new Exception("Error at query Partner Service: " . $getPartnerService->error);
             }
 
-            $getPartnerService->bind_param('iiiss', $availableID, $approvedPartner, $isApproved, $startDate, $endDate);
+            $getPartnerService->bind_param('iiiss', $isApproved, $availableID, $approvedPartner,  $startDate, $endDate);
 
             if (!$getPartnerService->execute()) {
                 throw new Exception("Error at query Partner Service execution: " . $getPartnerService->error);
