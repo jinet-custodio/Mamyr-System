@@ -11,6 +11,8 @@ $userRole = intval($_SESSION['userRole']);
 require '../Helpers/userFunctions.php';
 
 if (isset($_POST['eventBook'])) {
+    // error_log(print_r($_POST, true));
+
     $bookingType = 'Event';
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
 
@@ -92,10 +94,10 @@ if (isset($_POST['eventBook'])) {
         LEFT JOIN partnership p ON ps.partnershipID = p.partnershipID
         LEFT JOIN user u ON p.userID = u.userID
         WHERE ps.partnershipServiceID = ?");
-        foreach ($partnerIDs as $id => $partershipServiceID) {
-            // error_log('PSID: ' . $partershipServiceID);
-            $partershipServiceID = intval($partershipServiceID);
-            $getServiceID->bind_param('i', $partershipServiceID);
+        foreach ($partnerIDs as $partnershipServiceID => $partershipID) {
+            // error_log('PSID: ' . $partnershipServiceID);
+            $partnershipServiceID = intval($partnershipServiceID);
+            $getServiceID->bind_param('i', $partnershipServiceID);
 
             if ($getServiceID->execute()) {
                 $result = $getServiceID->get_result();
@@ -106,11 +108,12 @@ if (isset($_POST['eventBook'])) {
                     $serviceID = $row['serviceID'];
                     $price =  $row['PBPrice'];
                     $services[$serviceID] = $price;
-                    $partnerService[$partershipServiceID] = $price;
+                    $partnerService[$partnershipServiceID] = $price;
                     $partnershipUserID = $row['userID'];
-                    $partnershipIDs[$partnershipUserID] = $row['PBName'];
+                    $serviceName = trim($row['PBName']);
+                    $partnershipIDs[$serviceName] = $partnershipUserID;
                 } else {
-                    error_log("No matching service found for partnershipServiceID: $partershipServiceID");
+                    error_log("No matching service found for partnershipServiceID: $partnershipServiceID");
                 }
             } else {
                 error_log("Query failed: " . $conn->error);
@@ -119,7 +122,7 @@ if (isset($_POST['eventBook'])) {
         $getServiceID->close();
     }
 
-    // error_log(print_r($partnerService, true));
+
 
 
 
@@ -192,11 +195,11 @@ if (isset($_POST['eventBook'])) {
 
         $bookingID = $insertBooking->insert_id;
         $pendingID = 1;
-
+        // error_log('Partnership Service' . print_r($partnerService, true));
         //insert into bp availed service
         $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `approvalStatus`, `price`) VALUES (?,?,?,?)");
-        foreach ($partnerService as $partershipServiceID => $price) {
-            $insertBPavailedService->bind_param('iiid', $partershipServiceID, $bookingID, $pendingID, $price);
+        foreach ($partnerService as $partnershipServiceID => $price) {
+            $insertBPavailedService->bind_param('iiid', $partnershipServiceID, $bookingID, $pendingID, $price);
             if (!$insertBPavailedService->execute()) {
                 $conn->rollback();
                 error_log("Error: " . $insertBooking->error);
@@ -228,9 +231,9 @@ if (isset($_POST['eventBook'])) {
                 error_log("Error: $type -> $id" . $insertIntoUnavailableService->error);
             }
         }
-
+        // error_log('Partnership IDs' . print_r($partnershipIDs, true));
         if (!empty($partnershipIDs)) {
-            foreach ($partnershipIDs as $id => $name):
+            foreach ($partnershipIDs as $name => $id):
                 $receiver = 'Business Partner';
                 $message = "You have received a new customer booking request for your <strong>" . strtolower($name) . "</strong> service.";
                 $insertPartnerNotification = $conn->prepare("INSERT INTO `notification`(`bookingID`, `senderID`, `receiverID` , `message`, `receiver`) VALUES (?,?,?,?,?)");

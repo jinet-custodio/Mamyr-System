@@ -936,12 +936,16 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
                 date.addEventListener('change', getAvailablePartnerService);
                 startTime.addEventListener('change', getAvailablePartnerService);
 
-                if (date.value === '' && startTime.value === '') {
-                    showDefaultText();
-                } else {
+                const hasSessionServices =
+                    sessionSelectedServices &&
+                    Object.keys(sessionSelectedServices).length > 0;
 
+                if ((date.value && startTime.value) || hasSessionServices) {
                     getAvailablePartnerService();
+                } else {
+                    showDefaultText();
                 }
+
 
                 function getAvailablePartnerService() {
                     const selectedDate = date.value;
@@ -978,21 +982,38 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
                                 return;
                             }
                             mainContainer.innerHTML = "";
+
+                            const printedCategories = new Set();
                             if (data.Categories && data.Categories.length > 0) {
                                 data.Categories.forEach((category) => {
                                     const wrapper = document.createElement("div");
                                     wrapper.classList.add("photography");
 
 
-                                    const bpTypeContainer = document.createElement("div");
-                                    bpTypeContainer.classList.add("bpTypeContainer");
+                                    // const bpTypeContainer = document.createElement("div");
+                                    // bpTypeContainer.classList.add("bpTypeContainer");
 
-                                    const categoryHeading = document.createElement("h6");
-                                    categoryHeading.classList.add("bpCategory", "fw-bold");
-                                    categoryHeading.innerText = category.eventCategory || "Category Name";
+                                    // const categoryHeading = document.createElement("h6");
+                                    // categoryHeading.classList.add("bpCategory", "fw-bold");
+                                    // categoryHeading.innerText = category.eventCategory || "Category Name";
 
-                                    bpTypeContainer.appendChild(categoryHeading);
-                                    wrapper.appendChild(bpTypeContainer);
+                                    // bpTypeContainer.appendChild(categoryHeading);
+                                    // wrapper.appendChild(bpTypeContainer);
+
+                                    if (!printedCategories.has(category.eventCategory)) {
+                                        printedCategories.add(category.eventCategory);
+
+                                        const bpTypeContainer = document.createElement("div");
+                                        bpTypeContainer.classList.add("bpTypeContainer");
+
+                                        const categoryHeading = document.createElement("h6");
+                                        categoryHeading.classList.add("bpCategory", "fw-bold");
+                                        categoryHeading.innerText = category.eventCategory || "Category Name";
+
+                                        bpTypeContainer.appendChild(categoryHeading);
+                                        mainContainer.appendChild(bpTypeContainer);
+                                    }
+
 
                                     const partnerListContainer = document.createElement("div");
                                     partnerListContainer.classList.add("partnerListContainer");
@@ -1001,37 +1022,37 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
                                     checkbox.type = "checkbox";
                                     checkbox.classList.add("form-check-input");
                                     checkbox.name =
-                                        `additionalServiceSelected[${category.partnershipID}][selected]`;
+                                        `additionalServiceSelected[${category.partnershipServiceID}][selected]`;
                                     checkbox.value = category.partnershipServiceID;
                                     checkbox.id = `service-${category.partnershipServiceID}`;
 
                                     const inputPBName = document.createElement("input");
                                     inputPBName.type = "hidden";
                                     inputPBName.name =
-                                        `additionalServiceSelected[${category.partnershipID}][PBName]`;
+                                        `additionalServiceSelected[${category.partnershipServiceID}][PBName]`;
                                     inputPBName.value = category.PBName;
 
                                     const inputPBPrice = document.createElement("input");
                                     inputPBPrice.type = "hidden";
                                     inputPBPrice.name =
-                                        `additionalServiceSelected[${category.partnershipID}][PBPrice]`;
+                                        `additionalServiceSelected[${category.partnershipServiceID}][PBPrice]`;
                                     inputPBPrice.value = category.PBPrice;
 
-                                    const inputServiceID = document.createElement("input");
-                                    inputServiceID.type = "hidden";
-                                    inputServiceID.name =
-                                        `additionalServiceSelected[${category.partnershipID}][partnershipServiceID]`;
-                                    inputServiceID.value = category.partnershipServiceID;
+                                    const inputPartnerID = document.createElement("input");
+                                    inputPartnerID.type = "hidden";
+                                    inputPartnerID.name =
+                                        `additionalServiceSelected[${category.partnershipServiceID}][partnershipID]`;
+                                    inputPartnerID.value = category.partnershipID;
 
                                     checkbox.addEventListener("change", function() {
                                         if (this.checked) {
                                             partnerListContainer.appendChild(inputPBName);
                                             partnerListContainer.appendChild(inputPBPrice);
-                                            partnerListContainer.appendChild(inputServiceID);
+                                            partnerListContainer.appendChild(inputPartnerID);
                                         } else {
                                             inputPBName.remove();
                                             inputPBPrice.remove();
-                                            inputServiceID.remove();
+                                            inputPartnerID.remove();
                                         }
                                     });
 
@@ -1049,32 +1070,32 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
 
                                     if (Array.isArray(sessionSelectedServices)) {
                                         selectedServiceIDs = sessionSelectedServices.map(String);
-                                    } else if (typeof sessionSelectedServices === "object" &&
-                                        sessionSelectedServices !== null) {
+                                    } else if (typeof sessionSelectedServices === "object" && sessionSelectedServices !== null) {
                                         for (const key in sessionSelectedServices) {
                                             const entry = sessionSelectedServices[key];
-
-                                            if (entry && entry.partnershipServiceID) {
-                                                selectedServiceIDs.push(String(entry.partnershipServiceID));
+                                            if (entry && typeof entry === "object") {
+                                                if (entry.selected) selectedServiceIDs.push(String(entry.selected));
+                                            } else {
+                                                selectedServiceIDs.push(String(key));
                                             }
                                         }
                                     }
 
 
-                                    if (selectedServiceIDs.includes(String(category
-                                            .partnershipServiceID))) {
+
+                                    if (selectedServiceIDs.includes(String(category.partnershipServiceID))) {
                                         checkbox.checked = true;
 
-                                        partnerListContainer.appendChild(inputPBName);
-                                        partnerListContainer.appendChild(inputPBPrice);
-                                        partnerListContainer.appendChild(inputServiceID);
+                                        if (typeof sessionSelectedServices[category.partnershipServiceID] === "object") {
+                                            checkbox.dispatchEvent(new Event("change"));
+                                        }
                                     }
 
 
                                     partnerListContainer.appendChild(checkbox);
-                                    partnerListContainer.appendChild(inputPBName);
-                                    partnerListContainer.appendChild(inputPBPrice);
-                                    partnerListContainer.appendChild(inputServiceID);
+                                    // partnerListContainer.appendChild(inputPBName);
+                                    // partnerListContainer.appendChild(inputPBPrice);
+                                    // partnerListContainer.appendChild(inputPartnerID);
                                     partnerListContainer.appendChild(label);
 
                                     wrapper.appendChild(partnerListContainer);

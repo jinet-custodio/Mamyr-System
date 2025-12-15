@@ -55,6 +55,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
+// error_log(print_r($_POST, true));
 ?>
 
 <!DOCTYPE html>
@@ -264,14 +265,14 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $additionalServiceSelected = [];
 
         if (!empty($_POST['additionalServiceSelected'])) {
-            foreach ($_POST['additionalServiceSelected'] as $id => $service) {
+            foreach ($_POST['additionalServiceSelected'] as $id => $service) { //Yung id nato is yung service ID 
                 // Only keep if checkbox was actually selected
                 if (isset($service['selected'])) {
                     $additionalServiceSelected[$id] = [
                         'selected' => trim($service['selected']),
                         'PBName' => trim($service['PBName'] ?? ''),
                         'PBPrice' => trim($service['PBPrice'] ?? ''),
-                        'partnershipServiceID' => trim($service['partnershipServiceID'] ?? ''),
+                        'partnershipID' => trim($service['partnershipID'] ?? ''),
                     ];
                 }
             }
@@ -424,12 +425,12 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     $additionalServicePrice = 0;
                     if (!empty($additionalServiceSelected)) { ?>
 
-                        <?php foreach ($additionalServiceSelected as $id => $service) {
+                        <?php foreach ($additionalServiceSelected as $id => $service) { //id -> partnership service id
                             $additionalServicePrice += $service['PBPrice'] ?>
                             <div class="form-group">
                                 <label><?= htmlspecialchars(ucfirst($service['PBName'])) ?> &mdash;
                                     ₱<?= number_format($service['PBPrice'], 2) ?></label>
-                                <input type="hidden" name="additionalServiceSelected[<?= $id ?>]" value="<?= htmlspecialchars($service['partnershipServiceID']) ?>"
+                                <input type="hidden" name="additionalServiceSelected[<?= $id ?>]" value="<?= htmlspecialchars($service['partnershipID']) ?>"
                                     class="form-control">
                             </div>
                             <div class="customer-chocie-container">
