@@ -21,7 +21,6 @@ if (isset($_GET['userID'])) {
                                                 MAX(u.email) AS email,
                                                 MAX(u.phoneNumber) AS phoneNumber,
                                                 MAX(u.userAddress) AS userAddress,
-                                                bpas.price AS price,
                                                 MAX(b.bookingType) AS bookingType,
                                                 MAX(b.durationCount) AS durationCount,
                                                 MAX(b.startDate) AS startDate,
@@ -29,7 +28,11 @@ if (isset($_GET['userID'])) {
                                                 GROUP_CONCAT(DISTINCT ra.resortServiceID) AS resortServiceID,
                                                 GROUP_CONCAT(DISTINCT ra.RServiceName) AS RServiceName,
                                                 MAX(b.additionalRequest) AS additionalRequest,
-                                                GROUP_CONCAT(DISTINCT ps.PBName) AS PBName,
+                                                GROUP_CONCAT(
+                                                    DISTINCT CONCAT(ps.PBName, ' - ₱', FORMAT(bpas.price, 2))
+                                                    SEPARATOR '<br>'
+                                                ) AS serviceInfo,
+                                                SUM(DISTINCT bpas.price) as servicePrice,
                                                 MAX(bpas.approvalStatus) AS approvalStatus,
                                                 MAX(ec.categoryName) AS categoryName,
                                                 bpas.availedDate,
@@ -125,8 +128,8 @@ if (isset($_GET['userID'])) {
                     break;
             }
             $eventType =  $row['categoryName'] ?? 'N/A';
-
-            $serviceInfo =  $row['PBName'] . " — ₱" . number_format($row['price'], 2);
+            // $serviceInfo = '';
+            $serviceInfo = trim($row['serviceInfo']) ?? 'None';
 
             $bookings[] = [
                 'formattedBookingID' => $row['formattedBookingID'],
@@ -147,7 +150,8 @@ if (isset($_GET['userID'])) {
                 'notes' => $row['additionalRequest'],
                 'serviceInfo' =>  $serviceInfo,
                 'approvalTimeUntil' =>  $approvalTimeUntil,
-                'profileImage' => $image
+                'profileImage' => $image,
+                'serviceTotalPrice' => $servicePrice
             ];
         }
 
