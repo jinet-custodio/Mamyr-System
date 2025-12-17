@@ -402,7 +402,7 @@ switch ($userRole) {
                         $guestCount = intval($row['guestCount']);
 
                         //Additionals
-                        $additionalReq = str_replace(["\\r\\n", "\r\n"], "\n", $row['additionalRequest']);
+                        $additionalReq = str_replace(["\\r\\n", "\r\n"], "\n", $row['additionalRequest'] ?? 'None');
 
                         $additionalServices = $row['addOns'] ?? 'None';
 
@@ -1611,28 +1611,31 @@ switch ($userRole) {
             const reschedButton = document.getElementById("resched-button-container");
             const bookingStatus = document.getElementById('bookingStatusName').value;
             const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
-            console.log('Booking status:', bookingStatus);
+            // console.log('Booking status:', bookingStatus);
 
-            console.log('Payment status:', paymentApprovalStatus);
+            // console.log('Payment status:', paymentApprovalStatus);
             switch (bookingStatus.toLowerCase()) {
                 case 'pending':
-                    buttonContainer.style.display = "block";
+                    // console.log(bookingStatus.toLowerCase());
+                    buttonContainer.style.setProperty("display", "flex", "important");
                     break;
                 case 'expired':
                 case 'cancelled':
                 case 'done':
                 case 'rejected':
-                    reschedButton.style.display = "none";
+                    // console.log(bookingStatus.toLowerCase());
+                    reschedButton.style.setProperty("display", "none", "important");
+                    buttonContainer.style.setProperty("display", "none", "important");
                     break;
                 default:
-                    console.log(bookingStatus);
-                    buttonContainer.style.display = "none";
+                    // console.log(bookingStatus.toLowerCase());
+                    buttonContainer.style.setProperty("display", "none", "important");
                     break;
             }
 
             switch (paymentApprovalStatus.toLowerCase()) {
                 case 'payment sent':
-                    buttonContainer.style.display = "none";
+                    buttonContainer.style.setProperty("display", "none", "important");
                     break;
             }
         });

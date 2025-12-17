@@ -344,9 +344,6 @@ switch ($userRole) {
                                 <section class="booking-info-container">
 
                                     <div class="hidden-inputs" style="display: none;">
-                                        <input type="hidden" name="bookingID" id="bookingID" value="">
-                                        <input type="hidden" name="guestID" id="guestID" value="">
-                                        <input type="hidden" name="guestRole" id="guestRole" value="">
                                     </div>
                                     <div class="booking-info">
                                         <label for="eventType">Event Type</label>
@@ -373,9 +370,9 @@ switch ($userRole) {
                                     </div>
                                 </section>
 
-                                <section class="serviceContainer">
-                                    <label for="service">Your Service</label>
-                                    <div class="service-info">
+                                <section class="serviceContainer mt-3">
+                                    <label for="service" class="fw-bold">Your Service</label>
+                                    <div class="service-info text-center">
                                         <p id="service"></p>
                                     </div>
                                 </section>
@@ -618,15 +615,15 @@ switch ($userRole) {
                     viewModal.querySelector('#eventDate').value = booking.bookingDate;
                     viewModal.querySelector('#eventDuration').value = booking.timeDuration;
                     viewModal.querySelector('#eventVenue').value = booking.venue;
-                    viewModal.querySelector("#service").textContent = booking.serviceInfo;
+                    viewModal.querySelector("#service").innerHTML = booking.serviceInfo;
                     viewModal.querySelector('#bookingID').value = booking.bookingID;
                     viewModal.querySelector('#guestID').value = booking.guestID;
                     viewModal.querySelector('#guestRole').value = booking.guestRole;
                     viewModal.querySelector('#note-approval-time').innerHTML =
                         `Please note that this booking must be approved by <strong> ${booking.approvalTimeUntil} </strong>. After this time, it will be automatically rejected.`;
 
-                    viewModal.querySelector('#additionalNotes').value =
-                        (booking.notes || '').replace(/\r\n/g, '\n').replace(/\n/g, '\n');
+                    viewModal.querySelector('#additionalNotes').innerHTML =
+                        (booking.notes || '').replace(/\\r\\n/g, '\n');
 
                     if (booking.statusName === 'Approved' || booking.statusName === 'Rejected' || booking
                         .statusName === 'Cancelled') {

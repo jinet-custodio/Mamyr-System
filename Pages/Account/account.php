@@ -94,7 +94,7 @@ $baseURL = '../..';
 
 
     $getData = $conn->prepare("SELECT u.firstName, u.middleInitial, u.lastName, u.userProfile, u.email, u.phoneNumber, u.birthDate, u.userAddress, p.partnershipID,
-                                        pt.partnerTypeDescription, ppt.isApproved, p.companyName, p.validID, p.businessEmail, p.documentLink, p.partnerAddress
+                                        pt.partnerTypeDescription, ppt.isApproved, p.companyName, p.validID, p.businessEmail, p.documentLink, p.partnerAddress, ppt.otherPartnerType
                             FROM user u
                             LEFT JOIN partnership p ON u.userID = p.userID
                             LEFT JOIN partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID
@@ -153,7 +153,7 @@ $baseURL = '../..';
                 $isApproved = $data['isApproved'] ?? false;
 
                 if ($isApproved) {
-                    $partnerTypes[] = $data['partnerTypeDescription'] ?? 'N/A';
+                    $partnerTypes[] = (strtolower(trim($data['partnerTypeDescription'])) === 'other') ? $data['otherPartnerType'] : $data['partnerTypeDescription'];
                 }
 
                 $companyName = $data['companyName'] ?? 'N/A';

@@ -90,6 +90,7 @@ if (isset($_POST['approveBtn'])) {
         header('Location: ../../../../Pages/Account/bpBookings.php?action=approve-failed');
     }
 } elseif (isset($_POST['rejectBtn'])) {
+    error_log(print_r($_POST, true));
     $bookingID = (int) $_POST['bookingID'];
     $guestID = (int) $_POST['guestID'];
     $guestRoleID = (int) $_POST['guestRole'];
@@ -103,12 +104,14 @@ if (isset($_POST['approveBtn'])) {
         header('Location: ../../Pages/Account/bpBookings.php?action=rejectionEmpty');
         exit();
     }
+    $conn->begin_transaction();
     try {
         $rejectStatusID = 5;
         $updateStatusBooking = $conn->prepare("UPDATE `businesspartneravailedservice` SET `approvalStatus`= ? WHERE `bookingID`= ?");
         $updateStatusBooking->bind_param("ii", $rejectStatusID, $bookingID);
 
         if (!$updateStatusBooking->execute()) {
+            $conn->rollback();
             throw new Exception("Failed executing updating status query. Error => " . $updateStatusBooking->error);
         }
 
@@ -135,10 +138,13 @@ if (isset($_POST['approveBtn'])) {
         $notificationQuery->bind_param("iissi", $bookingID, $userID, $message, $receiver, $guestID);
 
         if (!$notificationQuery->execute()) {
+            $conn->rollback();
             throw new Exception("Failed inserting notification query. Error => " . $notificationQuery->error);
         }
+        // $conn->commit();
         header('Location: ../../../../Pages/Account/bpBookings.php?action=reject-success');
     } catch (Exception $e) {
+        $conn->rollback();
         error_log("Error-> " . $e->getMessage());
         header('Location: ../../../../Pages/Account/bpBookings.php?action=reject-failed');
     }
