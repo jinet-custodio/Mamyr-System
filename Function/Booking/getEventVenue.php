@@ -6,13 +6,13 @@ header('Content-Type: application/json');
 
 $categories = [];
 $halls = [];
-$startDate = "2025-12-19 12:00:00";
-$endDate = "2025-12-19 17:00:00";
-if (isset($startDate) && isset($endDate)) {
+// $startDate = "2025-12-19 12:00:00";
+// $endDate = "2025-12-19 17:00:00";
+if (isset($_GET['startDate']) && isset($_GET['endDate'])) {
 
     // Date & Time
-    // $startDate = $_GET['startDate'];
-    // $endDate = $_GET['endDate'];
+    $startDate = $_GET['startDate'];
+    $endDate = $_GET['endDate'];
 
 
     // Get Event Categories
@@ -29,8 +29,9 @@ if (isset($startDate) && isset($endDate)) {
 
     // Get Event Halls
     $eventHallID = 4;
+    $availableID = 1;
     $getEventHallQuery = $conn->prepare("SELECT ra.* FROM resortamenity  ra
-            WHERE ra.RScategoryID = ?
+            WHERE ra.RScategoryID = ? AND ra.RSAvailabilityID = ?
             AND NOT EXISTS (
                     SELECT 1 FROM serviceunavailabledate sud
                     WHERE sud.resortServiceID = ra.resortServiceID
@@ -41,7 +42,7 @@ if (isset($startDate) && isset($endDate)) {
         echo json_encode(['error' => $conn->error]);
         exit();
     }
-    $getEventHallQuery->bind_param("iss", $eventHallID,  $startDate,  $endDate);
+    $getEventHallQuery->bind_param("iiss", $eventHallID, $availableID,  $startDate,  $endDate);
     $getEventHallQuery->execute();
     $getEventHallResult = $getEventHallQuery->get_result();
 

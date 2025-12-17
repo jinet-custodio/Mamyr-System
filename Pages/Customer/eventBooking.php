@@ -1317,10 +1317,8 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
                     const container = document.getElementById(containerId);
                     if (!container) return;
 
-                    // ✅ Clear previous content to prevent duplication
                     container.innerHTML = "";
 
-                    // ✅ Do not render anything if nothing is selected
                     if (items.length === 0) return;
 
                     const wrapper = document.createElement("div");
@@ -1345,26 +1343,34 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
 
                 const dishModal = document.getElementById('dishModal');
 
-                function updateSelectedServices() {
-                    const selected = Array.from(
-                        additionalModal.querySelectorAll('input[type="checkbox"]:checked')
-                    ).map(el => {
-                        const wrapper = el.closest('.partnerListContainer');
-                        if (wrapper) {
-                            const labelText = wrapper.querySelector('label')?.textContent || '';
-                            return labelText.split('—')[0].trim();
-                        }
-                        return el.value;
-                    });
-
-                    renderSelectedList(
-                        'selectedAdditionalServicesContainer',
-                        'Selected Services:',
-                        selected
-                    );
+                function updateSelectedDishes() {
+                    const selected = Array.from(document.querySelectorAll('#dishModal input[type="checkbox"]:checked'))
+                        .map(el => el.value);
+                    renderSelectedList('selectedDishesContainer', 'Selected Dishes:', selected);
                 }
 
                 dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
+
+                // function updateSelectedServices() {
+                //     const selected = Array.from(
+                //         additionalModal.querySelectorAll('input[type="checkbox"]:checked')
+                //     ).map(el => {
+                //         const wrapper = el.closest('.partnerListContainer');
+                //         if (wrapper) {
+                //             const labelText = wrapper.querySelector('label')?.textContent || '';
+                //             return labelText.split('—')[0].trim();
+                //         }
+                //         return el.value;
+                //     });
+
+                //     renderSelectedList(
+                //         'selectedAdditionalServicesContainer',
+                //         'Selected Services:',
+                //         selected
+                //     );
+                // }
+
+                // dishModal.addEventListener('hidden.bs.modal', updateSelectedDishes);
 
                 const additionalModal = document.getElementById('additionalServicesModal');
 
