@@ -151,7 +151,7 @@ if (isset($_GET['userID'])) {
                 'serviceInfo' =>  $serviceInfo,
                 'approvalTimeUntil' =>  $approvalTimeUntil,
                 'profileImage' => $image,
-                'serviceTotalPrice' => $servicePrice
+                'serviceTotalPrice' => $row['servicePrice'] ?? 0
             ];
         }
 
