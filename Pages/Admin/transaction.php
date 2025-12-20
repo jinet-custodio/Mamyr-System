@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -199,7 +199,6 @@ if ($result->num_rows > 0) {
             <div class="filter-btn-container">
                 <div class="filter-select-wrapper">
                     <select class="filter-select" name="payment-filter-select" id="payment-filter-select">
-                        <!-- <option selected disabled>Filters</option> -->
                         <option value="all">All Payments</option>
                         <option value="pending-payment">Awaiting Payment</option>
                         <option value="pending-review">Awaiting Payment Review</option>
@@ -225,7 +224,6 @@ if ($result->num_rows > 0) {
                                 <th scope="col">Balance</th>
                                 <th scope="col">Payment Method</th>
                                 <th scope="col">Status</th>
-                                <!-- <th scope="col">Status</th> -->
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -314,7 +312,6 @@ if ($result->num_rows > 0) {
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        // console.error("Failed to load payments.");
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
@@ -325,10 +322,8 @@ if ($result->num_rows > 0) {
                     const payments = data.payments;
                     const table = $('#transactionTable').DataTable();
                     table.clear();
-                    // console.log(payments);
 
                     payments.forEach(payment => {
-                        // const row = document.createElement("tr");
                         table.row.add([
                             payment.bookingID,
                             payment.bookingCode,
@@ -337,8 +332,7 @@ if ($result->num_rows > 0) {
                             payment.paymentAmount,
                             payment.userBalance,
                             payment.paymentMethod,
-                            getStatusBadge(payment.statusClass, payment.status),
-                            // getStatusBadge(payment.paymentClass, payment.paymentStatusName),
+                            getStatusBadge(payment.statusClass, payment.status), ,
                             ` <form action = "viewPayments.php"
                                         method = "POST" >
                                             <input type = "hidden"
@@ -358,7 +352,6 @@ if ($result->num_rows > 0) {
                     });
                     table.draw();
                 }).catch(error => {
-                    console.error("Error loading bookings:", error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',

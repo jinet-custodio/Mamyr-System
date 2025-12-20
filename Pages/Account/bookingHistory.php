@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -188,12 +188,6 @@ unset($_SESSION['tempImage']) ?>
                             <span class="sidebar-text">Services</span>
                         </a>
                     </li>
-                    <!-- <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="bi bi-tags sidebar-icon"></i></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li> -->
                 <?php } ?>
                 <li>
                     <a href="loginSecurity.php" class="list-group-item">
@@ -229,9 +223,6 @@ unset($_SESSION['tempImage']) ?>
                             <th scope="col">ID</th>
                             <th scope="col">Booking Code</th>
                             <th scope="col">Check In</th>
-                            <!-- <th scope="col">Total Cost</th>
-                            <th scope="col">Balance</th>
-                            <th scope="col">Payment Method</th> -->
                             <th scope="col">Booking Type</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
@@ -267,7 +258,6 @@ unset($_SESSION['tempImage']) ?>
                                         <textarea class="form-control w-100 mt-3" id="purpose-additionalNotes"
                                             name="reviewComment" rows="5" placeholder="Additional Feedback"></textarea>
 
-                                        <!-- Booking Info -->
                                         <!-- Booking Info -->
                                         <input type="hidden" id="modalBookingID" name="bookingID" value="">
                                         <input type="hidden" id="modalBookingType" name="bookingType" value="">
@@ -318,11 +308,6 @@ unset($_SESSION['tempImage']) ?>
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content" id="cancel-content">
 
-                                    <!-- <div class="image w-100 text-center">
-                                        <img src="../../Assets/Images/Icon/warning.png" alt="warning icon"
-                                            class="warning-image">
-                                    </div> -->
-
                                     <div class="modal-body">
                                         <input type="hidden" name="bookingID" id="bookingIDModal" value="">
                                         <input type="hidden" name="confirmedBookingID" id="confirmedBookingIDModal"
@@ -331,8 +316,6 @@ unset($_SESSION['tempImage']) ?>
                                         <input type="hidden" name="confirmedStatus" id="confirmedStatusModal" value="">
                                         <input type="hidden" name="bookingType" id="bookingTypeModal" value="">
                                         <input type="hidden" name="status" id="statusModal" value="">
-
-                                        <!-- <p class="modal-title text-center mb-2 fw-bold fs-5">Reason of Cancellation</p> -->
                                         <h6 class="cancellation-label fw-bold fs-5">Select a Reason for Cancellation
                                         </h6>
                                         <div class="form-group mt-4">
@@ -398,7 +381,6 @@ unset($_SESSION['tempImage']) ?>
     <script src="../../Assets/JS/datatables.min.js"></script>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert JS -->
@@ -412,12 +394,11 @@ unset($_SESSION['tempImage']) ?>
         document.addEventListener("DOMContentLoaded", function() {
             const userID = document.getElementById('userID');
             const userIDValue = userID.value;
-            // console.error(userIDValue);
+
             fetch(`../../Function/Admin/Ajax/getBookingHistoryJSON.php?userID=${userIDValue}`)
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        // console.error("Failed to load bookings.");
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
@@ -447,9 +428,6 @@ unset($_SESSION['tempImage']) ?>
                                 booking.bookingID,
                                 booking.bookingCode,
                                 booking.checkIn,
-                                // booking.totalBill,
-                                // booking.userBalance,
-                                // booking.paymentMethod,
                                 booking.bookingType + ' Booking',
                                 getStatusBadge(booking.statusClass, booking.status),
                                 `<div class="action-button-container">
@@ -500,11 +478,6 @@ unset($_SESSION['tempImage']) ?>
                                         "data-confirmedstatus");
                                     const bookingType = button.getAttribute("data-bookingtype");
 
-                                    // console.log({
-                                    //     bookingID,
-                                    //     confirmedBookingID
-                                    // });
-
                                     document.getElementById("bookingIDModal").value = bookingID;
                                     document.getElementById("confirmedBookingIDModal").value =
                                         confirmedBookingID;
@@ -522,12 +495,6 @@ unset($_SESSION['tempImage']) ?>
 
                         table.draw();
                     }
-                    //  else {
-                    //     const row = document.createElement("tr");
-                    //     row.innerHTML = `<td colspan="7" class="text-center">No bookings to display</td>`;
-                    //     tbody.appendChild(row);
-                    // }
-
                     $(document).ready(function() {
                         const starContainer = $("#starContainer");
                         const ratingInput = $("#reviewRating");
@@ -569,19 +536,12 @@ unset($_SESSION['tempImage']) ?>
                         // AJAX form submission
                         $("#reviewForm").on("submit", function(e) {
                             e.preventDefault();
-                            // console.log("Submitting review:", {
-                            //     bookingID: $('#modalBookingID').val(),
-                            //     bookingType: $('#modalBookingType').val(),
-                            //     rating: $('#reviewRating').val(),
-                            //     comment: $('#purpose-additionalNotes').val()
-                            // });
 
                             $.ajax({
                                 url: "../../Function/Account/submitReview.php",
                                 method: "POST",
                                 data: $(this).serialize(),
                                 success: function(response) {
-                                    // alert("Review submitted successfully!");
                                     Swal.fire({
                                         position: "top-end",
                                         icon: "success",
@@ -781,7 +741,6 @@ unset($_SESSION['tempImage']) ?>
                 didOpen: () => {
                     const btn = document.querySelector('.loaderTrigger');
                     if (btn) {
-                        console.log("Trigger found");
                         btn.addEventListener('click', () => {
                             loaderOverlay.style.display = 'flex';
                         });

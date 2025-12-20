@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -49,7 +49,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 require '../../Function/Partner/sales.php';
-// require '../../Function/Partner/getBookings.php';
 
 $folder = 'landingPage';
 $sectionName = 'Landing';
@@ -303,7 +302,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     <div class="filter-select-wrapper">
                                         <select class="filter-select" name="sales-filter-select"
                                             id="sales-filter-select">
-                                            <!-- <option selected disabled>Filters</option> -->
                                             <option value="month"><?= $monthToday ?></option>
                                             <option value="w1">Week 1</option>
                                             <option value="w2">Week 2</option>
@@ -354,9 +352,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                     }
 
                                     while ($service = $result->fetch_assoc()) {
-                                        // echo '<pre>';
-                                        // print_r("ID: " . $partnershipID);
-                                        // echo '</pre>';
                                     ?>
                                         <li class="serviceNamePrice"><?= htmlspecialchars(ucfirst($service['PBName'])) ?>
                                             &mdash; ₱<?= number_format($service['PBPrice']) ?></li>
@@ -485,18 +480,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             <div class="rating-value" id="event-rating-value"></div>
                         </div>
 
-                        <!-- Overall Rating (Optional) -->
+                        <!-- Overall Rating -->
                         <div class="overall-rating">
                             <div class="overall-rating-label">
                                 <h6 class="overall-rating-label">Overall Rating</h6>
                                 <h4 class="overall-rating-value" id="overall-rating-value"></h4>
                             </div>
                             <div class="overall-rating-stars" id="star-container">
-                                <!-- <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i> -->
                             </div>
                         </div>
                     </div>
@@ -644,7 +634,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const userID = document.getElementById('userID').value;
-            console.log(userID)
             fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
                 .then(result => {
                     if (!result.ok) throw new Error("Network Error");
@@ -661,15 +650,25 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                     const totalBookings = data.allBookingStatus || 0;
                     const totalPendings = data.totalPendingBooking || 0;
-                    // const totalCancelled = data.cancelledBooking || 0;
                     const totalApproved = data.approvedBookings || 0;
 
                     document.getElementById('bookingNumber').textContent = totalBookings;
                     document.getElementById('approvedBooking').textContent = totalApproved;
                     document.getElementById('pendingBooking').textContent = totalPendings;
-                    // document.getElementById('cancelledBooking').textContent = totalCancelled;
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    if (error.message === 'server') {
+                        message = 'Unable to load requests at the moment. Please try again later.';
+                    } else {
+                        message = 'Network issue detected. Please check your connection.';
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Something went wrong.',
+                        text: message
+                    });
+                });
         });
     </script>
 
@@ -825,7 +824,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     const sales = data.sales;
                     let labels = [];
                     let dataset = [];
-                    // let title = "";
 
                     if (selectedFilterValue === "month") {
                         const dayLabels = [...new Set(sales.map((item) => item.weekOfMonth))];

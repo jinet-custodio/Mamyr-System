@@ -174,12 +174,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                             <span class="sidebar-text">Services</span>
                         </a>
                     </li>
-                    <!-- <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="bi bi-tags sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li> -->
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -413,11 +407,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         <?php include '../Customer/loader.php'; ?>
     </div>
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
-
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Password Validation -->
     <script src="../../Assets/JS/passwordValidation.js"></script>
@@ -605,7 +595,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 text: "You will need to log in again to access your account.",
                 icon: "warning",
                 showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, logout!",
                 customClass: {
@@ -616,7 +605,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 didOpen: () => {
                     const btn = document.querySelector('.loaderTrigger');
                     if (btn) {
-                        console.log("Trigger found");
                         btn.addEventListener('click', () => {
                             loaderOverlay.style.display = 'flex';
                         });

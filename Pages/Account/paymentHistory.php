@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -184,12 +184,6 @@ switch ($userRole) {
                             <span class="sidebar-text">Services</span>
                         </a>
                     </li>
-                    <!-- <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="bi bi-tags sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li> -->
                 <?php } ?>
                 <li>
                     <a href="loginSecurity.php" class="list-group-item">
@@ -315,12 +309,10 @@ switch ($userRole) {
             const userIDValue = userID.value;
 
             const bookingMap = {};
-            // console.error(userIDValue);
             fetch(`../../Function/Admin/Ajax/getPaymentHistory.php?userID=${userIDValue}`)
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        // console.error("Failed to load bookings.");
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
@@ -621,7 +613,6 @@ switch ($userRole) {
                 text: "You will need to log in again to access your account.",
                 icon: "warning",
                 showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, logout!",
                 customClass: {
@@ -632,7 +623,6 @@ switch ($userRole) {
                 didOpen: () => {
                     const btn = document.querySelector('.loaderTrigger');
                     if (btn) {
-                        console.log("Trigger found");
                         btn.addEventListener('click', () => {
                             loaderOverlay.style.display = 'flex';
                         });

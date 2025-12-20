@@ -2,8 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 0);
 require_once '../Config/dbcon.php';
 
 
@@ -299,7 +299,6 @@ while ($row = $getLogoResult->fetch_assoc()) {
                         });
 
                         const rawText = await res.text();
-                        console.log("Text update server response:", rawText);
 
                         let response;
                         try {
@@ -324,7 +323,6 @@ while ($row = $getLogoResult->fetch_assoc()) {
                             });
                         }
                     } catch (err) {
-                        console.error('❌ Error saving text content:', err);
                         Swal.fire({
                             icon: 'error',
                             title: 'An error occurred!',
@@ -359,7 +357,6 @@ while ($row = $getLogoResult->fetch_assoc()) {
                             })
                             .then(async res => {
                                 const rawText = await res.text();
-                                console.log("Server response:", rawText);
 
                                 let response;
                                 try {
@@ -385,7 +382,6 @@ while ($row = $getLogoResult->fetch_assoc()) {
                                 }
                             })
                             .catch(error => {
-                                console.error(`❌ Error updating image ${wcImageID}:`, error);
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Upload Failed',

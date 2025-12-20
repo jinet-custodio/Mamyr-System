@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 require '../../Config/dbcon.php';
 
@@ -21,9 +21,6 @@ if (isset($_POST['addBulkBooking'])) {
     $startDate = $startDateObj->format('Y-m-d');
     $endDate = $endDateObj->format('Y-m-d');
 
-    error_log(print_r($_POST, true));
-    error_log($startDate);
-    error_log($endDate);
     $_SESSION['createBookingForm'] = $_POST;
     if (empty($dateRange) && empty($bookingType) && empty($totalBookings) && empty($totalSales)) {
         header('Location: ../../Pages/Admin/createBooking.php?action=fieldAllRequiredInfo');

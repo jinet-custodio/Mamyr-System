@@ -43,7 +43,6 @@ if (!$getAdminName->execute()) {
 $result = $getAdminName->get_result();
 
 if ($result->num_rows === 0) {
-    // error_log('NO DATA  ' . $userID);
     $approvedBy = 'Unknown';
 }
 
@@ -54,8 +53,6 @@ $approvedDate = date('Y-m-d h:i:s');
 
 if (isset($_POST['approvePaymentBtn'])) {
 
-    // error_log(print_r($_POST['services'], true));
-
     //ID`s
     $bookingID  = (int) $_POST['bookingID'];
     $userRoleID = (int) $_POST['userRoleID'];
@@ -63,8 +60,6 @@ if (isset($_POST['approvePaymentBtn'])) {
     $paymentID = (int) $_POST['paymentID'];
     $paymentApprovalStatusID = 2; //Approved
     $bookingStatus = 3; //Reserved
-
-    // $serviceIDs = $_POST['services'];
 
     $firstName = mysqli_real_escape_string($conn, $_POST['firstName']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -87,10 +82,6 @@ if (isset($_POST['approvePaymentBtn'])) {
     }
 
     $amount = (strtolower($paymentMethod) !== 'gcash')  ? $paymentAmount : (($paymentAmount == 0) ? $customerPaymentMade : $paymentAmount);
-
-    // error_log('amount: '  . $finalBill);
-    // error_log('finalBill: ' . $discount);
-
 
     $today = date('M. d, Y g:i A');
 
@@ -368,8 +359,6 @@ if (isset($_POST['approvePaymentBtn'])) {
         }
     }
 } elseif (isset($_POST['submitPaymentBtn'])) {
-    // error_log(print_r($_POST, true));
-
     //IDs
     $bookingID  = (int) $_POST['bookingID'];
     $userRoleID = (int) $_POST['userRoleID'];

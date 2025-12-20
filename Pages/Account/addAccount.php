@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -82,18 +82,11 @@ switch ($userRole) {
             <div class="card">
                 <h5 class="card-title">Create New Account</h5>
                 <div class="card-body">
-                    <!-- <div class="profile-pic">
-                        <img src="../../Assets/Images/defaultProfile.png" alt="" class="profile-image" id="preview">
-                        <input type="file" name="profile-image" id="profile-image" hidden>
-                        <label for="profile-image" class="uploadPfpBtn btn btn-primary">Upload Profile</label>
-                    </div> -->
                     <div class="information-container">
                         <div class="input-container form-floating fullwidth">
                             <select class="form-select" id="roleSelect" name="roleSelect" aria-label="Floating label select example" required>
                                 <option value="" selected <?= ($data['roleSelect'] ?? '') == " " ? 'selected' : '' ?> disabled>Select Role</option>
                                 <option value="admin" <?= ($data['roleSelect'] ?? '') == 'admin' ? 'selected' : '' ?>>Admin</option>
-                                <!-- <option value="partner">Business Partner</option>
-                                <option value="customer">Customer</option> -->
                             </select>
                             <label for="roleSelect">Role</label>
                         </div>
@@ -116,7 +109,6 @@ switch ($userRole) {
                             <label for=" address">Address</label>
                         </div>
                         <div class="input-container form-floating">
-                            <!-- <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" required> -->
                             <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$" value="<?= !empty($data['phoneNumber']) ? ucfirst($data['phoneNumber']) : '' ?>"
                                 title="e.g., +639123456789 or 09123456789"
                                 required>
@@ -154,8 +146,7 @@ switch ($userRole) {
     </div>
 
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

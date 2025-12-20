@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 require '../../../Config/dbcon.php';
 
@@ -46,7 +46,6 @@ if (isset($_GET['selectedFiltered'])) {
             $filter = 'week';
             $weekNumber = substr($selectedFilteredValue, 1) - 1;
             $sql = "SELECT 
-                    -- b.bookingType,
                     CASE 
                         WHEN (cb.paymentStatus IS NULL) THEN 
                             IF(ps.statusName IS NULL, 'Unpaid', ps.statusName)
@@ -102,10 +101,6 @@ if (isset($_GET['selectedFiltered'])) {
         $getPaymentsFiltered->bind_param('iiii', $paymentIssue, $approvedStatusID, $reservedStatusID, $doneStatus);
     }
 
-    // if ($filter === 'week') {
-    //     $getPaymentsFiltered->bind_param('i',   $weekNumber);
-    // }
-
     if (!$getPaymentsFiltered->execute()) {
         error_log("Error: " . $getPaymentsFiltered->error);
         echo json_encode([
@@ -123,7 +118,6 @@ if (isset($_GET['selectedFiltered'])) {
             'message' => 'No Data',
             'payments' => []
         ]);
-        // error_log(print_r($payments, true));
         exit;
     }
 

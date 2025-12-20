@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -101,9 +101,6 @@ if ($role === "Admin") {
 
     <?php
     $bookingID = $bookingID;
-    // $bookingStatus = 2;
-    // $reservedStatus = 3;
-    // $doneStatus = 6;
 
     $payments = $conn->prepare("SELECT 
                     LPAD(cb.bookingID, 4, '0') AS formattedID, b.bookingCode,
@@ -266,7 +263,6 @@ if ($role === "Admin") {
 
 
             foreach ($paymentIDs as $i => $pid) {
-                // error_log($pid);
                 $rawDate = $paymentDates[$i] ?? null;
                 $formattedDate = null;
 
@@ -287,7 +283,6 @@ if ($role === "Admin") {
             }
         }
     }
-    // var_dump($paymentStatusID);
     ?>
     <form action="" method="POST" id="form">
 
@@ -298,7 +293,6 @@ if ($role === "Admin") {
         <main>
             <section style="background-color: #ffff;">
                 <div class="bookingInfo">
-                    <!-- <div class="card"> -->
                     <input type="hidden" name="customerID" value="<?= $customerID ?>">
                     <input type="hidden" name="userRoleID" value="<?= $userRoleID ?>">
                     <input type="hidden" name="bookingID" value="<?= $bookingID ?>">
@@ -447,9 +441,6 @@ if ($role === "Admin") {
                 <div class="image-container" id="downpayment-image-container">
                     <?php if ($downpaymentImage !== 'None'): ?>
                         <img src="<?= $downpaymentImage ?>" alt="Receipt Image" class="preview-image">
-                        <!-- <div class="zoom-overlay">
-                            <img src="<?= $downpaymentImage ?>" alt="Zoomed Image">
-                        </div> -->
                     <?php else: ?>
                         <img src="../../Assets/Images/defaultDownpayment.png" alt="Payment Icon"
                             class="defaultDownpaymentImage">
@@ -968,10 +959,8 @@ if ($role === "Admin") {
         const paymentMethod = document.getElementById("paymentMethod").value;
         const paymentStatus = document.getElementById("paymentStatus").value;
         const ImageContainer = document.getElementById("downpayment-image-container");
-        // const downpaymentContainer = document.getElementById('downpaymentContainer');
         if (paymentMethod === 'Cash - Onsite Payment') {
             ImageContainer.style.display = "none";
-            // downpaymentContainer.style.display = "none";
         }
         if (paymentStatus === 'Fully Paid') {
             document.querySelector("#form-button").style.display = "none";
@@ -1188,7 +1177,6 @@ if ($role === "Admin") {
                 }
                 entry[name][property] = isNaN(form.value) ? form.value : Number(form.value);
                 updateAddPaymentSummary();
-                // console.log(data);
             });
         });
 

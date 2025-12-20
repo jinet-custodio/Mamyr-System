@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
@@ -360,7 +360,6 @@ unset($_SESSION['formData']);
                     $entertainmentName[] = $row['RServiceName'];
                     $entertainmentIDs[] = $row['serviceID'];
                     $addOnsServices[] = $row['RServiceName'];
-                    // $addOns[] = $row['RServiceName'] . ' - ₱' . number_format($row['RSprice'], 2);
                 }
             }
         }
@@ -388,9 +387,6 @@ unset($_SESSION['formData']);
 
         $_SESSION['resortFormData'] = $_POST;
     }
-
-    // error_log("Services " . print_r($services, true));
-    // error_log("Add Ons " . print_r($addOnsServices, true));
     ?>
 
     <!-- For Hotel Booking -->
@@ -524,7 +520,6 @@ unset($_SESSION['formData']);
         $additionalFeePerHour = 0;
         $remainingHours = 0;
         $fullBlocks = 0;
-        // print_r($numHours);
         if ($numHours <= 24 && $numHours <= 22) {
             $fullBlocks = floor($numHours / 22);
         } else {
@@ -545,8 +540,6 @@ unset($_SESSION['formData']);
             $computedHotelPrice[] = ($fullBlocks * $hotelPrice) + $additionalFeePerHour;
         }
 
-        // print_r('remaininghours ' . $remainingHours);
-        // print_r($computedHotelPrice);
         $totalCapacity = arrayAddition($capacity);
         $totalPax = addition($childrenCount, $adultCount, $toddlerCount);
         $adultChildrenCount = addition($childrenCount, $adultCount, 0);

@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(0);
+// ini_set('display_errors', 0);
+// ini_set('display_startup_errors', 0);
+// error_reporting(0);
 
 require '../../../Config/dbcon.php';
 
@@ -72,8 +72,6 @@ if (isset($_GET['selectedFilter'])) {
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    -- LEFT JOIN 
-                    --     payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
                         cb.paymentStatus IN (?, ?) AND b.bookingStatus IN (?, ?,?) AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
@@ -103,11 +101,6 @@ if (isset($_GET['selectedFilter'])) {
         $getSalesFiltered->bind_param('iiiii',  $partiallyPaid, $fullyPaid, $approvedStatus, $doneStatus, $reservedID);
     }
 
-    // if ($filter === 'week') {
-    //     $getSalesFiltered->bind_param('i', $weekNumber);
-    // }
-    // error_log("Executing query with weekNumber = $weekNumber * selectedValue = $selectedFilterValue");
-
     if (!$getSalesFiltered->execute()) {
         error_log("Error: " . $getSalesFiltered->error);
         echo json_encode([
@@ -126,7 +119,6 @@ if (isset($_GET['selectedFilter'])) {
             'message' => 'No Data',
             'sales' => []
         ]);
-        // error_log(print_r($sales, true));
         exit;
     }
 
@@ -135,7 +127,6 @@ if (isset($_GET['selectedFilter'])) {
     while ($row = $salesResult->fetch_assoc()) {
         $sales[] = $row;
     }
-    // error_log(print_r($sales, true));
 
     echo json_encode([
         'success' => true,

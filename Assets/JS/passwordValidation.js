@@ -63,23 +63,10 @@ function checkboxChecker(checkbox, message) {
     message.innerHTML = "";
     return true;
   } else {
-    // message.innerHTML = "Please agree to the terms and conditions!";
     message.innerHTML = "";
     return false;
   }
 }
-
-// function checkLoginPassword() {
-//   const password = document.getElementById("login_password").value;
-//   const passwordMessage = document.getElementById("passwordLValidation");
-//   const loginButton = document.getElementById("login");
-
-//   const isValid = passwordValidation(password, passwordMessage);
-
-//   if (isValid) {
-//     loginButton.disabled = false;
-//   }
-// }
 
 function validateSignUpForm() {
   const password = document.getElementById("password").value;
@@ -128,7 +115,6 @@ function isValid(event) {
       email !== "") &&
     password !== ""
   ) {
-    console.log("Trulalu");
     switch (validated) {
       case "password":
         event.preventDefault();
@@ -231,3 +217,46 @@ function AcceptTerms() {
 function declineTerms() {
   handleTerms(false);
 }
+
+function passwordChangeValidation() {
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+  const passwordValidationMessage = document.getElementById(
+    "password-validation-message"
+  );
+  const passwordMatchMessage = document.getElementById(
+    "password-match-message"
+  );
+
+  const isPasswordValid = passwordValidation(
+    password,
+    passwordValidationMessage
+  );
+  const isPasswordMatch = passwordMatchValidation(
+    password,
+    confirmPassword,
+    passwordMatchMessage
+  );
+
+  return isPasswordValid && isPasswordMatch;
+}
+
+document
+  .getElementById("password-change")
+  .addEventListener("click", function (e) {
+    if (!passwordChangeValidation()) {
+      e.preventDefault();
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please ensure your password meets all requirements and matches the confirmation field.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        const passwordModal = document.getElementById(
+          "changePasswordSecondModal"
+        );
+        const modal = new bootstrap.Modal(passwordModal);
+        modal.show();
+      });
+    }
+  });

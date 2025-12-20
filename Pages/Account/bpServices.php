@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -371,7 +371,6 @@ switch ($userRole) {
         const addServiceContainer = document.getElementById("addServiceContainer");
         const addServiceButtonContainer = document.getElementById("addServiceButtonContainer");
         const emptyContainer = document.getElementById("no-data-container");
-        // const homeBtnContainer = document.getElementById("homeBtnContainer")
 
         addServiceContainer.style.display = "none"
 
@@ -380,7 +379,7 @@ switch ($userRole) {
                 addServiceContainer.style.display = "block";
                 serviceCardContainer.style.display = "none";
                 addServiceButtonContainer.style.display = "none";
-                // homeBtnContainer.style.display = "none";
+
                 document.getElementById("title").innerHTML = "Add Service"
                 emptyContainer.style.display = 'none';
 
@@ -451,7 +450,6 @@ switch ($userRole) {
                 text: "You will need to log in again to access your account.",
                 icon: "warning",
                 showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, logout!",
                 customClass: {
@@ -462,7 +460,6 @@ switch ($userRole) {
                 didOpen: () => {
                     const btn = document.querySelector('.loaderTrigger');
                     if (btn) {
-                        console.log("Trigger found");
                         btn.addEventListener('click', () => {
                             loaderOverlay.style.display = 'flex';
                         });
@@ -512,8 +509,6 @@ switch ($userRole) {
                             const card = document.createElement('div');
                             card.classList.add('card', 'service-card');
 
-                            // const cardHeader = document.createElement('div');
-                            // cardHeader.classList.add('card-header');
 
                             const pHeader = document.createElement('p');
                             pHeader.classList.add('card-text');
@@ -524,9 +519,6 @@ switch ($userRole) {
 
                             const cardBody = document.createElement('div');
                             cardBody.classList.add('card-body');
-
-                            // const imageContainer = document.createElement('div');
-                            // imageContainer.classList.add('image-container', );
 
                             const img = document.createElement('img');
                             img.classList.add('service-image-display', 'card-img-top');
@@ -598,8 +590,6 @@ switch ($userRole) {
                 });
         });
     </script>
-
-    <!-- <script src="../../Assets/JS/Services/editCancelPartnerService.js"></script> -->
 
     <script>
         const Toast = Swal.mixin({

@@ -1,6 +1,6 @@
 <?php
-error_reporting(0);
-ini_set('display_errors', 0);
+// error_reporting(0);
+// ini_set('display_errors', 0);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -215,7 +215,6 @@ switch ($userRole) {
                 <h5 class="page-title">Bookings</h5>
             </section>
 
-            <!-- <h1 class="title text-center my-3" style="display: none;" id="hiddenTitle">Bookings</h1> -->
 
             <div class="booking-table">
                 <div class="card">
@@ -223,7 +222,6 @@ switch ($userRole) {
                         <div class="filter-btn-container">
                             <div class="filter-select-wrapper">
                                 <select class="filter-select" name="booking-filter-select" id="booking-filter-select">
-                                    <!-- <option selected disabled>Filters</option> -->
                                     <option value="all">All Bookings</option>
                                     <option value="pending">Awaiting Review</option>
                                     <option value="incoming">Upcoming</option>
@@ -321,9 +319,7 @@ switch ($userRole) {
             getBookings(filterSelected.value);
             filterSelected.addEventListener('change', () => {
                 getBookings(filterSelected.value);
-                // console.log(filterSelected.value);
             });
-            // console.log(filterSelected.value);
         });
 
 
@@ -333,7 +329,6 @@ switch ($userRole) {
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        // console.error("Failed to load bookings.");
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
@@ -355,7 +350,6 @@ switch ($userRole) {
                             booking.bookingType + ` Booking`,
                             booking.bookingDate,
                             booking.createdOn,
-                            // booking.checkOut,
                             getStatusBadge(booking.statusClass, booking.status),
                             `<form action="viewBooking.php" method="POST">
                                     <input type="hidden" name="button" value="booking">

@@ -108,8 +108,6 @@ if (isset($_POST['signUp'])) {
             trim($_POST['zip'] ?? ''),
         'proofLink'      => trim($_POST['proofLink'] ?? '')
     ];
-
-    // error_log(print_r($partnerData, true));
     $defaultImage = '../Assets/Images/defaultProfile.png';
     if (file_exists($defaultImage)) {
         $userProfile = file_get_contents($defaultImage);
@@ -150,7 +148,6 @@ if (isset($_POST['signUp'])) {
                     $insertUser->bind_param("bssssssiss", $dummyBlob,  $firstName, $middleInitial, $lastName, $email, $userAddress, $hashpassword, $userRole, $otp, $OTP_expiration_at);
                     $insertUser->send_long_data(0, $userProfile);
                     if ($registerStatus == "Partner") {
-                        // error_log("PartnerTypeID :" .  $_POST['partnerType']);
                         $_SESSION['partnerData'] = $partnerData;
                     }
 

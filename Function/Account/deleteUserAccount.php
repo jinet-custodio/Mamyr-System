@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 
 session_start();
@@ -33,14 +31,9 @@ if (isset($_POST['yesDelete'])) {
                 header("Location: ../../Pages/Account/userManagement.php?status=failed");
                 exit;
             }
-            echo 'here3';
         }
-        echo 'here2';
     } else {
-        echo 'here1';
         header("Location: ../../Pages/Account/userManagement.php?status=null");
         exit;
     }
-} else {
-    echo 'here';
 }

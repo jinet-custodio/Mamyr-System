@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 session_start();
@@ -11,17 +11,12 @@ require '../../vendor/autoload.php';
 require '../emailSenderFunction.php';
 require '../Helpers/userFunctions.php';
 
-// require '../../../phpmailer/src/PHPMailer.php';
-// require '../../../phpmailer/src/Exception.php';
-// require '../../../phpmailer/src/SMTP.php';
-
 $userRole = (int) $_SESSION['userRole'];
 $userID = (int) $_SESSION['userID'];
 
 //* Confirmation if they have any transaction in the system other than creating an account
 if (isset($_POST['confirmationBtn'])) {
 
-  // error_log(print_r($_POST, true));
 
   $adminFullName = mysqli_real_escape_string($conn, $_POST['adminFullName'] ?? '');
   $adminID = (int) $_POST['adminID'] ?? '';
@@ -252,7 +247,6 @@ if (isset($_POST['verifyCode'])) {
           $today = date('Y-m-d H:i:s');
           $isDeleted = true;
           $anonymousEmail = 'deletedAt_' . bin2hex(random_bytes(4)) . '@gmail.com';
-          $name = 'deletedUser' . chr(random_int(65, 90)); // A–Z
 
           $subject = "Your Account Has Been Successfully Deleted";
           $email_message = '<body style="font-family: Arial, sans-serif;         background-color: #f4f4f4; padding: 20px; margin: 0;">

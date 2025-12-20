@@ -6,8 +6,6 @@ header('Content-Type: application/json');
 
 $categories = [];
 $halls = [];
-// $startDate = "2025-12-19 12:00:00";
-// $endDate = "2025-12-19 17:00:00";
 if (isset($_GET['startDate']) && isset($_GET['endDate'])) {
 
     // Date & Time

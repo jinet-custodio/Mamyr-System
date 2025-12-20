@@ -56,8 +56,6 @@ if (isset($_POST['verify-btn'])) {
                             $partnerPhoneNumber = mysqli_real_escape_string($conn, $partnerData['phoneNumber']);
                             $validIDImage = mysqli_real_escape_string($conn, $partnerData['imageName']);
                             $otherPartnerType = $partnerData['other-partner-type'] ?? [];
-
-                            // error_log($partnerType);
                             if (!$partnerData) {
                                 $_SESSION['error'] = "Partner information is missing. Please restart the registration process.";
                                 header("Location: ../Pages/register.php");
@@ -155,7 +153,6 @@ if (isset($_POST['verify-btn'])) {
                                 $conn->commit();
 
                                 unset($_SESSION['partnerData']);
-                                // $_SESSION['success'] = "Partner has been successfully registered and verified.";
                                 header("Location: ../Pages/register.php?action=partner-registered");
 
                                 $updateUser->close();
@@ -192,12 +189,10 @@ if (isset($_POST['verify-btn'])) {
                             exit;
                         }
                     } else {
-                        // $_SESSION['error'] = "Invalid OTP.";
                         header("Location: ../Pages/verify_email.php?action=invalidOTP");
                         exit;
                     }
                 } else {
-                    // $_SESSION['error'] = "Expired OTP.";
                     header("Location: ../Pages/verify_email.php?action=expiredOTP");
                     exit;
                 }

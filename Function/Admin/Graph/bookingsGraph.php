@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(0);
+// ini_set('display_errors', 0);
+// ini_set('display_startup_errors', 0);
+// error_reporting(0);
 
 require '../../../Config/dbcon.php';
 header('Content-Type: application/json');
@@ -27,8 +27,6 @@ if (isset($_GET['selectedFilter'])) {
                         booking b ON cb.bookingID = b.bookingID
                     LEFT JOIN 
                         businesspartneravailedservice bpas ON b.bookingID = bpas.bookingID
-                    -- LEFT JOIN 
-                    --     payment p ON cb.confirmedBookingID = p.confirmedBookingID
                     WHERE 
                         cb.paymentStatus NOT IN (?) AND b.bookingStatus IN (?, ?, ?)  AND
                         MONTH(b.startDate) = MONTH(CURDATE()) 
@@ -89,16 +87,12 @@ if (isset($_GET['selectedFilter'])) {
     if (!$getBookingsFiltered) {
         error_log("Prepare failed: " . $conn->error);
     }
-    // error_log("Executing query with weekNumber = $weekNumber * selectedValue = $selectedFilterValue");
     if ($filter === 'week') {
         $getBookingsFiltered->bind_param('iiiii', $paymentIssue, $approvedStatus, $doneStatus, $reservedID,  $weekNumber);
     } elseif ($filter === 'month') {
         $getBookingsFiltered->bind_param('iiii', $paymentIssue, $approvedStatus, $doneStatus, $reservedID);
     }
 
-    // if ($filter === 'week') {
-    //     $getBookingsFiltered->bind_param('i', $weekNumber);
-    // }
 
     if (!$getBookingsFiltered->execute()) {
         error_log("Error: " . $getBookingsFiltered->error);
@@ -118,7 +112,6 @@ if (isset($_GET['selectedFilter'])) {
             'message' => 'No Data',
             'bookings' => []
         ]);
-        // error_log(print_r($bookings, true));
         exit;
     }
 
@@ -127,7 +120,6 @@ if (isset($_GET['selectedFilter'])) {
     while ($row = $bookingsResult->fetch_assoc()) {
         $bookings[] = $row;
     }
-    // error_log(print_r($bookings, true));
 
     echo json_encode([
         'success' => true,

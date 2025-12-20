@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../Assets/CSS/Notification/notification.css">
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
@@ -41,9 +40,6 @@
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
 
     <!-- Notification Script -->
     <script>
@@ -145,7 +141,6 @@
                     return;
                 }
                 const notificationID = item.dataset.id;
-                // console.log('Clicked notification:', notificationID);
 
                 fetch(
                         `../../Function/Notification/readNotification.php?id=${encodeURIComponent(notificationID)}`
@@ -169,10 +164,21 @@
                             } else {
                                 notificationBadge.remove();
                             }
-                            // console.log(count);
                         }
                     })
-                    .catch(err => console.error('Error updating notification:', err));
+                    .catch(err => {
+                        if (error.message === 'server') {
+                            message = 'Unable to load requests at the moment. Please try again later.';
+                        } else {
+                            message = 'Network issue detected. Please check your connection.';
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Something went wrong.',
+                            text: message
+                        });
+                    });
             });
         });
         const userIDInput = document.getElementById('userID');
@@ -182,14 +188,23 @@
                     response => response.json())
                 .then(data => {
                     if (data.success) {
-                        console.log(data.message);
                         document.querySelectorAll('.notification-item').forEach(el => el.classList.add('read'));
                         notificationBadge.remove();
-                    } else {
-                        console.error(data.message);
                     }
                 })
-                .catch(err => console.error('Fetch error:', err));
+                .catch(err => {
+                    if (error.message === 'server') {
+                        message = 'Unable to load requests at the moment. Please try again later.';
+                    } else {
+                        message = 'Network issue detected. Please check your connection.';
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Something went wrong.',
+                        text: message
+                    });
+                });
         });
     </script>
 </body>

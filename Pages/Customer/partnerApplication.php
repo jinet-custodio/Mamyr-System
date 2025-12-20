@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -116,7 +116,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- <img src="../../Assets/Images/MamyrLogo.png" alt="Mamyr Resort Logo" class="logoNav"> -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                     <li class="nav-item">
@@ -721,7 +720,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     <script>
         const phoneNumber = document.getElementById('phoneNumber');
         const zipCode = document.getElementById('zip');
-        // const tooltip = document.getElementById('tooltip');
 
         const inputs = [
             phoneNumber,
@@ -732,13 +730,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 if (!/[0-9]/.test(e.key)) {
                     e.preventDefault();
                 }
-                // tooltip.classList.add('show');
 
-
-                // clearTimeout(tooltip.hideTimeout);
-                // tooltip.hideTimeout = setTimeout(() => {
-                //     tooltip.classList.remove('show');
-                // }, 2000);
             });
         });
     </script>
@@ -752,11 +744,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             checkboxes.forEach(cb => {
                 cb.addEventListener("change", function() {
                     const label = document.querySelector(`label[for="${this.id}"]`);
-                    console.log(label.textContent.trim());
                     const labelText = label.textContent.trim();
 
                     if (labelText.toLowerCase() === "other") {
-                        // otherInput.style.display = this.checked ? "block" : "none";
+
 
                         if (this.checked) {
                             otherInput.style.display = "block";
@@ -772,7 +763,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
             document.getElementById('addInputField').addEventListener('click', () => {
-                console.log('clicked');
 
                 const existing = document.querySelectorAll('input[name="other-partner-type[]"]').length;
 
@@ -794,7 +784,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             document.getElementById("removeInputField").addEventListener('click', () => {
 
                 const fields = document.querySelectorAll('input[name="other-partner-type[]"]');
-                console.log(fields.length);
 
                 if (fields.length <= 1) {
                     Swal.fire({

@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -93,8 +93,7 @@ switch ($userRole) {
     <!-- CSS Link -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/roomInfo.css">
     <!-- Bootstrap Link -->
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -135,9 +134,6 @@ switch ($userRole) {
             <div class="bookInfobox">
                 <div class="left-col">
                     <?php
-                    // $roomID = mysqli_real_escape_string($conn, $_POST['roomID']);
-                    // $_SESSION['roomID'] = $roomID;
-                    // $actionType = mysqli_real_escape_string($conn, $_POST['actionType']);
 
                     $userQuery = $conn->prepare("SELECT 
                                 b.*, bs.*, 
@@ -206,13 +202,7 @@ switch ($userRole) {
                         <input type="text" name="roomDuration" class="roomDuration form-control" id="roomDuration"
                             value="<?= $roomInfo['RSduration'] ?>">
                     </div>
-                    <!-- <div class="end">
-                        <label for="others"> Others: </label>
-                        <input type="text" name="others" style="padding: 0.5vw; font-size: 1.5vw;"
-                            class="others form-control" id="others">
-                    </div> -->
                 </div>
-                <!-- <input type="text" name="roomImage" class="roomImage" id="roomImage"> -->
                 <?php
                 $imgSrc = '../../Assets/Images/Services/Hotel/';
                 if (!empty($roomInfo['RSimageData'])) {

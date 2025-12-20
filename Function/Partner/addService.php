@@ -60,8 +60,6 @@ if (isset($_POST['addService'])) {
         exit();
     }
 
-    // error_log(print_r($_FILES['serviceImage'], true));
-
     $conn->begin_transaction();
     try {
         $insertPartnerServiceQuery = $conn->prepare("INSERT INTO `partnershipservice`(`partnershipID`, `PBName`, `PBPrice`, `PBDescription`, `PBcapacity`, `PBduration`, `PSAvailabilityID`, `partnerTypeID`, `serviceImage`) VALUES (?,?,?,?,?,?,?,?,?)");

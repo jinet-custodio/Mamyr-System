@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -387,7 +387,19 @@ if ($result->num_rows > 0) {
 
                     partnersTable.draw();
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    if (err.message === 'server') {
+                        message = 'Unable to load requests at the moment. Please try again later.';
+                    } else {
+                        message = 'Network issue detected. Please check your connection.';
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Something went wrong.',
+                        text: message
+                    });
+                });
         }
 
         function loadRequests() {
@@ -423,13 +435,20 @@ if ($result->num_rows > 0) {
 
                     requestsTable.draw();
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    if (err.message === 'server') {
+                        message = 'Unable to load requests at the moment. Please try again later.';
+                    } else {
+                        message = 'Network issue detected. Please check your connection.';
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Something went wrong.',
+                        text: message
+                    });
+                });
         }
-
-
-
-        // if (paramValue == 1) loadPartners();
-        // else if (paramValue == 2) loadRequests();
     </script>
 
     <!-- Pages hide/show -->
@@ -437,8 +456,6 @@ if ($result->num_rows > 0) {
         document.addEventListener("DOMContentLoaded", function() {
             const requestLink = document.getElementById("request-link");
             const partnerLink = document.getElementById("partner-link");
-            // const choices = document.getElementById("choice-container");
-            // const choice1Link = document.getElementById("choice1-link");
             const partner_Container = document.getElementById("partner-container");
             const request_Container = document.getElementById("request-container");
             const partner_Card = document.getElementById("partner-card");
@@ -446,7 +463,6 @@ if ($result->num_rows > 0) {
 
             requestLink.addEventListener('click', function(event) {
                 event.preventDefault();
-                console.log("Request link clicked");
                 partnerLink.style.color = "#6d6e72ff";
                 requestLink.style.color = "#0d6dfc";
                 partner_Container.style.display = "none";
@@ -458,7 +474,6 @@ if ($result->num_rows > 0) {
 
             partnerLink.addEventListener('click', function(event) {
                 event.preventDefault();
-                console.log("Partner link clicked");
                 requestLink.style.color = "#6d6e72ff";
                 partnerLink.style.color = "#0d6dfc";
                 partner_Container.style.display = "block";
@@ -475,7 +490,6 @@ if ($result->num_rows > 0) {
         const paramValue = params.get('container');
         const action = params.get("action");
 
-        // const choices = document.getElementById("choice-container");
         const partnerContainer = document.getElementById("partner-container");
         const requestContainer = document.getElementById("request-container");
         const partnerCard = document.getElementById("partner-card");
@@ -508,11 +522,9 @@ if ($result->num_rows > 0) {
                 requestContainer.style.display = "none";
                 partnerCard.style.display = "none";
                 requestCard.style.display = "none";
-                // No table loading here
                 break;
 
             default:
-                // default to partners table
                 partnerContainer.style.display = "block";
                 requestContainer.style.display = "none";
                 partnerCard.style.display = "block";
@@ -540,21 +552,11 @@ if ($result->num_rows > 0) {
                 icon: "success",
                 title: "Partnership Approved Successfully"
             });
-            // Swal.fire({
-            //     icon: 'success',
-            //     title: 'Partnership Approved',
-            //     text: 'The partnership request has been approved successfully.'
-            // });
         } else if (action === 'rejected') {
             Toast.fire({
                 icon: "success",
                 title: "Partnership Rejected Successfully"
             });
-            // Swal.fire({
-            //     icon: 'success',
-            //     title: 'Partnership Rejected',
-            //     text: 'The partnership request has been rejected successfully.'
-            // });
         }
 
         if (action || paramValue) {

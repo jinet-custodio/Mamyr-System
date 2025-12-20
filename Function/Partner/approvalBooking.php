@@ -1,7 +1,7 @@
 <?php
-ini_set('log_errors', 1);
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('log_errors', 1);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 
 require '../../Config/dbcon.php';
@@ -27,9 +27,6 @@ function getMessageReceiver($userRoleID)
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
-
-// print_r('ID: '  . $userID);
-// print_r('Role: ' . $userRole);
 
 if (isset($_POST['approveBtn'])) {
     $bookingID = (int) $_POST['bookingID'];
@@ -141,7 +138,7 @@ if (isset($_POST['approveBtn'])) {
             $conn->rollback();
             throw new Exception("Failed inserting notification query. Error => " . $notificationQuery->error);
         }
-        // $conn->commit();
+        $conn->commit();
         header('Location: ../../../../Pages/Account/bpBookings.php?action=reject-success');
     } catch (Exception $e) {
         $conn->rollback();

@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -274,9 +274,6 @@ if ($result->num_rows > 0) {
                                             default:
                                                 $statColor = 'light';
                                         }
-                                        // echo '<pre>';
-                                        // print_r($statColor);
-                                        // echo '<pre>';
                                 ?>
                                         <tr>
                                             <td>
@@ -382,10 +379,6 @@ if ($result->num_rows > 0) {
                             <label for="roomImage">Room Image</label>
                             <input type="file" class="form-control" id="roomImage" name="roomImage">
                         </div>
-                        <!-- <div class="input-container">
-                            <label for="other">Other</label>
-                            <input type="text" class="form-control" id="other" name="other">
-                        </div> -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

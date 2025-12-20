@@ -17,7 +17,6 @@ $selectQuery->bind_param("ii", $isApproved, $partner);
 $selectQuery->execute();
 $result = $selectQuery->get_result();
 
-// ob_start();
 $table = [];
 if ($result->num_rows > 0) {
     foreach ($result as $applicant) {
@@ -48,27 +47,3 @@ echo json_encode([
     'success' => true,
     'partners' => $table
 ]);
-
-
-// if (!empty($table)) {
-//     foreach ($table as $row) {
-//         $typesString = implode(' & ', $row['types']);
-//         echo "
-//             <tr>
-//                 <td>{$row['partnershipID']}</td>
-//                 <td>{$row['name']}</td>
-//                 <td>{$typesString}</td>
-//                 <td>{$row['startDate']}</td>
-//                 <td>
-//                         <form action='partnership.php?container=3' method='POST'>
-//                             <input type='hidden' name='partnerID' value='{$row['partnershipID']}'>
-//                             <button type='submit' class='btn btn-info' name='view-btn'>View</button>
-//                         </form>
-//                 </td>
-//             </tr>";
-//     }
-// } else {
-//     echo '<tr><td colspan="5" class="text-center">No Record Found!</td></tr>';
-// }
-
-// echo ob_get_clean();

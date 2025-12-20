@@ -210,8 +210,6 @@ if (isset($_GET['filter'])):
                 'statusClass' => $class,
                 'bookingStatus' => $row['bookingStatus'],
                 'paymentMethod' => strtoupper($row['paymentMethod']),
-                // 'paymentStatusName' =>  $paymentStatusName,
-                // 'paymentClass' => $paymentClass,
                 'paymentAmount' => '₱' . number_format($row['amountPaid'] ?? 0, 2),
                 'userBalance' => '₱' . number_format($row['userBalance'], 2),
                 'totalBill' => '₱' . number_format($row['finalBill'], 2) ?? '₱ ' . number_format($row['totalCost'], 2)

@@ -128,7 +128,6 @@ if (isset($_GET['userID'])) {
                     break;
             }
             $eventType =  $row['categoryName'] ?? 'N/A';
-            // $serviceInfo = '';
             $serviceInfo = trim($row['serviceInfo']) ?? 'None';
 
             $bookings[] = [

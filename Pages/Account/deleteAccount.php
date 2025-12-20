@@ -350,9 +350,6 @@ switch ($userRole) {
                                 <input type="hidden" name="email"
                                     value="<?= htmlspecialchars($data['email']) ?>">
                             </div>
-                            <button type="button" class="btn-close btn btn-danger ms-2"
-                                data-bs-dismiss="modal" aria-label="Close">
-                            </button>
                         </div>
                         <div class="modal-body">
                             <?php

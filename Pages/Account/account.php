@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -129,8 +129,6 @@ $baseURL = '../..';
                 $birthday = $birthdayRaw && strtotime($birthdayRaw)
                     ? date('M. d, Y', strtotime($birthdayRaw))
                     : '--';
-
-                // $type = ($birthday === NULL || $birthday === "") ? "text" : "date";
                 $birthday = $birthday ?: "--";
 
                 $address = $data['userAddress'];
@@ -167,12 +165,6 @@ $baseURL = '../..';
             }
         }
     }
-
-    // error_log($birthday);
-
-    // foreach ($partnerTypes as $partnerType):
-    //     error_log($partnerType);
-    // endforeach;
     ?>
     <div class="wrapper d-flex">
 
@@ -247,12 +239,6 @@ $baseURL = '../..';
                             <span class="sidebar-text">Services</span>
                         </a>
                     </li>
-                    <!-- <li class="sidebar-item">
-                        <a href="bpSales.php" class="list-group-item">
-                            <i class="bi bi-tags sidebar-icon"></i>
-                            <span class="sidebar-text">Sales</span>
-                        </a>
-                    </li> -->
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -429,7 +415,6 @@ $baseURL = '../..';
                         </div>
 
                         <div class=" partner-info partner-type-container">
-                            <!-- <h5 class="partner-info-label">Partner Type/s</h5> -->
                             <div class="partner-type form-floating">
                                 <?php foreach ($partnerTypes as $partnerType): ?>
                                     <div class="partner-info form-floating">
@@ -444,17 +429,6 @@ $baseURL = '../..';
 
                     </div>
 
-                    <!-- <div class="partner-type-container">
-                        <h5 class="partner-info-label">Partner Type/s</h5>
-                        <div class="partner-type">
-                            <?php foreach ($partnerTypes as $partnerType): ?>
-                                <div>
-                                    <input type="text" name="partnerType" id="partnerType"
-                                        value="<?= htmlspecialchars($partnerType) ?>" readonly required class="form-control">
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div> -->
 
                 <?php } ?>
 
@@ -739,7 +713,6 @@ $baseURL = '../..';
                 text: "You will need to log in again to access your account.",
                 icon: "warning",
                 showCancelButton: true,
-                // confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, logout!",
                 customClass: {
@@ -750,7 +723,6 @@ $baseURL = '../..';
                 didOpen: () => {
                     const btn = document.querySelector('.loaderTrigger');
                     if (btn) {
-                        console.log("Trigger found");
                         btn.addEventListener('click', () => {
                             loaderOverlay.style.display = 'flex';
                         });
