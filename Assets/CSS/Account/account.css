@@ -42,7 +42,6 @@
   border-radius: 0.5rem;
   text-align: center;
   margin-top: 0.5rem;
-  /* background-color: rgb(33, 148, 209); */
   color: rgb(255, 255, 255);
 }
 
@@ -98,15 +97,6 @@
   font-size: 18px;
 }
 
-/* .customer-details,
-.partner-details-container,
-.partner-type {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
-} */
-
 .customer-details,
 .partner-details-container {
   display: grid;
@@ -135,15 +125,6 @@
 .partner-info-label {
   font-size: 16px;
 }
-
-/* .partner-type-container {
-  padding-top: 1rem;
-} */
-
-/* #validIDInfo {
-  position: relative;
-  max-width: 350px;
-} */
 
 #validIDInfo .form-floating {
   position: relative;

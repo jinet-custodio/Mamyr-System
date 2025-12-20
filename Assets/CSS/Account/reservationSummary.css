@@ -26,7 +26,6 @@ body {
 
 .container {
   margin: 2rem auto;
-  /* border: 1px solid red; */
 }
 .statusContainer {
   width: 100%;
@@ -83,16 +82,13 @@ body {
 }
 
 .rightStatusContainer .card {
-  /* border: 1px solid red; */
   margin: auto;
   width: 35rem !important;
 }
 
 .list-group-item {
-  /* border: 1px solid red !important; */
   display: flex !important;
   align-items: center !important;
-  /* padding: 0.5rem 0.5rem; */
   background-color: #f5f5f5;
   gap: 0.5rem;
   height: 3rem !important;
@@ -116,17 +112,11 @@ body {
   font-size: 14px;
 }
 
-/* .infoIcon {
-  height: 1.3vw;
-  aspect-ratio: 1;
-} */
-
 #totalAmountSection,
 #promoSection,
 #totalBillSection {
   display: flex;
   justify-content: end !important;
-  /* gap: 1.5vw; */
 }
 
 #downPaymentAmount,
@@ -209,27 +199,6 @@ body {
   width: 20px;
   aspect-ratio: 1;
 }
-
-/* #foodListModal {
-  display: none;
-  position: absolute;
-  top: 13.5%;
-  left: 75%;
-  margin-left: 10px;
-  width: 300px;
-} */
-
-/* .modal-body {
-  padding: 15px;
-  overflow-y: auto;
-  flex-grow: 1;
-  max-height: 60vh;
-} */
-
-/* #service-info-button {
-  background-color: transparent !important;
-  border: none !important;
-} */
 
 .cardContent i {
   font-size: 1rem;

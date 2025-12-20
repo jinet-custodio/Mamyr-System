@@ -16,13 +16,11 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   text-decoration: none;
-  /* list-style: none; */
 }
 
 .topSec {
   width: 100%;
   margin-top: 5vw;
-  /* background-color: #fff5be; */
   background-color: #89cdf7;
   display: flex;
   justify-content: center;
@@ -44,7 +42,6 @@
   font-family: "Poppins";
   font-weight: bold;
   font-size: 2vw;
-  /* margin-top: 2vw; */
 }
 
 .subtext {
@@ -151,7 +148,6 @@
 .card.bp-card img.card-img-top {
   width: 100%;
   max-height: 225px;
-  /*  object-position: 90% 60%; optional, depending on the pictures. baka kasi maputol pag hindi na pool pic nakalagay*/
   object-fit: cover;
   display: block;
 }

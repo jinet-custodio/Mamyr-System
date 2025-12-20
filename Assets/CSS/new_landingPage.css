@@ -142,7 +142,6 @@ nav {
   left: 0;
   width: 100%;
   z-index: 1000;
-  /* background-color: rgb(242, 242, 242); */
 }
 
 .navbar {
@@ -150,7 +149,6 @@ nav {
   background-color: #ffffff;
   justify-content: space-between;
   align-items: center;
-  /* height: 15vh; */
   padding: 1rem !important;
 }
 
@@ -177,7 +175,6 @@ nav {
   font-weight: lighter;
   margin-top: 15px;
   font-size: 1.5vw;
-  /* margin-left: 3vw; */
 }
 
 .nav-link,
@@ -318,7 +315,6 @@ nav {
 }
 
 .logoNav {
-  /* border: 1px solid black; */
   width: 15vw;
   position: absolute;
   margin: 1vw;

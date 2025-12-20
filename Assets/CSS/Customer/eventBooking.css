@@ -258,7 +258,6 @@
 
 .fc-scrollgrid,
 td {
-  /* border: 1px solid red !important; */
   border: none;
 }
 
@@ -383,8 +382,6 @@ td {
 }
 
 .foodContainer {
-  /* width: 80%;
-  margin: auto; */
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
   gap: 1rem;

@@ -2,10 +2,6 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-/* @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-} */
 
 @font-face {
   font-family: "Poppins Black";
@@ -21,7 +17,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: "Plus Jakarta Sans"; */
   text-decoration: none;
   list-style: none;
 }
@@ -113,14 +108,12 @@ body {
 }
 
 .transactionContainer {
-  /* border: 1px solid black; */
   display: flex;
   justify-content: center;
 }
 
 .card {
   border: none !important;
-  /* padding: var(--padding-lg); */
   margin-top: var(--margin-mdl);
   margin-bottom: 2rem;
   width: 100% !important;

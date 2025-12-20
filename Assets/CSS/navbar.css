@@ -164,13 +164,6 @@
   color: black !important;
 }
 
-/* #navbar .nav-link,
-#navbar #logOutBtn,
-#navbar-half2 .nav-link,
-#navbar-half2 #logOutBtn {
-  color: rgb(2, 2, 2) !important;
-} */
-
 .nav-link,
 #logOutBtn {
   text-decoration: none;

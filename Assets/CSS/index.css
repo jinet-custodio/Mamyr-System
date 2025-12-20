@@ -18,7 +18,6 @@
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
-  /* list-style: none; */
 }
 
 body {
@@ -184,7 +183,6 @@ input[type="password"]::-webkit-search-cancel-button {
 
 .userInfo {
   margin-top: -1.5vw;
-  /* border: 1px solid red; */
 }
 #firstName,
 #lastName {
@@ -294,7 +292,6 @@ div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
 .loginMessageBox {
   color: red;
   width: 100%;
-  /* border: 1px solid red; */
   height: 5vh;
   position: absolute;
   left: 50%;
@@ -304,16 +301,6 @@ div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
 .successMsg {
   color: green;
 }
-
-/* .passwordContainerError {
-  position: absolute;
-  left: 50%;
-  bottom: 15.5%;
-  transform: translateX(-50%);
-  width: 80%;
-  color: red;
-  padding: 0;
-} */
 
 .emailErrorMsg {
   position: absolute;
@@ -628,13 +615,6 @@ a.categoryLink {
     width: 100% !important;
   }
 
-  /* .user-category {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  } */
-
   #userType-modal-label {
     font-size: 18px;
   }
@@ -681,13 +661,6 @@ a.categoryLink {
   #usertype-modal-content {
     width: 100% !important;
   }
-
-  /* .user-category {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  } */
 
   #userType-modal-label {
     font-size: 18px;
@@ -820,13 +793,6 @@ a.categoryLink {
   #usertype-modal-content {
     width: 100% !important;
   }
-
-  /* .user-category {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  } */
 
   #userType-modal-label {
     font-size: 18px;

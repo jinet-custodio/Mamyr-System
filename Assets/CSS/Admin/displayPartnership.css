@@ -2,10 +2,6 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-/* @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-} */
 
 @font-face {
   font-family: "Lora";
@@ -102,7 +98,6 @@ body {
 
 .partnership-request-table,
 .partnership-table {
-  /* border: 1px solid black; */
   display: flex;
   justify-content: center;
 }

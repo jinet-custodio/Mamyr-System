@@ -50,8 +50,6 @@ body {
   width: 90%;
   margin-bottom: 1rem;
   border: none;
-  /* border: 1px solid rgb(23, 143, 235); */
-  /* box-shadow: 0 0 8px 8px rgb(23, 143, 235, 0.5); */
   transition: box-shadow 0.3s ease;
 }
 
@@ -122,7 +120,7 @@ body {
     align-items: flex-start;
     padding-left: 2px;
   }
-  .card-body  {
+  .card-body {
     margin-right: 5rem;
     width: 80%;
     padding-top: 0 !important;
@@ -134,9 +132,9 @@ body {
   #floatingInputValue {
     width: 125% !important;
   }
- }
+}
 
-@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait){
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
   .wrapper {
     margin-top: 3rem;
     width: 80vw;
@@ -155,7 +153,7 @@ body {
     flex-direction: column;
   }
 }
-@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape){
+@media only screen and (min-width: 600px) and (max-width: 1024px) and (orientation: landscape) {
   .wrapper {
     margin-top: 3.5rem;
   }
@@ -177,8 +175,4 @@ body {
   .card {
     margin-top: 4rem;
   }
-
 }
-
-
-

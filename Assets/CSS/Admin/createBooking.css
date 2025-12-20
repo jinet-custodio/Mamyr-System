@@ -6,10 +6,6 @@
   font-family: "Poppins Black";
   src: url(../../Fonts/Poppins/Poppins-Black.ttf);
 }
-/* @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-} */
 
 @font-face {
   font-family: "Lora";
@@ -50,7 +46,6 @@
   display: flex;
   gap: 5rem;
   justify-content: center;
-  /* align-items: center; */
 }
 
 .leftSide,
@@ -131,15 +126,6 @@ label {
 button {
   width: 30%;
 }
-
-/* .addButton {
-  margin-top: 0.5rem;
-}
-
-#addBooking {
-  display: block;
-  margin: auto;
-}  */
 
 thead {
   font-family: "Lora";
@@ -448,11 +434,6 @@ th {
     height: 1.5rem !important;
     width: 90px !important;
   }
-
-  /* .btn {
-    height: 1.5rem;
-    width: 65px;
-  } */
 
   .dt-input {
     font-size: clamp(2.1vw, 1.9vw, 1.7vw);

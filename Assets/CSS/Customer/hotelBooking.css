@@ -58,7 +58,6 @@
 }
 
 .container-fluid {
-  /* border: 2px solid pink; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -218,10 +217,6 @@ h5 {
   background-color: #d0e9ff;
 }
 
-/* .NumberOfHours {
-    width: 30%;
-  } */
-
 #hotelBooking .btn {
   width: 100%;
   margin: auto;
@@ -266,10 +261,6 @@ h5 {
 
 /* Tablet Landscape only */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
-  /* body {
-    outline: 5px solid red !important;
-  } */
-
   .container-fluid {
     display: flex;
     flex-direction: column;
@@ -302,9 +293,6 @@ h5 {
 
 /* Tablet portrait only */
 @media only screen and (min-width: 600px) and (max-width: 768px) {
-  /* body {
-    outline: 5px solid rgb(21, 255, 0) !important;
-  } */
   .container-fluid {
     display: flex;
     flex-direction: column;

@@ -11,14 +11,6 @@
   list-style: none;
 }
 
-/*
-.logoNav {
- border: 1px solid black; 
-  width: 15vw;
-  position: absolute;
-  margin: 2vw;
-}*/
-
 /* Div for loader */
 #loaderOverlay {
   position: fixed;
@@ -56,7 +48,6 @@
 }
 
 .titleContainer {
-  /* border: 1px solid red; */
   margin: -2rem 0 2rem 0;
   text-align: center;
 }
@@ -75,7 +66,6 @@
 .title {
   font-family: "Poppins Black";
   font-size: 30px;
-  /* font-style: normal; */
   font-weight: 500;
 }
 
@@ -93,7 +83,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-top: 5vw; */
 }
 
 .category-card {
@@ -163,7 +152,6 @@ a.categoryLink {
     margin-top: 4rem !important;
     margin-right: 8rem !important;
   }
-
 
   .backArrow {
     font-size: 4.2vw;

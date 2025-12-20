@@ -41,7 +41,6 @@ body {
 }
 
 .pavilionPicContainer {
-  /* border: 1px solid black; */
   margin-top: -13vw;
 }
 
@@ -63,7 +62,6 @@ body {
 }
 
 .p1ImgContainer {
-  /* border: 1px solid black; */
   background-color: #ffff;
   border-radius: 10px;
   width: 40%;
@@ -78,7 +76,6 @@ body {
 }
 
 .p1Text {
-  /* border: 1px solid black; */
   width: 100%;
 }
 
