@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require '../Config/dbcon.php';
 session_start();
@@ -75,16 +75,8 @@ $fullText = trim($fullText);
                             data-bs-target="#userType-modal">
                             Sign Up
                         </button></p>
-                    <!-- <p>Don't have an account? <a href="userType.php" class="signUpLink">Sign Up
-                        </a></p> -->
-
-
                 </div>
                 <div class="loginMessageBox">
-                    <!-- (Show under Login Button) -->
-                    <!-- <div class="errorMsg" style="display: none;">
-                        <div class="login-error" id="passwordLValidation"></div>
-                    </div> -->
                     <p class="errorMsg">
                         <!-- (Show under Login Button) -->
                         <?php
@@ -215,9 +207,6 @@ $fullText = trim($fullText);
                 </div>
                 <h1 class="welcome" id="welcomeLogin">Welcome to Mamyr Resort and Events Place!</h1>
                 <img src="../Assets/Images/MamyrLogo.png" alt="Mamyr Logo" class="mamyrLogo">
-                <!-- <p>Don't have an account?</p>
-                <a href="userType.php" class="btn btn-outline-light signUpLink">Sign Up
-                </a> -->
             </div>
 
 
@@ -368,7 +357,6 @@ $fullText = trim($fullText);
             const mediumPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
             const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
             const passwordBar = document.getElementById("password-strength");
-            // console.log(password);
 
             passwordBar.className = "progress-bar";
             let color = "";
@@ -408,10 +396,6 @@ $fullText = trim($fullText);
         const registerBtn = document.querySelector('.register-btn');
         const loginBtn = document.querySelector('.login-btn');
 
-        // registerBtn.addEventListener('click', () => {
-        //     container.classList.add('active');
-        // });
-
         emailInputField.addEventListener('change', () => {
             emailInputField.style.border = '1px solid rgb(237, 237, 237)';
         })
@@ -428,7 +412,7 @@ $fullText = trim($fullText);
         if (page === 'register') {
             container.classList.add('active');
 
-            // 🔽 Remove `?page=register` from URL after activating the form
+            // Remove `?page=register` from URL after activating the form
             const urlWithoutParam = window.location.protocol + "//" + window.location.host + window.location.pathname;
             window.history.replaceState({}, document.title, urlWithoutParam);
         } else {

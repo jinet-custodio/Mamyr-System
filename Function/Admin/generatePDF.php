@@ -12,10 +12,6 @@ if (isset($_POST['generatePDF'])) {
     $selectedEndDate  = mysqli_real_escape_string($conn, $_POST['selectedEndDate']);
     $dateToday = date("l, F d, Y (g:i A)");
 
-
-    // $startDateFormatted = date('Y-m-d 00:00:00', strtotime($selectedStartDate));
-    // $endDateFormatted = date('Y-m-d 23:59:59', strtotime($selectedEndDate));
-
     $getProfile = $conn->prepare("SELECT firstName, middleInitial, lastName FROM user WHERE userID = ? AND userRole = ?");
     $getProfile->bind_param("ii", $userID, $userRole);
     $getProfile->execute();
@@ -36,9 +32,6 @@ if (isset($_POST['generatePDF'])) {
 
     $reportData = $_SESSION['reportData'] ?? [];
     $bulkData = $_SESSION['bulkData'] ?? [];
-
-    // error_log(print_r($reportData, true));
-    // error_log(print_r($bulkData, true));
     ob_start();
 ?>
 
@@ -118,12 +111,6 @@ if (isset($_POST['generatePDF'])) {
                 margin-top: 70px;
 
             }
-
-            /* .separator-line {
-                margin-top: 40px;
-                width: 100%;
-                opacity: 0.35;
-            } */
 
             .bulkBooking-table {
                 width: 100%;
@@ -239,8 +226,6 @@ if (isset($_POST['generatePDF'])) {
                 </section>
                 <?php if (!empty($bulkData)): ?>
                     <section class="contents">
-                        <!-- <hr class="separator-line"> -->
-
                         <h5 class="bulkBooking-title">Bulk Booking Report</h5>
 
                         <table class="table table-striped bulkBooking-table">

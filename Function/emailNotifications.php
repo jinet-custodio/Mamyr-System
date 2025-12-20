@@ -1,6 +1,6 @@
 <?php
 
-require '../Config/dbcon.php';
+require __DIR__ . '/../Config/dbcon.php';
 
 require_once 'emailSenderFunction.php';
 
@@ -19,11 +19,5 @@ $logMessage =
     $reminderBookingReviews . "\n" .
     $reminderPaymentReview . "\n" .
     $paymentReminder . "\n";
-
-
-echo '<pre>';
-print_r($logMessage);
-echo '</pre>';
-
 
 file_put_contents(__DIR__ . '/cron_log.txt', $logMessage, FILE_APPEND);

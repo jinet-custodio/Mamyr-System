@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 //SQL statement for retrieving data for website content from DB
 $sectionName = 'BusinessInformation';
@@ -144,7 +144,6 @@ while ($row = $getLogoResult->fetch_assoc()) {
             }).addTo(map)
             .bindPopup('Mamyr Resort and Events Place is Located Here!')
             .openPopup();
-        console.log(`${baseURL}/Assets/Images/${logoFile}`)
     </script>
 
 </body>

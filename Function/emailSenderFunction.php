@@ -14,7 +14,6 @@ function sendEmail($toUserEmail, $userName, $subject, $body, $env)
         $mail->Username = $env['SMTP_USER'];
         $mail->Host = $env['SMTP_HOST'];
         $mail->Password = $env['SMTP_PASS'];
-        // $mail->SMTPSecure = 'tls';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = $env['SMTP_PORT'];
 

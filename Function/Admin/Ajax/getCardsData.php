@@ -1,8 +1,8 @@
 
             <?php
-            ini_set('display_errors', 0);
-            ini_set('log_errors', 1);
-            error_reporting(E_ALL);
+            // ini_set('display_errors', 0);
+            // ini_set('log_errors', 1);
+            // error_reporting(E_ALL);
             require '../../../Config/dbcon.php';
 
             header('Content-Type: application/json');
@@ -74,18 +74,11 @@
                                                         END
                                                     ) AS guestsLastMonth
 
-                                                    
-                                                    -- Total guests overall
-                                                    -- SUM(b.guestCount) AS totalGuests,
-
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-                                                -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                                                 WHERE 
                                                     b.bookingStatus IN (?, ?, ?) 
                                                     AND cb.paymentStatus IN (?,?) 
-                                                    -- AND MONTH(b.startDate) = MONTH(CURDATE())
-                                                    -- AND YEAR(b.startDate) = YEAR(CURDATE())
                                                 ");
             $getCardData->bind_param('iiiii',  $approvedStatusID, $doneStatusID, $reservedStatusID,  $partiallyPaid, $fullyPaid);
 
@@ -104,8 +97,6 @@
             $guestsThisMonth = (int) $row['guestsThisMonth'];
             $guestsLastMonth = (int) $row['guestsLastMonth'];
             $guestCountToday = (int) $row['guestToday'];
-            // $guestsThisMonth = 29;
-            // $guestsLastMonth = 55;
 
             $resort = (int) $row['resortCount'];
             $hotel = (int) $row['hotelCount'];

@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
@@ -197,7 +197,6 @@ if ($result->num_rows > 0) {
                 <div class="backArrowContainer" id="backArrowContainer" style="display: none;">
                     <img src="../../Assets/Images/Icon/arrowBtnBlack.png" alt="Back Arrow" class="backArrow">
                 </div>
-                <!-- <h2 class="header text-center" id="headerText">Services</h2> -->
             </div>
 
             <section class="page-title-container">
@@ -261,7 +260,6 @@ if ($result->num_rows > 0) {
                         <th scope="col">Max Capacity</th>
                         <th scope="col">Duration</th>
                         <th scope="col">Description</th>
-                        <!-- <th scope="col">Image</th> -->
                         <th scope="col">Availability</th>
                         <th scope="col">Action</th>
                     </thead>
@@ -311,17 +309,6 @@ if ($result->num_rows > 0) {
                                                 readonly></td>
                                         <td><textarea name="serviceDesc" readonly
                                                 class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea></td>
-                                        <!-- <td>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control resortServiceImage"
-                                                value="<?= htmlspecialchars($serviceImageName) ?>" name="resortServiceImage"
-                                                readonly>
-                                            <button class="btn btn-outline-secondary editImageBtn" disabled type="button"><i
-                                                    class="fa-solid fa-camera"></i></button>
-                                        </div>
-                                        <input type="file" class="form-control resortServiceImagePicker"
-                                            name="resortServiceImagePicker" hidden>
-                                    </td> -->
                                         <td>
                                             <select name="resortAvailability" class="form-select resortAvailability" disabled>
                                                 <option value="" disabled <?= $serviceAvailability == "" ? "selected" : "" ?>>Select
@@ -586,7 +573,6 @@ if ($result->num_rows > 0) {
                 <table class=" table table-striped" id="cateringServices">
                     <thead>
                         <th scope="col">Food Name</th>
-                        <!-- <th scope="col">Price</th> -->
                         <th scope="col">Category</th>
                         <th scope="col">Availability</th>
                         <th scope="col">Action</th>
@@ -1021,7 +1007,6 @@ if ($result->num_rows > 0) {
 
     <!-- Table JS -->
     <script>
-        // console.log("Script loaded1");
         $(document).ready(function() {
             const isMobile = window.innerWidth < 600;
 
@@ -1272,7 +1257,6 @@ if ($result->num_rows > 0) {
 
     <!-- Changing pages by category -->
     <script>
-        // console.log("Script loaded");
         document.addEventListener("DOMContentLoaded", function() {
 
             const resortLink = document.getElementById("resort-link");
@@ -1288,8 +1272,6 @@ if ($result->num_rows > 0) {
             const backButton = document.getElementById("backArrowContainer");
             const serviceCategories = document.getElementById("serviceCategories");
             const headerText = document.getElementById("headerText");
-
-            // console.log(resortLink, resortRatesLink, eventLink, cateringLink, backButton);
 
             function hideAllContainers() {
                 resortContainer.style.display = "none";

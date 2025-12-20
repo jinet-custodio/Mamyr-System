@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -188,12 +188,6 @@ while ($row = $contentResult->fetch_assoc()) {
                                     value="<?php echo isset($_SESSION['hotelFormData']['arrivalTime']) ? date('H:i', strtotime($_SESSION['hotelFormData']['arrivalTime'])) : ''; ?>">
                             </div>
                         </div>
-                        <!-- <div class="days-count">
-                            <h5 class="containerLabel">Number of days</h5>
-                            <input type="number" class="form-control" name="daysCount" id="daysCount" required
-                                placeholder="Days Count"
-                                value="<?php echo isset($_SESSION['hotelFormData']['daysCount']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['daysCount'])) : ''; ?>" min="1">
-                        </div> -->
                     </div>
                     <div class="checkInOut">
                         <div class="checkIn-container">
@@ -202,7 +196,6 @@ while ($row = $contentResult->fetch_assoc()) {
                                 <input type="text" class="form-control" name="checkInDate" id="checkInDate" required
                                     placeholder="Select Date and Time"
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkInDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkInDate'])) : ''; ?>">
-                                <!--<i class="fa-solid fa-calendar" id="hotelCheckinIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i>-->
                             </div>
                         </div>
                         <div class="checkOut-container">
@@ -211,8 +204,6 @@ while ($row = $contentResult->fetch_assoc()) {
                                 <input type="text" class="form-control" name="checkOutDate" id="checkOutDate" required
                                     placeholder="Date and Time"
                                     value="<?php echo isset($_SESSION['hotelFormData']['checkOutDate']) ? htmlspecialchars(trim($_SESSION['hotelFormData']['checkOutDate'])) : ''; ?>">
-                                <!-- <input type="hidden" name="checkOutDate" id="checkOutDateHidden"> -->
-                                <!-- <i class="fa-solid fa-calendar" id="hotelCheckoutIcon" style="margin-left: -2vw;font-size:1.2vw;"> </i> -->
                             </div>
                         </div>
 
@@ -400,8 +391,6 @@ while ($row = $contentResult->fetch_assoc()) {
                 enableTime: true,
                 minDate: minDate,
                 dateFormat: "Y-m-d h:i K",
-                // minTime: "06:00",
-                // maxTime: "22:00",
                 disableMobile: true,
             });
 
@@ -410,8 +399,6 @@ while ($row = $contentResult->fetch_assoc()) {
                 enableTime: true,
                 minDate: minDate,
                 dateFormat: "Y-m-d h:i K",
-                // minTime: "06:00",
-                // maxTime: "22:00",
                 disableMobile: true,
             });
 
@@ -430,7 +417,6 @@ while ($row = $contentResult->fetch_assoc()) {
         <script>
             const checkInInput = document.getElementById('checkInDate');
             const checkOutInput = document.getElementById('checkOutDate');
-            // const daysCountInput = document.getElementById('daysCount');
 
             checkInInput.addEventListener('change', () => {
                 const selectedValue = '22 hours';
@@ -540,7 +526,7 @@ while ($row = $contentResult->fetch_assoc()) {
                                 checkbox.checked = true;
                             }
 
-                            // 🔹 Make entire div clickable
+                            // Make entire div clickable
                             wrapper.addEventListener("click", (e) => {
                                 if (e.target.tagName !== "INPUT") {
                                     checkbox.checked = !checkbox.checked;

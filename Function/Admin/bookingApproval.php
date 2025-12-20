@@ -44,7 +44,6 @@ if (!$getAdminName->execute()) {
 $result = $getAdminName->get_result();
 
 if ($result->num_rows === 0) {
-    error_log('NO DATA  ' . $userID);
     $approvedBy = 'Unknown';
 }
 
@@ -70,7 +69,6 @@ if (isset($_POST['approveBtn'])) {
     $userRoleID = (int) $_POST['userRoleID'];
     $customerID = (int) $_POST['customerID'];
     $customPackageID = (int) $_POST['customPackageID'];
-    // $serviceIDs = $_POST['serviceIDs'];
     $tourType = isset($_POST['tourType'])
         ? '&mdash; ' . mysqli_real_escape_string($conn, $_POST['tourType'])
         : '';
@@ -87,7 +85,6 @@ if (isset($_POST['approveBtn'])) {
     $downpayment = $finalBill * .3;
 
     $bookingCode = mysqli_real_escape_string($conn, $_POST['bookingCode']);
-    // strtoupper($type) . date('ymd') . generateCode(5)
     if ($bookingType === 'Event') {
         $rawVenuePrice = mysqli_real_escape_string($conn, $_POST['venuePrice']);
         $totalFoodPrice = !empty($_POST['foodPrice']) ? mysqli_real_escape_string($conn, $_POST['foodPrice']) : 0;
@@ -98,7 +95,6 @@ if (isset($_POST['approveBtn'])) {
         $customerChoice = mysqli_real_escape_string($conn, $_POST['customerChoice']);
 
         if (!empty($_POST['partnerServices'])) {
-            // $businessApprovalStatus = mysqli_real_escape_string($conn, $_POST['businessApprovalStatus']) ?? '';
 
             foreach ($_POST['partnerServices'] as $partnerID => $services) {
                 foreach ($services as $service) {
@@ -300,7 +296,6 @@ if (isset($_POST['approveBtn'])) {
 
 //Reject Button is Click
 if (isset($_POST['rejectBtn'])) {
-    error_log(print_r($_POST, true));
     $bookingID = (int) $_POST['bookingID'];
     $bookingStatusID = (int) $_POST['bookingStatusID'];
     $customerID = (int) $_POST['customerID'];
@@ -311,8 +306,6 @@ if (isset($_POST['rejectBtn'])) {
 
     $partnerServices = $_POST['partnerServices'];
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
-    // error_log('reasonID: ' . $reason);
-    // error_log("AdminID: " . $adminID);
 
     if (empty($reason) && empty($otherReason)) {
         $_SESSION['bookingID'] = $bookingID;
@@ -549,7 +542,6 @@ if (isset($_POST['submitCharges'])) {
 
 if (isset($_POST['reschedBtn'])) {
 
-    error_log(print_r($_POST, true));
     try {
         //IDs
         $bookingID = (int) $_POST['bookingID'];

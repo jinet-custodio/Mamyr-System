@@ -55,7 +55,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     exit();
 }
 
-// error_log(print_r($_POST, true));
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +115,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         $menuItems[] = [
                             'foodItemID' => $data['foodItemID'],
                             'foodName'   => $data['foodName']
-                            // 'foodPrice' => $data['foodPrice']
                         ];
                     }
                 } else {
@@ -133,7 +131,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     if (isset($_POST['eventBN'])) {
 
         $_SESSION['eventFormData'] = $_POST;
-        // print_r($_SESSION['eventFormData']);
         $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);
         $guestNo = intval($_POST['guestNo']);
         $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
@@ -198,8 +195,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
         // Food 
         $foodSelections = $_POST['foodSelections'] ?? [];
-        // echo ("<h1> Selection </h1> <br>");
-        // print_r($foodSelections);
         $targetCategory = 'Vegetables';
         $drinkCategory = 'Drink';
         $dessertCategory = 'Dessert';
@@ -242,9 +237,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
             header("Location: eventBooking.php?action=exceedFoodCount");
             exit();
         }
-        // echo '<pre>';
-        // print_r($_POST);
-        // echo '</pre>';
 
         //Venue
         $eventVenue = mysqli_real_escape_string($conn, $_POST['eventVenue']);
@@ -291,20 +283,7 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 $customerChoiceMessage = 'You decided to cancel the event booking if the partner service you availed declines.';
             }
         }
-
-        // $getFreeServiceQuery = $conn->prepare("SELECT RServiceName, resortServiceID FROM resortamenity WHERE RSavailabilityID = 4");
-        // $getFreeServiceQuery->execute();
-        // $result = $getFreeServiceQuery->get_result();
-        // $row = $result->fetch_assoc();
-
-        // $freeRoom = $row['RServiceName'];
-
-        // var_dump($additionalServiceSelected);
     }
-
-    // echo '<pre>';
-    // print_r($_posiadditionalServiceSelected);
-    // echo '</pre>';
     ?>
 
     <header class="headerSection">
@@ -469,10 +448,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
         $downpaymentPrice = $totalCost * 0.3;
         ?>
 
-
-        <!-- <section class="additionalServices">
-
-        </section> -->
 
         <section class="payment-container">
             <h4>Payment Details</h4>

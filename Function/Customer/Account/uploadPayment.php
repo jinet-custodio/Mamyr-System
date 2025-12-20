@@ -27,7 +27,6 @@ $businessEmail = 'sgregorio.0020@gmail.com';
 
 
 if (isset($_POST['submitDownpaymentImage'])) {
-    // error_log(print_r($_POST, true));
     $bookingID = (int) $_POST['bookingID'];
     $confirmedBookingID = (int) $_POST['confirmedBookingID'];
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);

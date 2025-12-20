@@ -1,11 +1,11 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
 
 require '../../../Config/dbcon.php';
 session_start();
 
-error_reporting(E_ALL);
+// error_reporting(E_ALL);
 
 function getServiceCategory($conn, $id)
 {
@@ -43,8 +43,6 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
     }
 
     $servicePath = __DIR__ . '/../../../Assets/Images/Services/' . $categoryName . '/';
-    // echo "Service path: $servicePath";
-    // exit();
 
 
     if (!is_dir($servicePath)) {
@@ -60,8 +58,6 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
             $image = $servicePath . $imageName;
             move_uploaded_file($filePath, $image);
         } else {
-            echo 'IMAGE SIZE';
-            // $_SESSION['serviceFormData'] = $_POST;
             header("Location: ../../../Pages/Admin/services.php?action=imageSize&step=1");
             exit();
         }
@@ -97,19 +93,16 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
                 exit();
             } else {
                 $conn->rollback();
-                echo 'INSERTING ERROR';
                 error_log("Execution Error: " . $insertIntoService->error);
                 exit();
             }
             $insertServiceQuery->close();
         } else {
             $conn->rollback();
-            echo 'INSERTING ERROR';
             error_log("Execution Error: " . $insertServiceQuery->error);
         }
     } catch (Exception $e) {
         $conn->rollback();
-        echo 'INSERTING ERROR';
         error_log("Exception: " . $e->getMessage());
         header("Location: ../../../Pages/Admin/services.php?result=error");
         exit();
@@ -139,13 +132,11 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
                 exit();
             } else {
                 $conn->rollback();
-                echo 'INSERTING ERROR';
                 error_log("Execution Error: " . $insertIntoService->error);
                 exit();
             }
         } else {
             $conn->rollback();
-            echo 'INSERTING ERROR';
             error_log("Execution Error: " . $insertIntoService->error);
             exit();
         }
@@ -182,12 +173,10 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
             $image = $servicePath . $imageName;
             move_uploaded_file($filePath, $image);
         } else {
-            echo 'IMAGE SIZE';
             header("Location: ../../../Pages/Admin/roomList.php?action=imageSize&step=1");
             exit();
         }
     } else {
-        echo 'IMAGE ERROR';
         header("Location: ../../../Pages/Admin/roomList.php?action=imageError&step=2");
         exit();
     }

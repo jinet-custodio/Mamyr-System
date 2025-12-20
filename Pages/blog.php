@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../Config/dbcon.php';
 //for setting image paths in 'include' statements
 $baseURL = '..';
@@ -20,9 +20,8 @@ $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
     <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/blog.css">
     <link rel="stylesheet" href="../Assets/CSS/navbar.css">
-    <!-- <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css"> -->
-    <!-- link for online bootstrap CDN  -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
+
     <!-- icon libraries from font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="

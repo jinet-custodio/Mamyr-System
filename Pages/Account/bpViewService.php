@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -278,7 +278,6 @@ switch ($userRole) {
                     <section class="serviceInfo-container">
                         <div class="servicePic-container">
                             <?php
-                            // error_log($_SESSION['tempImage']);
                             if (isset($_SESSION['tempImage']) && file_exists(__DIR__ . '/../../Assets/Images/TempUploads/' . $_SESSION['tempImage'])) {
                                 $imageSrc = '../../Assets/Images/TempUploads/' . $_SESSION['tempImage'];
                             } else {

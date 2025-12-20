@@ -76,7 +76,6 @@ if (isset($_POST['hotelBooking'])) {
 
     $downpayment = (float) $_POST['downPayment'];
     $totalCost = (float) $_POST['totalCost'];
-    // $additionalCharge = (int) $_POST['additionalFee'];
 
     $bookingStatus = 1;
     $serviceIDs = [];
@@ -160,7 +159,6 @@ if (isset($_POST['hotelBooking'])) {
             $checkInDate,
             $checkOutDate,
             $paymentMethod,
-            // $additionalCharge,
             $totalCost,
             $downpayment,
             $approvedStatus,

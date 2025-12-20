@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -97,7 +97,7 @@ switch ($userRole) {
     </header>
     <main>
         <div class="container-fluid">
-            <!-- Temporary form action lang hehe para ma-print yung ininput ng user-->
+
             <form action="" method="POST">
                 <div class="dateRange">
                     <label for="reportDate">Report Period: </label>
@@ -151,9 +151,6 @@ switch ($userRole) {
                                 $selectedStartDate = DateTime::createFromFormat('F d, Y', trim($dates[0]))->format('Y-m-d') . ' 00:00:00';
                                 $selectedEndDate = DateTime::createFromFormat('F d, Y', trim($dates[1]))->format('Y-m-d') . ' 23:59:59';
 
-                                // print_r($reportDate);
-                                // print_r($selectedStartDate);
-                                // print_r($dates);
 
                                 if ($userRole === 3) { //Admin
                                     $getReportData = $conn->prepare("SELECT LPAD(b.bookingID, 4, '0') AS formattedBookingID, b.bookingCode,
@@ -192,7 +189,6 @@ switch ($userRole) {
 
                                             FROM confirmedbooking cb
                                             LEFT JOIN booking b ON cb.bookingID = b.bookingID 
-                                            -- LEFT JOIN payment p ON cb.confirmedBookingID = b.confirmedBookingID  
                                             LEFT JOIN bookingservice bs ON b.bookingID = bs.bookingID
                                             LEFT JOIN custompackage cp ON b.customPackageID = cp.customPackageID
                                             LEFT JOIN custompackageitem cpi ON cp.customPackageID = cpi.customPackageID 

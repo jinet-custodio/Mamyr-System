@@ -1,7 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 date_default_timezone_set('Asia/Manila');
 require '../../Config/dbcon.php';
@@ -39,9 +39,6 @@ if ($result->num_rows > 0) {
 }
 
 if (isset($_POST['bookRates'])) {
-    // echo '<pre>';
-    // print_r($_POST);
-    // echo '</pre>';
     $serviceIDs = [];
     $servicePrices = [];
     $serviceCapacity = [];
@@ -66,7 +63,6 @@ if (isset($_POST['bookRates'])) {
 
     $totalCost = (float) $_POST['totalCost'];
     $downpayment = (float) $_POST['downPayment'];
-    // $additionalCharge = (float) $_POST['additionalServiceFee'];
     $paymentMethod = mysqli_real_escape_string($conn, $_POST['paymentMethod']);
 
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
@@ -109,7 +105,6 @@ if (isset($_POST['bookRates'])) {
                     $servicePrices[] = $data['RSprice'];
                     $serviceCapacity[] = $data['RScapacity'];
                     $services[] = $data['RServiceName'];
-                    // $description[] = $data['RSdescription'];
                 }
             } else {
                 echo "Service not found for: " . htmlspecialchars($selectedCottage);
@@ -141,7 +136,6 @@ if (isset($_POST['bookRates'])) {
                     $servicePrices[] = $data['RSprice'];
                     $serviceCapacity[] = $data['RScapacity'];
                     $services[] = $data['RServiceName'];
-                    // $description[] = $data['RSdescription'];
                 }
             } else {
                 echo "Service not found for: " . htmlspecialchars($selectedRoom);
@@ -230,7 +224,6 @@ if (isset($_POST['bookRates'])) {
             $hoursNumber,
             $scheduledStartDate,
             $scheduledEndDate,
-            // $additionalCharge,
             $totalCost,
             $downpayment,
             $addOns,

@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 session_start();
 date_default_timezone_set('Asia/Manila');
@@ -276,10 +276,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="summary mt-3" id="selected-cottage-room" style="border: 1px solid red;">
-                        <ul id="selection-list"></ul>
-                    </div> -->
 
                     <h5 class="purposeLabel">Purpose for Booking/Additional Notes</h5>
                     <textarea class="form-control w-100" id="purpose-additionalNotes" maxlength="150"
@@ -621,7 +617,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             const calIcon = document.getElementById("calendarIcon");
             //resort calendar
             flatpickr('#resortBookingDate', {
-                // enableTime: true,
                 minDate: new Date().setDate(new Date().getDate() + 1),
                 dateFormat: "Y-m-d",
                 disableMobile: true,
@@ -639,7 +634,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
             const roomSelectionSession =
                 <?= isset($_SESSION['resortFormData']['roomOptions']) ? json_encode($_SESSION['resortFormData']['roomOptions']) : '[]' ?>;
-            // console.log(roomSelectionSession);
             document.addEventListener("DOMContentLoaded", function() {
                 const dateInput = document.getElementById('resortBookingDate');
                 const tourInput = document.getElementById('tourSelections');
@@ -771,7 +765,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                         // Show entertainment for all
                         if (data.entertainments && data.entertainments.length > 0) {
-                            //  entertainmentLabel.innerHTML = "Additional Services";
                             data.entertainments.forEach(ent => {
                                 const wrapper = document.createElement('div');
                                 wrapper.classList.add('checkbox-item');
@@ -799,7 +792,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         }
                     })
                     .catch(error => {
-                        // console.error(error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -815,8 +807,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     startDate.style.border = '1px solid rgb(223, 226, 230)';
                     tourSelect.style.border = '1px solid rgb(223, 226, 230)';
                 }
-
-                // console.log("startDate.value at DOMContentLoaded:", startDate?.value);
 
             });
 
@@ -841,7 +831,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
             bookRatesBTN.addEventListener("click", function() {
-                // e.preventDefault();
 
                 let totalCapacity = 0;
                 const totalPax = getTotalPax();

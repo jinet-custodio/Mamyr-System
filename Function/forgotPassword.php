@@ -8,10 +8,6 @@ require_once 'Helpers/userFunctions.php';
 require_once 'emailSenderFunction.php';
 
 
-// require '../phpmailer/src/PHPMailer.php';
-// require '../phpmailer/src/Exception.php';
-// require '../phpmailer/src/SMTP.php';
-
 $isVerified = 2;
 
 if (isset($_POST['verify_email'])) {

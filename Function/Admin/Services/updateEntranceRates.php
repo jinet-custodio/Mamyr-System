@@ -28,7 +28,6 @@ try {
     if ($updateTimeRange->execute()) {
         $updateEntranceRate = $conn->prepare("UPDATE `entrancerate` SET `sessionType`= ?,`timeRangeID`= ?,`ERcategory`= ?,`ERprice`= ?, `availability` = ? WHERE entranceRateID = ?");
         $updateEntranceRate->bind_param("sisdsi", $tourType, $timeRangeID, $visitorType, $price, $availability, $entranceRateID);
-        // error_log("SQL Query: " . $updateEntranceRate->error);
         if ($updateEntranceRate->execute()) {
             $conn->commit();
             echo json_encode([

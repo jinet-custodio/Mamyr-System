@@ -1,6 +1,6 @@
 <?php
-require '../../Config/dbcon.php';
-date_default_timezone_set('Asia/Manila');
+// require '../../Config/dbcon.php';
+// date_default_timezone_set('Asia/Manila');
 
 session_start();
 require '../../Function/sessionFunction.php';
@@ -102,7 +102,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="icon" type="image/x-icon" href="../../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../../Assets/CSS/Customer/dashboard.css">
     <link rel="stylesheet" href="../../Assets/CSS/navbar.css">
-    <!-- <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css"> -->
     <!-- stylesheet link for bootstrap -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
     <!-- Swiper's CSS Link  -->
@@ -212,22 +211,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <h1 class="welcome">Welcome to Mamyr Resort and Events Place, <?= ucfirst($firstName) ?>!</h1>
                 <h5 class="subtext">We’re excited to welcome you to Mamyr Resort! Whether you're here to unwind,
                     explore, or enjoy some quality time, we’re ready to make your stay memorable. Book now and start
-                    your relaxation journey with us today!</h5>
-                <!-- <h5 class="subtext">Book now and start
-                    your relaxation journey with us today!</h5> -->
+                    your relaxation journey with us today!</h5>->
 
                 <div class="topBtn-container">
                     <a href="resortBooking.php" class="btn resort-booking-btn-base button-pool">Resort Booking</a>
                     <a href="hotelBooking.php" class="btn resort-booking-btn-base button-hotel">Hotel Booking</a>
                     <a href="eventBooking.php" class="btn resort-booking-btn-base button-event">Event Booking</a>
-                    <!-- <a href="resortBooking.php" class="btn btn-outline-primary resortBooking">Hotel Booking</a>
-                    <a href="resortBooking.php" class="btn btn-outline-primary resortBooking">Event Booking</a> -->
                 </div>
-
-                <!-- <div class="topBtn-container">
-                    <a href="bookNow.php" class="btn btn-light">Book Now</a>
-                    <a href="amenities.php" class="btn btn-light">Browse Amenities</a>
-                </div> -->
             </div>
 
             <div class="topRight">
@@ -375,18 +365,13 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             <div class="rating-value" id="event-rating-value"></div>
                         </div>
 
-                        <!-- Overall Rating (Optional) -->
+                        <!-- Overall Rating -->
                         <div class="overall-rating">
                             <div class="overall-rating-label">
                                 <h6 class="overall-rating-label">Overall Rating</h6>
                                 <h4 class="overall-rating-value" id="overall-rating-value"></h4>
                             </div>
                             <div class="overall-rating-stars" id="star-container">
-                                <!-- <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i>
-                                    <i class="bi bi-star-fill" id="overall-rating"></i> -->
                             </div>
                         </div>
                     </div>
@@ -498,59 +483,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             history.replaceState({}, document.title, url.toString());
         };
     </script>
-
-    <!-- Service Worker -->
-    <!-- <script>
-        async function registerPush() {
-            if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
-
-            try {
-                const permission = await Notification.requestPermission();
-                if (Notification.permission === "default") {
-                    console.log('Requesting permission now...');
-                    const permission = await Notification.requestPermission();
-                    console.log('User response:', permission);
-                    alert("Notification permission: " + permission);
-                } else if (permission !== 'granted') {
-                    console.error('Notification permission not granted');
-                    return;
-                }
-
-                const sw = await navigator.serviceWorker.register('/serviceWorker.js');
-                console.log('Service Worker registered:', sw);
-                const response = await fetch('/Function/Notification/getVapidPublicKey.php');
-                const vapidPublicKey = await response.text();
-                const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-
-                const subscription = await sw.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: convertedVapidKey
-                });
-
-                await fetch('/Function/savePushSubscription.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(subscription)
-                });
-
-                console.log('Push subscription successful');
-
-            } catch (err) {
-                console.error('Error registering push', err);
-            }
-        }
-
-        function urlBase64ToUint8Array(base64String) {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-            for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
-            return outputArray;
-        }
-    </script> -->
 
 
     <!-- Initialize Swiper -->

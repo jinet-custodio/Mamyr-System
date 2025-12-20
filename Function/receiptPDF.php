@@ -70,8 +70,6 @@ if (isset($_POST['downloadReceiptBtn'])) {
         $storedAmountPaid = floatval($row['amountPaid']) ?? 0.00;
         $storedUserBalance = floatval($row['userBalance']) ?? 0.00;
     }
-
-    // $confirmedFinalBill = floatval($row['confirmedFinalBill']);
     if ($storedAmountPaid == 0.00) {
         $isPaid = false;
         $isFullPayment = false;

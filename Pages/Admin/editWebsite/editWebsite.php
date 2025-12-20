@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../../Config/dbcon.php';
 
 $session_timeout = 3600;
@@ -453,12 +453,10 @@ switch ($userRole) {
                 })
                 .then(response => response.text())
                 .then(text => {
-                    console.log("Raw response from PHP:", text);
 
                     let data;
                     try {
                         data = JSON.parse(text);
-                        console.log("Parsed JSON:", data);
                     } catch (e) {
                         console.error("JSON parse error:", e);
                         alert("PHP returned invalid JSON. Check console for full output.");
@@ -481,7 +479,7 @@ switch ($userRole) {
                             confirmButtonText: "Okay"
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // 🔁 Refresh the page after clicking "Okay"
+                                // Refresh the page after clicking "Okay"
                                 location.reload();
                             }
                         });

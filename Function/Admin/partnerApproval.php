@@ -35,7 +35,6 @@ $userRole = (int) $_SESSION['userRole'];
 
 //Approve Button is Click
 if (isset($_POST['approveBtn'])) {
-    // error_log(print_r($_POST, true));
     $_SESSION['partnerID'] = (int) $_POST['partnerID'];
     $partnerStatusID = intval($_POST['partnerStatus']);
     $partnerUserID = intval($_POST['partnerUserID']);
@@ -46,7 +45,6 @@ if (isset($_POST['approveBtn'])) {
     $partnerID = $_SESSION['partnerID'];
 
     $partnerTypes = isset($_POST['partnerTypes']) ?  $_POST['partnerTypes'] : [];
-    // error_log(print_r($partnerTypes, true));
     if (empty($partnerTypes)) {
         header('Location: ../../Pages/Admin/partnership.php?container=4&action=emptyPartnerTypes');
         exit();
@@ -73,7 +71,6 @@ if (isset($_POST['approveBtn'])) {
         foreach ($partnerTypes as $id => $type) {
             foreach ($type as $pptID => $name) {
                 $isApproved = true;
-                // error_log("PPTID: " . $pptID . "ID: " . $id);
                 $updatePartnerTypeTrue->bind_param("iiii", $isApproved, $partnerID, $pptID, $id);
                 if (!$updatePartnerTypeTrue->execute()) {
                     $conn->rollback();
@@ -142,11 +139,6 @@ if (isset($_POST['approveBtn'])) {
                         </body>
         ';
 
-        // if (!sendEmail($businessEmail, $partnerName, $subject, $email_message, $env)) {
-        //     header('Location: ../../Pages/Admin/partnership.php?container=4&action=emailFailed');
-        //     exit();
-        // }
-
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
@@ -181,7 +173,6 @@ if (isset($_POST['approveBtn'])) {
     } catch (Exception $e) {
         $_SESSION['partnerID'] =  $partnerID;
         error_log('Error: ' . $e->getMessage());
-        // $_SESSION['error-partnership'] = 'The request could not be approved. Please try again later.';
         header('Location: ../../Pages/Admin/partnership.php?container=4&action=approvalFailed');
         exit();
     }

@@ -29,7 +29,6 @@ if (isset($_GET['id'])) {
         $result = $getPartnerBooking->get_result();
         if ($result->num_rows > 0) {
             $data = $result->fetch_assoc();
-            // error_log(print_r($data, true));
             $totalPendingBooking = $data['totalPendingBooking'] ?? 0;
             $allBookingStatus = $data['totalBookings'] ?? 0;
             $approvedBookings = $data['totalApprovedBooking'] ?? 0;

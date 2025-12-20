@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 
 session_start();
@@ -177,6 +177,108 @@ if ($result->num_rows > 0) {
     </div>
 
     <main class="dashboard-container" id="main">
+
+        <?php
+        $temporaryPassword = 'admin@mamyr_25';
+        $changePassword = false;
+        $getAdminPassword = $conn->prepare("SELECT password, email, firstName FROM user WHERE userID = ?");
+        $getAdminPassword->bind_param('i', $userID);
+        if ($getAdminPassword->execute()) {
+            $result = $getAdminPassword->get_result();
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $storedPassword = trim($row['password']);
+                $email = trim($row['email']);
+                $firstName = trim($row['firstName']);
+                if (password_verify($temporaryPassword, $storedPassword)) {
+                    $changePassword = true;
+                }
+            }
+        }
+        ?>
+
+        <form action="../../Function/Admin/changePasswordRequired.php" method="POST" id="admin-password-change-form">
+            <input type="hidden" id="temporaryPassword" value="<?= $changePassword ?>">
+            <!-- Modal for informing that password change is required -->
+            <div class="modal fade" id="changePasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <input type="hidden" name="email" id="email" value="<?= $email ?>">
+                        <input type="hidden" name="firstName" value="<?= ucfirst($firstName) ?>">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="changePasswordModalLabel">Password Change Required</h5>
+                        </div>
+                        <div class="modal-body">
+                            <h6 class="note">For security reasons, you are required to change your password before continuing.</h6>
+                        </div>
+
+                        <button type="submit" id="understood-btn" class="btn btn-primary" name="send-otp">
+                            Understood
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for security otp -->
+            <div class="modal fade" id="OTPModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="OTPModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="OTPModalLabel">One Time Password for Verification </h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-container">
+                                <label for="otp-code">Enter your otp code</label>
+                                <input type="text" class="form-control text-center" id="otp-code" name="otp-code" placeholder="567121">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" name="resend-otp">Resend</button>
+                            <button type="submit" class="btn btn-primary" name="submit-code">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for changing password-->
+            <div class="modal fade" id="changePasswordSecondModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changePasswordSecondModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="changePasswordSecondModalLabel">Change Your Password</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-container">
+                                <label for="password">Enter your password</label>
+                                <input type="password" class="form-control" id="password" name="password" oninput="passwordChangeValidation()">
+                                <i id="togglePassword" class='bx bxs-hide'></i>
+                            </div>
+                            <div class="validation-message-container mt-1">
+                                <p class="password-validation" id="password-validation-message"></p>
+                            </div>
+                            <div class="progress mt-1 mb-2">
+                                <div class="progress-bar" role="progressbar" id="password-strength" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="input-container">
+                                <label for="confirm-password">Confirm your password</label>
+                                <input type="password" class="form-control" id="confirm-password" name="confirm-password" oninput="passwordChangeValidation()">
+                                <i id="toggleConfirmPassword" class='bx bxs-hide'></i>
+                            </div>
+                            <div class="validation-message-container mt-1">
+                                <p class="password-validation" id="password-match-message"></p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="password-change" name="password-change">
+                                Enter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
 
         <section class="notification-toggler-container">
             <div class="notification-container position-relative">
@@ -393,8 +495,6 @@ if ($result->num_rows > 0) {
                     </div>
 
                     <div class="bookings-chart">
-                        <!-- <img src="../../Assets/Images/adminTemporary/bookingsGraph.jpg" alt="Bookings Graph"
-                            class="graph" id="bookingsBar"> -->
                         <canvas class="graph" id="bookingsBar"></canvas>
                     </div>
                 </div>
@@ -411,7 +511,6 @@ if ($result->num_rows > 0) {
                         <div class="filter-btn-container">
                             <div class="filter-select-wrapper">
                                 <select class="filter-select" name="sales-filter-select" id="sales-filter-select">
-                                    <!-- <option selected disabled>Filters</option> -->
                                     <option value="month"><?= $monthToday ?></option>
                                     <option value="w1">Week 1</option>
                                     <option value="w2">Week 2</option>
@@ -425,12 +524,8 @@ if ($result->num_rows > 0) {
                     </div>
 
                     <div class="sales-chart">
-                        <!-- <img src="../../Assets/Images/adminTemporary/bookingsGraph.jpg" alt="Bookings Graph"
-                            class="graph" id="salesBar"> -->
                         <canvas id="salesBar" class="graph"></canvas>
-                        <!-- <canvas class="graph" id="salesBar"></canvas> -->
-                        <a href="salesReport.php" class="btn btn-primary gen-rep-btn" id="gen-rep">Generate Sales
-                            Report</a>
+                        <a href="salesReport.php" class="btn btn-primary gen-rep-btn" id="gen-rep">Generate Sales Report</a>
                     </div>
 
                 </div>
@@ -460,10 +555,7 @@ if ($result->num_rows > 0) {
                     </div>
 
                     <div class="payments-chart">
-                        <!-- <img src="../../Assets/Images/adminTemporary/bookingsGraph.jpg" alt="Bookings Graph"
-                            class="graph" id="paymentsBar"> -->
                         <canvas class="graph" id="paymentsBar"></canvas>
-
                     </div>
 
                 </div>
@@ -541,18 +633,13 @@ if ($result->num_rows > 0) {
                             <div class="rating-value" id="event-rating-value"></div>
                         </div>
 
-                        <!-- Overall Rating (Optional) -->
+                        <!-- Overall Rating -->
                         <div class="overall-rating">
                             <div class="overall-rating-label">
                                 <h6 class="overall-rating-label">Overall Rating</h6>
                                 <h4 class="overall-rating-value" id="overall-rating-value"></h4>
                             </div>
                             <div class="overall-rating-stars" id="star-container">
-                                <!-- <i class="bi bi-star-fill" id="overall-rating"></i>
-                                <i class="bi bi-star-fill" id="overall-rating"></i>
-                                <i class="bi bi-star-fill" id="overall-rating"></i>
-                                <i class="bi bi-star-fill" id="overall-rating"></i>
-                                <i class="bi bi-star-fill" id="overall-rating"></i> -->
                             </div>
                         </div>
                     </div>
@@ -590,12 +677,6 @@ if ($result->num_rows > 0) {
                 },
                 eventClick: function(info) {
                     window.location.href = `schedule.php`;
-                },
-                eventsSet: function(events) {
-                    // console.log('Fetched events:', events);
-                    events.forEach(event => {
-                        console.log(`Title: ${event.title}, Start: ${event.startStr}`);
-                    });
                 },
             });
             calendar.render();
@@ -680,16 +761,16 @@ if ($result->num_rows > 0) {
         setInterval(updateCards, 300000);
     </script>
 
-    <!-- //* For Sales -->
+    <!-- //? For Sales -->
     <script src="../../Assets/JS/Dashboard/adminSales.js"></script>
 
-    <!-- //* For Bookings -->
+    <!-- //? For Bookings -->
     <script src="../../Assets/JS/Dashboard/adminBookings.js"></script>
 
-    <!-- //* For Payments -->
+    <!-- //? For Payments -->
     <script src="../../Assets/JS/Dashboard/adminPayments.js"></script>
 
-    <!-- //* For Booking Summary -->
+    <!-- //? For Booking Summary -->
     <script src="../../Assets/JS/Dashboard/adminBookingSummary.js"></script>
 
     <script>
@@ -803,7 +884,8 @@ if ($result->num_rows > 0) {
     <script>
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('action');
-
+        const modal = params.get('result');
+        const email = document.getElementById('email');
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -815,13 +897,113 @@ if ($result->num_rows > 0) {
                 toast.onmouseleave = Swal.resumeTimer;
             }
         });
+        switch (paramValue) {
+            case 'successLogin':
+                Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
+                });
+                break;
+        }
 
-        if (paramValue === 'successLogin') {
-            Toast.fire({
-                icon: "success",
-                title: "Signed in successfully"
-            });
-        };
+        switch (modal) {
+            case 'successOTP':
+                setTimeout(() => {
+                    const OTPModal = new bootstrap.Modal(document.getElementById("OTPModal"));
+                    OTPModal.show();
+                }, 100);
+
+                break;
+
+            case 'failedOTP':
+                Swal.fire({
+                    icon: "warning",
+                    title: "Oops!",
+                    text: "Failed to send the verification code. Please try again later.",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    window.location.href = '../register.php';
+                });
+                break;
+
+            case 'failedUpdatingUser':
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Failed to update user details. Please try again.",
+                    confirmButtonText: "OK",
+                });
+                break;
+
+            case 'OTPNotExpired':
+                Swal.fire({
+                    icon: "info",
+                    title: "Notice",
+                    html: `An OTP was already sent to <strong>${email.value}</strong> a few minutes ago. You can still use the previous OTP.`,
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    const OTPModal = new bootstrap.Modal(document.getElementById("OTPModal"));
+                    OTPModal.show();
+                });
+                break;
+
+            case 'correctOTP':
+                setTimeout(() => {
+                    const passwordModal = new bootstrap.Modal(document.getElementById("changePasswordSecondModal"));
+                    passwordModal.show();
+                }, 100);
+                break;
+
+            case 'wrongOTP':
+                Swal.fire({
+                    icon: "warning",
+                    title: "Invalid Code",
+                    text: "The code you entered is incorrect. Please try again.",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    setTimeout(() => {
+                        const OTPModal = new bootstrap.Modal(document.getElementById("OTPModal"));
+                        OTPModal.show();
+                    }, 100);
+                });
+                break;
+            case 'expiredOTP':
+                Swal.fire({
+                    icon: "error",
+                    title: "OTP Expired",
+                    text: "The code you entered has expired. Please request a new OTP.",
+                    confirmButtonText: "OK",
+                    width: 300,
+                    padding: '1rem'
+                }).then(() => {
+                    setTimeout(() => {
+                        const OTPModal = new bootstrap.Modal(document.getElementById("OTPModal"));
+                        OTPModal.show();
+                    }, 100);
+                });
+                break;
+            case 'successPassword':
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Password Change Successfully'
+                });
+            case 'passwordNotSame':
+                Swal.fire({
+                    icon: "error",
+                    title: "Password ",
+                    text: "The code you entered has expired. Please request a new OTP.",
+                    confirmButtonText: "OK",
+                    width: 300,
+                    padding: '1rem'
+                }).then(() => {
+                    setTimeout(() => {
+                        const OTPModal = new bootstrap.Modal(document.getElementById("OTPModal"));
+                        OTPModal.show();
+                    }, 100);
+                });
+                break;
+        }
+
 
         if (paramValue) {
             const url = new URL(window.location);
@@ -830,45 +1012,90 @@ if ($result->num_rows > 0) {
         }
     </script>
 
-    <!-- <script>
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggle-btn');
-    const main = document.getElementById('main');
-    const sbLogo = document.getElementById('sbLogo');
-    const pfpContainer = document.getElementById('pfpContainer');
-    const navLI = document.getElementById('navLI');
-    const linkText = document.getElementById('linkText');
-
-    let isOpen = true; 
-
-    toggleBtn.addEventListener("click", function() {
-        if (isOpen) {
-            closeSB();
-        } else {
-            openSB();
-        }
-        isOpen = !isOpen; 
-    });
-
-    function openSB() {
-        sidebar.style.width = "250px";
-        main.style.width = "85%";
-        sbLogo.style.display = "block";
-        pfpContainer.style.padding = "1rem";
-        navLI.style.padding = "1rem";
-        linkText.style.display = "inline";
-    }
-
-    function closeSB() {
-        sidebar.style.width = "5%";
-        main.style.width = "95%";
-        sbLogo.style.display = "none";
-        pfpContainer.style.padding = "1rem";
-        navLI.style.padding = "0";
-        linkText.style.display = "none";
-    }
-    </script> -->
     <?php include '../Customer/loader.php'; ?>
+
+    <!-- Forced change password if first login -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const temporaryPassword = document.getElementById("temporaryPassword");
+            const temporaryPasswordValue = temporaryPassword.value;
+
+            if (temporaryPasswordValue) {
+                const changePasswordModal = document.getElementById("changePasswordModal");
+                const modal = new bootstrap.Modal(changePasswordModal);
+                modal.show();
+            }
+        });
+    </script>
+
+    <!-- JS link for password validation -->
+    <script src="../../Assets/JS/passwordValidation.js"></script>
+
+    <!-- For password — weak, medium, strong -->
+    <script>
+        document.getElementById('password').addEventListener('input', function() {
+            const password = document.getElementById("password").value;
+            const weakPattern = /^.{0,5}$/;
+            const mediumPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+            const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+            const passwordBar = document.getElementById("password-strength");
+
+            passwordBar.className = "progress-bar";
+            let color = "";
+            let number = "";
+            let strength = 'too  weak';
+            if (strongPattern.test(password)) {
+                color = "bg-success";
+                number = "100";
+                strength = 'strong';
+            } else if (mediumPattern.test(password)) {
+                color = "bg-warning";
+                number = "75";
+                strength = 'moderate';
+            } else if (weakPattern.test(password)) {
+                color = "bg-danger";
+                number = "50";
+                strength = 'weak';
+            } else {
+                color = "bg-danger";
+                number = "25";
+                strength = 'too weak';
+            }
+
+
+            passwordBar.classList.add(color, `w-${number}`);
+            passwordBar.setAttribute("aria-valuenow", number);
+            passwordBar.textContent = strength;
+        });
+    </script>
+
+    <!-- Eye icon of password show and hide -->
+    <script>
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+        function togglePasswordVisibility(passwordField, toggleIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('bxs-hide');
+                toggleIcon.classList.add('bx-show-alt');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('bx-show-alt');
+                toggleIcon.classList.add('bxs-hide');
+            }
+        }
+
+        togglePassword.addEventListener('click', () => {
+            togglePasswordVisibility(password, togglePassword);
+        });
+
+        toggleConfirmPassword.addEventListener('click', () => {
+            togglePasswordVisibility(confirmPassword, toggleConfirmPassword);
+        });
+    </script>
 </body>
 
 </html>

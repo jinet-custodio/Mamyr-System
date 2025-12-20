@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 session_start();
 date_default_timezone_set('Asia/Manila');
@@ -11,8 +11,6 @@ $userRole = intval($_SESSION['userRole']);
 require '../Helpers/userFunctions.php';
 
 if (isset($_POST['eventBook'])) {
-    // error_log(print_r($_POST, true));
-
     $bookingType = 'Event';
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
 
@@ -95,7 +93,6 @@ if (isset($_POST['eventBook'])) {
         LEFT JOIN user u ON p.userID = u.userID
         WHERE ps.partnershipServiceID = ?");
         foreach ($partnerIDs as $partnershipServiceID => $partershipID) {
-            // error_log('PSID: ' . $partnershipServiceID);
             $partnershipServiceID = intval($partnershipServiceID);
             $getServiceID->bind_param('i', $partnershipServiceID);
 
@@ -160,7 +157,6 @@ if (isset($_POST['eventBook'])) {
         $insertCustomPackageItem = $conn->prepare("INSERT INTO `custompackageitem`( `customPackageID`, `foodItemID`, `servicePrice`) VALUES (?,?,?)");
 
         foreach ($foodList as $foodItemID => $name) {
-            // error_log('Food ID: ' . $foodItemID . 'CustomID: ' .  $customPackageID);
             $foodItemID = (int) $foodItemID;
             $foodItemPrice = 0.0;
 
@@ -195,7 +191,6 @@ if (isset($_POST['eventBook'])) {
 
         $bookingID = $insertBooking->insert_id;
         $pendingID = 1;
-        // error_log('Partnership Service' . print_r($partnerService, true));
         //insert into bp availed service
         $insertBPavailedService = $conn->prepare("INSERT INTO `businesspartneravailedservice`(`partnershipServiceID`, `bookingID`, `approvalStatus`, `price`) VALUES (?,?,?,?)");
         foreach ($partnerService as $partnershipServiceID => $price) {
@@ -231,7 +226,6 @@ if (isset($_POST['eventBook'])) {
                 error_log("Error: $type -> $id" . $insertIntoUnavailableService->error);
             }
         }
-        // error_log('Partnership IDs' . print_r($partnershipIDs, true));
         if (!empty($partnershipIDs)) {
             foreach ($partnershipIDs as $name => $id):
                 $receiver = 'Business Partner';

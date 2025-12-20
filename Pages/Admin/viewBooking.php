@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -128,11 +128,9 @@ switch ($userRole) {
             $address = $data['userAddress'];
             $userRoleID = $data['userRole'];
 
-            $file_info = finfo_open(FILEINFO_MIME_TYPE);
             $imageData = $data['userProfile'];
-            $mime_type = finfo_buffer($file_info, $imageData);
-            // finfo_close($file_info);
-
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($imageData);
             $userProfile = 'data:' . $mime_type . ';base64,' . base64_encode($imageData);
 
             if (!empty($phoneNumber)) {
@@ -253,7 +251,6 @@ switch ($userRole) {
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb 
                                                     ON b.bookingID = cb.bookingID
-                                                -- LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
 
                                                 LEFT JOIN custompackage cp 
                                                     ON b.customPackageID = cp.customPackageID
@@ -266,8 +263,6 @@ switch ($userRole) {
 
                                                 LEFT JOIN additionalcharge ac 
                                                     ON b.bookingID = ac.bookingID
-                                                -- LEFT JOIN payment p 
-                                                --     ON cb.confirmedBookingID = p.confirmedBookingID
                                                 LEFT JOIN businesspartneravailedservice bpas 
                                                     ON b.bookingID = bpas.bookingID
                                                 LEFT JOIN bookingservice bs 
@@ -279,7 +274,6 @@ switch ($userRole) {
 
                                                 LEFT JOIN resortamenity ra 
                                                     ON s.resortServiceID = ra.resortServiceID
-                                                -- LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
 
                                                 LEFT JOIN entrancerate er 
                                                     ON s.entranceRateID = er.entranceRateID
@@ -314,12 +308,7 @@ switch ($userRole) {
                     $partnerServices = [];
                     $pricePerHead = 0;
                     $additionalChargesInfo = [];
-                    // $businessApproval = '';
                     while ($row = $getBookingInfoResult->fetch_assoc()) {
-
-                        // echo '<pre>';
-                        // print_r($row);
-                        // echo '</pre>';
 
                         // Date and Time
                         $bookingCode = $row['bookingCode'];
@@ -521,9 +510,6 @@ switch ($userRole) {
 
 
                         $finalBill = ($finalBill === 0) ?  $originalBill : $finalBill;
-                        // echo '<pre>';
-                        // print_r($serviceIDs);
-                        // echo '</pre>';
                     }
                 }
                 ?>
@@ -1438,11 +1424,9 @@ switch ($userRole) {
                 input.addEventListener('input', updateSummary);
             });
 
-            // console.log(inputs);
-
             updateSummary();
 
-            //Disable any letter but allowed the peiod
+            //Disable any letter but allowed the period
             formControls.forEach(formControl => {
                 formControl.addEventListener('keypress', function(e) {
                     if (/[0-9]/.test(e.key)) return;
@@ -1456,7 +1440,7 @@ switch ($userRole) {
         });
     </script>
 
-    <!-- //* to add original price to updated food price  -->
+    <!-- //* To add original price to updated food price  -->
     <script>
         const sameFoodPrice = document.getElementById('sameFoodPrice');
         const sameAmount = document.getElementById('sameAmount');
@@ -1489,6 +1473,8 @@ switch ($userRole) {
     </script>
 
     <script>
+
+        //Function for adding additional charges
         function toggleAdditionalInput() {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
             var additionalInputs = document.querySelectorAll('.additional-input');
@@ -1553,11 +1539,10 @@ switch ($userRole) {
                 }
                 entry[name][property] = isNaN(form.value) ? form.value : Number(form.value);
                 updateAddPaymentSummary();
-                // console.log(data);
             });
         });
 
-
+        //Function for updating the total amount
         function updateAddPaymentSummary() {
             const finalBillValue = parseFloat(finalBill.value) || 0;
             const originalChargeValue = parseFloat(originalCharge.value) || 0;
@@ -1611,24 +1596,18 @@ switch ($userRole) {
             const reschedButton = document.getElementById("resched-button-container");
             const bookingStatus = document.getElementById('bookingStatusName').value;
             const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
-            // console.log('Booking status:', bookingStatus);
-
-            // console.log('Payment status:', paymentApprovalStatus);
             switch (bookingStatus.toLowerCase()) {
                 case 'pending':
-                    // console.log(bookingStatus.toLowerCase());
                     buttonContainer.style.setProperty("display", "flex", "important");
                     break;
                 case 'expired':
                 case 'cancelled':
                 case 'done':
                 case 'rejected':
-                    // console.log(bookingStatus.toLowerCase());
                     reschedButton.style.setProperty("display", "none", "important");
                     buttonContainer.style.setProperty("display", "none", "important");
                     break;
                 default:
-                    // console.log(bookingStatus.toLowerCase());
                     buttonContainer.style.setProperty("display", "none", "important");
                     break;
             }
@@ -1648,7 +1627,7 @@ switch ($userRole) {
         const param = new URLSearchParams(window.location.search);
         const action = param.get('action');
 
-
+        //Minimalist sweet alert pop up
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -1660,6 +1639,7 @@ switch ($userRole) {
                 toast.onmouseleave = Swal.resumeTimer;
             }
         });
+        //Show depends on the action
         switch (action) {
             case 'approvalFailed':
                 const errorMessage = window.approvalErrorMessage ||
@@ -1719,12 +1699,12 @@ switch ($userRole) {
                 break;
         }
 
-
-        // if (action) {
-        //     const url = new URL(window.location);
-        //     url.search = '';
-        //     history.replaceState({}, document.title, url);
-        // }
+        //Clear the added param value
+        if (action) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url);
+        }
     </script>
 
     <!-- For other reason -->

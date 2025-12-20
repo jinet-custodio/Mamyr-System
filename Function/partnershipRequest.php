@@ -105,7 +105,6 @@ if (isset($_POST['submit_request'])) {
             $updateQuery = $conn->prepare("UPDATE user SET firstName = ?, middleInitial = ?, lastName = ?, phoneNumber = ?, userRole = ? WHERE userID = ?");
             $updateQuery->bind_param("ssssii", $firstName, $middleInitial, $lastName, $phoneNumber, $userRoleID, $userID);
             if (!$updateQuery->execute()) {
-                // $_SESSION['success'] = "Profile updated successfully.";
                 $conn->rollback();
                 $_SESSION['message'] = "Failed to update profile.";
                 throw new Exception('Error updating profile information. ' . $updateQuery->error);

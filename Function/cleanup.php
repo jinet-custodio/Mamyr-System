@@ -28,9 +28,5 @@ $logMessage =
     "Deleted rows in service unavailable: $deleted\n" .
     "Reject partner booking request: $rejectBookedRequest\n" .
     "Updated Cancel Status (partner): $partnerCancelledBooking \n \n";
-
-echo '<pre>';
-print_r($logMessage);
-echo '</pre>';
 file_put_contents(__DIR__ . '/cron_log.txt', $logMessage, FILE_APPEND);
 $conn->close();

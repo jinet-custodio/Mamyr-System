@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require '../Config/dbcon.php';
 session_start();
@@ -20,12 +20,6 @@ while ($row = $contentResult->fetch_assoc()) {
     $fullText .= $row['content'] . "\n\n"; // Keep spacing between sections
 }
 $fullText = trim($fullText);
-
-
-
-// echo '<pre>';
-// print_r($_SESSION['registerFormData']);
-// echo '</pre>';
 ?>
 
 
@@ -67,19 +61,14 @@ $fullText = trim($fullText);
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             value="<?php echo isset($_SESSION['registerFormData']['firstName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['firstName'])) : ''; ?>"
                             required>
-                        <!-- <i class='bx bxs-user-circle'></i> -->
 
                         <input type="text" class="form-control" id="middleInitial" name="middleInitial" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{1,100}$"
                             placeholder="M.I. (Optional)"
                             value="<?php echo isset($_SESSION['registerFormData']['middleInitial']) ? htmlspecialchars(trim($_SESSION['registerFormData']['middleInitial'])) : ''; ?>">
-                        <!-- <i class='bx bxs-user-circle'></i> -->
+
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" pattern="^[A-Za-zÀ-ÖØ-öø-ÿĀ-žḀ-ỹẀ-ẕ'.\- ]{2,100}$"
                             value="<?php echo isset($_SESSION['registerFormData']['lastName']) ? htmlspecialchars(trim($_SESSION['registerFormData']['lastName'])) : ''; ?>"
                             required>
-                        <!-- <i class='bx bxs-user-circle'></i> -->
-                        <!-- <input type="text" class="form-control" id="email" name="email" placeholder="Email Address"
-                            required> -->
-
 
                         <div class="phone-container">
                             <input type="text" name="phoneNumber" id="phoneNumber" pattern="^(?:\+63|0)9\d{9}$"
@@ -89,7 +78,6 @@ $fullText = trim($fullText);
                             <div id="tooltip-phone" class="custom-tooltip">Please input numbers only</div>
                         </div>
 
-                        <!-- <i class='bx bxs-phone'></i> -->
 
                     </div>
                 </div>
@@ -636,7 +624,6 @@ $fullText = trim($fullText);
             const mediumPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
             const strongPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
             const passwordBar = document.getElementById("password-strength");
-            // console.log(password);
 
             passwordBar.className = "progress-bar";
             let color = "";
@@ -659,9 +646,6 @@ $fullText = trim($fullText);
                 number = "25";
                 strength = 'too weak';
             }
-
-            // console.log(color);
-            // console.log(number);
 
             passwordBar.classList.add(color, `w-${number}`);
             passwordBar.setAttribute("aria-valuenow", number);
@@ -742,12 +726,9 @@ $fullText = trim($fullText);
             checkboxes.forEach(cb => {
                 cb.addEventListener("change", function() {
                     const label = document.querySelector(`label[for="${this.id}"]`);
-                    console.log(label.textContent.trim());
                     const labelText = label.textContent.trim();
 
                     if (labelText.toLowerCase() === "other") {
-                        // otherInput.style.display = this.checked ? "block" : "none";
-
                         if (this.checked) {
                             otherInput.style.display = "block";
                         } else {
@@ -762,8 +743,6 @@ $fullText = trim($fullText);
 
 
             document.getElementById('addInputField').addEventListener('click', () => {
-                console.log('clicked');
-
                 const existing = document.querySelectorAll('input[name="other-partner-type[]"]').length;
 
                 if (existing >= 3) {
@@ -784,7 +763,6 @@ $fullText = trim($fullText);
             document.getElementById("removeInputField").addEventListener('click', () => {
 
                 const fields = document.querySelectorAll('input[name="other-partner-type[]"]');
-                console.log(fields.length);
 
                 if (fields.length <= 1) {
                     Swal.fire({

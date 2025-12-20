@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 session_start();
 require '../Config/dbcon.php';
 //for setting image paths in 'include' statements
@@ -47,9 +47,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <link rel="icon" type="image/x-icon" href="../Assets/Images/Icon/favicon.png ">
     <link rel="stylesheet" href="../Assets/CSS/about.css">
     <link rel="stylesheet" href="../Assets/CSS/navbar.css">
-    <!-- <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css"> -->
-    <!-- Online link for Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
     <!-- icon library from font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -125,7 +123,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-        <!-- <img src="../Assets/Images/amenities/poolPics/poolPic3.jpg" alt="Pool Picture" class="resortPic"> -->
 
 
         <div class="topTextContainer">
@@ -444,8 +441,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         })
     </script>
 
-    <!-- Sweetalert JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 </body>
 
 </html>

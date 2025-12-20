@@ -1,8 +1,8 @@
 <?php
 
-error_reporting(E_ALL);
+// error_reporting(E_ALL);
 session_start();
-ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 require '../Config/dbcon.php';
 //for setting image paths in 'include' statements
 $baseURL = '..';
@@ -153,14 +153,14 @@ require '../Function/Helpers/statusFunctions.php';
 
         <?php
         $approvedPartnerID = 2;
-        $getPartnersQuery = $conn->prepare("SELECT  u.phoneNumber, p.partnershipID, p.businessEmail,  p.companyName, p.partnerAddress, p.documentLink, pt.partnerTypeDescription, ppt.isApproved, ps.partnershipServiceID, ps.PSAvailabilityID, ps.PBDescription, ps.serviceImage, ps.PBPrice, ps.PBName, ps.PBduration, ps.PBcapacity
+        $getPartnersQuery = $conn->prepare("SELECT  u.phoneNumber, p.partnershipID, p.businessEmail,  p.companyName, p.partnerAddress, p.documentLink, CASE WHEN LOWER(pt.partnerTypeDescription) = 'other' THEN ppt.otherPartnerType ELSE pt.partnerTypeDescription END AS partnerTypeDescription, ppt.isApproved, ps.partnershipServiceID, ps.PSAvailabilityID, ps.PBDescription, ps.serviceImage, ps.PBPrice, ps.PBName, ps.PBduration, ps.PBcapacity
                                             FROM partnership p 
                                             LEFT JOIN 
                                                 user u ON p.userID = u.userID
                                             INNER JOIN 
                                                 partnershipservice ps ON p.partnershipID = ps.partnershipID
                                             LEFT JOIN 
-                                                partnership_partnertype ppt ON p.partnershipID = ppt.partnershipID 
+                                                partnership_partnertype ppt ON ps.partnerTypeID = ppt.pptID 
                                             LEFT JOIN
                                                 partnershiptype pt ON ppt.partnerTypeID = pt.partnerTypeID
                                             WHERE 
@@ -221,7 +221,6 @@ require '../Function/Helpers/statusFunctions.php';
         <div class="BPContainer">
 
             <?php
-            // error_log(print_r($partners, true));
             if (!empty($partners)) {
                 foreach ($partners as $partner): ?>
                     <div class="card bp-card" id="bp1">
@@ -252,7 +251,7 @@ require '../Function/Helpers/statusFunctions.php';
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="bpName">Singko Marias</h5>
+                                    <h5 class="modal-title" id="bpName"><?= $partner['companyName'] ?></h5>
                                 </div>
                                 <div class="modal-body">
                                     <div class="md-container">

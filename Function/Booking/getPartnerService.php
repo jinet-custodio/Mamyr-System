@@ -67,8 +67,6 @@
                 'Message' => 'Successfull Fetching Services',
                 'Categories' => $serviceData['Category']
             ]);
-
-            // error_log(print_r($serviceData['Category'], true));
             exit;
         } catch (Exception $e) {
             error_log("Error: " . $e->getMessage());

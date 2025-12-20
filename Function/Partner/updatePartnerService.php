@@ -1,13 +1,12 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 require '../../Config/dbcon.php';
 session_start();
 
 if (isset($_POST['saveServiceInfo'])) {
-    // error_log(print_r($_POST, true));
 
     $serviceID = intval($_POST['partnershipServiceID']);
     $serviceName = $_POST['serviceName'];
@@ -30,9 +29,6 @@ if (isset($_POST['saveServiceInfo'])) {
 
     if (!is_dir($storeProofPath)) mkdir($storeProofPath, 0755, true);
     if (!is_dir($tempUploadPath)) mkdir($tempUploadPath, 0755, true);
-
-    // error_log($storeProofPath);
-    // error_log($tempUploadPath);
     $tempFileName = null;
 
     if (!empty($_FILES['serviceImage']['tmp_name']) && is_uploaded_file($_FILES['serviceImage']['tmp_name'])) {
@@ -54,7 +50,6 @@ if (isset($_POST['saveServiceInfo'])) {
 
         $tempFileName = 'temp_' . uniqid() . '_serviceID'  . $serviceID . '.' . $imageExt;
         $tempFilePath = $tempUploadPath . $tempFileName;
-        // error_log("THIS: " . $tempFilePath);
         if (!move_uploaded_file($_FILES['serviceImage']['tmp_name'], $tempFilePath)) {
             header("Location: ../../../Pages/Account/bpViewService.php?action=imageFailed");
             exit();

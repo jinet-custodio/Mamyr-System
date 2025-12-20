@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -91,10 +91,7 @@ switch ($userRole) {
         <div class="statusContainer">
             <!-- Get user data -->
             <?php
-            // $confirmedBookingID = (int) $_POST['confirmedBookingID'] ?? $_SESSION['confirmedBookingID'];
             $bookingID = (int) $bookingID;
-            // $bookingID = mysqli_real_escape_string($conn, $_POST['bookingID']);
-            // $status = mysqli_real_escape_string($conn, $_POST['status']);
             $getData = $conn->prepare("SELECT booking.*, user.firstName, user.middleInitial, user.lastName, user.phoneNumber, user.userAddress FROM booking 
             JOIN user ON booking.userID = user.userID
             WHERE booking.userID = ? AND booking.bookingID =?");
@@ -182,7 +179,6 @@ switch ($userRole) {
                                                 FROM booking b
                                                 LEFT JOIN confirmedbooking cb 
                                                     ON b.bookingID = cb.bookingID
-                                                -- LEFT JOIN bookingpaymentstatus bps ON cb.paymentStatus = bps.paymentStatusID 
 
                                                 LEFT JOIN custompackage cp 
                                                     ON b.customPackageID = cp.customPackageID
@@ -204,7 +200,6 @@ switch ($userRole) {
 
                                                 LEFT JOIN resortamenity ra 
                                                     ON s.resortServiceID = ra.resortServiceID
-                                                -- LEFT JOIN resortservicescategory rsc ON rsc.categoryID = ra.RScategoryID
 
                                                 LEFT JOIN entrancerate er 
                                                     ON s.entranceRateID = er.entranceRateID
@@ -240,10 +235,6 @@ switch ($userRole) {
                 $downpaymentNotes = [];
                 $additionalChargesInfo = [];
                 while ($row = $getBookingInfoResult->fetch_assoc()) {
-
-                    // echo '<pre>';
-                    // print_r($row);
-                    // echo '</pre>';
 
                     // Date and Time
                     $rawStartDate = $row['startDate'] ?? null;
@@ -424,8 +415,6 @@ switch ($userRole) {
                         $cardHeader = "Type of Event";
                         $eventType = $row['eventType'];
                         $additionalServicePrice = floatval($row['additionalServicePrice']);
-                        // $partnerServiceList['Hakdog']['Haha'] = 3000;
-                        // $partnerServiceList['HEhe']['Haha'] = 5000;
                         $downpaymentNotes[] = 'Any additional services offered by our business partners require separate approval and are not included in the reservation unless specifically requested and confirmed.';
                         $downpaymentNotes[] = 'The displayed price on the summary is only rough estimate. The price can change depending on the customer\'s discussions with the admin.';
                         if (!empty($serviceID)) {
@@ -484,10 +473,6 @@ switch ($userRole) {
                     }
                 }
 
-                // echo '<pre>';
-                // print_r($paymentStatus);
-                // echo '</pre>';
-
                 $serviceVenue = [];
 
                 foreach ($services as $service) {
@@ -498,13 +483,6 @@ switch ($userRole) {
                     ) {
                         $serviceVenue[] = trim($service);
                     }
-                    // if (stripos($service, 'Day') !== false) {
-                    //     $tourType = "Day Tour";
-                    // } elseif (stripos($service, 'Night') !== false) {
-                    //     $tourType = "Night Tour";
-                    // } elseif (stripos($service, 'Overnight') !== false) {
-                    //     $tourType = "Overnight Tour";
-                    // }
                 }
                 $serviceVenue = array_unique($serviceVenue);
             }
@@ -981,8 +959,6 @@ switch ($userRole) {
         const downloadReceiptBtn = document.getElementById('downloadReceiptBtn');
         const viewTransactionBtn = document.getElementById('viewTransaction');
         const downpaymentBtn = document.getElementById("makeDownpaymentBtn");
-        console.log("Booking Stat: " + bookingStatus);
-        // console.log("payment App Stat" + paymentApprovalStatus);
         switch (bookingStatus.toLowerCase().trim()) {
             case 'pending':
             case 'cancel':
@@ -1016,30 +992,6 @@ switch ($userRole) {
                 viewTransactionBtn.style.display = 'block';
                 break;
         }
-        // if ((bookingStatus === "Pending" && (paymentApprovalStatus === 'Pending' ||
-        //         paymentApprovalStatus === '')) || (bookingStatus === 'Cancelled') || (
-        //         bookingStatus === 'Rejected')) {
-        //     downpaymentBtn.style.display = "none";
-        //     downloadReceiptBtn.style.display = 'none';
-        //     viewTransactionBtn.style.display = 'none';
-        // } else if (bookingStatus === "Approved" && paymentApprovalStatus === "Pending" && (paymentStatus === "Unpaid" || paymentStatus === "Payment Sent")) {
-        //     downpaymentBtn.style.display = "block";
-        //     downloadReceiptBtn.style.display = 'none';
-        //     viewTransactionBtn.style.display = 'block';
-        // } else if (paymentApprovalStatus === "Approved" && bookingStatus === 'Reserved' && (paymentStatus === "Partially Paid" || paymentStatus === "Fully Paid")) {
-        //     downpaymentBtn.style.display = "none";
-        //     viewTransactionBtn.style.display = 'block';
-        // } else if ((bookingStatus === "Done" && paymentStatus === "Fully Paid") || bookingStatus === 'Expired') {
-        //     downpaymentBtn.style.display = "none";
-        //     viewTransactionBtn.style.display = 'block';
-        // } else if (paymentMethod === 'Cash') {
-        //     downpaymentBtn.style.display = "none";
-        // } else if (paymentMethod === 'GCash') {
-        //     downpaymentBtn.style.display = "block";
-        // } else {
-        //     downpaymentBtn.style.display = "none";
-        // };
-
 
         const input = document.getElementById('payment-amount');
         const tooltip = document.getElementById('tooltip');

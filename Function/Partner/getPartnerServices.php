@@ -5,8 +5,8 @@ require '../Helpers/statusFunctions.php';
 header('Content-Type: application/json');
 
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 $details = [];
 
@@ -14,7 +14,6 @@ if (isset($_GET['id'])) {
     $partnershipID = (int) $_GET['id'];
     $getPartnerService = $conn->prepare("SELECT * FROM `partnershipservice` WHERE partnershipID = ?");
     $getPartnerService->bind_param('i', $partnershipID);
-    // error_log("PID: $partnershipID");
     if (!$getPartnerService->execute()) {
         error_log("Error: $partnershipID" . $getPartnerService->error);
         echo json_encode(['error' => 'Database execution failed']);

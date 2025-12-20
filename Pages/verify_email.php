@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require '../Config/dbcon.php';
 session_start();
@@ -34,7 +34,6 @@ if (isset($_SESSION['action'])) {
   <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="../Assets/CSS/modal.css" />
   <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
   <!-- icon libraries for font-awesome and box icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -112,9 +111,7 @@ if (isset($_SESSION['action'])) {
 
 
   <!-- Bootstrap JS -->
-  <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-
+  <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
   <!-- Sweetalert Link -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

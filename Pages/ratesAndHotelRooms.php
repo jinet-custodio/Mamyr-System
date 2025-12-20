@@ -1,6 +1,6 @@
 <?php
-session_start();
-error_reporting(E_ALL);
+// session_start();
+// error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require '../Config/dbcon.php';
 //for setting image paths in 'include' statements
@@ -119,11 +119,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
             <div class="rates" id="rates">
-                <!-- <div class="titleContainer">
-                    <h4 class="title">Our Rates</h4>
-                </div> -->
-
-
                 <div class="entrance mx-auto" style="padding: 0vw 0 1vw 0; ">
                     <div class=" entranceTitleContainer" style="padding-top: 2vw;">
 
@@ -460,8 +455,8 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                         $imgSrc = '../Assets/Images/amenities/hotelPics/hotel1.jpg';
                                         if (!empty($hotel['imageData'])) {
                                             // You can use this if imageData is raw binary
-                                            // $imgData = base64_encode($hotel['imageData']);
-                                            // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                                            $imgData = base64_encode($hotel['imageData']);
+                                            $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                         }
                                 ?>
                                         <div class="swiper-slide">
@@ -514,10 +509,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <!-- Sweetalert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap Link -->
-    <!-- <script src="../../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
+    <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
 
     <!-- Flatpickr for date input -->
@@ -626,11 +618,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     })
                 })
                 .then(res => {
-                    console.log("HTTP", res.status, res.statusText);
                     return res.text(); // read raw response
                 })
                 .then(text => {
-                    console.log("RAW RESPONSE:", text);
 
                     let json;
                     try {
@@ -644,8 +634,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                         console.error("❌ Missing 'rooms' in JSON:", json);
                         return;
                     }
-
-                    console.log("Parsed JSON:", json);
 
                     json.rooms.forEach(room => {
                         const icons = document.querySelectorAll('.hotelIconWithCaption');

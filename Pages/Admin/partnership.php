@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -102,7 +102,6 @@ switch ($userRole) {
         $result = $selectQuery->get_result();
         if ($result->num_rows > 0) {
             $partnerTypes = [];
-            // $printThis = '';
             while ($data = $result->fetch_assoc()) {
                 $applicantName = (ucfirst($data['firstName']) . " " . ucfirst($data['lastName'])) ?? '';
                 $companyName = $data['companyName'] ?? '';
@@ -133,9 +132,6 @@ switch ($userRole) {
 
                 $imageName = $data['validID'] ?? 'N/A';
             }
-            // echo '<pre>';
-            // print_r($partnerTypes);
-            // echo '</pre>';
         }
         ?>
         <!-- Display the information -->
@@ -144,7 +140,6 @@ switch ($userRole) {
                 <img src="<?= htmlspecialchars($image ?? '')  ?>" class="img-fluid rounded-start"
                     alt="<?= htmlspecialchars($applicantName ?? '') ?> ">
                 <div class="partner-info-contact">
-                    <!-- <h4 class="card-title name">Name</h4> -->
                     <p class="card-text name"><?= $applicantName ?? null ?></p>
                     <p class="card-text sub-name"><?= $businessEmail ?? null ?> | <?= $phoneNumber ?? null ?> </p>
                 </div>
@@ -249,7 +244,6 @@ switch ($userRole) {
             } else {
                 $partnerTypes[$partnerTypeID][$pptID] = $data['partnerTypeDescription'];
             }
-            // $partnerTypes[$partnerTypeID] = $data['partnerTypeDescription'];
             $businessEmail = $data['businessEmail'] ?? '';
             $phoneNumber = $data['phoneNumber'] ?? '';
             if ($phoneNumber === NULL) {
@@ -270,10 +264,6 @@ switch ($userRole) {
             }
             $partnerStatus = $data['partnerStatusID'] ?? null;
             $imageName = $data['validID'] ?? 'N/A';
-
-            // echo '<pre>';
-            // print_r($partnerTypes);
-            // echo '</pre>';
         }
 
         ?>
@@ -285,7 +275,6 @@ switch ($userRole) {
                     <img src="<?= htmlspecialchars($image ?? '') ?>" class="img-fluid rounded-start"
                         alt="<?= htmlspecialchars($applicantName ?? '') ?> ">
                     <div class="applicant-info-contact">
-                        <!-- <h4 class="card-title name">Name</h4> -->
                         <p class="card-text name"><?= $applicantName ?? null ?> </p>
                         <p class="card-text sub-name"><?= $businessEmail ?? null ?> | <?= $phoneNumber  ?? null ?> </p>
                         <input type="hidden" name="businessEmail" value="<?= $businessEmail ?? null ?>">
@@ -442,7 +431,6 @@ switch ($userRole) {
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('container');
         const action = params.get("action");
-        // const paramValue = atob(encodedParamValue);
 
         const partnerContainer = document.getElementById("partner-info");
         const requestContainer = document.getElementById("applicant-request");
@@ -512,16 +500,15 @@ switch ($userRole) {
                 break;
 
             default:
-                // Optional: handle unexpected actions
                 console.warn("Unknown action:", action);
         }
 
 
-        // if (action) {
-        //     const url = new URL(window.location);
-        //     url.searchParams.delete('action');
-        //     history.replaceState({}, document.title, url.toString());
-        // }
+        if (action) {
+            const url = new URL(window.location);
+            url.searchParams.delete('action');
+            history.replaceState({}, document.title, url.toString());
+        }
     </script>
 
     <!-- For other reason -->
@@ -546,7 +533,7 @@ switch ($userRole) {
             e.preventDefault();
             Swal.fire({
                 icon: 'warning',
-                title: '⚠️ External Link Warning',
+                title: 'External Link Warning',
                 html: `
             <p class="fs-6 mb-2">You are about to visit an external site.</p>
             <p class="fs-6 mb-3"><b>This link may be unsafe, unverified, or contain spam.</b></p>

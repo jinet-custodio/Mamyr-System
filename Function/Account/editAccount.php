@@ -12,8 +12,6 @@ if (isset($_POST['saveChanges'])) {
     $partnershipID = (int) $_POST['partnershipID'] ?? 0;
     $fullName = mysqli_real_escape_string($conn, $_POST['fullName']);
     $birthday = mysqli_real_escape_string($conn, $_POST['birthday']);
-    // $birthDate = date('Y-m-d', strtotime($birthday));
-    // var_dump($birthday);
     $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     $companyName = !empty($_POST['companyName'])
@@ -106,7 +104,6 @@ if (isset($_POST['saveChanges'])) {
         exit;
     } else {
         error_log("User update failed: " . $updateUser->error);
-        // $_SESSION['update-error'] = "Failed to update account details.";
         header("Location: ../../Pages/Account/account.php?message=error-change");
         exit;
     }

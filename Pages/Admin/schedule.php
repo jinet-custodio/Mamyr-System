@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 
 session_start();
@@ -85,10 +85,9 @@ if ($result->num_rows > 0) {
     <!-- CSS Links -->
     <link rel="stylesheet" href="../../Assets/CSS/Admin/schedule.css">
     <link rel="stylesheet" href="../../Assets/CSS/Admin/sidebar.css">
-    <!-- CSS Links -->
     <!-- Bootstrap Links -->
     <link rel="stylesheet" href="../../Assets/CSS/bootstrap.min.css">
-    <!-- Bootstrap Links -->
+
     <!-- Icon Links -->
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -96,7 +95,6 @@ if ($result->num_rows > 0) {
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Icon Links -->
 </head>
 
 <body>
@@ -179,12 +177,6 @@ if ($result->num_rows > 0) {
     <main class="dashboard-container" id="main">
 
         <section class="notification-toggler-container">
-            <!-- <div class="notification-container position-relative">
-                <button type="button" class="btn position-relative" data-bs-toggle="modal"
-                    data-bs-target="#notificationModal">
-                    <i class="bi bi-bell" id="notification-icon"></i>
-                </button>
-            </div> -->
             <div class="notification-container position-relative">
                 <button type="button" class="btn position-relative" data-bs-toggle="modal"
                     data-bs-target="#notificationModal" id="notificationButton">
@@ -391,7 +383,7 @@ if ($result->num_rows > 0) {
 
 
                     let content = `
-                     <div class="text-center">
+                    <div class="text-center">
                         <h3 class="text-center fw-bolder text-primary">${event.title}</h3>
                         <p class="text-center mt-5 mb-0" style="letter-spacing: 1px; line-height: 35px">
                                 <strong>Start:</strong> ${formattedStart}<br>
@@ -399,15 +391,10 @@ if ($result->num_rows > 0) {
                         </p>
                     </div>
                 `;
-
                     modalBody.innerHTML = content;
                     modalCont.classList.add('gradientBg');
                     modalFooter.classList.add('mx-auto');
                     modal.show();
-                },
-
-                eventsSet: function(events) {
-                    console.log('Fetched events:', events);
                 },
             });
 

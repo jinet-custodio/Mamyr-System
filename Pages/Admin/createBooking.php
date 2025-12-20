@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 
 session_start();
@@ -118,12 +118,10 @@ switch ($userRole) {
         <input type="hidden" name="adminID" value="<?= $adminID ?>">
 
         <main class="container-fluid">
-            <!-- <h5 class="bsTitle">Booking Summary</h5> -->
             <section class="topSection">
                 <section class="leftSide">
                     <div class="infoLabelContainer">
                         <label for="repPeriod">Date Period: </label>
-                        <!-- <label for="bookingCount">Number of Bookings: </label> -->
                         <label for="bookingType">Type of Booking:</label>
                     </div>
 
@@ -135,8 +133,6 @@ switch ($userRole) {
                                 <i class="fa-solid fa-calendar" id="calendarIcon"></i>
                             </div>
                         </section>
-
-                        <!-- <input type="number" class="form-control" id="bookingCount" name="bookingCount" min='1' required> -->
 
                         <select class="form-select" aria-label="typeOfBooking" id="bookingType" name="bookingType" required>
                             <option selected disabled>Booking Type</option>
@@ -164,16 +160,10 @@ switch ($userRole) {
                         </div>
                     </div>
 
-                    <!-- <div class="bsButtons">
-                        <button class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</button>
-                        <button type="submit" class="btn btn-success"><i class="bi bi-floppy"></i> Save</button>
-                    </div> -->
-
                 </section>
             </section>
 
             <section class="button-container">
-                <!-- <button class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</button> -->
                 <button type="submit" class="btn btn-success" id="addBooking" name="addBulkBooking"><i class="bi bi-plus-lg"></i> Add Booking</button>
             </section>
         </main>
@@ -190,26 +180,6 @@ switch ($userRole) {
 
                 </thead>
                 <tbody>
-                    <!-- <tr>
-                        <td>September 14, 2025</td>
-                        <td>September 30, 2025</td>
-                        <td>Resort Booking</td>
-                        <td>₱15,000</td>
-                    </tr>
-
-                    <tr>
-                        <td>September 16, 2025</td>
-                        <td>September 25, 2025</td>
-                        <td>Hotel Booking</td>
-                        <td>₱35,000</td>
-                    </tr>
-
-                    <tr>
-                        <td>September 1, 2025</td>
-                        <td>September 30, 2025</td>
-                        <td>Event Booking</td>
-                        <td>₱100,000</td>
-                    </tr> -->
                 </tbody>
             </table>
 
@@ -238,21 +208,7 @@ switch ($userRole) {
     <!-- Table JS -->
     <script>
         $(document).ready(function() {
-            $('#addedBookings').DataTable({
-                // columnDefs: [{
-                //         width: '10%',
-                //         targets: 0
-                //     },
-                //     {
-                //         width: '15%',
-                //         targets: 2
-                //     },
-                //     {
-                //         width: '15%',
-                //         targets: 4
-                //     },
-                // ],
-            });
+            $('#addedBookings').DataTable({});
         });
     </script>
 

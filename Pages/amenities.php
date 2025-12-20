@@ -1,9 +1,6 @@
 <?php
-
-error_reporting(E_ALL);
-session_start();
-ini_set('display_errors', 1);
 require '../Config/dbcon.php';
+
 //for setting image paths in 'include' statements
 $baseURL = '..';
 
@@ -173,7 +170,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
         </div>
 
-        <div class="pool" id="poolContainer">
+        <div class="pool poolContainer" id="poolContainer">
             <div class="amenityTitleContainer">
                 <?php if ($editMode): ?>
                     <input type="text" class="amenityTitle editable-input form-control text-center mx-auto"

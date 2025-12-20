@@ -17,7 +17,6 @@ $serviceCapacity = intval($data['capacity']);
 $serviceMaxCapacity = intval($data['maxCapacity']);
 $serviceDuration = $data['duration'];
 $serviceDesc = $data['description'];
-// $serviceImage = $data['image'];
 $serviceAvailability = intval($data['availability']);
 
 $conn->begin_transaction();

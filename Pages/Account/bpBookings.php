@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 
@@ -171,12 +171,6 @@ switch ($userRole) {
                             <span class="sidebar-text">Services</span>
                         </a>
                     </li>
-                    <!-- <li class="sidebar-item">
-                    <a href="bpSales.php" class="list-group-item">
-                        <i class="bi bi-tags sidebar-icon"></i>
-                        <span class="sidebar-text">Sales</span>
-                    </a>
-                </li> -->
                 <?php } ?>
 
                 <li class="sidebar-item">
@@ -518,7 +512,6 @@ switch ($userRole) {
         });
         document.addEventListener('DOMContentLoaded', function() {
             const userID = document.getElementById('userID').value;
-            console.log(userID)
             fetch(`../../Function/Partner/getBookings.php?id=${encodeURIComponent(userID)}`)
                 .then(result => {
                     if (!result.ok) throw new Error("Network Error");
@@ -712,7 +705,6 @@ switch ($userRole) {
                 didOpen: () => {
                     const btn = document.querySelector('.loaderTrigger');
                     if (btn) {
-                        console.log("Trigger found");
                         btn.addEventListener('click', () => {
                             loaderOverlay.style.display = 'flex';
                         });

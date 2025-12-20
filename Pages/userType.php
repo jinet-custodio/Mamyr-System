@@ -8,8 +8,8 @@
     <link rel="shortcut icon" href="../Assets/Images/Icon/favicon.png" type="image/x-icon">
     <!-- CSS Link -->
     <link rel="stylesheet" href="../Assets/CSS/userType.css">
-    <!-- online stylesheet link for bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.min.css">
 
     <!-- icon libraries for font-awesome and box icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -72,11 +72,8 @@
         <div class="loader"></div>
     </div>
 
-    </script>
     <!-- Bootstrap JS -->
-    <!-- <script src="../Assets/JS/bootstrap.bundle.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-
+    <script src="../Assets/JS/bootstrap.bundle.min.js"></script>
 
     <!-- Script for loader -->
     <script>

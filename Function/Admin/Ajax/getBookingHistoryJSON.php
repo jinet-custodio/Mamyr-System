@@ -6,7 +6,6 @@ require '../../Helpers/statusFunctions.php';
 header('Content-Type: application/json');
 if (isset($_GET['userID'])) {
     $userID = (int) $_GET['userID'];
-    // error_log($userID);
     try {
         $getBookingInfo = $conn->prepare("SELECT b.bookingCode,
                             b.bookingID, b.bookingType, b.userID, b.startDate, b.bookingStatus, b.paymentMethod, 
@@ -14,7 +13,6 @@ if (isset($_GET['userID'])) {
                             cb.paymentApprovalStatus, cb.confirmedBookingID, cb.paymentStatus, cb.finalBill, cb.userBalance
                         FROM booking b
                         LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
-                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         WHERE b.userID = ?
                         GROUP BY
                             b.bookingID
@@ -28,7 +26,6 @@ if (isset($_GET['userID'])) {
 
         while ($bookings = $result->fetch_assoc()) {
             $checkIn = date("M. d, Y", strtotime($bookings['startDate']));
-            // $paymentID = $bookings['paymentID'];
             $paymentApprovalStatus = getStatuses($conn, $bookings['paymentApprovalStatus'] ?? null);
             $bookingStatus = getStatuses($conn, $bookings['bookingStatus'] ?? null);
             $paymentStatus = getPaymentStatus($conn, ($bookings['paymentStatus'] ?? 1));

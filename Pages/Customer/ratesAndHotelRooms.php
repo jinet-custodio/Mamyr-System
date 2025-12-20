@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 require '../../Config/dbcon.php';
 date_default_timezone_set('Asia/Manila');
 //for setting image paths in 'include' statements
@@ -195,9 +195,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
 
             <div class="rates" id="rates" style="display: none;">
-                <!-- <div class="titleContainer">
-                    <h4 class="title">Our Rates</h4>
-                </div> -->
 
                 <div class="entrance mx-auto" style="padding: 0vw 0 1vw 0; ">
                     <div class=" entranceTitleContainer" style="padding-top: 2vw;">
@@ -254,7 +251,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                 </div>
 
                 <div class="titleContainer" style="margin-top: 2vw;">
-
                     <h4 class="entranceTitle">Cottages</h4>
                 </div>
 
@@ -532,8 +528,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                                         $imgSrc = '../../Assets/Images/amenities/hotelPics/hotel1.jpg';
                                         if (!empty($hotel['imageData'])) {
                                             // You can use this if imageData is raw binary
-                                            // $imgData = base64_encode($hotel['imageData']);
-                                            // $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                                            $imgData = base64_encode($hotel['imageData']);
+                                            $imgSrc = 'data:image/jpeg;base64,' . $imgData;
                                         }
                                 ?>
                                         <div class="swiper-slide">
@@ -681,11 +677,9 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                     })
                 })
                 .then(res => {
-                    console.log("HTTP", res.status, res.statusText);
                     return res.text(); // read raw response
                 })
                 .then(text => {
-                    console.log("RAW RESPONSE:", text);
 
                     let json;
                     try {
@@ -699,8 +693,6 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
                         console.error("❌ Missing 'rooms' in JSON:", json);
                         return;
                     }
-
-                    console.log("Parsed JSON:", json);
 
                     json.rooms.forEach(room => {
                         const icons = document.querySelectorAll('.hotelIconWithCaption');

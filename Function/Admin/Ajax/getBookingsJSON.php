@@ -8,7 +8,6 @@ header('Content-Type: application/json');
 if (isset($_GET['filter'])) {
 
     $filterValue = mysqli_real_escape_string($conn, $_GET['filter'] ?? 'all');
-    // error_log($filterValue);
     try {
 
         switch (strtolower($filterValue)) {
@@ -23,7 +22,6 @@ if (isset($_GET['filter'])) {
                         LEFT JOIN confirmedbooking cb ON b.bookingID = cb.bookingID
                         ORDER BY
                             b.createdAt DESC
-                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         ");
                 break;
             case 'pending':
@@ -39,7 +37,6 @@ if (isset($_GET['filter'])) {
                         WHERE b.bookingStatus = ?
                         ORDER BY
                             b.createdAt DESC
-                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         ");
                 break;
             case 'expired':
@@ -54,7 +51,6 @@ if (isset($_GET['filter'])) {
                         WHERE b.bookingStatus IN (?,?,?)
                         ORDER BY
                             b.createdAt DESC
-                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         ");
                 break;
             case 'incoming':
@@ -70,7 +66,6 @@ if (isset($_GET['filter'])) {
                             b.bookingStatus IN (?,?) AND b.startDate > NOW()
                         ORDER BY
                             b.createdAt DESC
-                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         ");
                 break;
             case 'ongoing':
@@ -86,7 +81,6 @@ if (isset($_GET['filter'])) {
                             b.bookingStatus = ? AND b.startDate <= NOW() AND b.endDate >= NOW()
                         ORDER BY
                             b.createdAt DESC
-                        -- LEFT JOIN payment p ON cb.confirmedBookingID = p.confirmedBookingID
                         ");
                 break;
         }
@@ -234,8 +228,6 @@ if (isset($_GET['filter'])) {
                 'bookingCode' => $bookings['bookingCode'],
                 'name' => $name,
                 'bookingType' => $bookings['bookingType'],
-                // 'checkIn' => $checkIn,
-                // 'checkOut' => $checkOut,
                 'bookingDate' => $bookingDate,
                 'status' => $status,
                 'statusClass' => $class,
