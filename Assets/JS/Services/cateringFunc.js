@@ -29,7 +29,6 @@ function editMenuItem(editBtn) {
     const foodData = {
       id: thisRow.querySelector(".foodID").value,
       name: thisRow.querySelector(".foodName").value,
-      // price: thisRow.querySelector(".foodPrice").value,
       category: thisRow.querySelector(".foodCategory").value,
       availability: thisRow.querySelector(".foodAvailability").value,
     };

@@ -12,21 +12,16 @@
   src: url(../Fonts/Alkatra/Alkatra-VariableFont_wght.ttf);
 }
 
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   text-decoration: none;
-  /* list-style: none; */
 }
 
 body {
   background-image: url(../../Images/BookNowPhotos/bookNowBg.jpg);
-  /* background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat; */
 }
 
 .backBtn {
@@ -100,61 +95,3 @@ h6 {
 .mb-5 {
   margin-top: 2vw;
 }
-
-/* html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.centered-wrapper {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f8f9fa;
-}
-
-.summary-box {
-  width: 75vw;
-  height: 75vh;
-  padding: 2rem;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden; 
-}
-
-.event-line {
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 0.875rem;
-}
-
-.alert-msg {
-  font-size: 0.8rem;
-  color: #dc3545;
-  font-weight: 500;
-}
-
-
-.payment-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.left-info {
-  width: 45%; 
-}
-
-.right-info {
-  width: 45%; 
-  text-align: right; 
-}
-
-.qr-pic {
-  max-width: 120px; 
-  height: auto;
-} */

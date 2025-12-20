@@ -54,7 +54,6 @@ function filteredSales(selectedFilterValue) {
       const sales = data.sales;
       let labels = [];
       let dataset = [];
-      // let title = "";
       let chartType = selectedFilterValue === "month" ? "bar" : "line";
       if (selectedFilterValue === "month") {
         const dayLabels = [...new Set(sales.map((item) => item.weekOfMonth))];

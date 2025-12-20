@@ -51,7 +51,6 @@ function editServiceInfo(edit) {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log('Response from server:', data);
         if (!data.success) {
           console.log(data.message);
           Swal.fire({
@@ -103,7 +102,6 @@ function editServiceInfo(edit) {
 }
 
 function canEditInfo(cancel) {
-  // console.log('cancel clicked')
   const modal = cancel.closest(".modal");
   const formControl = modal.querySelectorAll(".form-control");
   const select = modal.querySelector("#serviceAvailability");

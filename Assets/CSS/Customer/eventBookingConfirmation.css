@@ -146,7 +146,6 @@ section h4 {
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  /* margin-top: 1rem; */
 }
 
 textarea {
@@ -163,12 +162,10 @@ textarea {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  /* border: 1px solid red; */
   padding: 1rem;
 }
 
 .food-info {
-  /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -181,11 +178,6 @@ textarea {
   font-family: "Poppins";
   text-align: center;
 }
-
-/* .foodName {
-  display: block;
-  text-align: right;
-} */
 
 .text-center {
   color: red;

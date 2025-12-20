@@ -2,10 +2,6 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-/* @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-} */
 
 @font-face {
   font-family: "Poppins Light";
@@ -16,7 +12,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: "Plus Jakarta Sans"; */
   text-decoration: none;
   list-style: none;
 }
@@ -66,7 +61,6 @@ main {
 }
 .card {
   border: none !important;
-  /* padding: var(--padding-md); */
   margin-top: var(--margin-mdl);
   margin-bottom: 2rem;
   width: 100% !important;
@@ -185,15 +179,6 @@ th {
 
 /* Colors */
 
-/* .badge {
-  font-weight: initial;
-  line-height: normal;
-  font-size: var(--font-size-base);
-  padding: var(--padding-xs) !important;
-  width: 10rem;
-  border-radius: 3rem !important;
-} */
-
 .badge {
   font-weight: initial !important;
   line-height: normal !important;
@@ -271,10 +256,6 @@ th {
 .viewBooking {
   padding: 0.4rem !important;
   font-size: 12px !important;
-  /* background-color: transparent !important;
-  color: blue !important;
-  text-decoration: underline !important;
-  border: none !important; */
 }
 
 #notification-count.badge {

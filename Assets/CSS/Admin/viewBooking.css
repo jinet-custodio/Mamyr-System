@@ -60,7 +60,6 @@ body {
 }
 
 .card {
-  /* border: 1px solid red !important; */
   width: 90%;
   margin: auto;
   margin-bottom: 3rem;
@@ -92,7 +91,6 @@ body {
 }
 
 .booking-info-name-pic-btn {
-  /* border: 1px solid red !important; */
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -238,16 +236,6 @@ div#button-approval-container {
   width: 50%;
 }
 
-/* div#button-approval-container {
-  width: 50%;
-  margin: auto;
-  display: flex !important;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-*/
-
 div#resched-button-container {
   width: 50%;
   margin: auto;
@@ -332,7 +320,6 @@ div#resched-button-container {
   }
   .approveReject {
     margin-right: 0;
-    /* margin-left: 3rem; */
   }
   .row1 {
     display: flex;
@@ -474,33 +461,10 @@ div#resched-button-container {
     gap: 0.5rem;
     margin-top: 0.5rem !important;
   }
-  /* .button-container {
-    width: 45%;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    flex-direction: row;
-    align-items: center;
-    gap: 3px;
-    margin-bottom: 1rem;
-  } */
   .btn-danger {
     margin-left: 0 !important;
   }
 
-  /* div#button-approval-container {
-    display: unset !important;
-    gap: 1rem;
-  } */
-
-  /* .approveReject {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    margin-left: 3rem;
-    margin-bottom: 1rem;
-    font-size: 12px;
-  } */
   .row1 {
     display: flex;
     flex-direction: column;
@@ -575,7 +539,6 @@ div#resched-button-container {
   }
 
   .booking-info-name-pic-btn {
-    /* border: 1px solid red !important; */
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -650,243 +613,3 @@ div#resched-button-container {
     font-size: clamp(14px, 16px, 18px);
   }
 }
-
-/*
-@media only screen and (min-width: 600px) and (max-width: 1024px) {
-  .card {
-    width: 95%;
-  }
-  .page-title {
-    font-size: clamp(3vw, 3.1vw, 3.2vw);
-  }
-
-  .back {
-    height: 5vh;
-  }
-
-  .user-info {
-    width: 60%;
-  }
-
-  .name {
-    font-size: clamp(2.5vw, 2.1vw, 2.3vw) !important;
-  }
-
-  .sub-name {
-    font-size: clamp(1.6vw, 1.5vw, 1.7vw) !important;
-  }
-
-  p {
-    margin-bottom: 0.5rem;
-  }
-
-  .button-container {
-    width: 40%;
-  }
-
-  .approveReject {
-    font-size: clamp(1.8vw, 1.6vw, 1.7vw);
-    padding: 0.5vw 0.8vw;
-    width: 48%;
-  }
-
-  .info-label,
-  .card-title {
-    font-size: clamp(1.6vw, 1.8vw, 2vw);
-  }
-
-  #info-card {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-
-  .bookingInfoLeft {
-    width: 58%;
-    padding: 2vw;
-  }
-
-  .paymentDetails {
-    width: 42%;
-    padding: 1vw;
-  }
-
-  .inputDetail,
-  label {
-    font-size: clamp(1.5vw, 1.9vw, 1.7vw);
-  }
-
-  #info-card {
-    padding: 0;
-  }
-
-  .paymentInfo {
-    flex-direction: column !important;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .paymentInfo input {
-    width: 90% !important;
-  }
-
-  .paymentInfo label {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-@media only screen and (max-width: 599px) {
-  .card {
-    width: 98%;
-    border-radius: 3vw;
-    padding: 3vw;
-  }
-  .page-title {
-    font-size: clamp(4.5vw, 4.3vw, 4.1vw);
-  }
-
-  .page-container {
-    margin: 3vh 2vw;
-  }
-
-  .back {
-    height: 5vh;
-    width: 5vh;
-    padding: 1.5vw;
-  }
-
-  .back img {
-    height: 3.5vh;
-  }
-
-  .user-info {
-    width: 58%;
-  }
-
-  .booking-info-name-pic-btn {
-    padding: 0.4vw;
-  }
-
-  .name {
-    font-size: clamp(3.5vw, 3.1vw, 3.3vw) !important;
-  }
-
-  .sub-name {
-    font-size: clamp(2.2vw, 2.5vw, 2.4vw) !important;
-  }
-
-  p {
-    margin-bottom: 0.5rem;
-  }
-
-  .button-container {
-    width: 20%;
-    flex-wrap: wrap;
-  }
-
-  .approveReject {
-    font-size: clamp(2.6vw, 2.2vw, 2.4vw);
-    padding: 1vw 0.5vw;
-    width: 100%;
-    margin-bottom: 1vw;
-  }
-
-  .info-label,
-  .card-title {
-    font-size: clamp(3.5vw, 3.3vw, 3vw);
-  }
-
-  .img-fluid {
-    width: 20vw;
-    height: 20vw;
-  }
-
-  #info-card {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 2vw !important;
-  }
-
-  .row1,
-  .row2 {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  ul {
-    padding: 0;
-  }
-
-  .info-container {
-    width: 48%;
-  }
-
-  .bookingInfoLeft {
-    width: 100%;
-  }
-
-  .paymentDetails {
-    width: 100%;
-    padding: 1vw;
-    margin-top: 3vw;
-  }
-
-  .paymentInfo {
-    flex-direction: column !important;
-    justify-content: center !important;
-    text-align: center;
-    width: 90% !important;
-  }
-
-  .paymentInfo input {
-    width: 90% !important;
-  }
-
-  .inputDetail,
-  label {
-    font-size: clamp(3.3vw, 3.1vw, 3.2vw);
-  }
-
-  .inputDetail {
-    width: 90%;
-    margin: 0.5vw auto;
-  }
-
-  .foodDetails {
-    justify-content: center;
-  }
-
-  .discountform {
-    width: 100%;
-    align-items: center;
-  }
-
-  .fa-circle-info {
-    margin-top: 0;
-    right: 20%;
-  }
-
-  #info-card {
-    padding: 0;
-  }
-
-  .defaultMess {
-    font-size: 3vw;
-  }
-
-  .foodList p {
-    font-size: clamp(2.7vw, 2.5vw, 2.4vw);
-  }
-
-  .servicesList {
-    font-size: clamp(2.5vw, 2.4vw, 2.3vw);
-  }
-
-  .notes {
-    width: 100% !important;
-  }
-} */

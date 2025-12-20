@@ -294,8 +294,6 @@
   height: 30rem !important;
   border: none !important;
   background-color: oklch(1 0 0 / 0.4) !important;
-  /* display: block;
-  margin-left: auto; */
 }
 
 .rating-categories {
@@ -354,7 +352,6 @@
 }
 
 .star {
-  /* border: 1px solid red; */
   font-size: 30px !important;
   width: 25%;
   text-align: center;
@@ -405,8 +402,6 @@
   text-align: center;
   background-color: #f5f5f5;
   border-radius: 20px;
-  /* display: flex;
-  flex-wrap: wrap; */
 }
 
 .numbering {
@@ -453,24 +448,6 @@
   justify-content: center;
   align-items: start;
 }
-
-/* .location-container {
-  margin-top: var(--margin-md) !important;
-  padding: var(--padding-xl);
-  border-radius: 20px;
-  width: 98%;
-  height: 30rem !important;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 3rem;
-} */
-
-/* .resortPic {
-  width: 40vw;
-  border-radius: 50px;
-}*/
 
 .locationText-container {
   width: 50%;
@@ -519,7 +496,6 @@
 @media only screen and (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
   .topSec {
     flex-direction: column;
-    /* height: 90vh; */
   }
 
   .topLeft {
@@ -539,7 +515,6 @@
     font-family: "Poppins Light";
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-xl);
-    /* margin-top: 1rem; */
   }
 
   .subtext {
@@ -872,7 +847,6 @@
   .topLeft {
     width: 80%;
     text-align: center;
-    /* margin-top: var(--margin-md); */
   }
 
   .topText {
@@ -896,7 +870,6 @@
   }
 
   #topBookNow-btn {
-    /* margin-top: var(--margin-xl); */
     font-size: var(--font-size-md);
     width: 40%;
   }
@@ -1031,7 +1004,6 @@
     margin-top: var(--margin-xl);
   }
   .rating-container {
-    /* flex-direction: column-reverse; */
     margin-top: 20rem !important;
     gap: 2rem;
   }
@@ -1160,7 +1132,6 @@
 @media only screen and (min-width: 600px) and (max-width: 768px) {
   .topSec {
     flex-direction: column;
-    /* height: 90vh; */
   }
 
   .topLeft {

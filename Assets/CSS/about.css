@@ -21,17 +21,6 @@
   list-style: none;
 }
 
-/* html,
-  body {
-    height: 100%;
-    margin: 0;
-  }
-  
-  body {
-    display: flex;
-    flex-direction: column;
-  } */
-
 body {
   background-image: url(../Images/AboutImages/aboutbg.jpg);
   background-repeat: no-repeat;
@@ -203,8 +192,6 @@ body {
 .hotelContainer {
   width: 27%;
   text-align: center;
-  /* display: flex;
-  flex-wrap: wrap; */
 }
 
 .resortIcon,

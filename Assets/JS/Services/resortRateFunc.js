@@ -28,7 +28,6 @@ function editRates(editBtn) {
     });
 
     availability.disabled = false;
-    // console.log(availability.disabled);
     availability.style.setProperty(
       "border",
       "1px solid rgba(253, 10, 10, 1)",
@@ -47,7 +46,6 @@ function editRates(editBtn) {
       price: thisRow.querySelector(".entrancePrice").value,
       availability: thisRow.querySelector(".availability").value,
     };
-    // console.log(ratesData.availability);
     fetch("../../../Function/Admin/Services/updateEntranceRates.php", {
       method: "POST",
       headers: {
@@ -103,9 +101,6 @@ function cancelEditRates(cancelBtn) {
   const formControl = thisRow.querySelectorAll(".form-control");
   const formSelect = thisRow.querySelectorAll(".form-select");
   const editBtn = thisRow.querySelector(".editRatesBtn");
-  // const cancelBtn = thisRow.querySelectorAll('.cancelResortService');
-  // const OriginalRatesValues = {};
-  // cancelBtn.forEach(btn => btn.disabled = false);
 
   formControl.forEach((element) => {
     if (element.type === "file") {

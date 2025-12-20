@@ -21,12 +21,6 @@
   list-style: none;
 }
 
-/* html,
-  body {
-    height: 100%;
-    margin: 0;
-  }
-*/
 body {
   margin: 0;
 }
@@ -53,7 +47,6 @@ main {
 .account-nav {
   margin: 1px;
   margin-left: 1rem;
-  /* border: 1px solid white; */
   border-radius: 50%;
 }
 
@@ -211,11 +204,6 @@ input.headerEdit {
   width: 30vw;
 }
 
-/* .btn-close {
-  margin-left: -1vw;
-  font-size: 14px !important;
-} */
-
 .bookNowBtn {
   width: 15vw;
 }
@@ -321,7 +309,6 @@ input.headerEdit {
 }
 
 .featured .fb-img {
-  /* max-height: 200px; */
   object-fit: cover;
 }
 

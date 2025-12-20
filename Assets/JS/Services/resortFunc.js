@@ -21,7 +21,6 @@ function editResortService(editBtn) {
       element.disabled = false;
       element.style.setProperty("border", "1px solid red", "important");
     });
-    // console.log(originalResortValues);
 
     editImageBtn.forEach((btn) => (btn.disabled = false));
 
@@ -32,8 +31,6 @@ function editResortService(editBtn) {
         ];
         const textImage = resortServiceImage[index];
 
-        // textImage.style.display = 'none';
-        // fileImage.hidden = false;
         fileImage.click();
 
         fileImage.addEventListener("change", function () {
@@ -56,11 +53,8 @@ function editResortService(editBtn) {
       maxCapacity: thisRow.querySelector(".resortServiceMaxCapacity").value,
       duration: thisRow.querySelector(".resortServiceDuration").value,
       description: thisRow.querySelector("textarea").value,
-      // image: thisRow.querySelector(".resortServiceImage").value,
-      // imageData: thisRow.querySelector(".resortServiceImagePicker").value,
       availability: thisRow.querySelector(".resortAvailability").value,
     };
-    // console.log(resortData['imageData']);
     fetch("../../../Function/Admin/Services/updateResortServices.php", {
       method: "POST",
       headers: {
@@ -116,11 +110,6 @@ function cancelResortService(cancelBtn) {
   const thisRowForm = thisRow.querySelectorAll(".form-control");
   const editBtn = thisRow.querySelector(".editBtn");
   const availabilityForm = thisRow.querySelectorAll(".resortAvailability");
-  // const resortServiceImage = thisRow.querySelectorAll(".resortServiceImage");
-  // const editImageBtn = thisRow.querySelectorAll(".editImageBtn");
-  // const cancelBtn = thisRow.querySelectorAll('.cancelResortService');
-  // const originalResortValues = {};
-  // cancelBtn.forEach(btn => btn.disabled = false);
 
   thisRowForm.forEach((element) => {
     if (element.type === "file") {

@@ -13,13 +13,11 @@
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
-  /* list-style: none; */
 }
 
 body {
   background: url(../Images/indexPhotos/Background2.png) lightgray 50% / cover
     no-repeat;
-  /* display: flex; */
   background-color: #88858534 !important;
   background-blend-mode: darken !important;
   background-position: center;
@@ -35,17 +33,6 @@ body {
   font-size: 45px;
 }
 
-/* .column {
-  float: left;
-  width: 33.33%;
-}
-
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-*/
 #basicInfo {
   display: flex;
   align-items: center;
@@ -54,7 +41,6 @@ body {
 
 .container {
   font-family: "Poppins";
-  /* border: 1px solid black !important; */
   background-color: #ffff;
   width: 1289px;
   border-radius: 40px;
@@ -103,7 +89,6 @@ div#selectedBusinessTypes {
 }
 
 .repInfoFormContainer {
-  /* border: 1px solid black !important; */
   padding: 1vw;
   gap: 1vw;
   margin-top: 2.5vw;
@@ -165,10 +150,6 @@ div#selectedBusinessTypes {
   width: 100%;
   margin-top: 1vw;
 }
-
-/* .btn-primary {
-  margin-top: 5vw;
-} */
 
 /* Div for loader */
 #loaderOverlay {

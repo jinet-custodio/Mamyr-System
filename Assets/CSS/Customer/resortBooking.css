@@ -52,7 +52,6 @@ body {
   margin: 0.2rem 0 0 5rem;
   width: 4.5rem;
   border: none !important;
-  /* background-color: transparent !important; */
 }
 
 .backToSelection i {
@@ -157,7 +156,6 @@ body {
 
 #entertainmentContainer,
 #cottagesContainer {
-  /* border: 1px solid red; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;

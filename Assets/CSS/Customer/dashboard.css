@@ -46,15 +46,8 @@ body {
   border-radius: 20px;
   margin: 0 auto;
   background-color: oklch(0.64 0.65 220 / 0.1) !important;
-  /* background-image: linear-gradient(
-      to left,
-      rgba(255, 255, 255, 0) 0%,
-      #6592ccdc 73%
-    ),
-    url(/Assets/Images/amenities/poolPics/poolPic2\ -\ Copy.jpg); */
   background-position: center;
   background-size: cover;
-  /* background-color: oklch(0.64 0.65 220 / 0.5); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,7 +60,6 @@ body {
 }
 
 .mamyrTitle {
-  /* border: 1px solid black; */
   width: 100%;
 }
 
@@ -91,7 +83,6 @@ body {
   position: relative !important;
   min-height: 10rem !important;
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
@@ -410,7 +401,6 @@ a {
 .swiper-slide img {
   width: 100%;
   height: 100%;
-  /* max-height: 350px; */
   object-fit: cover;
   border-radius: 10px;
 }
@@ -493,8 +483,6 @@ a {
   height: 30rem !important;
   border: none !important;
   background-color: oklch(1 0 0 / 0.4) !important;
-  /* display: block;
-  margin-left: auto; */
 }
 
 .rating-categories {
@@ -553,7 +541,6 @@ a {
 }
 
 .star {
-  /* border: 1px solid red; */
   font-size: 30px !important;
   width: 25%;
   text-align: center;
@@ -609,8 +596,6 @@ a {
   text-align: center;
   background-color: #f5f5f5;
   border-radius: 20px;
-  /* display: flex;
-  flex-wrap: wrap; */
 }
 
 .numbering {
@@ -969,7 +954,6 @@ a {
   .topLeft {
     width: 80%;
     text-align: center;
-    /* margin-top: var(--margin-md); */
   }
 
   .topText {
@@ -993,7 +977,6 @@ a {
   }
 
   #topBookNow-btn {
-    /* margin-top: var(--margin-xl); */
     font-size: var(--font-size-md);
     width: 40%;
   }
@@ -1113,7 +1096,6 @@ a {
     margin-top: var(--margin-xl);
   }
   .rating-container {
-    /* flex-direction: column-reverse; */
     margin-top: 20rem !important;
     gap: 2rem;
   }
@@ -1232,7 +1214,6 @@ a {
 @media only screen and (min-width: 600px) and (max-width: 768px) {
   .topSec {
     flex-direction: column;
-    /* height: 90vh; */
   }
 
   .topLeft {

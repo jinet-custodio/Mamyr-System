@@ -16,7 +16,6 @@
 }
 
 .main-content {
-  /* border: 1px solid red; */
   margin-left: 23vw;
   margin-top: 5rem;
   margin: 3rem 0 0 20rem;
@@ -102,7 +101,6 @@
   text-align: center;
   width: 100%;
   margin: auto;
-  /* margin-top: 3vw !important; */
 }
 
 th {
@@ -121,10 +119,6 @@ table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
   padding: 0.5vw 0.6vw !important;
 }
-
-/* .btn {
-  padding: 0.5vw 0.8vw;
-} */
 
 td.dt-type-numeric {
   text-align: center !important;

@@ -16,7 +16,6 @@
 }
 
 .main-content {
-  /* border: 1px solid red; */
   margin-left: 290px;
   margin-top: 20vh;
   padding: 1rem;
@@ -128,19 +127,9 @@
   justify-content: center !important;
 }
 
-/* .swal2-confirm {
-  margin-right: 2vw !important;
-} */
 .swal2-title {
   font-size: 20px;
 }
-/* .swal2-icon-content {
-  font-size: 2rem !important;
-} */
-
-/* .swal2-popup {
-  padding: 0 !important;
-} */
 
 #confirmationBtn {
   font-size: clamp(1.4vw, 1.2vw, 1.1vw);

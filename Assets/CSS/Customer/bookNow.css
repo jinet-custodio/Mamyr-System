@@ -68,7 +68,6 @@ footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* margin-top: 5vw; */
 }
 
 .category-card {

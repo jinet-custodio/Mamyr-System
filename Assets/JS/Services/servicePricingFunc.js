@@ -88,9 +88,6 @@ function cancelEditServicePricing(cancelBtn) {
   const formControl = thisRow.querySelectorAll(".form-control");
   const formSelect = thisRow.querySelectorAll(".form-select");
   const editBtn = thisRow.querySelector(".editServicePricing");
-  // const cancelBtn = thisRow.querySelectorAll('.cancelResortService');
-  // const OriginalRatesValues = {};
-  // cancelBtn.forEach(btn => btn.disabled = false);
 
   formControl.forEach((element) => {
     if (element.type === "file") {

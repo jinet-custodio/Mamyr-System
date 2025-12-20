@@ -2,10 +2,6 @@
   font-family: "Poppins";
   src: url(../../Fonts/Poppins/Poppins-Regular.ttf);
 }
-/* @font-face {
-  font-family: "Plus Jakarta Sans";
-  src: url(../../Fonts/PlusJakartaSans/PlusJakartaSans-VariableFont_wght.ttf);
-} */
 
 @font-face {
   font-family: "Poppins Black";
@@ -21,7 +17,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: "Plus Jakarta Sans"; */
   text-decoration: none !important;
   list-style: none;
 }
@@ -78,11 +73,9 @@ body {
 .backArrowContainer img {
   width: 2vw;
   aspect-ratio: 1;
-  /* margin-top: 1vw; */
 }
 
 #serviceCategories {
-  /* border: none !important; */
   padding: var(--padding-lg);
   margin-top: var(--margin-md);
   margin-bottom: 2rem;
@@ -101,8 +94,6 @@ body {
 
 .category-card,
 .category-body {
-  /* margin: 2vw; */
-  /* border-radius: 2vw 2vw 2vw 2vw !important; */
   text-align: center;
 }
 
