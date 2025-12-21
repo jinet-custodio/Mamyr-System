@@ -36,6 +36,7 @@ $fieldsToShow = [
     ['key' => 'FBLink', 'label' => 'Facebook Link'],
     ['key' => 'Owner Full Name', 'label' => 'Owner Full Name'],
     ['key' => 'gcashNumber', 'label' => 'Gcash Number and Name'],
+    ['key' => 'TemporaryAdminPassword', 'label' => 'Temporary Admin Password'],
 ];
 
 ?>
@@ -53,6 +54,7 @@ $fieldsToShow = [
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         @font-face {
             font-family: "Poppins";
@@ -92,31 +94,48 @@ $fieldsToShow = [
                 $value = $contentMap[$key];
                 ?>
 
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6 mb-3">
                     <div class="p-3 border rounded shadow-sm bg-light">
 
-                        <!-- Custom Label -->
+                        <!-- Label -->
                         <label class="form-label fw-bold">
                             <?= htmlspecialchars($label) ?>
                         </label>
 
                         <?php if ($editMode): ?>
 
-                            <?php if (strlen($value) > 80): ?>
+                            <?php if ($key === 'TemporaryAdminPassword'): ?>
+                                <!-- PASSWORD FIELD WITH TOGGLE -->
+                                <div class="position-relative">
+                                    <input
+                                        type="password"
+                                        class="editable-input form-control admin-password"
+                                        data-title="<?= htmlspecialchars($key) ?>"
+                                        value="<?= htmlspecialchars($value) ?>"
+                                        id="<?= htmlspecialchars($key) ?>">
+
+                                    <i class="bx bxs-hide toggle-password"
+                                        style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
+                                </div>
+
+                            <?php elseif (strlen($value) > 80): ?>
                                 <textarea
                                     class="editable-input form-control"
                                     rows="4"
                                     data-title="<?= htmlspecialchars($key) ?>"><?= htmlspecialchars($value) ?></textarea>
+
                             <?php else: ?>
                                 <input
                                     type="text"
                                     class="editable-input form-control"
                                     data-title="<?= htmlspecialchars($key) ?>"
-                                    value="<?= htmlspecialchars($value) ?>">
+                                    value="<?= htmlspecialchars($value) ?>"
+                                    id="<?= htmlspecialchars($key) ?>">
                             <?php endif; ?>
 
                         <?php else: ?>
 
+                            <!-- VIEW MODE -->
                             <p class="mt-2">
                                 <?= nl2br(htmlspecialchars($value)) ?>
                             </p>
@@ -131,6 +150,8 @@ $fieldsToShow = [
         </div>
     </div>
 
+    <!-- Sweetalert2 Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Bootstrap Link -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
@@ -160,16 +181,44 @@ $fieldsToShow = [
                 })
                 .then(response => response.text())
                 .then(result => {
-                    alert("Changes saved successfully!");
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Saved!',
+                        text: 'Changes saved successfully!',
+                        confirmButtonColor: '#3085d6'
+                    });
+
                 })
                 .catch(err => {
-                    console.error(err);
-                    alert("Error saving changes.");
-                });
 
+                    console.error(err);
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error saving changes.',
+                        confirmButtonColor: '#d33'
+                    });
+
+                });
         });
     </script>
 
+    <script>
+        document.addEventListener('click', function(e) {
+
+            if (!e.target.classList.contains('toggle-password')) return;
+
+            const icon = e.target;
+            const input = icon.previousElementSibling;
+
+            input.type = input.type === 'password' ? 'text' : 'password';
+
+            icon.classList.toggle('bxs-hide');
+            icon.classList.toggle('bxs-show');
+        });
+    </script>
 </body>
 
 </html>
