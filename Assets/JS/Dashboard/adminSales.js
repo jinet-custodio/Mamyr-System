@@ -154,7 +154,6 @@ function filteredSales(selectedFilterValue) {
       });
     })
     .catch((error) => {
-      console.error("Error fetching sales data:", error);
       if (salesChart) {
         salesChart.destroy();
       }

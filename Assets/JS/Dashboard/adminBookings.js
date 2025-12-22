@@ -99,7 +99,6 @@ function filteredBookings(selectedFilterValue) {
           if (!groupedByType[type]) {
             groupedByType[type] = {};
           }
-          console.log(item);
           groupedByType[type] = dayLabels.map((day) => item[day] || 0);
         });
 
@@ -160,7 +159,6 @@ function filteredBookings(selectedFilterValue) {
       });
     })
     .catch((error) => {
-      console.error("Error fetching bookings data:", error);
       if (bookingsChart) {
         bookingsChart.destroy();
       }

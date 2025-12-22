@@ -210,6 +210,7 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
         if (isset($insertIntoService)) $insertIntoService->close();
     }
 } elseif (isset($_POST['addFoodItem'])) { //* Catering Food
+    // error_log(print_r($_POST, true));
     $foodName = mysqli_real_escape_string($conn, $_POST['foodName']) ?? '';
     $foodCategory = ucfirst(mysqli_real_escape_string($conn, $_POST['foodCategory'])) ?? '';
     $foodAvailability = intval($_POST['foodAvailability']) ?? 1;
@@ -242,7 +243,6 @@ if (isset($_POST['addResortService'])) { //*Resort Amenities
         error_log("Error: " . $insertServicePricingQuery->error);
         header("Location: ../../../../../Pages/Admin/services.php?page=servicePrice&result=error");
     }
-
     header("Location: ../../../../../Pages/Admin/services.php?page=servicePrice&result=added");
 } else {
     header("Location: ../../../../../Pages/Admin/services.php?result=error");

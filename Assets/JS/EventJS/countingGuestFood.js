@@ -3,7 +3,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const eventVenueInput = document.getElementById("eventVenue");
   const bookNowBtn = document.getElementById("bookNowBtn");
 
-  // let isFoodSelectionValid = true;
   let isGuestCountValid;
 
   let guestNoValue = parseInt(guestNoInput.value, 10);

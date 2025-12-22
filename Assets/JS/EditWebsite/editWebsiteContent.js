@@ -8,7 +8,6 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
       const editableImages = document.querySelectorAll(".editable-img");
 
       if (editableImages.length === 0) {
-        console.log("No editable images found — skipping image save.");
         return;
       }
 
@@ -18,8 +17,6 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
 
       if (hasModifiedImages) {
         saveEditableImages();
-      } else {
-        console.log("No image changes detected — skipping image save.");
       }
     });
 
@@ -135,7 +132,6 @@ export function initWebsiteEditor(sectionName, endpointUrl) {
         })
           .then((res) => res.json())
           .then((response) => {
-            console.log("Full Response:", response);
             if (response.success) {
               // Reset change tracking
               img.dataset.alttextChanged = "false";
