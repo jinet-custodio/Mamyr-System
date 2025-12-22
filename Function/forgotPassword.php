@@ -11,16 +11,16 @@ require_once 'emailSenderFunction.php';
 $isVerified = 2;
 
 if (isset($_POST['verify_email'])) {
-  $email = mysqli_real_escape_string($conn, $_POST['email']);
-
-  $emailQuery = $conn->prepare("SELECT * FROM user WHERE email = ?");
+  $email = trim($_POST['email']);
+  $minutes = 0;
+  $emailQuery = $conn->prepare("SELECT userStatusID, userOTP, OTP_expiration_at, firstName FROM user WHERE email = ?");
   $emailQuery->bind_param('s', $email);
   $emailQuery->execute();
   $result = $emailQuery->get_result();
   if ($result->num_rows > 0) {
     $storedData = $result->fetch_assoc();
     $statusID = intval($storedData['userStatusID']);
-
+    $firstName = trim($storedData['firstName']);
     $userOTP = trim($storedData['userOTP']);
     $OTP_expiration_at = trim($storedData['OTP_expiration_at']);
     $allowed = false;
@@ -30,14 +30,11 @@ if (isset($_POST['verify_email'])) {
       $expirationAt = new DateTime($OTP_expiration_at);
       $now = new DateTime();
 
-      if ($expirationAt->format('Y-m-d') === $now->format('Y-m-d')) {
-
-        if ($now >= $expirationAt) {
-          $allowed = true;
-        } else {
-          $interval = $now->diff($expirationAt);
-          $minutes = ($interval->h * 60) + $interval->i;
-        }
+      if ($now >= $expirationAt) {
+        $allowed = true;
+      } else {
+        $interval = $now->diff($expirationAt);
+        $minutes = ($interval->h * 60) + $interval->i;
       }
     }
 
@@ -159,7 +156,7 @@ if (isset($_POST['changePassword'])) {
     $storedData = $result->fetch_assoc();
     if ($password == $confirm_password) {
       $hashpassword = password_hash($password, PASSWORD_DEFAULT);
-      $updatePassword = $conn->prepare("UPDATE user SET password = ? WHERE email = ?");
+      $updatePassword = $conn->prepare("UPDATE user SET password = ?,userOTP = NULL, OTP_expiration_at = NULL WHERE email = ?");
       $updatePassword->bind_param("ss", $hashpassword, $email);
       if ($updatePassword->execute()) {
         unset($_SESSION['email']);

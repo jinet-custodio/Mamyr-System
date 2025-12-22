@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Manila');
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
-
+require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 
@@ -129,6 +129,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
     }
 
     if (isset($_POST['eventBN'])) {
+
+        if (!canUserBook($conn, $userID)) {
+            header("Location: ../../bookNow.php?action=notAllowed");
+        }
 
         $_SESSION['eventFormData'] = $_POST;
         $eventType = mysqli_real_escape_string($conn, $_POST['eventType']);

@@ -9,22 +9,18 @@ $userID = (int) $_SESSION['userID'];
 $env = parse_ini_file(__DIR__ . '/../../../.env');
 require __DIR__ . '/../../../vendor/autoload.php';
 require '../../emailSenderFunction.php';
-
-// $informationName = 'Email';
-// $getBusinessEmail = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
-// $getBusinessEmail->bind_param("s", $informationName);
-// $getBusinessEmail->execute();
-
-// $result = $getBusinessEmail->get_result();
-// if ($result->num_rows > 0) {
-//     $row = $result->fetch_assoc();
-//     $businessEmail = $row['resortInfoDetail'] ?? '';
-// } else {
-//     $businessEmail = 'mamyresort128@gmail.com';
-// }
-
-$businessEmail = 'sgregorio.0020@gmail.com';
-
+$adminEmails = [];
+$getAdminEmailQuery = $conn->prepare("SELECT a.userID, u.email 
+                                FROM admin a 
+                                LEFT JOIN user u ON a.userID = u.userID
+                                ");
+$getAdminEmailQuery->execute();
+$adminEmailResult = $getAdminEmailQuery->get_result();
+if ($adminEmailResult->num_rows > 0) {
+    while ($row = $adminEmailResult->fetch_assoc()) {
+        $adminEmails[] = $row['email'];
+    }
+}
 
 if (isset($_POST['submitDownpaymentImage'])) {
     $bookingID = (int) $_POST['bookingID'];
@@ -323,9 +319,13 @@ if (isset($_POST['submitDownpaymentImage'])) {
         $subject = "New Payment Received for $bookingCode";
 
         $isSend =  false;
-        if (sendEmail($businessEmail, 'Mamyr Admin', $subject, $email_message, $env)) {
-            $isSend = true;
+        foreach ($adminEmails as $email) {
+            $email = trim($email);
+            if (sendEmail($email, 'Mamyr Admin', $subject, $email_message, $env)) {
+                $isSend = true;
+            }
         }
+
 
         if (!$isSend) {
             $conn->rollback();

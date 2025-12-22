@@ -65,6 +65,8 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 unset($_SESSION['hotelFormData']);
 unset($_SESSION['resortFormData']);
 unset($_SESSION['eventFormData']);
+
+require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
 ?>
 
 <!DOCTYPE html>
@@ -303,13 +305,18 @@ unset($_SESSION['eventFormData']);
                     window.location.href = '../Account/bookingHistory.php';
                 }
             });
-        }
-
-        if (paramValue === 'phoneAdded') {
+        } else if (paramValue === 'phoneAdded') {
             Toast.fire({
                 text: "Your phone number has been submitted successfully. You may now proceed with booking.",
                 icon: "success"
             })
+        } else if (paramValue === 'notAllowed') {
+            Swal.fire({
+                title: 'Oops! Booking Unavailable!',
+                icon: 'info',
+                text: 'You have an active booking. You can only book a new event once your current one is done.',
+                confirmButtonText: 'Okay, thanks!'
+            });
         }
 
         if (paramValue) {
@@ -318,6 +325,21 @@ unset($_SESSION['eventFormData']);
             history.replaceState({}, document.title, url.toString());
         };
     </script>
+
+    <?php
+    if (!canUserBook($conn, $userID)) {
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Oops! Booking Unavailable!',
+                icon: 'info',
+                text: 'You have an active booking. You can only book a new event once your current one is done.',
+                confirmButtonText: 'Okay, thanks!'
+            });
+        </script>
+    <?php
+    }
+    ?>
 
 
     <!-- For checking the phone Number -->

@@ -12,6 +12,7 @@ if (isset($_POST['cancelBooking'])) {
     $bookingType = mysqli_real_escape_string($conn, $_POST['bookingType']);
     $cancellationReason = intval($_POST['cancellation-reason']);
     $otherReason = !empty($_POST['other-cancellation-reason']) ? mysqli_real_escape_string($conn, $_POST['other-cancellation-reason']) : 'N/A';
+    $conn->begin_transaction();
     try {
 
         $expiresAt = null;
@@ -34,17 +35,23 @@ if (isset($_POST['cancelBooking'])) {
         }
 
         //Check if booking exist
-        $checkBooking = $conn->prepare("SELECT *  FROM booking  WHERE bookingID = ? AND userID = ?");
+        $checkBooking = $conn->prepare("SELECT * FROM booking  WHERE bookingID = ? AND userID = ?");
         $checkBooking->bind_param("ii", $bookingID,  $userID);
         if (!$checkBooking->execute()) {
+            $conn->rollback();
             throw new Exception('Error ' . $checkBooking->error);
         }
 
         $resultBooking = $checkBooking->get_result();
         if ($resultBooking->num_rows === 0) {
+            $conn->rollback();
             error_log("Booking not found or doesn't match status/user. bookingID" . $bookingID . "userID:" . $userID);
             header("Location: ../../Pages/Account/bookingHistory.php?action=Error2");
             exit();
+        } else {
+            $row = $resultBooking->fetch_assoc();
+            $bookingCode = $row['bookingCode'];
+            $bookingType = $row['bookingType'];
         }
 
         $cancelledStatus = getStatuses($conn, 4);
@@ -57,6 +64,7 @@ if (isset($_POST['cancelBooking'])) {
         $insertCancellationReason = $conn->prepare("INSERT INTO `booking_cancellation`(`bookingID`, `userID`, `reasonID`, `otherReason`) VALUES (?,?,?,?)");
         $insertCancellationReason->bind_param('iiis', $bookingID, $userID, $cancellationReason, $otherReason);
         if (!$insertCancellationReason->execute()) {
+            $conn->rollback();
             error_log("Failed Adding Cancellation Reason" . $bookingID . "userID:" . $userID);
             header("Location: ../../Pages/Account/bookingHistory.php?action=Error3");
             exit();
@@ -64,25 +72,28 @@ if (isset($_POST['cancelBooking'])) {
 
         $resultBooking->free();
         $checkBooking->close();
-    } catch (Exception $e) {
-        error_log('Error' . $e->getMessage());
-        exit();
-    }
 
+        if ($cancelBooking->execute()) {
 
-    if ($cancelBooking->execute()) {
-
-        $receiver = 'Admin';
-        $message = 'A customer has cancelled a' . strtolower($bookingType) . ' booking.';
-        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, senderID, message, receiver)
+            $receiver = 'Admin';
+            $message = '<strong>#' .  $bookingCode . ' </strong><br>A customer has cancelled a' . strtolower($bookingType) . ' booking.';
+            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, senderID, message, receiver)
             VALUES(?,?,?,?)");
-        $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
-        $insertBookingNotificationRequest->execute();
-        header("Location: ../../Pages/Account/bookingHistory.php?action=Cancelled");
-        $cancelBooking->close();
-        exit();
-    } else {
-        header("Location: ../../Pages/Account/bookingHistory.php?action=Error3");
+            $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
+            $insertBookingNotificationRequest->execute();
+            header("Location: ../../Pages/Account/bookingHistory.php?action=Cancelled");
+            $cancelBooking->close();
+
+            $conn->commit();
+            exit();
+        } else {
+            $conn->rollback();
+            header("Location: ../../Pages/Account/bookingHistory.php?action=Error3");
+            exit();
+        }
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log('Error' . $e->getMessage());
         exit();
     }
 } else {

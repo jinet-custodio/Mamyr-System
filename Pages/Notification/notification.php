@@ -181,12 +181,16 @@
                     });
             });
         });
+
         const userIDInput = document.getElementById('userID');
+        const receiverInput = document.getElementById('receiver');
         const userID = userIDInput.value;
+        const receiver = receiverInput.value;
         document.getElementById('markAllRead').addEventListener('click', () => {
-            fetch(`../../Function/Notification/updateNotification.php?id=${encodeURIComponent(userID)}`).then(
+            fetch(`../../Function/Notification/updateNotification.php?id=${encodeURIComponent(userID)}&receiver=${encodeURIComponent(receiver)}`).then(
                     response => response.json())
                 .then(data => {
+                    const notificationBadge = document.getElementById('notification-count');
                     if (data.success) {
                         document.querySelectorAll('.notification-item').forEach(el => el.classList.add('read'));
                         notificationBadge.remove();

@@ -559,12 +559,12 @@ if ($role === "Admin") {
                         <div class="modal-body" id="approveModalBody">
                             <div class="amount-balance">
                                 <div class="input-container">
-                                    <label for="finalBill">Total Amount</label>
+                                    <label for="finalBill">Total Amount (₱)</label>
                                     <input type="text" class="form-control" id="approved-finalBill"
                                         value="<?= $finalBill ?>" readonly>
                                 </div>
                                 <div class="input-container">
-                                    <label for="balance">Customer Balance</label>
+                                    <label for="balance">Customer Balance (₱)</label>
                                     <input type="text" class="form-control approveModalForm"
                                         value="<?= $userBalance  ?>" readonly>
                                 </div>
@@ -725,12 +725,16 @@ if ($role === "Admin") {
                             <div class="display-container d-flex gap-3 justify-content-center">
                                 <div class="input-container">
                                     <label for="finalBill">Total Amount</label>
-                                    <input type="text" class="form-control" id="add-payment-finalBill"
+                                    <input type="text" class="form-control"
+                                        value="₱<?= number_format($finalBill, 2) ?>" readonly>
+                                    <input type="hidden" class="form-control" id="add-payment-finalBill"
                                         value="<?= $finalBill ?>" readonly>
                                 </div>
                                 <div class="input-container">
                                     <label for="balance">Customer Balance</label>
-                                    <input type="text" class="form-control" id="addModal-customer-balance"
+                                    <input type="text" class="form-control"
+                                        value="₱<?= number_format($userBalance, 2) ?>" readonly>
+                                    <input type="hidden" class="form-control" id="addModal-customer-balance"
                                         value="<?= $userBalance ?>" readonly>
                                 </div>
                             </div>
@@ -920,17 +924,17 @@ if ($role === "Admin") {
                             <div id="summaryContainer" class="border-top pt-3">
                                 <h6 class="fw-bold mb-1">Summary</h6>
 
-                                <p>Customer Payment: ₱<span id="summary-add-payment">0.00</span></p>
+                                <p>Customer Payment: <span id="summary-add-payment">0.00</span></p>
                                 <div id="additionalSummary" class="mt-2">
                                     <h6 class="fw-semibold">Additional Charges</h6>
                                     <ul class="list-group mb-1" id="additional-charges-list">
                                     </ul>
-                                    <p>Total Additional Charges: ₱<span id="total-additional-charges">0.00</span></p>
+                                    <p>Total Additional Charges: <span id="total-additional-charges">0.00</span></p>
                                 </div>
 
                                 <hr>
-                                <p><strong>Total Balance: ₱<span id="summary-balance">0.00</span></strong></p>
-                                <p><strong>Final Bill: ₱<span id="summary-total-amount">0.00</span></strong></p>
+                                <p><strong>Total Balance: <span id="summary-balance">0.00</span></strong></p>
+                                <p><strong>Final Bill: <span id="summary-total-amount">0.00</span></strong></p>
                                 <input type="hidden" id="new-balance" name="new-balance" value="">
                                 <input type="hidden" id="new-bill" name="new-bill" value="">
                                 <input type="hidden" id="additional-charge" name="additional-charge" value="">
@@ -953,6 +957,15 @@ if ($role === "Admin") {
     <!-- Bootstrap JS -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
+    <!-- Currency Formatter -->
+    <script>
+        let currencyFormat = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'PHP',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })
+    </script>
 
     <!-- Hiding Buttons -->
     <script>
@@ -1109,10 +1122,11 @@ if ($role === "Admin") {
             }
         });
     </script>
+
     <!-- For Add Payment Modal -->
     <script>
         function toggleAdditionalInput() {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
             var additionalInputs = document.querySelectorAll('.additional-input');
 
             additionalInputs.forEach(function(input) {
@@ -1202,7 +1216,7 @@ if ($role === "Admin") {
 
                 const li = document.createElement('li');
 
-                li.textContent = `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${parseFloat(properties.amount) || 0}`;
+                li.textContent = `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${currencyFormat.format(properties.amount) || 0}`;
                 additionalChargesTotal += parseFloat(properties.amount) || 0;
 
                 chargesList.appendChild(li);
@@ -1212,10 +1226,10 @@ if ($role === "Admin") {
             const totalBill = finalBillValue + additionalChargesTotal;
             const totalBalance = (customerBalanceValue + additionalChargesTotal) - customerPaymentValue;
             //Summary display
-            document.getElementById('summary-add-payment').textContent = customerPaymentValue.toFixed(2);
-            document.getElementById('total-additional-charges').textContent = additionalChargesTotal.toFixed(2);
-            document.getElementById('summary-balance').textContent = totalBalance.toFixed(2);
-            document.getElementById('summary-total-amount').textContent = totalBill.toFixed(2);
+            document.getElementById('summary-add-payment').textContent = currencyFormat.format(customerPaymentValue);
+            document.getElementById('total-additional-charges').textContent = currencyFormat.format(additionalChargesTotal);
+            document.getElementById('summary-balance').textContent = currencyFormat.format(totalBalance);
+            document.getElementById('summary-total-amount').textContent = currencyFormat.format(totalBill);
 
             finalBillInput.value = totalBill;
             balanceInput.value = totalBalance;

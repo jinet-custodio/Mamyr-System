@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Manila');
 session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
-
+require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
 //for setting image paths in 'include' statements
@@ -723,6 +723,21 @@ while ($row = $contentResult->fetch_assoc()) {
             </script>
         <?php endif; ?>
     <?php endif; ?>
+
+    <?php
+    if (!canUserBook($conn, $userID)) {
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Oops! Booking Unavailable!',
+                icon: 'info',
+                text: 'You have an active booking. You can only book a new event once your current one is done.',
+                confirmButtonText: 'Okay, thanks!'
+            });
+        </script>
+    <?php
+    }
+    ?>
 
 </body>
 

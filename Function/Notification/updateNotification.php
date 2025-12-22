@@ -3,11 +3,17 @@
 require '../../Config/dbcon.php';
 
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) && isset($_GET['receiver'])) {
     $userID = (int) $_GET['id'];
+    $receiver = strtolower($_GET['receiver']);
     $isRead = true;
-    $markAsRead = $conn->prepare("UPDATE notification SET is_read = ? WHERE receiverID = ?");
-    $markAsRead->bind_param('ii', $isRead, $userID);
+    if ($receiver === 'admin') {
+        $markAsRead = $conn->prepare("UPDATE notification SET is_read = ? WHERE receiver = ?");
+        $markAsRead->bind_param('is', $isRead, $receiver);
+    } else {
+        $markAsRead = $conn->prepare("UPDATE notification SET is_read = ? WHERE receiverID = ?");
+        $markAsRead->bind_param('ii', $isRead, $userID);
+    }
 
     if (!$markAsRead->execute()) {
         error_log("Execution of marking all as read failed. " . $markAsRead->error);

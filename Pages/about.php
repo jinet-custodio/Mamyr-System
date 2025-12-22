@@ -112,12 +112,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="topPicContainer">
             <?php if (isset($imageMap['AboutMamyr'])): ?>
                 <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
-                    $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                    $imagePath = "../Assets/Images//" . $img['imageData'];
                     $defaultImage = "../Assets/Images/no-picture.png";
                     $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                     <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($img['altText']) ?>" class="editable-img resortPic"
                         style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editImageModal"
-                        data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                        data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="AboutImages"
                         data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                         data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                 <?php endforeach; ?>
@@ -164,11 +164,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="resortContainer">
                 <?php if (isset($imageMap['Service1Desc'])): ?>
                     <?php foreach ($imageMap['Service1Desc'] as $index => $img):
-                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $imagePath = "../Assets/Images/AboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img resortIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="AboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
 
@@ -196,12 +196,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="eventContainer">
                 <?php if (isset($imageMap['Service2Desc'])): ?>
                     <?php foreach ($imageMap['Service2Desc'] as $index => $img):
-                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $imagePath = "../Assets/Images/AboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img eventIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="AboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -227,11 +227,11 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="hotelContainer">
                 <?php if (isset($imageMap['Service3Desc'])): ?>
                     <?php foreach ($imageMap['Service3Desc'] as $index => $img):
-                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $imagePath = "../Assets/Images/AboutImages/" . $img['imageData'];
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img hotelIcon mx-auto" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="AboutImages"
                             data-imagepath="<?= htmlspecialchars($img['imageData']) ?>"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
 
@@ -329,12 +329,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="firstImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph2'])): ?>
                     <?php foreach ($imageMap['HistoryParagraph2'] as $index => $img):
-                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $imagePath = "../Assets/Images/AboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.jpg";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img firstParagraphPhoto" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="AboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -345,12 +345,12 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="thirdImageContainer">
                 <?php if (isset($imageMap['HistoryParagraph4'])): ?>
                     <?php foreach ($imageMap['HistoryParagraph4'] as $index => $img):
-                        $imagePath = "../Assets/Images/aboutImages/" . $img['imageData'];
+                        $imagePath = "../Assets/Images/AboutImages/" . $img['imageData'];
                         $defaultImage = "../Assets/Images/no-picture.png";
                         $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                         <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
                             class="editable-img thirdParagraphPhoto" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="aboutImages"
+                            data-bs-target="#editImageModal" data-wcimageid="<?= $img['WCImageID'] ?>" data-folder="AboutImages"
                             data-alttext="<?= htmlspecialchars($img['altText']) ?>">
                     <?php endforeach; ?>
                 <?php else: ?>

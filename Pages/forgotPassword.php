@@ -41,7 +41,7 @@ if (isset($_SESSION['action'])) {
     <div class="container">
 
         <div class="form-box forgotPassword">
-            <form action="../Function/forgotPassword.php" method="POST">
+            <form action="../Function/forgotPassword.php" method="POST" id="form">
                 <h1 class="container-title">Forgot Password</h1>
                 <div class="errorMessageBox">
                     <div class="errorMsg" id="errorMsg">
@@ -72,7 +72,7 @@ if (isset($_SESSION['action'])) {
                 </div>
                 <div class="errorMsg" id="passwordMatch"></div>
 
-                <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword" disabled>Change Password</button>
+                <button type="submit" class="btn btn-primary" id="changePassword" name="changePassword">Change Password</button>
             </form>
         </div>
     </div>
@@ -81,6 +81,8 @@ if (isset($_SESSION['action'])) {
     <!-- Bootstrap Script -->
     <script src="../../Assets/JS/bootstrap.bundle.min.js"></script>
 
+    <!-- Sweetalert Link -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Password Validation Script -->
     <script src="../Assets/JS/passwordValidation.js"></script>
@@ -120,7 +122,7 @@ if (isset($_SESSION['action'])) {
         document.addEventListener('DOMContentLoaded', function() {
             const errorMessage = document.getElementById('errorMsg');
 
-            form.addEventListener('submit', function(e) {
+            document.getElementById('form').addEventListener('submit', function(e) {
                 if (!errorMessage === "") {
                     e.preventDefault();
                     loaderOverlay.style.display = 'none';
