@@ -148,7 +148,6 @@ function filteredPayments(selectedFilter) {
       });
     })
     .catch((error) => {
-      console.error("Error fetching payments data:", error);
       if (paymentsChart) {
         paymentsChart.destroy();
       }

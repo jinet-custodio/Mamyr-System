@@ -1,3 +1,15 @@
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
+
 const originalPriceValues = {};
 
 function editServicePricing(editBtn) {
@@ -67,9 +79,8 @@ function editServicePricing(editBtn) {
           editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>Edit';
           cancelBtn.innerHTML = '<i class="fa-solid fa-delete-left"></i>Cancel';
           cancelBtn.disabled = true;
-          Swal.fire({
-            title: "Success",
-            text: `${response.message}`,
+          Toast.fire({
+            title: `${response.message}`,
             icon: "success",
           });
         } else {

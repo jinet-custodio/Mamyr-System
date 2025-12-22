@@ -1362,6 +1362,12 @@ if ($result->num_rows > 0) {
                     icon: 'success'
                 })
                 break;
+            case 'menuAdded':
+                Toast.fire({
+                    title: 'Catering food was added successfully',
+                    icon: 'success'
+                })
+                break;
         }
 
 
