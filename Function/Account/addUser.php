@@ -20,7 +20,17 @@ if (isset($_POST['createAccount'])) {
     $address = mysqli_real_escape_string($conn, $_POST['address']) ?? 'Not Stated';
     $birthday = mysqli_real_escape_string($conn, $_POST['birthday']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $temporaryPassword = 'admin@mamyr_25';
+    $temporaryPassword = '';
+    $resortInfoName = 'Temporary  Admin Password';
+    $getDefaultAdminPassword = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
+    $getDefaultAdminPassword->bind_param("s", $resortInfoName);
+    if ($getDefaultAdminPassword->execute()) {
+        $result = $getDefaultAdminPassword->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $temporaryPassword = trim($row['resortInfoDetail']);
+        }
+    }
     $hash_password = password_hash($temporaryPassword, PASSWORD_DEFAULT);
 
     if ($role = "admin") {

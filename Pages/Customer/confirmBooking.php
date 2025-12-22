@@ -9,6 +9,7 @@ session_start();
 require_once '../../Function/sessionFunction.php';
 checkSessionTimeout();
 
+require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
 
 $userID = $_SESSION['userID'];
 $userRole = $_SESSION['userRole'];
@@ -140,6 +141,11 @@ unset($_SESSION['formData']);
     $roomChoices = [];
     $entertainmentChoices = [];
     if (isset($_POST['bookRates'])) {
+
+        if (!canUserBook($conn, $userID)) {
+            header("Location:  bookNow.php?action=notAllowed");
+        }
+
         $scheduledDate = mysqli_real_escape_string($conn, $_POST['resortBookingDate']);
         $tourSelections = mysqli_real_escape_string($conn, $_POST['tourSelections']);
 

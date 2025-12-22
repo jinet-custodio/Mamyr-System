@@ -370,12 +370,12 @@ if (isset($_POST['bookRates'])) {
                                         </p>
                                         <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking &mdash; '
                 . $tourType . '</strong></p>
-                                                                                        <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($totalCost, 2) .
+                                                                                                                            <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($totalCost, 2) .
                 '</strong></p>
 
-                                                                                        <p style="font-size: 14px;">
-                                                                                            <strong>To confirm your reservation</strong>, a <strong>downpayment</strong> of
-                                                                                            ₱' .
+                                                                                                                            <p style="font-size: 14px;">
+                                                                                                                                <strong>To confirm your reservation</strong>, a <strong>downpayment</strong> of
+                                                                                                                                ₱' .
                 number_format($downpayment, 2) .
                 ' must
                                             be paid within <strong>24 hours</strong>.

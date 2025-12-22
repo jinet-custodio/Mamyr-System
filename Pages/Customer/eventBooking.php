@@ -11,6 +11,8 @@ $userRole = $_SESSION['userRole'];
 //for setting image paths in 'include' statements
 $baseURL = '../..';
 
+require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
+
 //for edit website, this will enable edit mode from the iframe
 $editMode = isset($_SESSION['edit_mode']) && $_SESSION['edit_mode'] === true;
 switch ($userRole) {
@@ -1388,6 +1390,22 @@ $listItems = explode("\n", $contentMap['foodInclusions']);
             </script>
         <?php endif; ?>
     <?php endif; ?>
+
+
+    <?php
+    if (!canUserBook($conn, $userID)) {
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Oops! Booking Unavailable!',
+                icon: 'info',
+                text: 'You have an active booking. You can only book a new event once your current one is done.',
+                confirmButtonText: 'Okay, thanks!'
+            });
+        </script>
+    <?php
+    }
+    ?>
 </body>
 
 </html>

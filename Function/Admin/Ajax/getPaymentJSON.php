@@ -222,6 +222,7 @@ if (isset($_GET['filter'])):
             ]
         );
     } catch (Exception $e) {
+        error_log($e->getMessage());
         echo json_encode([
             'success' => false,
             'message' => 'Unexpected server error. Please try again later.'

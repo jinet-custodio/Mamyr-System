@@ -65,6 +65,9 @@ if ($result->num_rows > 0) {
 
 //Approve Button is Click
 if (isset($_POST['approveBtn'])) {
+
+    error_log(print_r($_POST, true));
+
     $bookingID = (int) $_POST['bookingID'];
     $userRoleID = (int) $_POST['userRoleID'];
     $customerID = (int) $_POST['customerID'];
@@ -81,7 +84,7 @@ if (isset($_POST['approveBtn'])) {
     $endDate = mysqli_real_escape_string($conn, $_POST['endDate']);
     $discountAmount = (float) $_POST['discountAmount'];
 
-    $finalBill = mysqli_real_escape_string($conn, $_POST['finalBill']);
+    $finalBill = trim($_POST['finalBill']);
     $downpayment = $finalBill * .3;
 
     $bookingCode = mysqli_real_escape_string($conn, $_POST['bookingCode']);
@@ -276,7 +279,7 @@ if (isset($_POST['approveBtn'])) {
             throw new Exception('Failed Sending Email');
         }
 
-        $conn->commit();
+        // $conn->commit();
         $updateStatus->close();
         $insertConfirmed->close();
         $insertNotification->close();

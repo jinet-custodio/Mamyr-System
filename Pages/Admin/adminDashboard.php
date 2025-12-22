@@ -179,7 +179,18 @@ if ($result->num_rows > 0) {
     <main class="dashboard-container" id="main">
 
         <?php
-        $temporaryPassword = 'admin@mamyr_25';
+        $temporaryPassword = '';
+        $resortInfoName = 'Temporary  Admin Password';
+        $getDefaultAdminPassword = $conn->prepare("SELECT resortInfoDetail FROM resortinfo WHERE resortInfoName = ?");
+        $getDefaultAdminPassword->bind_param("s", $resortInfoName);
+        if ($getDefaultAdminPassword->execute()) {
+            $result = $getDefaultAdminPassword->get_result();
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $temporaryPassword = trim($row['resortInfoDetail']);
+            }
+        }
+
         $changePassword = false;
         $getAdminPassword = $conn->prepare("SELECT password, email, firstName FROM user WHERE userID = ?");
         $getAdminPassword->bind_param('i', $userID);
@@ -987,6 +998,7 @@ if ($result->num_rows > 0) {
                     icon: 'success',
                     title: 'Password Change Successfully'
                 });
+                break;
             case 'passwordNotSame':
                 Swal.fire({
                     icon: "error",
@@ -1006,6 +1018,12 @@ if ($result->num_rows > 0) {
 
 
         if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        }
+
+        if (modal === 'successPassword') {
             const url = new URL(window.location);
             url.search = '';
             history.replaceState({}, document.title, url.toString());

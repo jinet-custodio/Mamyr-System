@@ -131,7 +131,7 @@ switch ($userRole) {
             $imageData = $data['userProfile'];
             $finfo = new finfo(FILEINFO_MIME_TYPE);
             $mimeType = $finfo->buffer($imageData);
-            $userProfile = 'data:' . $mime_type . ';base64,' . base64_encode($imageData);
+            $userProfile = 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
 
             if (!empty($phoneNumber)) {
                 $phoneNumber;
@@ -612,14 +612,18 @@ switch ($userRole) {
                                     <?php if (!empty($foodList)) { ?>
                                         <div class="mb-3">
                                             <label class="form-label">Original Food Price (₱)</label>
-                                            <input type="text" class="form-control" id="foodPrice" name="foodPrice"
+                                            <input type="text" class="form-control"
+                                                value="₱<?= number_format($foodPriceTotal, 2) ?>" readonly>
+                                            <input type="hidden" class="form-control" id="foodPrice" name="foodPrice"
                                                 value="<?= $foodPriceTotal ?>" readonly>
                                         </div>
                                     <?php } ?>
 
                                     <div class="mb-3">
                                         <label class="form-label">Original Bill (₱)</label>
-                                        <input type="text" class="form-control" id="originalBill"
+                                        <input type="text" class="form-control"
+                                            value="₱<?= number_format($finalBill, 2) ?>" readonly>
+                                        <input type="hidden" class="form-control" id="originalBill"
                                             value="<?= $finalBill ?>" readonly>
                                     </div>
                                 </div>
@@ -635,7 +639,9 @@ switch ($userRole) {
                                                     Same as original
                                                 </label>
                                             </div>
-                                            <input type="text" class="form-control" id="newFoodPrice" name="newFoodPrice"
+                                            <input type="text" class="form-control" id="displayFoodPrice"
+                                                placeholder="e.g 10000">
+                                            <input type="hidden" class="form-control" id="newFoodPrice" name="newFoodPrice"
                                                 placeholder="e.g 10000">
                                         </div>
                                     <?php } else { ?>
@@ -669,15 +675,15 @@ switch ($userRole) {
                                 <!-- Summary Section -->
                                 <div id="summaryContainer">
                                     <h6 class="fw-bold">Summary</h6>
-                                    <p>Food Price: ₱<?= $foodPriceTotal ?> -> <strong> ₱<span
+                                    <p>Food Price: ₱<?= number_format($foodPriceTotal, 2) ?> -> <strong> <span
                                                 id="summaryUpdatedFoodPrice">0.00</span></p> </strong>
                                     <?php if (empty($foodList)) { ?>
-                                        <p>Total Amount: ₱<?= $finalBill ?> -> <strong> ₱<span
+                                        <p>Total Amount: ₱<?= $finalBill ?> -> <strong> <span
                                                     id="summaryUpdatedTotalAmount">0.00</span></p> </strong>
                                     <?php } ?>
-                                    <p>Discount: ₱<span id="summaryDiscount">0.00</span></p>
+                                    <p>Discount: <span id="summaryDiscount">0.00</span></p>
                                     <hr>
-                                    <p><strong>Final Bill: ₱<span id="summaryFinalBill">0.00</span></strong></p>
+                                    <p><strong>Final Bill: <span id="summaryFinalBill">0.00</span></strong></p>
                                     <input type="hidden" id="finalBill" name="finalBill" value="">
                                 </div>
 
@@ -730,12 +736,16 @@ switch ($userRole) {
                                 <div class="original-info-container">
                                     <div class="input-container">
                                         <label for="finalBillValue">Total Amount:</label>
-                                        <input type="text" id="finalBillValue" value="<?= $finalBill ?>" readonly
+                                        <input type="text" value="₱<?= number_format($finalBill) ?>" readonly
+                                            class="form-control">
+                                        <input type="hidden" id="finalBillValue" value="<?= $finalBill ?>" readonly
                                             class="form-control">
                                     </div>
                                     <div class="input-container">
                                         <label for="additionalChargeValue">Additional Charge:</label>
-                                        <input type="text" id="additionalChargeValue" value="<?= $additionalCharge ?>"
+                                        <input type="text" value="₱<?= number_format($additionalCharge, 2) ?>"
+                                            readonly class="form-control">
+                                        <input type="hidden" id="additionalChargeValue" value="<?= $additionalCharge ?>"
                                             readonly class="form-control">
                                     </div>
                                 </div>
@@ -960,12 +970,12 @@ switch ($userRole) {
                                         <h6 class="fw-semibold">Additional Charges</h6>
                                         <ul class="list-group mb-1" id="additional-charges-list">
                                         </ul>
-                                        <p>Total Additional Charges: ₱<span id="total-additional-charges">0.00</span>
+                                        <p>Total Additional Charges: <span id="total-additional-charges">0.00</span>
                                         </p>
                                     </div>
 
                                     <hr>
-                                    <p><strong>Final Bill: ₱<span id="summary-total-amount">0.00</span></strong></p>
+                                    <p><strong>Final Bill: <span id="summary-total-amount">0.00</span></strong></p>
                                     <input type="hidden" id="new-bill" name="new-bill" value="">
                                     <input type="hidden" id="additional-charge" name="additional-charge" value="">
                                 </div>
@@ -1319,6 +1329,16 @@ switch ($userRole) {
     <!-- Flatpickr for date input -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <!-- Currency Formatter -->
+    <script>
+        let currencyFormat = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'PHP',
+                    minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                })
+    </script>
+
 
     <!-- Flatpickr -->
     <script>
@@ -1404,13 +1424,11 @@ switch ($userRole) {
                         discountValue;
                 }
 
-                // const
-
                 finalBill.value = totalOriginalBill.toFixed(2);
-                if (summaryFinalBill) summaryFinalBill.textContent = totalOriginalBill.toFixed(2);
-                if (updatedFoodPrice) updatedFoodPrice.textContent = newFoodPriceValue.toFixed(2);
-                if (updatedTotalAmount) updatedTotalAmount.textContent = baseAmountValue.toFixed(2);
-                if (discountSummary) discountSummary.textContent = discountValue.toFixed(2);
+                if (summaryFinalBill) summaryFinalBill.textContent =  currencyFormat.format(totalOriginalBill);
+                if (updatedFoodPrice) updatedFoodPrice.textContent = currencyFormat.format(newFoodPriceValue);
+                if (updatedTotalAmount) updatedTotalAmount.textContent = currencyFormat.format(baseAmountValue);
+                if (discountSummary) discountSummary.textContent = currencyFormat.format(discountValue);
             };
 
             const inputs = [
@@ -1442,43 +1460,47 @@ switch ($userRole) {
 
     <!-- //* To add original price to updated food price  -->
     <script>
-        const sameFoodPrice = document.getElementById('sameFoodPrice');
         const sameAmount = document.getElementById('sameAmount');
         const newFoodPrice = document.getElementById('newFoodPrice');
         const foodPrice = document.getElementById('foodPrice');
+        const displayFoodPrice = document.getElementById('displayFoodPrice');
 
-        if (sameAmount && sameFoodPrice) {
-
-
+        if (sameAmount) {
             sameAmount.addEventListener('click', (event) => {
                 event.stopPropagation();
 
                 if (sameAmount.checked) {
                     newFoodPrice.value = foodPrice.value;
+                    document.getElementById('summaryUpdatedFoodPrice').textContent = currencyFormat.format(newFoodPrice.value);
+                    displayFoodPrice.value = currencyFormat.format(newFoodPrice.value);
                 } else {
                     newFoodPrice.value = "";
-                }
-            });
-
-
-            sameFoodPrice.addEventListener('click', () => {
-
-                if (sameAmount.checked) {
-                    newFoodPrice.value = foodPrice.value;
-                } else {
-                    newFoodPrice.value = "";
+                    document.getElementById('summaryUpdatedFoodPrice').textContent = currencyFormat.format(newFoodPrice.value);
+                    displayFoodPrice.value = currencyFormat.format(newFoodPrice.value);
                 }
             });
         }
+
+        displayFoodPrice.addEventListener('input', function () {
+        const displayValue = Number(
+            displayFoodPrice.value.replace(/[^0-9.]/g, '')
+        );
+        const foodValue = Number(foodPrice.value);
+
+        sameAmount.checked = displayValue === foodValue;
+
+        if (sameAmount.checked) {
+            newFoodPrice.value = foodPrice.value;
+        }
+        });
+
     </script>
 
     <script>
-
         //Function for adding additional charges
         function toggleAdditionalInput() {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var checkboxes = document.querySelectorAll('.additionalCharge-container input[type="checkbox"]');
             var additionalInputs = document.querySelectorAll('.additional-input');
-
             additionalInputs.forEach(function(input) {
                 input.style.display = 'none';
                 input.querySelectorAll('input').forEach(i => i.disabled = true);
@@ -1564,7 +1586,7 @@ switch ($userRole) {
                 const li = document.createElement('li');
 
                 li.textContent =
-                    `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${parseFloat(properties.amount) || 0}`;
+                    `${displayName.charAt(0).toUpperCase() + displayName.slice(1)} — Quantity: ${parseInt(properties.quantity) || 0}, Amount: ${currencyFormat.format(properties.amount) || 0}`;
                 additionalChargesTotal += parseFloat(properties.amount) || 0;
 
                 chargesList.appendChild(li);
@@ -1573,8 +1595,8 @@ switch ($userRole) {
             const chargesTotal = originalChargeValue + additionalChargesTotal;
             const totalBill = finalBillValue + chargesTotal;
             //Summary display
-            document.getElementById('total-additional-charges').textContent = chargesTotal.toFixed(2);
-            document.getElementById('summary-total-amount').textContent = totalBill.toFixed(2);
+            document.getElementById('total-additional-charges').textContent = currencyFormat.format(chargesTotal);
+            document.getElementById('summary-total-amount').textContent = currencyFormat.format(totalBill);
 
             finalBillInput.value = totalBill;
             additionalChargeInput.value = chargesTotal;

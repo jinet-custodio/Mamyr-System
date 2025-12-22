@@ -159,7 +159,6 @@ function changePasswordValidation() {
   const confirmPassword = document.getElementById("confirmPassword").value;
   const passwordMessage = document.getElementById("passwordValidation");
   const passwordMatchMessage = document.getElementById("passwordMatch");
-  const changePasswordBtn = document.getElementById("changePassword");
 
   const isValid = passwordValidation(newPassword, passwordMessage);
   const isMatch = passwordMatchValidation(
@@ -168,9 +167,22 @@ function changePasswordValidation() {
     passwordMatchMessage
   );
 
-  if (isValid === true && isMatch === true) {
-    changePasswordBtn.disabled = false;
-  }
+  return isValid && isMatch;
+}
+
+const changePasswordBTN = document.getElementById("changePassword");
+if (changePasswordBTN) {
+  changePasswordBTN.addEventListener("click", function (e) {
+    if (!changePasswordValidation()) {
+      e.preventDefault();
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please ensure your password meets all requirements and matches the confirmation field.",
+        confirmButtonText: "Okay",
+      });
+    }
+  });
 }
 
 function checkCreateAccountPassword() {
@@ -241,9 +253,9 @@ function passwordChangeValidation() {
   return isPasswordValid && isPasswordMatch;
 }
 
-document
-  .getElementById("password-change")
-  .addEventListener("click", function (e) {
+const passwordChangeBTN = document.getElementById("password-change");
+if (passwordChangeBTN) {
+  passwordChangeBTN.addEventListener("click", function (e) {
     if (!passwordChangeValidation()) {
       e.preventDefault();
       Swal.fire({
@@ -260,3 +272,4 @@ document
       });
     }
   });
+}

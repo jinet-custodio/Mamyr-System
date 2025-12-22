@@ -332,7 +332,7 @@ if ($result->num_rows > 0) {
                             payment.paymentAmount,
                             payment.userBalance,
                             payment.paymentMethod,
-                            getStatusBadge(payment.statusClass, payment.status), ,
+                            getStatusBadge(payment.statusClass, payment.status),
                             ` <form action = "viewPayments.php"
                                         method = "POST" >
                                             <input type = "hidden"
