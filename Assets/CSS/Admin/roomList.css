@@ -153,17 +153,17 @@ td .sorting_1 {
 
 .badge.bg-red {
   background-color: rgba(204, 30, 20, 0.3) !important;
-  color: rgb(204, 30, 20) !important;
+  color: #4b0103 !important;
 }
 
 .badge.bg-light-green {
   background-color: rgba(99, 201, 9, 0.3) !important;
-  color: rgb(71, 139, 10) !important;
+  color: #1e3f00 !important;
 }
 
 .badge.badge.bg-success {
   background-color: rgba(83, 243, 169, 0.5) !important;
-  color: rgb(0, 129, 69) !important;
+  color: #054d1e !important;
 }
 
 .badge.badge.bg-light {
@@ -172,22 +172,22 @@ td .sorting_1 {
 
 .badge.bg-primary {
   background-color: rgba(12, 100, 232, 0.3) !important;
-  color: rgb(11, 90, 209) !important;
+  color: #0e2260 !important;
 }
 
 .badge.bg-danger {
   background-color: rgba(219, 53, 69, 0.3) !important;
-  color: rgb(219, 53, 69) !important;
+  color: #520500 !important;
 }
 
 .badge.bg-warning {
   background-color: rgba(255, 193, 8, 0.5) !important;
-  color: rgb(187, 140, 0) !important;
+  color: #5e3c09 !important;
 }
 
 .badge.bg-info {
   background-color: rgba(12, 202, 240, 0.3) !important;
-  color: rgb(28, 155, 180);
+  color: #013f4b;
 }
 /* Status */
 
