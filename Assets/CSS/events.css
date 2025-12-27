@@ -93,6 +93,7 @@ body {
 .venueTitleContainer {
   margin-top: 2vw;
 }
+
 .eventsTitle,
 .venueTitle {
   font-family: "Poppins";
@@ -154,6 +155,7 @@ body {
   font-family: "Poppins";
   font-size: 1.2vw;
 }
+
 .mainHall {
   margin-top: 1vw !important;
   width: 98%;
@@ -245,6 +247,7 @@ body {
     width: 95%;
     height: 22rem !important;
     margin: 0 1vw;
+
     img {
       object-fit: cover;
     }
@@ -325,6 +328,7 @@ body {
     width: 80%;
     height: 1rem !important;
     margin: 0 1vw;
+
     img {
       object-fit: contain;
     }
@@ -405,13 +409,16 @@ body {
   .venueTitleContainer {
     margin-top: 4vh;
   }
+
   .description,
   .venueDescription {
     font-size: 3vw;
   }
+
   .carousel {
     width: 85%;
   }
+
   .categories {
     padding: 1vw 0 0 0;
   }
@@ -432,7 +439,7 @@ body {
 
   .event-card {
     width: 65%;
-    height: 25rem !important ;
+    height: 25rem !important;
   }
 
   img.card-img-top {
@@ -444,6 +451,7 @@ body {
     justify-content: end !important;
     right: -4vw !important;
   }
+
   .carousel-control-prev {
     justify-content: start !important;
     left: -4vw !important;
@@ -461,6 +469,7 @@ body {
     height: 5vw !important;
     padding: 0 !important;
   }
+
   .carousel-control-next-icon {
     right: -5vw !important;
   }
@@ -491,6 +500,7 @@ body {
     padding-right: 0;
     width: 95% !important;
   }
+
   .mainHall {
     flex-direction: column;
     align-items: center;
@@ -530,6 +540,7 @@ body {
 }
 
 @media (max-width: 400px) {
+
   .title,
   .venueTitle {
     font-size: 7vw;
@@ -538,20 +549,29 @@ body {
   .venueTitleContainer {
     margin-top: 4vh;
   }
+
   .description,
   .venueDescription {
     font-size: 3.5vw;
   }
+
   .card-title {
-    font-size: 4vw;
+    font-size: 16px;
   }
 
   .eventDesc {
-    font-size: 3vw;
+    font-size: 12px !important;
+    margin-bottom: 0.5vw !important;
   }
 
   .event-card {
-    height: 22rem !important ;
+    height: 22rem !important;
+    width: 90%;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
   }
 
   .card-body {
@@ -559,7 +579,7 @@ body {
   }
 
   .bookBtn {
-    font-size: 2vw !important;
+    font-size: 12px !important;
   }
 
   .mainHallDescTitle,

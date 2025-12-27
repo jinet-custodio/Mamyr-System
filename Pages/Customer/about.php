@@ -62,11 +62,25 @@ $getWebContent->bind_param("s", $sectionName);
 $getWebContent->execute();
 $getWebContentResult = $getWebContent->get_result();
 $contentMap = [];
+$imageMap = [];
+$defaultImage = "../../Assets/Images/no-picture.png";
 while ($row = $getWebContentResult->fetch_assoc()) {
     $cleanTitle = trim(preg_replace('/\s+/', '', $row['title']));
     $contentID = $row['contentID'];
-
     $contentMap[$cleanTitle] = $row['content'];
+
+    // Fetch images with this contentID
+    $getImages = $conn->prepare("SELECT WCImageID, imageData, altText FROM websitecontentimage WHERE contentID = ? ORDER BY imageOrder ASC");
+    $getImages->bind_param("i", $contentID);
+    $getImages->execute();
+    $imageResult = $getImages->get_result();
+
+    $images = [];
+    while ($imageRow = $imageResult->fetch_assoc()) {
+        $images[] = $imageRow;
+    }
+
+    $imageMap[$cleanTitle] = $images;
 }
 
 ?>
@@ -182,7 +196,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     <div class="aboutTopContainer" id="aboutTopContainer">
         <div class="topPicContainer">
-            <img src="../../Assets/Images/AboutImages/poolPic.jpg" alt="Pool Picture" class="resortPic">
+            <?php if (isset($imageMap['AboutMamyr'])): ?>
+                <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
+                    $imagePath = "../../Assets/Images/AboutImages/" . $img['imageData'];
+                    $defaultImage = "../../Assets/Images/no-picture.png";
+                    $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                    <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($img['altText']) ?>" class="resortPic"
+                        style="cursor: pointer;">
+                <?php endforeach; ?>
+            <?php else: ?>
+                <img src="<? $defaultImage ?>" alt="None Found">
+            <?php endif; ?>
         </div>
 
         <div class="topTextContainer">
@@ -205,7 +229,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="servicesIconContainer">
 
             <div class="resortContainer">
-                <img src="../../Assets/Images/AboutImages/resort.png" alt="Resort Icon" class="resortIcon mx-auto">
+                <?php if (isset($imageMap['Service1Desc'])): ?>
+                    <?php foreach ($imageMap['Service1Desc'] as $index => $img):
+                        $imagePath = "../../Assets/Images/AboutImages/" . $img['imageData'];
+                        $defaultImage = "../../Assets/Images/no-picture.png";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="resortIcon mx-auto" style="cursor: pointer;">
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <img src="<? $defaultImage ?>" alt="None Found">
+                <?php endif; ?>
                 <h4 class="resortIconTitle">
                     <?= htmlspecialchars($contentMap['Service1'] ?? 'No description Not Found') ?></h4>
                 <p class="resortIconDescription">
@@ -213,7 +247,17 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="eventContainer">
-                <img src="../../Assets/Images/AboutImages/events.png" alt="Event Icon" class="eventIcon mx-auto">
+                <?php if (isset($imageMap['Service2Desc'])): ?>
+                    <?php foreach ($imageMap['Service2Desc'] as $index => $img):
+                        $imagePath = "../../Assets/Images/AboutImages/" . $img['imageData'];
+                        $defaultImage = "../../Assets/Images/no-picture.png";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="eventIcon mx-auto" style="cursor: pointer;">
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <img src="<? $defaultImage ?>" alt="None Found">
+                <?php endif; ?>
                 <h4 class="eventIconTitle">
                     <?= htmlspecialchars($contentMap['Service2'] ?? 'No description Not Found') ?></h4>
                 <p class="eventIconDescription">
@@ -221,7 +265,15 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             </div>
 
             <div class="hotelContainer">
-                <img src="../../Assets/Images/AboutImages/hotel.png" alt="Hotel Icon" class="hotelIcon mx-auto">
+                <?php if (isset($imageMap['Service3Desc'])): ?>
+                    <?php foreach ($imageMap['Service3Desc'] as $index => $img):
+                        $imagePath = "../../Assets/Images/AboutImages/" . $img['imageData'];
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="hotelIcon mx-auto" style="cursor: pointer;">
+
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 <h4 class="hotelIconTitle">
                     <?= htmlspecialchars($contentMap['Service3'] ?? 'No description Not Found') ?></h4>
                 <p class="hotelIconDescription">
@@ -282,16 +334,33 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
 
             <div class="firstImageContainer">
-                <img src="../../Assets/Images/AboutImages/aboutImage.jpg" alt="Mamyr Picture"
-                    class="firstParagraphPhoto">
+                <?php if (isset($imageMap['HistoryParagraph2'])): ?>
+                    <?php foreach ($imageMap['HistoryParagraph2'] as $index => $img):
+                        $imagePath = "../../Assets/Images/AboutImages/" . $img['imageData'];
+                        $defaultImage = "../Assets/Images/no-picture.jpg";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="firstParagraphPhoto" style="cursor: pointer;">
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <img src="<? $defaultImage ?>" alt="None Found">
+                <?php endif; ?>
             </div>
         </div>
 
         <div class="thirdParagraphContainer">
             <div class="thirdImageContainer">
-                <img src="../../Assets/Images/amenities/poolPics/poolPic2.jpg" alt="Mamyr Picture"
-                    class="thirdParagraphPhoto">
-
+                <?php if (isset($imageMap['HistoryParagraph4'])): ?>
+                    <?php foreach ($imageMap['HistoryParagraph4'] as $index => $img):
+                        $imagePath = "../../Assets/Images/AboutImages/" . $img['imageData'];
+                        $defaultImage = "../../Assets/Images/no-picture.png";
+                        $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
+                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                            class="thirdParagraphPhoto" style="cursor: pointer;">
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <img src="<?= htmlspecialchars($defaultImage) ?>">
+                <?php endif; ?>
             </div>
 
             <div class="thirdParagraphtextContainer">

@@ -163,7 +163,7 @@ while ($row = $getEventsResult->fetch_assoc()) {
                                 <div class="eventDescription">
                                     <p class="eventDesc"><?= htmlspecialchars($eventDesc) ?></p>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-auto bookBtn">BOOK NOW</button>
+                                <button type="button" class="btn btn-primary bookBtn">BOOK NOW</button>
                             </div>
                         </div>
                     </div>

@@ -314,7 +314,7 @@ require '../Function/Helpers/statusFunctions.php';
                 <?php endforeach;
             } else { ?>
                 <div class="card bp-card" id="bp1">
-                    <img class="card-img-top" src="../Assets/Images/PartnerServiceImage/noImage.png" alt="Card image cap">
+                    <img class="card-img-top" src="../Assets/Images/PartnerServiceImage/no-picture.jpg" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">
                             <div style="border: 1.5px solid gray; width: 30%"></div>

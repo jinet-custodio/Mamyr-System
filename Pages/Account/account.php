@@ -516,7 +516,7 @@ $baseURL = '../..';
             });
 
             function handleResponsiveSidebar() {
-                if (window.innerWidth <= 1240) {
+                if (window.innerWidth <= 1024) {
                     sidebar.classList.add('collapsed');
                     mainContent.style.marginLeft = "15vw";
                     toggleBtn.style.display = "flex";

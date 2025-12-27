@@ -329,7 +329,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             if (!empty($partners)) {
                 foreach ($partners as $partner): ?>
                     <div class="card bp-card" id="bp1">
-                        <img class="card-img-top" src="../../Assets/Images/PartnerServiceImage/<?= $partner['serviceImage'] ?? 'noImage.jpg' ?>" alt="<?= $partner['serviceName'] ?> Image">
+                        <img class="card-img-top" src="../../Assets/Images/PartnerServiceImage/<?= $partner['serviceImage'] ?? 'no-picture.jpg' ?>" alt="<?= $partner['serviceName'] ?> Image">
                         <div class="card-body">
                             <h5 class="card-title"><?= $partner['companyName'] ?></h5>
                             <h6 class="card-subtitle"><?= $partner['partnerTypeDescription'] ?? '' ?> &mdash; <small><?= $partner['serviceName'] ?? '' ?></small> </h6>
@@ -420,7 +420,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <?php endforeach;
             } else { ?>
                 <div class="card bp-card" id="bp1">
-                    <img class="card-img-top" src="../Assets/Images/PartnerServiceImage/noImage.png" alt="Card image cap">
+                    <img class="card-img-top" src="../../Assets/Images/PartnerServiceImage/no-picture.jpg" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">
                             <div style="border: 1.5px solid gray; width: 30%"></div>
