@@ -428,6 +428,7 @@ if ($result->num_rows > 0) {
                 responsive: !isMobile,
                 scrollX: isMobile,
                 autoWidth: false,
+                order: [],
 
                 columnDefs: isMobile ? [{
                         width: '100px',
