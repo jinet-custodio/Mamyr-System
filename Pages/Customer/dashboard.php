@@ -163,9 +163,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <ul class="navbar-nav ms-auto me-10" id="toggledNav">
                 <li class="nav-item">
                     <?php if ($userRole !== 2): ?>
-                    <a class="nav-link active" href="dashboard.php"> Home</a>
+                        <a class="nav-link active" href="dashboard.php"> Home</a>
                     <?php else: ?>
-                    <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
+                        <a class="nav-link" href="../BusinessPartner/bpDashboard.php"> Home</a>
                     <?php endif; ?>
                 </li>
                 <li class="nav-item dropdown">
@@ -183,9 +183,9 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     <a class="nav-link" href="blog.php">Blog</a>
                 </li>
                 <?php if ($userRole !== 2): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="beOurPartner.php">Be Our Partner</a>
+                    </li>
                 <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="about.php">About</a>
@@ -211,7 +211,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                 <h1 class="welcome">Welcome to Mamyr Resort and Events Place, <?= ucfirst($firstName) ?>!</h1>
                 <h5 class="subtext">We’re excited to welcome you to Mamyr Resort! Whether you're here to unwind,
                     explore, or enjoy some quality time, we’re ready to make your stay memorable. Book now and start
-                    your relaxation journey with us today!</h5>->
+                    your relaxation journey with us today!</h5>
 
                 <div class="topBtn-container">
                     <a href="resortBooking.php" class="btn resort-booking-btn-base button-pool">Resort Booking</a>
@@ -290,19 +290,19 @@ while ($row = $getWebContentResult->fetch_assoc()) {
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
                     <?php if (isset($imageMap['BookNow'])): ?>
-                    <?php foreach ($imageMap['BookNow'] as $index => $img):
+                        <?php foreach ($imageMap['BookNow'] as $index => $img):
                             $imagePath = "../../Assets/Images/landingPage/" . $img['imageData'];
                             $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage;
                         ?>
-                    <div class="swiper-slide">
-                        <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
-                            class="editable-img d-block" style="cursor: pointer;">
-                    </div>
-                    <?php endforeach; ?>
+                            <div class="swiper-slide">
+                                <img src="<?= htmlspecialchars($finalImage) ?>" alt="<?= htmlspecialchars($img['altText']) ?>"
+                                    class="editable-img d-block" style="cursor: pointer;">
+                            </div>
+                        <?php endforeach; ?>
                     <?php else: ?>
-                    <div class="card-img">
-                        <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
-                    </div>
+                        <div class="card-img">
+                            <img src="<?= htmlspecialchars($defaultImage) ?>" class="default" alt="None Found">
+                        </div>
                     <?php endif; ?>
 
                 </div>
@@ -442,273 +442,273 @@ while ($row = $getWebContentResult->fetch_assoc()) {
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const businessPartnerNavLink = document.getElementById("businessPartnerNav");
-        const userRoleValue = document.getElementById("userRole").value;
+        document.addEventListener("DOMContentLoaded", function() {
+            const businessPartnerNavLink = document.getElementById("businessPartnerNav");
+            const userRoleValue = document.getElementById("userRole").value;
 
-        if (userRoleValue === "2") {
-            businessPartnerNavLink.style.display = "none";
-        }
-    });
+            if (userRoleValue === "2") {
+                businessPartnerNavLink.style.display = "none";
+            }
+        });
     </script>
 
     <!-- Sweetalert Link -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Sweetalert Popup -->
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const paramValue = params.get('action');
+        const params = new URLSearchParams(window.location.search);
+        const paramValue = params.get('action');
 
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
-    });
-
-    if (paramValue === 'successLogin') {
-        Toast.fire({
-            icon: "success",
-            title: "Signed in successfully"
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
         });
-    };
 
-    if (paramValue) {
-        const url = new URL(window.location);
-        url.search = '';
-        history.replaceState({}, document.title, url.toString());
-    };
+        if (paramValue === 'successLogin') {
+            Toast.fire({
+                icon: "success",
+                title: "Signed in successfully"
+            });
+        };
+
+        if (paramValue) {
+            const url = new URL(window.location);
+            url.search = '';
+            history.replaceState({}, document.title, url.toString());
+        };
     </script>
 
 
     <!-- Initialize Swiper -->
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (document.querySelector(".mySwiper")) {
+        document.addEventListener("DOMContentLoaded", function() {
+            if (document.querySelector(".mySwiper")) {
 
-            var swiper = new Swiper(".mySwiper", {
-                loop: false,
-                loopedSlides: 3,
-                spaceBetween: 30,
-                slidesPerView: 3,
-                breakpoints: {
-                    0: {
-                        slidesPerView: 1,
-                        spaceBetween: 10
+                var swiper = new Swiper(".mySwiper", {
+                    loop: false,
+                    loopedSlides: 3,
+                    spaceBetween: 30,
+                    slidesPerView: 3,
+                    breakpoints: {
+                        0: {
+                            slidesPerView: 1,
+                            spaceBetween: 10
+                        },
+                        600: {
+                            slidesPerView: 2,
+                            spaceBetween: 20
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 30
+                        }
                     },
-                    600: {
-                        slidesPerView: 2,
-                        spaceBetween: 20
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 30
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true
                     }
-                },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true
-                }
-            });
-
-            window.addEventListener("load", () => {
-                swiper.update();
-            });
-        }
-    });
-    </script>
-
-    <script>
-    const popupContainer = document.getElementById('popup-container');
-    const popupImage = document.getElementById('popup-image');
-    const closePopupBtn = document.getElementById('close-popup');
-
-
-    document.querySelectorAll('.editable-img').forEach((image) => {
-        image.addEventListener('click', function() {
-            const imageSrc = image.src;
-            popupImage.src = imageSrc;
-            popupContainer.style.display = 'flex';
-            requestAnimationFrame(() => {
-                popupContainer.classList.add('show');
-            });
-        });
-    });
-
-
-    closePopupBtn.addEventListener('click', function() {
-        popupContainer.classList.remove('show');
-        setTimeout(() => {
-            popupContainer.style.display =
-                'none';
-        }, 300);
-    });
-
-    popupContainer.addEventListener('click', (e) => {
-        if (e.target === popupContainer) {
-            popupContainer.classList.remove('show');
-            setTimeout(() => {
-                popupContainer.style.display = 'none';
-            }, 300);
-        }
-    });
-    </script>
-
-    <script>
-    async function getRatings() {
-        const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
-        const data = await response.json();
-
-        const resortBar = document.getElementById('resort-bar');
-        resortBar.style.width = data.resortPercent + '%';
-        resortBar.setAttribute('ari-valuenow', data.resortPercent)
-        document.getElementById('resort-rating-value').textContent = data.resortRating;
-
-        const hotelBar = document.getElementById('hotel-bar');
-        hotelBar.style.width = data.hotelPercent + '%';
-        hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
-        document.getElementById('hotel-rating-value').textContent = data.hotelRating;
-
-        const eventBar = document.getElementById('event-bar');
-        eventBar.style.width = data.eventPercent + '%';
-        eventBar.setAttribute('ari-valuenow', data.eventPercent)
-        document.getElementById('event-rating-value').textContent = data.eventRating;
-
-        document.getElementById('overall-rating-value').textContent = data.overAllRating;
-        const starContainer = document.getElementById('star-container');
-        starContainer.innerHTML = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= Math.floor(data.overAllRating)) {
-                starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
-            } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
-                starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
-            } else {
-                starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
-            }
-        }
-    }
-    getRatings();
-    setInterval(getRatings, 300000);
-    </script>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const calendarEl = document.getElementById('calendar');
-        const modal = new bootstrap.Modal(document.getElementById('userEventModal'));
-        const modalBody = document.getElementById('userEventModalBody');
-
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            displayEventTime: false,
-            height: 'auto',
-            aspectRatio: 1.35,
-            events: '../../Function/Admin/fetchBookings.php',
-
-            // Make event blocks colored but textless
-            eventDidMount: function(info) {
-                info.el.style.backgroundColor = info.event.backgroundColor;
-                info.el.style.borderColor = info.event.backgroundColor;
-                info.el.style.color = 'transparent !important';
-            },
-
-            // Modal for clicking an event
-            eventClick: function(info) {
-                const event = info.event;
-
-                const formattedStart = new Date(event.start).toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true
                 });
 
-                const formattedEnd = event.end ?
-                    new Date(event.end).toLocaleString('en-US', {
+                window.addEventListener("load", () => {
+                    swiper.update();
+                });
+            }
+        });
+    </script>
+
+    <script>
+        const popupContainer = document.getElementById('popup-container');
+        const popupImage = document.getElementById('popup-image');
+        const closePopupBtn = document.getElementById('close-popup');
+
+
+        document.querySelectorAll('.editable-img').forEach((image) => {
+            image.addEventListener('click', function() {
+                const imageSrc = image.src;
+                popupImage.src = imageSrc;
+                popupContainer.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    popupContainer.classList.add('show');
+                });
+            });
+        });
+
+
+        closePopupBtn.addEventListener('click', function() {
+            popupContainer.classList.remove('show');
+            setTimeout(() => {
+                popupContainer.style.display =
+                    'none';
+            }, 300);
+        });
+
+        popupContainer.addEventListener('click', (e) => {
+            if (e.target === popupContainer) {
+                popupContainer.classList.remove('show');
+                setTimeout(() => {
+                    popupContainer.style.display = 'none';
+                }, 300);
+            }
+        });
+    </script>
+
+    <script>
+        async function getRatings() {
+            const response = await fetch('../../Function/Admin/Ajax/getRatings.php');
+            const data = await response.json();
+
+            const resortBar = document.getElementById('resort-bar');
+            resortBar.style.width = data.resortPercent + '%';
+            resortBar.setAttribute('ari-valuenow', data.resortPercent)
+            document.getElementById('resort-rating-value').textContent = data.resortRating;
+
+            const hotelBar = document.getElementById('hotel-bar');
+            hotelBar.style.width = data.hotelPercent + '%';
+            hotelBar.setAttribute('ari-valuenow', data.hotelPercent)
+            document.getElementById('hotel-rating-value').textContent = data.hotelRating;
+
+            const eventBar = document.getElementById('event-bar');
+            eventBar.style.width = data.eventPercent + '%';
+            eventBar.setAttribute('ari-valuenow', data.eventPercent)
+            document.getElementById('event-rating-value').textContent = data.eventRating;
+
+            document.getElementById('overall-rating-value').textContent = data.overAllRating;
+            const starContainer = document.getElementById('star-container');
+            starContainer.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(data.overAllRating)) {
+                    starContainer.innerHTML += '<i class="bi bi-star-fill star text-warning"></i>';
+                } else if (i - data.overAllRating <= .5 && i - data.overAllRating > 0) {
+                    starContainer.innerHTML += '<i class="bi bi-star-half star text-warning"></i>';
+                } else {
+                    starContainer.innerHTML += '<i class="bi bi-star star text-warning"></i>';
+                }
+            }
+        }
+        getRatings();
+        setInterval(getRatings, 300000);
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const modal = new bootstrap.Modal(document.getElementById('userEventModal'));
+            const modalBody = document.getElementById('userEventModalBody');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                displayEventTime: false,
+                height: 'auto',
+                aspectRatio: 1.35,
+                events: '../../Function/Admin/fetchBookings.php',
+
+                // Make event blocks colored but textless
+                eventDidMount: function(info) {
+                    info.el.style.backgroundColor = info.event.backgroundColor;
+                    info.el.style.borderColor = info.event.backgroundColor;
+                    info.el.style.color = 'transparent !important';
+                },
+
+                // Modal for clicking an event
+                eventClick: function(info) {
+                    const event = info.event;
+
+                    const formattedStart = new Date(event.start).toLocaleString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                         hour: 'numeric',
                         minute: '2-digit',
                         hour12: true
-                    }) :
-                    null;
+                    });
 
-                // Match header color with event
-                const header = document.querySelector('#userEventModal .modal-header');
-                header.style.backgroundColor = event.backgroundColor;
+                    const formattedEnd = event.end ?
+                        new Date(event.end).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
+                        }) :
+                        null;
 
-                modalBody.innerHTML = `
+                    // Match header color with event
+                    const header = document.querySelector('#userEventModal .modal-header');
+                    header.style.backgroundColor = event.backgroundColor;
+
+                    modalBody.innerHTML = `
                 <div class="text-center">
                     <p class="fs-5 mb-2"><strong>Booking Type:</strong> ${event.title || 'N/A'}</p>
                     <p class="mb-1"><strong>Start:</strong> ${formattedStart}</p>
                     ${formattedEnd ? `<p><strong>End:</strong> ${formattedEnd}</p>` : ''}
                 </div>
             `;
-                modal.show();
-            },
+                    modal.show();
+                },
 
-            // Modal for clicking a date cell (list all events)
-            dateClick: function(info) {
-                const clickedDate = new Date(info.dateStr);
-                clickedDate.setHours(0, 0, 0, 0);
+                // Modal for clicking a date cell (list all events)
+                dateClick: function(info) {
+                    const clickedDate = new Date(info.dateStr);
+                    clickedDate.setHours(0, 0, 0, 0);
 
-                const formattedClickedDate = clickedDate.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+                    const formattedClickedDate = clickedDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
 
-                // Find all events that fall on that date
-                const eventsOnDate = calendar.getEvents().filter(event => {
-                    const start = new Date(event.start);
-                    const end = new Date(event.end || event.start);
+                    // Find all events that fall on that date
+                    const eventsOnDate = calendar.getEvents().filter(event => {
+                        const start = new Date(event.start);
+                        const end = new Date(event.end || event.start);
 
-                    start.setHours(0, 0, 0, 0);
-                    end.setHours(0, 0, 0, 0);
+                        start.setHours(0, 0, 0, 0);
+                        end.setHours(0, 0, 0, 0);
 
-                    return clickedDate >= start && clickedDate <= end && event.display !==
-                        'background';
-                });
+                        return clickedDate >= start && clickedDate <= end && event.display !==
+                            'background';
+                    });
 
-                if (eventsOnDate.length === 0) {
-                    modalBody.innerHTML =
-                        `<p class="text-center mb-0">No events found on ${formattedClickedDate}.</p>`;
-                } else {
-                    let content = `
+                    if (eventsOnDate.length === 0) {
+                        modalBody.innerHTML =
+                            `<p class="text-center mb-0">No events found on ${formattedClickedDate}.</p>`;
+                    } else {
+                        let content = `
                     <h5 class="text-center mb-3">Events on ${formattedClickedDate}</h5>
                     <div class="list-group">
                 `;
 
-                    eventsOnDate.forEach(event => {
-                        const formattedStart = new Date(event.start).toLocaleString(
-                            'en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                hour12: true
-                            });
+                        eventsOnDate.forEach(event => {
+                            const formattedStart = new Date(event.start).toLocaleString(
+                                'en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
+                                });
 
-                        const formattedEnd = event.end ?
-                            new Date(event.end).toLocaleString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                hour12: true
-                            }) :
-                            null;
+                            const formattedEnd = event.end ?
+                                new Date(event.end).toLocaleString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true
+                                }) :
+                                null;
 
-                        content += `
+                            content += `
                         <div class="list-group-item d-flex align-items-center justify-content-between" style="border-left: 8px solid ${event.backgroundColor}">
                             <div>
                                 <strong>${event.title || 'Event'}</strong><br>
@@ -716,49 +716,49 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                             </div>
                         </div>
                     `;
+                        });
+
+                        content += `</div>`;
+                        modalBody.innerHTML = content;
+                    }
+
+                    // Make header neutral color for date clicks
+                    const header = document.querySelector('#userEventModal .modal-header');
+                    header.style.backgroundColor = '#0d6efd';
+
+                    modal.show();
+                },
+
+                // Create solid full-cell color if only 1 event that day
+                eventsSet: function(events) {
+                    const eventCountByDate = {};
+
+                    // Count how many events per date
+                    events.forEach(event => {
+                        const startDate = event.startStr.split('T')[0];
+                        if (!eventCountByDate[startDate]) eventCountByDate[startDate] = 0;
+                        eventCountByDate[startDate]++;
                     });
 
-                    content += `</div>`;
-                    modalBody.innerHTML = content;
+                    // Add solid background event for single-event days
+                    events.forEach(event => {
+                        const startDate = event.startStr.split('T')[0];
+                        if (eventCountByDate[startDate] === 1) {
+                            calendar.addEvent({
+                                start: event.startStr,
+                                end: event.endStr || event.startStr,
+                                display: 'background',
+                                allDay: true,
+                                backgroundColor: event.backgroundColor,
+                                borderColor: event.backgroundColor
+                            });
+                        }
+                    });
                 }
+            });
 
-                // Make header neutral color for date clicks
-                const header = document.querySelector('#userEventModal .modal-header');
-                header.style.backgroundColor = '#0d6efd';
-
-                modal.show();
-            },
-
-            // Create solid full-cell color if only 1 event that day
-            eventsSet: function(events) {
-                const eventCountByDate = {};
-
-                // Count how many events per date
-                events.forEach(event => {
-                    const startDate = event.startStr.split('T')[0];
-                    if (!eventCountByDate[startDate]) eventCountByDate[startDate] = 0;
-                    eventCountByDate[startDate]++;
-                });
-
-                // Add solid background event for single-event days
-                events.forEach(event => {
-                    const startDate = event.startStr.split('T')[0];
-                    if (eventCountByDate[startDate] === 1) {
-                        calendar.addEvent({
-                            start: event.startStr,
-                            end: event.endStr || event.startStr,
-                            display: 'background',
-                            allDay: true,
-                            backgroundColor: event.backgroundColor,
-                            borderColor: event.backgroundColor
-                        });
-                    }
-                });
-            }
+            calendar.render();
         });
-
-        calendar.render();
-    });
     </script>
 
 </body>

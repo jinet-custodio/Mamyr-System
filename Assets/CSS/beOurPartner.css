@@ -22,11 +22,12 @@
 }
 
 body {
-  background-image: url(../Images//indexPhotos/Background\ 1.jpg);
+  background-image: url(../Images/indexPhotos/Background1.jpg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -46,6 +47,7 @@ main {
   background-color: rgb(207, 244, 252, 0.5);
   color: rgb(5, 107, 171);
 }
+
 .titleContainer {
   width: 70%;
   margin: auto;
@@ -103,6 +105,7 @@ main {
   text-align: center;
   margin-top: 1rem;
 }
+
 .busInfoLabel {
   color: #ffff;
 }
@@ -206,6 +209,7 @@ button.close {
 .stepsContainer {
   margin-top: 1vw;
 }
+
 /* modal css */
 
 #phoneNumber {
@@ -321,6 +325,7 @@ div#selectedBusinessTypes {
     gap: 2px;
     margin-top: 30px !important;
   }
+
   #submit-request {
     margin-top: 2rem !important;
   }
@@ -351,10 +356,12 @@ div#selectedBusinessTypes {
     font-size: clamp(14px, 1.8vw, 20px);
     text-align: center;
   }
+
   .container {
     margin-top: 2vw !important;
     min-width: 750px;
   }
+
   /* Form container auto adjust */
   .repInfoFormContainer {
     display: grid;
@@ -378,10 +385,12 @@ div#selectedBusinessTypes {
   .defaultDiv h2 {
     font-size: clamp(20px, 18px, 19px);
   }
+
   .title {
     margin-top: 8rem !important;
     font-size: clamp(18px, 20px, 22px);
   }
+
   .titleDescription {
     width: 100% !important;
     margin: 3vw auto 0 auto !important;
@@ -406,12 +415,14 @@ div#selectedBusinessTypes {
     padding: 0;
     height: auto !important;
   }
+
   .repInfoLabel {
     font-weight: bold;
     font-size: 15px;
     text-align: center;
     margin-top: 1.5vw;
   }
+
   .row {
     flex-direction: column;
     width: 100% !important;
@@ -419,6 +430,7 @@ div#selectedBusinessTypes {
     height: 100%;
     margin-top: 5vw !important;
   }
+
   .container-wrapper {
     width: 100%;
     max-width: 480px;
@@ -435,24 +447,29 @@ div#selectedBusinessTypes {
     height: 125vh;
     margin-top: 4vw !important;
   }
+
   .repInfoLabel {
     font-size: 20px;
     margin-top: 1vw;
   }
+
   #busInfoContainer {
     background-color: #78aeff;
     width: 750px !important;
     margin-top: -10px;
   }
+
   .busInfoLabel {
     font-size: 20px;
     margin-top: 2vw;
   }
+
   .busProofLabel {
     font-size: 20px;
     margin-top: 1rem;
     display: block;
   }
+
   .busProofFormContainer {
     margin-top: 1rem !important;
     display: flex;
@@ -461,16 +478,20 @@ div#selectedBusinessTypes {
     gap: 0.5vw;
     flex-direction: column;
   }
+
   #repInfoContainer {
     padding-bottom: 5vw;
     top: -3vw;
   }
+
   #busInfoContainer {
     padding-bottom: 2vw;
   }
+
   #busProofContainer {
     padding-bottom: 5vw;
   }
+
   .label {
     margin-top: 3vw !important;
   }
@@ -479,6 +500,7 @@ div#selectedBusinessTypes {
   button.btn-light {
     margin-top: 15px !important;
   }
+
   #submit-request {
     display: block !important;
     margin: 0 auto !important;
@@ -498,6 +520,7 @@ div#selectedBusinessTypes {
     left: 7%;
     top: 12%;
   }
+
   .title {
     margin-top: clamp(2rem, 6vw, 4rem);
     font-size: clamp(25px, calc(3.3vh + 4px), 29px);

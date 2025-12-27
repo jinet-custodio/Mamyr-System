@@ -112,7 +112,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <div class="topPicContainer">
             <?php if (isset($imageMap['AboutMamyr'])): ?>
                 <?php foreach ($imageMap['AboutMamyr'] as $index => $img):
-                    $imagePath = "../Assets/Images//" . $img['imageData'];
+                    $imagePath = "../Assets/Images/AboutImages/" . $img['imageData'];
                     $defaultImage = "../Assets/Images/no-picture.png";
                     $finalImage = file_exists($imagePath) ? $imagePath : $defaultImage; ?>
                     <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($img['altText']) ?>" class="editable-img resortPic"

@@ -16,8 +16,7 @@
 }
 
 body {
-  background: url(../Images/indexPhotos/Background2.png) lightgray 50% / cover
-    no-repeat;
+  background: url(../Images/indexPhotos/Background2.png) lightgray 50% / cover no-repeat;
   background-color: #88858534 !important;
   background-blend-mode: darken !important;
   background-position: center;
@@ -84,6 +83,7 @@ div#selectedBusinessTypes {
 .accountCreationLabel {
   margin-top: 0;
 }
+
 .busInfoLabel {
   color: #ffff;
 }
@@ -158,7 +158,8 @@ div#selectedBusinessTypes {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Gray out effect */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Gray out effect */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -187,6 +188,7 @@ div#selectedBusinessTypes {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -272,6 +274,7 @@ button#selectPartnerBtn {
 .stepsContainer {
   margin-top: 1vw;
 }
+
 /* modal css */
 
 #emailPassContainer {
@@ -295,6 +298,7 @@ button#selectPartnerBtn {
   gap: -1.5rem;
   margin-top: -3vw;
 }
+
 .input-box {
   position: relative;
   margin: 20px 0;
@@ -370,11 +374,13 @@ input[type="password"]::-webkit-search-cancel-button {
 .modal-dialog {
   max-width: 60%;
 }
+
 .modal-body {
   max-height: 500px;
   font-size: clamp(1.1vw, 1vw, 1.2vw);
   overflow-y: auto !important;
 }
+
 .modal-title {
   margin: auto;
   font-size: 2vw;
@@ -483,6 +489,7 @@ input[type="password"]::-webkit-search-cancel-button {
     font-weight: bold;
     text-align: center;
   }
+
   .container {
     margin-top: 2vw !important;
   }
@@ -578,9 +585,11 @@ input[type="password"]::-webkit-search-cancel-button {
   button#selectPartnerBtn {
     font-size: 1.4vw !important;
   }
+
   button#selectPartnerBtn {
     font-size: 2.1vw !important;
   }
+
   /* modal css */
 
   .col {
@@ -643,6 +652,7 @@ input[type="password"]::-webkit-search-cancel-button {
     width: 80%;
     padding: 3vw;
   }
+
   .modal-body {
     font-size: 2vw !important;
   }
@@ -650,6 +660,7 @@ input[type="password"]::-webkit-search-cancel-button {
   .modal-dialog {
     width: 80% !important;
   }
+
   .container {
     transform-origin: top center;
     margin-top: 2vw !important;
@@ -660,6 +671,7 @@ input[type="password"]::-webkit-search-cancel-button {
   #busProofContainer {
     width: 33%;
   }
+
   .repInfoFormContainer {
     display: flex;
     flex-direction: column;
@@ -720,9 +732,11 @@ input[type="password"]::-webkit-search-cancel-button {
   button#selectPartnerBtn {
     font-size: 1.4vw !important;
   }
+
   button#selectPartnerBtn {
     font-size: 2.1vw !important;
   }
+
   /* modal css */
 
   em {
@@ -805,6 +819,7 @@ input[type="password"]::-webkit-search-cancel-button {
   .repInfoFormContainer input {
     margin-top: 3vw !important;
   }
+
   #repInfoContainer,
   #busInfoContainer,
   #busProofContainer {
@@ -818,6 +833,7 @@ input[type="password"]::-webkit-search-cancel-button {
   #busInfoContainer {
     padding-bottom: 3vw;
   }
+
   #submit-request {
     display: block !important;
     margin: 0 auto !important;
@@ -868,11 +884,14 @@ input[type="password"]::-webkit-search-cancel-button {
   button#selectPartnerBtn {
     font-size: 1.4vw !important;
   }
+
   button#selectPartnerBtn {
     font-size: 2.1vw !important;
   }
+
   /* modal css */
 }
+
 /* Phone size */
 @media screen and (max-width: 599px) {
   .title {
@@ -896,8 +915,8 @@ input[type="password"]::-webkit-search-cancel-button {
     font-size: 3vw !important;
   }
 
-  .back-icon-container-login {
-    left: 15vw;
+  .back-icon-container-login i {
+    font-size: 5vww;
   }
 
   .back-icon-container-login img {
@@ -927,7 +946,7 @@ input[type="password"]::-webkit-search-cancel-button {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 95%;
+    max-width: 90%;
     padding: 2vw 0 3vw 0 !important;
     margin-bottom: 10vw !important;
   }
@@ -959,6 +978,7 @@ input[type="password"]::-webkit-search-cancel-button {
   .repInfoFormContainer input {
     margin-top: 3vw !important;
   }
+
   #repInfoContainer,
   #busInfoContainer,
   #busProofContainer {
@@ -972,6 +992,7 @@ input[type="password"]::-webkit-search-cancel-button {
   #busInfoContainer {
     padding-bottom: 3vw;
   }
+
   #submit-request {
     display: block !important;
     margin: 0 auto !important;
@@ -1018,6 +1039,7 @@ input[type="password"]::-webkit-search-cancel-button {
   button#selectPartnerBtn {
     font-size: 2.6vw !important;
   }
+
   /* modal css */
 
   .termsContainer {
