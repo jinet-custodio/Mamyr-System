@@ -525,11 +525,10 @@ if (!isset($_SESSION['userID']) || !isset($_SESSION['userRole'])) {
 
                                 if (mysqli_num_rows($roomresult) > 0) {
                                     foreach ($roomresult as $hotel) {
-                                        $imgSrc = '../../Assets/Images/amenities/hotelPics/hotel1.jpg';
-                                        if (!empty($hotel['imageData'])) {
-                                            // You can use this if imageData is raw binary
-                                            $imgData = base64_encode($hotel['imageData']);
-                                            $imgSrc = 'data:image/jpeg;base64,' . $imgData;
+                                        $imgSrc = '../../Assets/Images/Services/Hotel/Hotel_79_hotel1.jpg';
+                                        if (!empty($hotel['RSimageData'])) {
+                                            $imgData = $hotel['RSimageData'];
+                                            $imgSrc = '../../Assets/Images/Services/Hotel/' . $imgData;
                                         }
                                 ?>
                                         <div class="swiper-slide">
