@@ -286,7 +286,7 @@ if ($result->num_rows > 0) {
                                     $serviceCapacity = $row['RScapacity'];
                                     $serviceMaxCapacity = $row['RSmaxCapacity'];
                                     $serviceDuration = $row['RSduration'];
-                                    $serviceDesc = $row['RSdescription'];
+                                    $serviceDesc = str_replace(["\\r\\n", "\\n", "\\r"], "\n", $row['RSdescription']);
                                     $serviceImageName = $row['RSimageData'];
                                     $serviceAvailability = $row['RSAvailabilityID'];
 
@@ -307,8 +307,11 @@ if ($result->num_rows > 0) {
                                         <td><input type="text" class="form-control resortServiceDuration"
                                                 name="resortServiceDuration" value="<?= htmlspecialchars($serviceDuration) ?>"
                                                 readonly></td>
-                                        <td><textarea name="serviceDesc" readonly
-                                                class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea></td>
+                                        <td><textarea name="serviceDesc"
+                                                readonly
+                                                rows="5"
+                                                class="form-control"><?= htmlspecialchars($serviceDesc) ?></textarea>
+
                                         <td>
                                             <select name="resortAvailability" class="form-select resortAvailability" disabled>
                                                 <option value="" disabled <?= $serviceAvailability == "" ? "selected" : "" ?>>Select

@@ -241,11 +241,18 @@ if ($result->num_rows > 0) {
                                 <!-- Select booking info -->
                                 <?php
                                 $hotelCategoryID = 1;
-                                $getRoomInfo = $conn->prepare("SELECT rs.*, sa.availabilityName AS roomStatus
-                    FROM resortamenity rs 
-                    LEFT JOIN serviceavailability sa ON rs.RSAvailabilityID = sa.availabilityID
-                    WHERE RScategoryID = ?
-                    ORDER  BY resortServiceID");
+                                $getRoomInfo = $conn->prepare("SELECT 
+                                        rs.*, 
+                                        sa.availabilityName AS roomStatus
+                                    FROM resortamenity rs
+                                    LEFT JOIN serviceavailability sa 
+                                        ON rs.RSAvailabilityID = sa.availabilityID
+                                    WHERE rs.RScategoryID = ?
+                                    ORDER BY 
+                                        rs.RSduration DESC, 
+                                        CAST(SUBSTRING_INDEX(rs.RServiceName, ' ', -1) AS UNSIGNED),
+                                        rs.RServiceName;
+                                    ");
                                 $getRoomInfo->bind_param("i", $hotelCategoryID);
                                 $getRoomInfo->execute();
                                 $getRoomInfoResult = $getRoomInfo->get_result();
