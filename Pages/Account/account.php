@@ -154,7 +154,7 @@ $baseURL = '../..';
                     $partnerTypes[] = (strtolower(trim($data['partnerTypeDescription'])) === 'other') ? $data['otherPartnerType'] : $data['partnerTypeDescription'];
                 }
 
-                $companyName = $data['companyName'] ?? 'N/A';
+                $companyName = stripslashes($data['companyName'] ?? 'N/A');;
                 $validID = !empty($data['validID']) ? $data['validID'] : 'defaultValidID.png';
 
                 $imageSrc = '../../Assets/Images/BusinessPartnerIDs/' . $validID;
