@@ -144,6 +144,7 @@ unset($_SESSION['formData']);
 
         if (!canUserBook($conn, $userID)) {
             header("Location:  bookNow.php?action=notAllowed");
+            exit;
         }
 
         $scheduledDate = mysqli_real_escape_string($conn, $_POST['resortBookingDate']);
@@ -400,6 +401,12 @@ unset($_SESSION['formData']);
     <?php
     $selectedHotels = [];
     if (isset($_POST['hotelBooking'])) {
+
+        if (!canUserBook($conn, $userID)) {
+            header("Location:  bookNow.php?action=notAllowed");
+            exit;
+        }
+
         $hoursSelected = "22 hours";
         $arrivalTime = isset($_POST['arrivalTime']) ? mysqli_real_escape_string($conn, $_POST['arrivalTime']) : '';
         $scheduledStartDate = mysqli_real_escape_string($conn, $_POST['checkInDate']);

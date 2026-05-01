@@ -85,6 +85,7 @@ function addToAdminTable($conn)
 {
     $adminID = 3;
     $position = 'Administrator';
+    $counter = 0;
 
     // Fetch users with userRole = 3
     $getAdminQuery = $conn->prepare("SELECT userID, firstName, middleInitial, lastName FROM user WHERE userRole = ?");
@@ -93,11 +94,11 @@ function addToAdminTable($conn)
     $adminQueryResult = $getAdminQuery->get_result();
 
     if ($adminQueryResult->num_rows > 0) {
-        $counter = 0;
         while ($row = $adminQueryResult->fetch_assoc()) {
             $storedUserID = intval($row['userID']);
             $firstName = ucfirst($row['firstName']);
-            $middleInitial = ucfirst($row['middleInitial'] ?? '') . '.' ?? ' ';
+            $mi = $row['middleInitial'] ?? '';
+            $middleInitial = $mi ? ucfirst($mi) . '.' : '';
             $lastName = ucfirst($row['lastName']);
             $fullName = $firstName . ' ' . $middleInitial . ' ' . $lastName;
 
@@ -120,8 +121,7 @@ function addToAdminTable($conn)
             $selectUsers->close();
         }
     }
-    return $counter;
-
     $adminQueryResult->free();
     $getAdminQuery->close();
+    return $counter;
 }

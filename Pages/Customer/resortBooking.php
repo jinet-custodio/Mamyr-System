@@ -86,6 +86,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
     $imageMap[$cleanTitle] = $images;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -631,7 +632,6 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                                                 ?>;
             const addOnsServicesSession =
                 <?= isset($_SESSION['resortFormData']['addOnsServices']) ? json_encode($_SESSION['resortFormData']['addOnsServices']) : '[]' ?>;
-
             const roomSelectionSession =
                 <?= isset($_SESSION['resortFormData']['roomOptions']) ? json_encode($_SESSION['resortFormData']['roomOptions']) : '[]' ?>;
             document.addEventListener("DOMContentLoaded", function() {
@@ -771,7 +771,7 @@ while ($row = $getWebContentResult->fetch_assoc()) {
 
                                 const checkbox = document.createElement('input');
                                 checkbox.type = 'checkbox';
-                                checkbox.name = 'entertainmentOptions[]';
+                                checkbox.name = 'addOnsServices[]';
                                 checkbox.value = ent.RServiceName.trim();
                                 checkbox.id = `ent-${ent.RServiceName.trim()}`;
 
@@ -894,12 +894,21 @@ while ($row = $getWebContentResult->fetch_assoc()) {
         <script>
             document.addEventListener("DOMContentLoaded", () => {
 
+
+                const sessionCottages = <?= json_encode($_SESSION['cottageOptions'] ?? []) ?>;
+                const sessionRooms = <?= json_encode($_SESSION['roomOptions'] ?? []) ?>;
+                const sessionServices = <?= json_encode($_SESSION['addOnsServices'] ?? []) ?>;
+
                 function renderSelectedItems(containerId, label, items) {
                     const container = document.getElementById(containerId);
                     if (!container) return;
 
-                    container.innerHTML = ""; // clear previous items
-                    if (items.length === 0) return;
+                    container.innerHTML = "";
+
+                    if (items.length === 0) {
+                        container.innerHTML = `<span class="text-muted">No Selected Item</span>`;
+                        return;
+                    }
 
                     const wrapper = document.createElement("div");
                     wrapper.classList.add("selected-inline");
@@ -920,29 +929,70 @@ while ($row = $getWebContentResult->fetch_assoc()) {
                     container.appendChild(wrapper);
                 }
 
-                const cottageModal = document.getElementById('cottageModal');
-                const cottageOkayBtn = cottageModal.querySelector('.modal-footer .btn-primary');
-                cottageOkayBtn.addEventListener('click', () => {
-                    const selectedCottages = Array.from(document.querySelectorAll('input[name="cottageOptions[]"]:checked'))
+                function getCheckedValues(name) {
+                    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
                         .map(el => el.value);
-                    renderSelectedItems('selectedCottagesContainer', 'Selected Cottages/:', selectedCottages);
-                });
+                }
+
+                function updateAllDisplays() {
+                    renderSelectedItems(
+                        'selectedCottagesContainer',
+                        'Selected Cottages:',
+                        getCheckedValues('cottageOptions[]')
+                    );
+
+                    renderSelectedItems(
+                        'selectedRoomsContainer',
+                        'Selected Hotel Room/s:',
+                        getCheckedValues('roomOptions[]')
+                    );
+
+                    renderSelectedItems(
+                        'selectedEntertainmentContainer',
+                        'Selected Additional Service/s:',
+                        getCheckedValues('addOnsServices[]')
+                    );
+                }
+
+
+                function applySessionCheckedState() {
+
+                    document.querySelectorAll('input[name="cottageOptions[]"]').forEach(cb => {
+                        if (sessionCottages.includes(cb.value)) {
+                            cb.checked = true;
+                        }
+                    });
+
+                    document.querySelectorAll('input[name="roomOptions[]"]').forEach(cb => {
+                        if (sessionRooms.includes(cb.value)) {
+                            cb.checked = true;
+                        }
+                    });
+
+                    document.querySelectorAll('input[name="addOnsServices[]"]').forEach(cb => {
+                        if (sessionServices.includes(cb.value)) {
+                            cb.checked = true;
+                        }
+                    });
+                }
+
+                applySessionCheckedState();
+
+                setTimeout(() => {
+                    updateAllDisplays();
+                }, 100);
+
+                const cottageModal = document.getElementById('cottageModal');
+                cottageModal?.querySelector('.modal-footer .btn-primary')
+                    ?.addEventListener('click', updateAllDisplays);
 
                 const hotelModal = document.getElementById('hotelRoomModal');
-                const hotelOkayBtn = hotelModal.querySelector('.modal-footer .btn-primary');
-                hotelOkayBtn.addEventListener('click', () => {
-                    const selectedRooms = Array.from(document.querySelectorAll('input[name="roomOptions[]"]:checked'))
-                        .map(el => el.value);
-                    renderSelectedItems('selectedRoomsContainer', 'Selected Hotel Room/s:', selectedRooms);
-                });
+                hotelModal?.querySelector('.modal-footer .btn-primary')
+                    ?.addEventListener('click', updateAllDisplays);
 
                 const entertainmentModal = document.getElementById('entertainmentModal');
-                const entertainmentOkayBtn = entertainmentModal.querySelector('.modal-footer .btn-primary');
-                entertainmentOkayBtn.addEventListener('click', () => {
-                    const selectedEntertainment = Array.from(document.querySelectorAll('input[name="entertainmentOptions[]"]:checked'))
-                        .map(el => el.value);
-                    renderSelectedItems('selectedEntertainmentContainer', 'Selected Additional Service/s:', selectedEntertainment);
-                });
+                entertainmentModal?.querySelector('.modal-footer .btn-primary')
+                    ?.addEventListener('click', updateAllDisplays);
 
             });
         </script>
