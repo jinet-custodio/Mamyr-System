@@ -13,7 +13,7 @@ require_once '../emailSenderFunction.php';
 
 session_start();
 $userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
-$userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
+$userID = (int) $_SESSION['userID'];
 
 
 function addition($a, $b, $c)
@@ -307,7 +307,7 @@ if (isset($_POST['bookRates'])) {
             $updateApproval->bind_param('issi', $approvedStatusID, $approvedBy, $today, $bookingID);
             if (!$updateApproval->execute()) {
                 $conn->rollback();
-                throw new Exception('Error :' . $insertConfirmedBooking->error);
+                throw new Exception('Error :' . $updateApproval->error);
             }
             $updateApproval->close();
 

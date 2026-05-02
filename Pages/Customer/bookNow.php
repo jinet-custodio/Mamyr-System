@@ -67,6 +67,14 @@ unset($_SESSION['resortFormData']);
 unset($_SESSION['eventFormData']);
 
 require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
+
+if (
+    !canUserBook($conn, $userID) &&
+    (!isset($_GET['action']) || $_GET['action'] !== 'notAllowed')
+) {
+    header("Location: bookNow.php?action=notAllowed");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -280,7 +288,6 @@ require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
     <script>
         const params = new URLSearchParams(window.location.search);
         const paramValue = params.get('action');
-
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -316,7 +323,11 @@ require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
                 icon: 'info',
                 text: 'You have an active booking. You can only book a new event once your current one is done.',
                 confirmButtonText: 'Okay, thanks!'
-            });
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'dashboard.php';
+                }
+            })
         }
 
         if (paramValue) {
@@ -326,20 +337,6 @@ require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
         };
     </script>
 
-    <?php
-    if (!canUserBook($conn, $userID)) {
-    ?>
-        <script>
-            Swal.fire({
-                title: 'Oops! Booking Unavailable!',
-                icon: 'info',
-                text: 'You have an active booking. You can only book a new event once your current one is done.',
-                confirmButtonText: 'Okay, thanks!'
-            });
-        </script>
-    <?php
-    }
-    ?>
 
 
     <!-- For checking the phone Number -->

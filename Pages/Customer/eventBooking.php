@@ -88,10 +88,9 @@ function getPartnershipType($conn)
             $categories[] = $row;
         }
     }
-
-    return $categories;
     $getPartnershipTypeResult->free();
     $getPartnershipTypeQuery->close();
+    return $categories;
 }
 
 $gcashDetails = '';

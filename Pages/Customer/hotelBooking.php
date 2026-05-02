@@ -71,6 +71,16 @@ while ($row = $contentResult->fetch_assoc()) {
     $contentID = $row['contentID'];
     $contentMap[$cleanTitle] = $row['content'];
 }
+
+
+if (
+    !canUserBook($conn, $userID) &&
+    (!isset($_GET['action']) || $_GET['action'] !== 'notAllowed')
+) {
+    header("Location: bookNow.php?action=notAllowed");
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -595,13 +605,19 @@ while ($row = $contentResult->fetch_assoc()) {
         <script>
             document.addEventListener("DOMContentLoaded", () => {
 
+                const sessionHotels = <?= json_encode($_SESSION['hotelSelections'] ?? []) ?>;
+                console.log(sessionHotels);
+
                 function renderSelectedRooms(containerId, label, items) {
                     const container = document.getElementById(containerId);
                     if (!container) return;
 
-                    container.innerHTML = ""; // Clear previous
+                    container.innerHTML = "";
 
-                    if (items.length === 0) return;
+                    if (!Array.isArray(items) || items.length === 0) {
+                        container.innerHTML = `<span class="text-muted">No Selected Item</span>`;
+                        return;
+                    }
 
                     const wrapper = document.createElement("div");
                     wrapper.classList.add("selected-inline");
@@ -622,20 +638,44 @@ while ($row = $contentResult->fetch_assoc()) {
                     container.appendChild(wrapper);
                 }
 
-                function updateSelectedRooms() {
-                    const selectedRooms = Array.from(document.querySelectorAll('input[name="hotelSelections[]"]:checked'))
-                        .map(el => el.value);
-                    renderSelectedRooms('selectedHotelRoomsContainer', 'Selected Room/s:', selectedRooms);
+                function getCheckedHotels() {
+                    return Array.from(
+                        document.querySelectorAll('input[name="hotelSelections[]"]:checked')
+                    ).map(el => el.value);
                 }
 
+                function updateSelectedRooms() {
+                    renderSelectedRooms(
+                        'selectedHotelRoomsContainer',
+                        'Selected Room/s:',
+                        getCheckedHotels()
+                    );
+                }
+
+                function applySessionCheckedState() {
+                    document.querySelectorAll('input[name="hotelSelections[]"]').forEach(cb => {
+                        if (sessionHotels.includes(cb.value)) {
+                            cb.checked = true;
+                        }
+                    });
+                }
+
+                applySessionCheckedState();
+
+                setTimeout(() => {
+                    updateSelectedRooms();
+                }, 100);
+
+                document.querySelectorAll('input[name="hotelSelections[]"]').forEach(cb => {
+                    cb.addEventListener('change', updateSelectedRooms);
+                });
+
                 const hotelModal = document.getElementById('hotelRoomModal');
-                const okBtn = hotelModal.querySelector('.modal-footer .btn-primary');
+                hotelModal?.querySelector('.modal-footer .btn-primary')
+                    ?.addEventListener('click', updateSelectedRooms);
 
-                okBtn.addEventListener('click', updateSelectedRooms);
+                hotelModal?.addEventListener('hidden.bs.modal', updateSelectedRooms);
 
-                hotelModal.addEventListener('hidden.bs.modal', updateSelectedRooms);
-
-                updateSelectedRooms();
             });
         </script>
 
@@ -723,21 +763,6 @@ while ($row = $contentResult->fetch_assoc()) {
             </script>
         <?php endif; ?>
     <?php endif; ?>
-
-    <?php
-    if (!canUserBook($conn, $userID)) {
-    ?>
-        <script>
-            Swal.fire({
-                title: 'Oops! Booking Unavailable!',
-                icon: 'info',
-                text: 'You have an active booking. You can only book a new event once your current one is done.',
-                confirmButtonText: 'Okay, thanks!'
-            });
-        </script>
-    <?php
-    }
-    ?>
 
 </body>
 
