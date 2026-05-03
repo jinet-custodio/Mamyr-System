@@ -7,9 +7,7 @@ header('Content-Type: application/json');
 $getRatingsQuery = $conn->prepare("SELECT 
                                         bookingType,
                                         reviewRating
-                                    FROM userreview ur
-                                    GROUP BY
-                                        bookingType
+                                    FROM userreview
                                 ");
 
 if (!$getRatingsQuery->execute()) {

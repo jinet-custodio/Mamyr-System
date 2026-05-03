@@ -279,7 +279,7 @@ if (isset($_POST['approveBtn'])) {
             throw new Exception('Failed Sending Email');
         }
 
-        // $conn->commit();
+        $conn->commit();
         $updateStatus->close();
         $insertConfirmed->close();
         $insertNotification->close();

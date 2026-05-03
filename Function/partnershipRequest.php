@@ -187,7 +187,7 @@ if (isset($_POST['submit_request'])) {
                 $requestNotif = "A new partnership application has been submitted and is currently awaiting your review and approval. Please review the application as soon as possible. Click <a href='displayPartnership.php?container=2'>here</a> to view the application";
                 $insertAdminNotification = $conn->prepare("INSERT INTO notification(partnershipID, senderID, message, receiver) VALUES(?, ?, ?, ?)");
                 $insertAdminNotification->bind_param("iiss", $partnershipID, $storedUserID, $requestNotif, $admin);
-                if (!$insertNotification->execute()) {
+                if (!$insertAdminNotification->execute()) {
                     $conn->rollback();
                     throw new Exception("Failed to insert admin notification");
                 }

@@ -164,6 +164,12 @@ switch ($userRole) {
                             <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal"
                                 data-bs-target="#rejectionModal">Reject</button>
                         </div>
+                        <div id="button-pending-approval-container" style="display: none;">
+                            <button type="button" class="btn btn-primary approveReject" data-bs-toggle="modal"
+                                data-bs-target="#approvalModal">Approve</button>
+                            <button type="button" class="btn btn-danger approveReject" data-bs-toggle="modal"
+                                data-bs-target="#rejectionModal">Reject</button>
+                        </div>
                         <div class="resched-button-container" id="resched-button-container">
                             <button type="button" class="btn btn-success reschedModal" data-bs-toggle="modal"
                                 data-bs-target="#reschedModal">Reschedule</button>
@@ -714,8 +720,19 @@ switch ($userRole) {
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     aria-label="Close">Cancel</button>
-                                <button type="submit" class="btn btn-primary loaderTrigger"
-                                    name="approveBtn">Approve</button>
+                                <?php
+                                if (strtolower($bookingStatus) === 'pending') { ?>
+                                    <button type="submit" class="btn btn-primary loaderTrigger"
+                                        name="pendingApproveBtn">Approve</button>
+                                <?php
+                                } else {
+                                ?>
+                                    <button type="submit" class="btn btn-primary loaderTrigger"
+                                        name="approveBtn">Approve</button>
+                                <?php
+
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -1615,21 +1632,29 @@ switch ($userRole) {
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const buttonContainer = document.getElementById('button-approval-container');
+            const buttonPendingContainer = document.getElementById('button-pending-approval-container');
             const reschedButton = document.getElementById("resched-button-container");
             const bookingStatus = document.getElementById('bookingStatusName').value;
             const paymentApprovalStatus = document.getElementById('paymentApprovalStatus').value;
             switch (bookingStatus.toLowerCase()) {
                 case 'pending':
+                    buttonPendingContainer.style.setProperty("display", "flex", "important");
+                    buttonContainer.style.setProperty("display", "none", "important");
+                    break;
+                case 'approved':
                     buttonContainer.style.setProperty("display", "flex", "important");
+                    buttonPendingContainer.style.setProperty("display", "none", "important");
                     break;
                 case 'expired':
                 case 'cancelled':
                 case 'done':
                 case 'rejected':
+                    buttonPendingContainer.style.setProperty("display", "none", "important");
                     reschedButton.style.setProperty("display", "none", "important");
                     buttonContainer.style.setProperty("display", "none", "important");
                     break;
                 default:
+                    buttonPendingContainer.style.setProperty("display", "none", "important");
                     buttonContainer.style.setProperty("display", "none", "important");
                     break;
             }
@@ -1637,6 +1662,7 @@ switch ($userRole) {
             switch (paymentApprovalStatus.toLowerCase()) {
                 case 'payment sent':
                     buttonContainer.style.setProperty("display", "none", "important");
+                    buttonPendingContainer.style.setProperty("display", "none", "important");
                     break;
             }
         });

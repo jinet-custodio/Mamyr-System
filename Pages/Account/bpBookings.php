@@ -287,164 +287,167 @@ switch ($userRole) {
 
 
                 <div class="hidden-input">
-                    <input type="hidden" name="userID" id="userID" value="<?= $userID ?>">
+                    <input type="hidden" name="userID" id="userID" value="<?= $userID ?>"
+                        </div>
+                    <div class="tableContainer" id="bookingTable">
+                        <table class=" table table-striped" id="booking">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Booking ID</th>
+                                    <th scope="col">Guest</th>
+                                    <th scope="col">Booking Type</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Check-in</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="tableContainer" id="bookingTable">
-                    <table class=" table table-striped" id="booking">
-                        <thead>
-                            <tr>
-                                <th scope="col">Booking ID</th>
-                                <th scope="col">Guest</th>
-                                <th scope="col">Booking Type</th>
-                                <th scope="col">Service</th>
-                                <th scope="col">Check-in</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
 
-            <form action="../../Function/Partner/approvalBooking.php" method="POST">
-                <!-- bookingModal -->
-                <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="booking"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel">Booking Info</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <section class="user-info-container">
-                                    <div class="booking-info-name-pic-btn">
-                                        <div class="user-info">
-                                            <img src="../../Assets/Images/defaultProfile.png"
-                                                class="img-fluid rounded-start" alt="Profile Image">
-                                            <div class="booking-info-contact">
-                                                <p class="card-text name"></p>
-                                                <p class="card-text sub-name contact">
-                                                </p>
-                                                <p class="card-text sub-name address"></p>
+                <form action="../../Function/Partner/approvalBooking.php" method="POST">
+                    <!-- bookingModal -->
+                    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="booking"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="exampleModalLabel">Booking Info</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <section class="user-info-container">
+                                        <div class="booking-info-name-pic-btn">
+                                            <div class="user-info">
+                                                <img src="../../Assets/Images/defaultProfile.png"
+                                                    class="img-fluid rounded-start" alt="Profile Image">
+                                                <div class="booking-info-contact">
+                                                    <p class="card-text name"></p>
+                                                    <p class="card-text sub-name contact">
+                                                    </p>
+                                                    <p class="card-text sub-name address"></p>
+                                                </div>
                                             </div>
+                                    </section>
+
+                                    <section class="booking-info-container">
+
+                                        <div class="hidden-inputs" style="display: none;">
+                                            <input type="hidden" id="bookingID" name="bookingID">
+                                            <input type="hidden" id="guestID" name="guestID">
+                                            <input type="hidden" id="guestRole" name="guestRole">
                                         </div>
-                                </section>
+                                        <div class="booking-info">
+                                            <label for="eventType">Event Type</label>
+                                            <input type="text" class="form-control" name="eventType" id="eventType" value=""
+                                                readonly>
+                                        </div>
 
-                                <section class="booking-info-container">
+                                        <div class="booking-info">
+                                            <label for="eventDate">Booking Date</label>
+                                            <input type="text" class="form-control" name="eventDate" id="eventDate" value=""
+                                                readonly>
+                                        </div>
 
-                                    <div class="hidden-inputs" style="display: none;">
+                                        <div class="booking-info">
+                                            <label for="eventDuration">Time Duration</label>
+                                            <input type="text" class="form-control" name="eventDuration" id="eventDuration"
+                                                value="" readonly>
+                                        </div>
+
+                                        <div class="booking-info">
+                                            <label for="eventVenue">Venue</label>
+                                            <input type="text" class="form-control" name="eventVenue" id="eventVenue"
+                                                value="" readonly>
+                                        </div>
+                                    </section>
+
+                                    <section class="serviceContainer mt-3">
+                                        <label for="service" class="fw-bold">Your Service</label>
+                                        <div class="service-info text-center">
+                                            <p id="service"></p>
+                                        </div>
+                                    </section>
+
+                                    <section class="additionalNotesContainer">
+                                        <label for="eventVenue">Additional Notes</label>
+                                        <textarea name="additionalNotes" class="form-control" id="additionalNotes"
+                                            readonly></textarea>
+                                    </section>
+                                </div>
+                                <div class="note-section-approval">
+                                    <p class="text-primary text-center" id="note-approval-time"></p>
+                                </div>
+                                <div class="modal-footer" id="btnContainer-footer">
+                                    <div class="btnContainer">
+                                        <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
+                                        <button type="button" class="btn btn-danger" id="rejectBtn"
+                                            data-bs-target="#rejectionModal" data-bs-toggle="modal">Reject</button>
                                     </div>
-                                    <div class="booking-info">
-                                        <label for="eventType">Event Type</label>
-                                        <input type="text" class="form-control" name="eventType" id="eventType" value=""
-                                            readonly>
-                                    </div>
-
-                                    <div class="booking-info">
-                                        <label for="eventDate">Booking Date</label>
-                                        <input type="text" class="form-control" name="eventDate" id="eventDate" value=""
-                                            readonly>
-                                    </div>
-
-                                    <div class="booking-info">
-                                        <label for="eventDuration">Time Duration</label>
-                                        <input type="text" class="form-control" name="eventDuration" id="eventDuration"
-                                            value="" readonly>
-                                    </div>
-
-                                    <div class="booking-info">
-                                        <label for="eventVenue">Venue</label>
-                                        <input type="text" class="form-control" name="eventVenue" id="eventVenue"
-                                            value="" readonly>
-                                    </div>
-                                </section>
-
-                                <section class="serviceContainer mt-3">
-                                    <label for="service" class="fw-bold">Your Service</label>
-                                    <div class="service-info text-center">
-                                        <p id="service"></p>
-                                    </div>
-                                </section>
-
-                                <section class="additionalNotesContainer">
-                                    <label for="eventVenue">Additional Notes</label>
-                                    <textarea name="additionalNotes" class="form-control" id="additionalNotes"
-                                        readonly></textarea>
-                                </section>
-                            </div>
-                            <div class="note-section-approval">
-                                <p class="text-primary text-center" id="note-approval-time"></p>
-                            </div>
-                            <div class="modal-footer" id="btnContainer-footer">
-                                <div class="btnContainer">
-                                    <button type="submit" class="btn btn-primary" name="approveBtn">Approve</button>
-                                    <button type="button" class="btn btn-danger" id="rejectBtn"
-                                        data-bs-target="#rejectionModal" data-bs-toggle="modal">Reject</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
 
-                <!--Rejection Modal -->
-                <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-body">
+                    <!--Rejection Modal -->
+                    <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
 
-                                <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
-                                <div class="form-group mt-4">
-                                    <select class="form-select" id="select-reason" name="rejection-reason"
-                                        aria-label="rejection-reason" onchange="otherReason()">
-                                        <option value="" disabled selected>Select a reason</option>
-                                        <?php
-                                        $category = 'partnerServiceRejection';
-                                        $getRejectionReason = $conn->prepare("SELECT `reasonID`, `reasonDescription` FROM `reason` WHERE `category` = ?");
-                                        $getRejectionReason->bind_param('s', $category);
-                                        if (!$getRejectionReason->execute()) {
-                                            error_log('Failed getting rejection reason');
-                                        ?>
-                                            <option value="other">Other (Please specify)</option>
-                                        <?php
-                                        }
+                                    <h6 class="reject-label fw-bold">Select a Reason for Rejection</h6>
+                                    <div class="form-group mt-4">
+                                        <select class="form-select" id="select-reason" name="rejection-reason"
+                                            aria-label="rejection-reason" onchange="otherReason()">
+                                            <option value="" disabled selected>Select a reason</option>
+                                            <?php
+                                            $category = 'partnerServiceRejection';
+                                            $getRejectionReason = $conn->prepare("SELECT `reasonID`, `reasonDescription` FROM `reason` WHERE `category` = ?");
+                                            $getRejectionReason->bind_param('s', $category);
+                                            if (!$getRejectionReason->execute()) {
+                                                error_log('Failed getting rejection reason');
+                                            ?>
+                                                <option value="other">Other (Please specify)</option>
+                                            <?php
+                                            }
 
-                                        $result = $getRejectionReason->get_result();
+                                            $result = $getRejectionReason->get_result();
 
-                                        while ($row = $result->fetch_assoc()):
-                                        ?>
-                                            <option value="<?= $row['reasonID'] ?>">
-                                                <?= htmlspecialchars($row['reasonDescription']) ?></option>
-                                        <?php
-                                        endwhile;
-                                        ?>
-                                    </select>
+                                            while ($row = $result->fetch_assoc()):
+                                            ?>
+                                                <option value="<?= $row['reasonID'] ?>">
+                                                    <?= htmlspecialchars($row['reasonDescription']) ?></option>
+                                            <?php
+                                            endwhile;
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
+                                        <h6 class="otherReason-label fw-bold">Please Specify</h6>
+                                        <input type="text" class="form-control" id="rejectReason-textBox"
+                                            placeholder="Enter your option">
+                                    </div>
+
                                 </div>
-
-                                <div class="form-group mt-4" id="otherInputGroup" style="display: none;">
-                                    <h6 class="otherReason-label fw-bold">Please Specify</h6>
-                                    <input type="text" class="form-control" id="rejectReason-textBox"
-                                        placeholder="Enter your option">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        aria-label="Close">Close</button>
+                                    <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
                                 </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                    aria-label="Close">Close</button>
-                                <button type="submit" class="btn btn-danger" name="rejectBtn">Reject</button>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
 
-            <?php include '../Customer/loader.php'; ?>
+                <?php include '../Customer/loader.php'; ?>
         </main>
     </div>
 
@@ -549,6 +552,7 @@ switch ($userRole) {
 
         document.addEventListener("DOMContentLoaded", function() {
             const userID = document.getElementById('userID').value;
+            console.log('User ID:' + userID);
             const bookingMap = {};
 
             fetch(`../../Function/Partner/getPartnerBookings.php?userID=${encodeURIComponent(userID)}`)
@@ -593,6 +597,7 @@ switch ($userRole) {
                 if (e.target.classList.contains('viewInfo')) {
                     const bookingID = e.target.getAttribute("data-bookingid");
                     const booking = bookingMap[bookingID];
+                    console.log(booking);
                     if (!booking) return;
 
                     const viewModal = document.getElementById('bookingModal');
