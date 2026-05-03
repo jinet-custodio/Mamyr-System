@@ -76,7 +76,7 @@ if (isset($_POST['cancelBooking'])) {
         if ($cancelBooking->execute()) {
 
             $receiver = 'Admin';
-            $message = '<strong>#' .  $bookingCode . ' </strong><br>A customer has cancelled a' . strtolower($bookingType) . ' booking.';
+            $message = '<strong>#' .  $bookingCode . ' </strong><br>A customer has cancelled a ' . strtolower($bookingType) . ' booking.';
             $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, senderID, message, receiver)
             VALUES(?,?,?,?)");
             $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);

@@ -218,7 +218,8 @@ label {
   margin-left: 0 !important;
 }
 
-div#button-approval-container {
+div#button-approval-container,
+div#button-pending-approval-container {
   width: 50%;
   margin: auto;
   display: flex !important;

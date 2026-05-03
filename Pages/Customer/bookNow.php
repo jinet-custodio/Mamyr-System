@@ -68,13 +68,13 @@ unset($_SESSION['eventFormData']);
 
 require_once __DIR__ . '/../../Function/Helpers/bookingValidator.php';
 
-if (
-    !canUserBook($conn, $userID) &&
-    (!isset($_GET['action']) || $_GET['action'] !== 'notAllowed')
-) {
+$action = $_GET['action'] ?? null;
+
+if ($action === null && !canUserBook($conn, $userID)) {
     header("Location: bookNow.php?action=notAllowed");
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -337,8 +337,6 @@ if (
         };
     </script>
 
-
-
     <!-- For checking the phone Number -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -353,8 +351,7 @@ if (
                 if (!/[0-9+]/.test(e.key)) {
                     e.preventDefault();
                 }
-            })
-
+            });
 
         });
     </script>

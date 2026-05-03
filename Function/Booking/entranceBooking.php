@@ -12,7 +12,7 @@ require '../../vendor/autoload.php';
 require_once '../emailSenderFunction.php';
 
 session_start();
-$userRole = mysqli_real_escape_string($conn, $_SESSION['userRole']);
+$userRole = $_SESSION['userRole'];
 $userID = (int) $_SESSION['userID'];
 
 
@@ -204,8 +204,9 @@ if (isset($_POST['bookRates'])) {
     try {
 
 
-        $bookingStatus = ($dateScheduled === 'March' || $dateScheduled === 'April' || $dateScheduled === 'May') ? 1 : 2;
-
+        $bookingStatus = (strtolower($dateScheduled) === 'march' || strtolower($dateScheduled) === 'april' || strtolower($dateScheduled) === 'may' || strtolower($dateScheduled) === 'june') ? 1 : 2;
+        // error_log('Booking Status: ' . $bookingStatus);
+        // error_log('Date Scheduled: ' . strtolower($dateScheduled));
         $insertBooking = $conn->prepare("INSERT INTO 
         booking(userID, additionalRequest, toddlerCount, kidCount, adultCount, guestCount, durationCount, 
         startDate, endDate,
@@ -288,9 +289,11 @@ if (isset($_POST['bookRates'])) {
             throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
         }
         $expiresAt = NULL;
-
+        $startDate = new Datetime($scheduledStartDate);
+        $bookingDate = $startDate->format('M. d, Y g:i A');
+        $dateCreated = date('d F Y');
+        $isSend = false;
         if ($bookingStatus === 2) {
-            $isSend = false;
             $today = date('Y m d');
             if ($today === $scheduledStartDate) {
                 $paymentDueDate = $downpaymentDueDate = $today;
@@ -322,19 +325,8 @@ if (isset($_POST['bookRates'])) {
 
             $confirmedBookingID = $conn->insert_id;
 
-            $receiver = 'Customer';
+            $receiver = ($userRole === 1) ? 'Customer' : 'Business Partner';
             $message = 'Your booking has been approved (#' . $bookingCode  . '). Please complete your payment within 24 hours to confirm your reservation. Kindly check your email for more details.';
-            $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, receiverID, message, receiver)
-            VALUES(?,?,?,?)");
-            $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
-
-            if (!$insertBookingNotificationRequest->execute()) {
-                $conn->rollback();
-                throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
-            }
-            $startDate = new Datetime($scheduledStartDate);
-            $bookingDate = $startDate->format('M. d, Y g:i A');
-            $dateCreated = date('d F Y');
             $email_message = '
                         <body style="font-family: Poppins, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
                             <table align="center" width="100%" cellpadding="0" cellspacing="0"
@@ -404,16 +396,101 @@ if (isset($_POST['bookRates'])) {
 
             $subject = 'Booking Confirmation';
 
-            if (sendEmail($email, $firstName, $subject, $email_message, $env)) {
-                $isSend = true;
-            };
-
             $today = new DateTime();
             $expiresAt = $today->modify('+24 hours')->format('Y-m-d H:i:s');
-            if (!$isSend) {
-                $conn->rollback();
-                throw new Exception('Failed Sending Email');
-            }
+        } else if ($bookingStatus === 1) {
+            $receiver = ($userRole === 1) ? 'Customer' : 'Business Partner';
+            $message = 'Your booking (#' . $bookingCode . ') has been sent and is currently awaiting admin review. Due to a busy schedule from April to June, there may be delays in processing. Thank you for your patience.';
+
+            $email_message = '
+                        <body style="font-family: Poppins, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
+                            <table align="center" width="100%" cellpadding="0" cellspacing="0"
+                                style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+
+                                <!-- Header -->
+                                <tr style="background-color: #365CCE;">
+                                    <td style="text-align:center; padding: 30px;">
+                                        <h4
+                                            style="font-family: Poppins, sans-serif;  font-weight: 700; font-size: 18px; color: #ffffff; font-size: 18px; margin: 0;">
+                                            THANKS FOR BOOKING WITH MAMYR!
+                                        </h4>
+                                        <h2
+                                            style="font-family: Poppins, sans-serif; font-weight: 200; font-size: 16px;  color: #ffffff; margin: 10px 0 0;">
+                                            Your Booking is Under Review
+                                        </h2>
+                                    </td>
+                                </tr>
+
+                                <!-- Body -->
+                                <tr>
+                                    <td style="padding: 30px; text-align: left; color: #333333;">
+                                        <p style="font-size: 12px; margin: -20PX 0 20px; font-style: italic;">
+                                            Booking Reference: <strong>' . $bookingCode . '</strong> &nbsp;|&nbsp; Created on ' . $dateCreated . '
+                                        </p>
+
+                                        <p style="font-size: 14px; margin: 20px 0 10px;">Hello <strong> ' . $firstName . '</strong>,</p>
+                                        <p style="font-size: 14px; margin: 20px 0 10px;">
+                                            We have successfully received your booking request. It is now <strong>under admin review</strong>.
+                                        </p>
+
+                                        <p style="font-size: 14px;">
+                                            Due to a high volume of bookings from <strong>April to June</strong>, our team is currently reviewing requests carefully. This may take a little longer than usual.
+                                        </p>
+
+                                        <p style="font-size: 14px; margin: 20px 0 10px;">Here are your booking details:</p>
+
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Reference: <strong>' . $bookingCode . '</strong></p>
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Date: <strong>' . $bookingDate . '</strong>
+                                        </p>
+                                        <p style="font-size: 14px; margin: 8px 0;">Booking Type: <strong>' . $bookingType . ' Booking &mdash; '
+                . $tourType . '</strong>
+                                        </p>
+                                        <p style="font-size: 14px; margin: 8px 0;">Grand Total: <strong>₱' . number_format($totalCost, 2) . '</strong></p>
+
+                                        <p style="font-size: 14px;">
+                                            Please wait for our confirmation email before making any payment instructions. You will be notified once your booking has been approved.
+                                        </p>
+
+                                        <p style="font-size: 14px;">
+                                            If you have concerns, feel free to message us here:
+                                            <a href="https://www.facebook.com/messages/t/100888189251567"
+                                                style="color: #007bff; text-decoration: none;">
+                                                Facebook Messenger
+                                            </a>
+                                        </p>
+
+                                        <p style="font-size: 14px; margin: 20px 0 0;">
+                                            Thank you for your patience and understanding.
+                                        </p>
+
+                                        <p style="font-size: 16px; margin: 30px 0 0;">Best regards,</p>
+                                        <p style="font-size: 16px; font-weight: bold; margin: 8px 0 0;">
+                                            Mamyr Resort and Events Place
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
+                    ';
+
+            $subject = 'Booking Received &mdash; Under Review';
+        }
+
+        $insertBookingNotificationRequest = $conn->prepare("INSERT INTO notification(bookingID, receiverID, message, receiver)
+            VALUES(?,?,?,?)");
+        $insertBookingNotificationRequest->bind_param("iiss", $bookingID, $userID, $message, $receiver);
+
+        if (!$insertBookingNotificationRequest->execute()) {
+            $conn->rollback();
+            throw new Exception('Error: ' . $insertBookingNotificationRequest->error);
+        }
+
+        if (sendEmail($email, $firstName, $subject, $email_message, $env)) {
+            $isSend = true;
+        };
+        if (!$isSend) {
+            $conn->rollback();
+            throw new Exception('Failed Sending Email');
         }
 
         $insertUnavailableService = $conn->prepare("INSERT INTO serviceunavailabledate(bookingID, resortServiceID, unavailableStartDate, unavailableEndDate, expiresAt) VALUES (?,?,?,?,?)");
@@ -433,8 +510,8 @@ if (isset($_POST['bookRates'])) {
 
         unset($_SESSION['resortFormData']);
         $conn->commit();
-        header('Location: ../../Pages/Customer/bookNow.php?action=success');
         $insertBookingServices->close();
+        header('Location: ../../Pages/Customer/bookNow.php?action=success');
         exit();
     } catch (Exception $e) {
         $conn->rollback();
